@@ -1,12 +1,19 @@
-https://chrome.google.com/webstore/detail/nbhcbdghjpllgmfilhnhkllmkecfmpld
+# Comic Reader
 
-URL List:
+## Extensions
+[User JavaScript and CSS](https://chrome.google.com/webstore/detail/nbhcbdghjpllgmfilhnhkllmkecfmpld)
+
+## URL List:
+```
 !cdn.komikcast.com, !store.kombatch.com, oploverz.in, mangaku.pro, mangaku.co, mangaindo.web.id, pecintakomik.net, komikstation.com, neumanga.tv, ngomik.in, komikcast.com, otakufile.com, westmanga.info, mangakita.net, mangashiro.co, mangacanblog.com, mangaindo.net, kiryuu.co, komikindo.web.id, kazemanga.web.id, komikgo.com, maid.my.id, arsipmanga.me, mangakyo.me, otakuindo.net, bacamanga.co, aomegumi.com, komikav.com, komiku.co.id, kyuroku.com, manhwa-san.xyz, mangaseno.com, matakomik.com, komikfoxy.xyz, webtoons.com, komikid.com, kombatch.com, komiku.net, mangabat.com, mangapus.com, mangadropout.net, mangareceh.co, sektekomik.com, mangaid.id, bacamanhua.com, manhuaid.com, pojokmanga.com, sheamanga.my.id, iniotaku.com, senpaisubsid.net, klikmanga.com, bacakomik.co, mangatsuki.web.id, mangayu.com, klankomik.com, boosei.com, comicfx.net, yuumanga.com, wordhero.my.id, gurukomik.com, mangapark.net, mangapark.org, trashscanlations.com, mangadex.org, readmanhua.net, readmng.com, ninjascans.com, hatigarmscans.net, zeroscans.com, funmanga.com, bato.to, mangawindow.net, leviatanscans.com, merakiscans.com, mangarawr.com, toonily.com, jaiminisbox.com, mangasushi.net, reaperscans.com, animesc-kun.blogspot.com, logmanga.blogspot.com, gunskomik.blogspot.com, readcmic.blogspot.com, lozkomik.blogspot.com, iniotakuu.blogspot.com, mangapaus.blogspot.com, ninkomik.blogspot.com
-
-Website Anime List:
+```
+## Website Anime List:
+```
 - Oploverz.net|in
+```
 
-Website Manga List:
+## Website Manga List:
+```
 - Mangaku.web.id|in|co|pro => .singlep .section_ad.group_ad
 - Mangaindo.web.id
 - Komikstation.com
@@ -70,8 +77,10 @@ Website Manga List:
 - Jaiminisbox.com
 - Mangasushi.net
 - Reaperscans.com
+```
 
-Closed:
+## Closed:
+```
 - Pecintakomik.com|net
 - Neumanga.tv
 - Mangaindo.net
@@ -90,3 +99,4 @@ Closed:
 - Gunskomik.blogspot.com
 - Logmanga.blogspot.com
 - Trashscanlations.com
+```
