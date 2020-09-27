@@ -1,25 +1,3 @@
-/* 
-
-Retiring:
-- Pecintakomik.com|net
-- Neumanga.tv
-- Mangaindo.net
-- Kazemanga.xyz|web.id
-- Otakufile.com
-- Arsipmanga.me
-- Komikotaku.net | Kyuroku.com
-- Aomegumi.com
-- Mangaseno.com
-- Mangapus.com
-- Mangadropout.net
-- Mangaid.id
-- Baekjinscans.xyz | Bacamanhua.com
-- Iniotaku.com | Iniotakuu.blogspot.com
-- Mangatsuki.web.id
-- Gunskomik.blogspot.com
-- Logmanga.blogspot.com
-- Trashscanlations.com
-
 Website Anime List:
 - Oploverz.net|in
 
@@ -87,4 +65,23 @@ Website Manga List:
 - Jaiminisbox.com
 - Mangasushi.net
 - Reaperscans.com
-*/
+
+Closed:
+- Pecintakomik.com|net
+- Neumanga.tv
+- Mangaindo.net
+- Kazemanga.xyz|web.id
+- Otakufile.com
+- Arsipmanga.me
+- Komikotaku.net | Kyuroku.com
+- Aomegumi.com
+- Mangaseno.com
+- Mangapus.com
+- Mangadropout.net
+- Mangaid.id
+- Baekjinscans.xyz | Bacamanhua.com
+- Iniotaku.com | Iniotakuu.blogspot.com
+- Mangatsuki.web.id
+- Gunskomik.blogspot.com
+- Logmanga.blogspot.com
+- Trashscanlations.com
