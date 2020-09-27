@@ -1,0 +1,90 @@
+/* 
+
+Retiring:
+- Pecintakomik.com|net
+- Neumanga.tv
+- Mangaindo.net
+- Kazemanga.xyz|web.id
+- Otakufile.com
+- Arsipmanga.me
+- Komikotaku.net | Kyuroku.com
+- Aomegumi.com
+- Mangaseno.com
+- Mangapus.com
+- Mangadropout.net
+- Mangaid.id
+- Baekjinscans.xyz | Bacamanhua.com
+- Iniotaku.com | Iniotakuu.blogspot.com
+- Mangatsuki.web.id
+- Gunskomik.blogspot.com
+- Logmanga.blogspot.com
+- Trashscanlations.com
+
+Website Anime List:
+- Oploverz.net|in
+
+Website Manga List:
+- Mangaku.web.id|in|co|pro => .singlep .section_ad.group_ad
+- Mangaindo.web.id
+- Komikstation.com
+- Subapics.com | Ngomik.in
+- Komikcast.com
+- Westmanga.info
+- Mangakita.net
+- Mangashiro.net|org|co
+- Mangacanblog.com
+- Mangavy.com | Kiryuu.co
+- Komikindo.web.id
+- Komikgo.com
+- Maid.my.id
+- Mangakyo.net|com|me
+- Otakuindo.net | Komiku.co|co.id
+- Otakuindo.web.id | Komiku.net | Tokusiro.com (check)
+- Mangaid.me | Bacamanga.web.id|co
+- Komikav.com
+- Manhwa-san.xyz
+- Matakomik.com
+- Komikfoxy.xyz (check)
+- Webtoons.com
+- Komikid.com
+- Kombatch.com
+- Mangareceh.com|id|co
+- Sektekomik.com
+- Manhuaid.com
+- Pojokmanga.com
+- Sheamanga.my.id
+- Senpaisubsid.net
+- Klikmanga.com
+- Bacakomik.co
+- Mangayu.com
+- Klankomik.com
+- Boosei.com
+- Comicfx.net
+- Wordhero.my.id
+- Tenseiscans.xyz
+- Gurukomik.com
+- Yuumanga.blogspot.com || Yuumanga.com
+- Animesc-kun.blogspot.com
+- Readcmic.blogspot.com
+- Lozkomik.blogspot.com
+- Mangapaus.blogspot.com
+- Ninkomik.blogspot.com
+- Mangadex.org|cc
+- Mangapark.com|me|net|org
+- Zeroscans.com
+- Readmanhua.net
+- Readmng.com
+- Ninjascans.com
+- Hatigarmscans.net
+- Funmanga.com
+- Mangabat.com
+- Bato.to
+- Mangawindow.com|net
+- Leviatanscans.com
+- Merakiscans.com
+- Mangarawr.com
+- Toonily.com
+- Jaiminisbox.com
+- Mangasushi.net
+- Reaperscans.com
+*/
