@@ -445,10 +445,8 @@
     } else if (wh.indexOf('mangacanblog') != -1) { //click
       var eAll = el('.pagers a');
       if (eAll.innerHTML.indexOf('Full') != -1) eAll.click();
-    } else if (wh.indexOf('komiku.co.id') != -1) {
-      //removeElem('aside.ch'); //remove floating navigation
-      //el('#Baca_Komik .part1').style.cssText = 'display:initial !important';
-      //el('#Baca_Komik .part2').style.cssText = 'display:initial !important';
+    } else if (wh.indexOf('mangayu.com') != -1) {
+      el('.ch-img').parentNode.parentNode.id = 'readerarea';
     } else if (wh.indexOf('jaiminisbox') != -1) { //script
       createImage(pages); //from web
     } else if (wh.indexOf('mangapark') != -1) { //replace
@@ -480,7 +478,7 @@
           break;
         }
       }
-      eData = JSON.parse(eScript.match(/(\{[^\)]+)/)[1]);
+      eData = JSON.parse(eScript.match(/(\{[^\;]+)\)\;/)[1]);
       createImage(eData);
     } else if (wh.indexOf('mangadropout') != -1) {
       var mwp = wp.match(/collection[^\d]*\/\d+\/([^\/]*)/)[1];
@@ -632,7 +630,7 @@
     content_.style.cssText = 'position:initial;';
   } else if (wh.indexOf('webtoons') != -1) {
     el('#wrap').classList.add('no-css');
-  } else if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga/) != -1) {
+  } else if (wh.search(/mangaku|westmanga|komikindo.web.id|komikstation|sheamanga/) != -1) {
     // skip syndication.exdynsrv.com
     el('a', 'all').forEach(function(item) {
       item.addEventListener('click', function(e) {
@@ -662,15 +660,25 @@
       if (typeof embedVars != 'undefined') { //from web
         clearInterval(cmt_chk);
         reloadComment(embedVars.disqusShortname);
+      } else if (el('#disqus_thread').dataset.disqusShortname) {
+        clearInterval(cmt_chk);
+        reloadComment(el('#disqus_thread').dataset.disqusShortname);
       } else if (el('#disqus_thread').nextElementSibling) {
         clearInterval(cmt_chk);
         if (el('#disqus_thread').nextElementSibling.innerHTML.indexOf('disqus') == -1) return;
         var dsqs_sn = el('#disqus_thread').nextElementSibling.innerHTML;
         dsqs_sn = dsqs_sn.match(/\/\/([^\n]+)\.disqus\.com[^\n]+\.js/)[1];
         reloadComment(dsqs_sn);
-      } else if (el('#disqus_thread').dataset.disqusShortname) {
+      } else {
         clearInterval(cmt_chk);
-        reloadComment(el('#disqus_thread').dataset.disqusShortname);
+        var idDsqs, sDsqs = el('script', 'all');
+        for (var i = 0; i < sDsqs.length; i++) {
+          if (sDsqs[i].innerHTML.indexOf('disqus.com') != -1) {
+            idDsqs = sDsqs[i].innerHTML.match(/\/\/([^\n]+)\.disqus\.com[^\n]+\.js/)[1];
+            reloadComment(idDsqs);
+            break;
+          }
+        }
       }
     } else {
       clearInterval(cmt_chk);
@@ -678,7 +686,7 @@
   }, 100);
   
   if (wp.search(wk1) != -1 && wl.hash.indexOf('project') == -1) {
-    if (wh.search(/kiryuu|komikindo.web.id|sektekomik|komikav|sheamanga|gurukomik/) != -1) document.body.classList.add('new_themesia');
+    if (wh.search(/kiryuu|komikindo.web.id|sektekomik|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|asurascans/) != -1) document.body.classList.add('new_themesia');
     checkAll();
     //window.addEventListener('DOMContentLoaded', checkAll);
   }
