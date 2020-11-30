@@ -72,7 +72,7 @@
   }
   
   function reloadComment(id) {
-  	var par_dsqs = el('#disqus_thread').parentNode;
+    var par_dsqs = el('#disqus_thread').parentNode;
     par_dsqs.removeChild(el('#disqus_thread'));
     
     var disqus_load = document.createElement('div');
@@ -247,11 +247,11 @@
       } else if ((e.shiftKey) && (e.keyCode == 40)) {
         el('.ld-zoom .ld-btn.less').click(); //shift & down zoom -
       } else if (e.keyCode == 39) { //arrow right
-        var next_chapter = el('.nextprev a[rel="next"]') || el('.nav-links .btn.next_page') || el('.pager a[onclick*="next"]') || el('.reader-controls-chapters a[class*="right"]') || el('.nav-newer a[rel="next"]') || el('.naveps a[rel="next"]') || el('.paginate a[class*="next"]') || el('.btn-sm i[class*="right"]') || el('.urlChange span[class*="right"]') || el('.chapter a[rel="next"]') || el('.brk .brkn a') || el('.navi-change-chapter-btn-next');
-        next_chapter = wh.search(/mangadropout|leviatanscans|zeroscans|reaperscans/) != -1 ? next_chapter.parentNode : next_chapter;
+        var next_chapter = el('.nextprev a[rel="next"]') || el('.nav-links .btn.next_page') || el('.pager a[onclick*="next"]') || el('.reader-controls-chapters a[class*="right"]') || el('.nav-newer a[rel="next"]') || el('.naveps a[rel="next"]') || el('.paginate a[class*="next"]') || el('.btn-sm i[class*="right"]') || el('.urlChange span[class*="right"]') || el('.chapter a[rel="next"]') || el('.brk .brkn a') || el('.navi-change-chapter-btn-next') || el('.baca-button .fa-chevron-right');
+        next_chapter = wh.search(/mangadropout|leviatanscans|zeroscans|reaperscans|secretscans|softkomik/) != -1 ? next_chapter.parentNode : next_chapter;
         next_chapter = next_chapter || el('.load-next a'); // from nextChapter()
         if (next_chapter) {
-          if (wh.search(/mangadex/) != -1) {
+          if (wh.search(/mangadex|softkomik/) != -1) {
             wl.href = next_chapter.href;
           } else {
             next_chapter.click();
@@ -270,7 +270,7 @@
     checkPoint = el('#check-point');
     
     if (!prnt && !imgs) {
-    var st = ['0','1','2','3','4','5','6','7','webtoons.com','neumanga.tv','mangaindo.web.id','mangacanblog.com','manhwa-san.xyz','komikfoxy.xyz','mangabat.com','mangadropout.net','manhuaid.com','komiku.co.id','maid.my.id','bacakomik.co'];
+    var st = ['0','1','2','3','4','5','6','7','webtoons.com','neumanga.tv','mangaindo.web.id','mangacanblog.com','manhwa-san.xyz','komikfoxy.xyz','mangabat.com','mangadropout.net','manhuaid.com','komiku.id','maid.my.id','bacakomik.co'];
       var sl = ['#readerarea','.reading-content','.read-container','.viewer-cnt #all','#readerareaimg','#Gambar_komik','#viewer','#Blog1 .post-body','.viewer_lst .viewer_img','.readarea','.entry-content','#imgholder','.post-body.post-content','#gallery-1','.container-chapter-reader','#displayNoAds .col-md-12.text-center','.row.mb-4 .col-md-12','#Baca_Komik','.reader-area','#chimg'];
       var area_s = el(sl[0]) || el(sl[1]) || el(sl[2]) || el(sl[3]) || el(sl[4]) || el(sl[5]) || el(sl[6]) || el(sl[7]);
       for (var j = 8; j < st.length; j++) {
@@ -293,6 +293,8 @@
         imgLink = imgList[j];
       } else if (imgList[j].getAttribute('original')) { //manhwa-san.xyz
         imgLink = imgList[j].getAttribute('original');
+      } else if (wh.indexOf('komiku.id') != -1) { //komiku.id
+        imgLink = '//img.komiku.co.id/nor'+ imgList[j].dataset.src;
       } else if (imgList[j].dataset.src) {
         imgLink = imgList[j].dataset.src;
       } else if (imgList[j].dataset.lazySrc) {
@@ -366,7 +368,7 @@
     } else if (el('body').classList.contains('new_themesia')) {
       csl = el('#readerarea').parentNode;
       total = data.sources[0].images;
-    } else if (wh.search(/leviatanscans|zeroscans|reaperscans/) != -1) {
+    } else if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans/) != -1) {
       csl = '#pages-container';
       total = data;
     } else if (wh.indexOf('merakiscans') != -1) {
@@ -375,6 +377,9 @@
     } else if (wh.indexOf('jaiminisbox') != -1) {
       csl = '#page';
       total = data;
+    } else if (wh.indexOf('softkomik') != -1) {
+      csl = el('.baca-button').nextElementSibling;
+      total = data.DataGambar;
     }
     var main = typeof csl == 'string' ? el(csl) : csl;
     var img_api = '';
@@ -387,6 +392,8 @@
         data_src = data[i].thumb_url;
       } else if (el('body').classList.contains('new_themesia')) {
         data_src = total[i];
+      } else if (wh.indexOf('softkomik') != -1) {
+        data_src = '//api.softkomik.site/'+ total[i].url_gambar;
       } else {
         data_src = data[i];
       }
@@ -401,8 +408,8 @@
         el('.ctop .nextprev [rel="next"]').href = data.nextUrl;
         el('.cbot .nextprev [rel="next"]').href = data.nextUrl;
       } else {
-      	el('.ctop .nextprev [rel="next"]').style.display = 'none';
-      	el('.cbot .nextprev [rel="next"]').style.display = 'none';
+        el('.ctop .nextprev [rel="next"]').style.display = 'none';
+        el('.cbot .nextprev [rel="next"]').style.display = 'none';
       }
       var new_div = document.createElement('div');
       main.insertBefore(new_div, el('#readerarea'));
@@ -413,7 +420,7 @@
       main.removeChild(el('.reader-images', main));
       main.removeChild(el('.reader-page-bar', main));
       el('#content').dataset.renderer = 'long-strip';
-    } else if (wh.search(/leviatanscans|zeroscans|reaperscans/) != -1) {
+    } else if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans/) != -1) {
       main.innerHTML = '';
       main.removeAttribute('id');
     } else if (wh.indexOf('merakiscans') != -1) {
@@ -422,6 +429,11 @@
       el('#toTop').style.cssText = 'height:0;overflow:hidden;';
     } else if (wh.indexOf('jaiminisbox') != -1) {
       main.removeChild(el('.inner', main));
+    } else if (wh.indexOf('softkomik') != -1) {
+      var new_div = document.createElement('div');
+      main.parentNode.insertBefore(new_div, main);
+      main.parentNode.removeChild(main);
+      main = new_div;
     }
     
     startImage(main, img_api);
@@ -434,14 +446,22 @@
     
     if (wh.indexOf('mangadex') != -1) { //api
       var eId = el('meta[name="app"]').dataset.chapterId;
-      getData('https://mangadex.org/api/?id='+eId+'&type=chapter');
+      getData('//mangadex.org/api/?id='+eId+'&type=chapter');
       var eReader = el('.reader-controls-chapters');
       eReader.addEventListener('click', function(e) {
         wl.href = e.target.parentNode.href;
       });
-    } else if (wh.indexOf('neumanga') != -1) { //click
-      var eAll = el('.readnav .mode');
-      if (eAll.innerHTML.indexOf('All') != -1) eAll.click();
+    } else if (wh.indexOf('softkomik') != -1) { //api
+      var eId = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[1];
+      var eCh = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[2];
+      var eReader = setInterval(function() {
+        if (el('#container .baca-button')) {
+          clearInterval(eReader);
+          getData('//api.softkomik.site/api/baca-chapter/'+ eId +'&'+ eCh);
+        }
+      }, 100);
+    } else if (wh.indexOf('komiku.id') != -1) { //click
+      document.body.classList.add('click');
     } else if (wh.indexOf('mangacanblog') != -1) { //click
       var eAll = el('.pagers a');
       if (eAll.innerHTML.indexOf('Full') != -1) eAll.click();
@@ -463,7 +483,7 @@
     } else if (wh.search(/hatigarmscans|komikid/) != -1) { //my Manga Reader CMS
       el('#all').style.display = 'block';
       el('#ppp').style.display = 'none';
-    } else if (wh.search(/leviatanscans|zeroscans|reaperscans/) != -1) { //new cms
+    } else if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans/) != -1) { //new cms
       var eShow = setInterval(function() {
         if (window.chapterPages) {
           clearInterval(eShow);
@@ -487,7 +507,7 @@
       for (var i = 0; i < mlnk.length; i++) {
         if (mlnk[i].href.indexOf('generelatelink') != -1) {
           var mnm = mlnk[i].href.match(/generelatelink[^\d]*\/(\d+)\/([^\/\?\#]*)/);
-          mlnk[i].href = 'https://mangadropout.net/collection/link/'+mnm[1]+'/'+mwp+'/chapter/'+mnm[2];
+          mlnk[i].href = '//mangadropout.net/collection/link/'+mnm[1]+'/'+mwp+'/chapter/'+mnm[2];
         }
       }
     } else if (wh.indexOf('merakiscans') != -1) { //script
@@ -547,8 +567,8 @@
       var d_scr = el('script', 'all');
       for (var i = 0; i < d_scr.length; i++) {
         if (d_scr[i].innerHTML.search(d_rgx) != -1) {
-        	el_scr = d_scr[i];
-        	d_txt = d_scr[i].innerHTML.match(d_rgx);
+          el_scr = d_scr[i];
+          d_txt = d_scr[i].innerHTML.match(d_rgx);
           d_id2 = d_txt[1];
           var ps1_rgx = new RegExp('(?:const|let|var)\\s'+ d_txt[2] +'\\s?=\\s?[\'"]([^\\\'\\"]+)[\'"][;,]', 'i');
           d_ps1 = d_scr[i].innerHTML.match(ps1_rgx)[1];
@@ -585,7 +605,7 @@
       document.body.appendChild(new_txt);*/
     }
     
-    if (el('body').className.search(/new_themesia|mangadex|kyuroku|merakiscans|leviatanscans|zeroscans|reaperscans|jaiminisbox/) == -1) { startImage(); }
+    if (el('body').className.search(/new_themesia|mangadex|kyuroku|merakiscans|leviatanscans|zeroscans|reaperscans|secretscans|jaiminisbox|softkomik/) == -1) { startImage(); }
   }
   
   function removeAADB() {
@@ -680,13 +700,21 @@
           }
         }
       }
+    } else if (wh.indexOf('softkomik') != -1) { //api
+      clearInterval(cmt_chk);
+      /*var eDsqs = setInterval(function() {
+        if (el('#container #disqus_thread')) {
+          clearInterval(eDsqs);
+          reloadComment(el('#disqus_thread').dataset.disqusShortname);
+        }
+      }, 100);*/
     } else {
       clearInterval(cmt_chk);
     }
   }, 100);
   
   if (wp.search(wk1) != -1 && wl.hash.indexOf('project') == -1) {
-    if (wh.search(/kiryuu|komikindo.web.id|sektekomik|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|asurascans/) != -1) document.body.classList.add('new_themesia');
+    if (wh.search(/kiryuu|komikindo.web.id|sektekomik|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|asurascans/) != -1) document.body.classList.add('new_themesia');
     checkAll();
     //window.addEventListener('DOMContentLoaded', checkAll);
   }
