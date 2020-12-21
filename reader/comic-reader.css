@@ -31,6 +31,7 @@ html, body, article {
     height: auto;
     position: initial !important;
     display: block;
+    margin: 0 auto;
 }
 #content .carousel, .darex .carousel, .vezone .carousel {
     height: auto;
@@ -74,15 +75,19 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
 .chapter-type-manga .c-blog-post .entry-content .entry-content_wrap .reading-content::before {
     position: relative;
 }
-/* manhwa-san.xyz */
-.manhwa-san\.xyz #outer-wrapper {
+/* manhwa-san.xyz | katakomik.site */
+.manhwa-san\.xyz #outer-wrapper, .katakomik\.site #outer-wrapper, .katakomik\.site .header-header {
     background: #151515 !important;
 }
-.manhwa-san\.xyz #main-wrapper {
+.manhwa-san\.xyz #main-wrapper, .katakomik\.site #main-wrapper {
     width: 100%;
 }
 .manhwa-san\.xyz .blog-post.item-post h1.post-title {
     color: #999;
+}
+.manhwa-san\.xyz .alphanx, .katakomik\.site .naviarea1 .awnavi1 {
+    display: flex;
+    justify-content: space-between;
 }
 /* mangaku.pro */
 .mangaku\.pro .owl-carousel {
@@ -93,10 +98,10 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
     background: #151515 !important;
 }
 /* mangayu.com */
-body.mangayu\.com {
+.mangayu\.com {
     overflow: auto !important;
 }
-body.mangayu\.com .swal2-container {
+.mangayu\.com .swal2-container {
     display: none;
 }
 /* webtoons.com */
@@ -118,7 +123,7 @@ body.mangayu\.com .swal2-container {
 
 
 /* display none */
-#footer2, noscript, #ftads, .kln:not(.blox), .c-sub-header-nav.sticky, html body [class*="iklan"], html body [rel="noopener"]:not([target="_blank"]), html body [style="z-index: 2147483647;"], html body [style="background: rgb(221, 221, 221); z-index: 9999999; opacity: 1; visibility: visible;"], html body [style="z-index: 999999; background: rgba(0, 0, 0, 0.8); display: block;"], html body [style="position: fixed; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2147483647; background: black; opacity: 0.01; height: 637px; width: 1366px;"], center a[href*="mangatoon"], #navkanan[class*="scroll"], #bottom-banner-ads, footer.perapih.chf, #Notifikasi {
+#footer2, noscript, #ftads, .kln:not(.blox), .kln.mlb, .c-sub-header-nav.sticky, html body [class*="iklan"], html body [rel="noopener"]:not([target="_blank"]), html body [style="z-index: 2147483647;"], html body [style="background: rgb(221, 221, 221); z-index: 9999999; opacity: 1; visibility: visible;"], html body [style="z-index: 999999; background: rgba(0, 0, 0, 0.8); display: block;"], html body [style="position: fixed; top: 0px; bottom: 0px; left: 0px; right: 0px; z-index: 2147483647; background: black; opacity: 0.01; height: 637px; width: 1366px;"], center a[href*="mangatoon"], #navkanan[class*="scroll"], #bottom-banner-ads, footer.perapih.chf, #Notifikasi {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
