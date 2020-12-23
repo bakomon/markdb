@@ -79,13 +79,10 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
 .manhwa-san\.xyz #outer-wrapper, .katakomik\.site #outer-wrapper, .katakomik\.site .header-header {
     background: #151515 !important;
 }
-.manhwa-san\.xyz #main-wrapper, .katakomik\.site #main-wrapper {
-    width: 100%;
-}
 .manhwa-san\.xyz .blog-post.item-post h1.post-title {
     color: #999;
 }
-.manhwa-san\.xyz .alphanx, .katakomik\.site .naviarea1 .awnavi1 {
+.manhwa-san\.xyz .alphanx, .katakomik\.site .naviarea1 .awnavi1, .funmanga\.com .prev-next-post {
     display: flex;
     justify-content: space-between;
 }
@@ -97,12 +94,19 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
 .manhuaid\.com#darkbody {
     background: #151515 !important;
 }
+.manhuaid\.com img[alt^="Aplikasi"] {
+    display: none;
+}
 /* mangayu.com */
 .mangayu\.com {
     overflow: auto !important;
 }
 .mangayu\.com .swal2-container {
     display: none;
+}
+/* readcmic.blogspot.com */
+.readcmic\.blogspot\.com #outer-wrapper {
+    background: #151515 !important;
 }
 /* webtoons.com */
 .webtoons\.com img {
