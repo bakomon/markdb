@@ -5,7 +5,7 @@
 
 ## URL List
 ```
-!cdn.komikcast.com, oploverz.in, mangaku.pro, mangaku.co, mangaindo.web.id, komikstation.com, ngomik.net, komikcast.com, otakufile.com, westmanga.info, mangakita.net, mangashiro.co, mangacanblog.com, mangaindo.net, kiryuu.co, komikindo.web.id, komikgo.com, maid.my.id, arsipmanga.me, mangakyo.me, otakuindo.net, bacamanga.co, aomegumi.com, komikav.com, komiku.id, kyuroku.com, manhwa-san.xyz, mangaseno.com, matakomik.com, komikfoxy.xyz, webtoons.com, komikid.com, kombatch.com, komiku.net, mangabat.com, mangapus.com, mangadropout.net, mangareceh.co, sektekomik.com, mangaid.id, bacamanhua.com, manhuaid.com, pojokmanga.com, sheamanga.my.id, iniotaku.com, senpaisubsid.net, klikmanga.com, bacakomik.co, mangatsuki.web.id, mangayu.com, klankomik.com, boosei.com, comicfx.net, yuumanga.com, wordhero.my.id, gurukomik.com, masterkomik.com, kaisarkomik, softkomik.site, katakomik.site, mangapark.net, mangapark.org, trashscanlations.com, mangadex.org, readmanhua.net, readmng.com, ninjascans.com, hatigarmscans.net, zeroscans.com, funmanga.com, bato.to, mangawindow.net, leviatanscans.com, merakiscans.com, mangarawr.com, toonily.com, jaiminisbox.com, mangasushi.net, reaperscans.com, asurascans.com, secretscans.co, animesc-kun.blogspot.com, logmanga.blogspot.com, gunskomik.blogspot.com, readcmic.blogspot.com, mangapaus.blogspot.com, ninkomik.blogspot.com
+!cdn.komikcast.com, oploverz.in, mangaku.pro, mangaku.co, mangaindo.web.id, komikstation.com, ngomik.net, komikcast.com, westmanga.info, mangakita.net, mangashiro.co, mangacanblog.com, kiryuu.co, maid.my.id, mangakyo.me, otakuindo.net, komikav.com, komiku.id, manhwa-san.xyz, matakomik.com, webtoons.com, komikid.com, kombatch.com, komiku.net, mangabat.com, mangceh.com, sektekomik.com, manhuaid.com, pojokmanga.com, sheamanga.my.id, senpaisubsid.net, klikmanga.com, bacakomik.co, mangayu.com, klankomik.com, boosei.com, comicfx.net, yuumanga.com, wordhero.my.id, gurukomik.com, masterkomik.com, kaisarkomik, softkomik.site, katakomik.site, mgkomik.my.id, mangapark.net, mangapark.org, mangadex.org, readmanhua.net, readmng.com, ninjascans.com, hatigarmscanz.net, zeroscans.com, funmanga.com, bato.to, leviatanscans.com, merakiscans.com, mangarawr.com, toonily.com, jaiminisbox.com, mangasushi.net, reaperscans.com, asurascans.com, secretscans.co, animesc-kun.blogspot.com, readcmic.blogspot.com, mangapaus.blogspot.com, ninkomik.blogspot.com
 ```
 ## Anime List
 ```
@@ -24,21 +24,17 @@
 - Mangashiro.net|org|co
 - Mangacanblog.com
 - Mangavy.com | Kiryuu.co
-- Komikindo.web.id
-- Komikgo.com
 - Maid.my.id
 - Mangakyo.net|com|me
 - Otakuindo.net | Komiku.co|co.id|id
 - Otakuindo.web.id | Komiku.net | Tokusiro.com (check)
-- Mangaid.me | Bacamanga.web.id|co
 - Komikav.com
 - Manhwa-san.xyz
 - Matakomik.com
-- Komikfoxy.xyz (check)
 - Webtoons.com
 - Komikid.com
 - Kombatch.com
-- Mangareceh.com|id|co
+- Mangareceh.com|id|co || mangceh.com
 - Sektekomik.com
 - Manhuaid.com
 - Pojokmanga.com
@@ -56,6 +52,7 @@
 - Masterkomik.com
 - Kaisarkomik.com
 - Softkomik.site
+- Mgkomik.my.id
 - Yuumanga.blogspot.com || Yuumanga.com
 - Katakomik.blogspot.com || Katakomik.site
 - Animesc-kun.blogspot.com
@@ -66,13 +63,12 @@
 - Mangapark.com|me|net|org
 - Zeroscans.com
 - Readmanhua.net
-- Readmng.com
+- Readmanga.today || Readmng.com
 - Ninjascans.com
-- Hatigarmscans.net
+- Hatigarmscans.net || hatigarmscanz.net
 - Funmanga.com
 - Mangabat.com
-- Bato.to
-- Mangawindow.com|net
+- Mangawindow.com|net || Bato.to
 - Leviatanscans.com
 - Merakiscans.com
 - Mangarawr.com
@@ -101,6 +97,10 @@
 - Baekjinscans.xyz | Bacamanhua.com
 - Iniotaku.com | Iniotakuu.blogspot.com
 - Mangatsuki.web.id
+- Komikindo.web.id
+- Komikgo.com
+- Mangaid.me | Bacamanga.web.id|co
+- Komikfoxy.xyz
 - Gunskomik.blogspot.com
 - Logmanga.blogspot.com
 - Lozkomik.blogspot.com
