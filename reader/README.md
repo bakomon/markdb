@@ -7,10 +7,6 @@
 ```
 !cdn.komikcast.com, oploverz.in, mangaku.pro, mangaku.co, mangaindo.web.id, komikstation.com, ngomik.net, komikcast.com, westmanga.info, mangakita.net, mangashiro.co, mangacanblog.com, kiryuu.co, maid.my.id, mangakyo.me, otakuindo.net, komikav.com, komiku.id, manhwa-san.xyz, matakomik.com, webtoons.com, komikid.com, kombatch.com, komiku.net, mangabat.com, mangceh.com, sektekomik.com, manhuaid.com, pojokmanga.com, sheamanga.my.id, senpaisubsid.net, klikmanga.com, bacakomik.co, mangayu.com, klankomik.com, boosei.com, comicfx.net, yuumanga.com, wordhero.my.id, gurukomik.com, masterkomik.com, kaisarkomik, softkomik.site, katakomik.site, mgkomik.my.id, mangapark.net, mangapark.org, mangadex.org, readmanhua.net, readmng.com, ninjascans.com, hatigarmscanz.net, zeroscans.com, funmanga.com, bato.to, leviatanscans.com, merakiscans.com, mangarawr.com, toonily.com, jaiminisbox.com, mangasushi.net, reaperscans.com, asurascans.com, secretscans.co, animesc-kun.blogspot.com, readcmic.blogspot.com, mangapaus.blogspot.com, ninkomik.blogspot.com
 ```
-## Anime List
-```
-- Oploverz.net|in
-```
 
 ## Manga List
 ```
@@ -39,7 +35,7 @@
 - Manhuaid.com
 - Pojokmanga.com
 - Sheamanga.my.id
-- Senpaisubsid.net
+##- Senpaisubsid.net
 - Klikmanga.com
 - Bacakomik.co
 - Mangayu.com
@@ -78,6 +74,14 @@
 - Reaperscans.com
 - Asurascans.com
 - Secretscans.co
+```
+
+## Anime List
+```
+- Oploverz.net|in
+- wardhanime.net | awsubs.me|tv|id|co
+- Samehadaku.net|tv|vip
+- Animeindo.asia
 ```
 
 ## Closed
