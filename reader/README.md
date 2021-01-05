@@ -35,7 +35,7 @@
 - Manhuaid.com
 - Pojokmanga.com
 - Sheamanga.my.id
-##- Senpaisubsid.net
+- Senpaisubsid.net
 - Klikmanga.com
 - Bacakomik.co
 - Mangayu.com
