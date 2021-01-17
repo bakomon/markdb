@@ -45,7 +45,11 @@
         xhr.send();
       }
       
-      loadXMLDoc('https://raw.githubusercontent.com/bakomon/page/master/bookmark/comic-bookmark.js', function(res) { console.log(res); });
+      function startPage(data) {
+        var cm_list = el('.bixbox .cl .ul', data);
+      }
+      
+      loadXMLDoc('https://komikcast.com/komik/chronicles-of-heavenly-demon/', function(res) { startPage(res); }, 'parse');
     </script>
   </body>
 </html>
