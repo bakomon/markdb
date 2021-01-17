@@ -110,6 +110,7 @@
       s_txt += '</ul>';
       s_txt += '<div class="cs_text flex"><span class="_text">Search Result</span><span class="f_grow"></span><button class="cs_close _rc bc_btn">Close</button></div>';
       el('.bc_result').innerHTML = s_txt;
+      el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
       
       el('.cs_close').onclick = function() {
         is_search = false;
@@ -139,7 +140,6 @@
       el('.bc_result').innerHTML = 'not found.';
     }
     
-    el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
     el('.bc_result').classList.remove('_hidden');
     el('.reader_db').classList.remove('s_shide');
     el('.mn_notif').classList.add('_hidden');
