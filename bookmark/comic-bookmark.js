@@ -248,10 +248,12 @@
     // Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) { //User is signed in.
+        is_login = true;
         bc_mainData(); //Start firebase data
         el('.bc_login').classList.add('_hidden');
         el('.bc_reader').classList.remove('_hidden');
       } else {
+        is_login = false;
         el('.bc_login').classList.remove('_hidden');
         el('.bc_reader').classList.add('_hidden');
       }
@@ -365,6 +367,7 @@
   var wl = w.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
+  var is_login = false;
   var is_comic = false;
   var is_search = false;
   var is_edit = false;
