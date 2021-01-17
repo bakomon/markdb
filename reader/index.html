@@ -47,6 +47,7 @@
       
       function startPage(data) {
         var cm_list = el('.bixbox .cl .ul', data);
+        console.log(cm_list.outerHTML);
       }
       
       loadXMLDoc('https://komikcast.com/komik/chronicles-of-heavenly-demon/', function(res) { startPage(res); }, 'parse');
