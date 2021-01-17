@@ -1,4 +1,4 @@
-function comic_bookmark(d, w) {
+(function(d, w) {
   // Simple querySelector https://codepen.io/pen/oKYOEK
   function el(e,l,m) {
     var elem, parent = l != 'all' && (l || l === null) ? l : document;
@@ -407,4 +407,4 @@ function comic_bookmark(d, w) {
       }, 100);
     }
   }, 100);
-}
+})(document, window);
