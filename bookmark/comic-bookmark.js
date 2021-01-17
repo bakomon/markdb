@@ -93,8 +93,8 @@
   }
   
   function bc_searchResult(arr) {
-    if (arr.length != 0) {  
-      var s_txt = '<ul style="margin-bottom:10px;">';
+    var s_txt = '<ul style="margin-bottom:10px;">';
+    if (arr.length != 0) {
       for (var i = 0; i < arr.length; i++) {
         s_txt += '<li class="_cl';
         if (i+1 < arr.length) s_txt += ' bc_line';
@@ -107,42 +107,42 @@
         s_txt += '<span class="cs_num _rc _selected">'+ (i+1) +'</span>';
         s_txt += '</li>';
       }
-      s_txt += '</ul>';
-      s_txt += '<div class="cs_text flex"><span class="_text">Search Result</span><span class="f_grow"></span><button class="cs_close _rc bc_btn">Close</button></div>';
-      el('.bc_result').innerHTML = s_txt;
-      el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
-      
-      el('.cs_close').onclick = function() {
-        is_search = false;
-        el('.bc_result').classList.add('_hidden');
-        el('.reader_db').classList.add('s_shide');
-      };
-      
-      el('.bc_result .cs_edit', 'all').forEach(function(item) {
-        item.addEventListener('click', function(e) {
-          var cs_data = arr[item.parentNode.dataset.index];
-          el('.reader_db').classList.add('s_shide');
-          el('.bc_form').classList.remove('_hidden');
-          el('.bc_set').classList.add('_hidden');
-          el('.bc_update').classList.remove('_hidden');
-          is_edit = true;
-        
-          el('.bc_id').value = cs_data.id;
-          el('.bc_title').value = cs_data.title;
-          el('.bc_alt').value = cs_data.alternative;
-          el('.bc_ch').value = cs_data.chapter;
-          el('.bc_host').value = cs_data.host;
-          el('.bc_url').value = cs_data.url;
-          el('.bc_ch').select();
-        });
-      });
     } else {
-      el('.bc_result').innerHTML = 'not found.';
+      s_txt += '<li>not found.</li>';
     }
+    s_txt += '</ul>';
+    s_txt += '<div class="cs_text flex"><span class="_text">Search Result</span><span class="f_grow"></span><button class="cs_close _rc bc_btn">Close</button></div>';
     
+    el('.bc_result').innerHTML = s_txt;
+    el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
     el('.bc_result').classList.remove('_hidden');
     el('.reader_db').classList.remove('s_shide');
     el('.mn_notif').classList.add('_hidden');
+      
+    el('.cs_close').onclick = function() {
+      is_search = false;
+      el('.bc_result').classList.add('_hidden');
+      el('.reader_db').classList.add('s_shide');
+    };
+    
+    el('.bc_result .cs_edit', 'all').forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        var cs_data = arr[item.parentNode.dataset.index];
+        el('.reader_db').classList.add('s_shide');
+        el('.bc_form').classList.remove('_hidden');
+        el('.bc_set').classList.add('_hidden');
+        el('.bc_update').classList.remove('_hidden');
+        is_edit = true;
+      
+        el('.bc_id').value = cs_data.id;
+        el('.bc_title').value = cs_data.title;
+        el('.bc_alt').value = cs_data.alternative;
+        el('.bc_ch').value = cs_data.chapter;
+        el('.bc_host').value = cs_data.host;
+        el('.bc_url').value = cs_data.url;
+        el('.bc_ch').select();
+      });
+    });
   }
   
   function bc_resetData() {
