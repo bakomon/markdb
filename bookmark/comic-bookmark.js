@@ -104,7 +104,7 @@
         s_txt += '<a class="_bc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
         if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
         s_txt += '</a>';
-        s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter +'">';
+        s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter +'" disabled>';
         s_txt += '<button class="cs_edit bc_btn _bc">Edit</button>';
         s_txt += '<span class="cs_num _bc _selected">'+ (i+1) +'</span>';
         s_txt += '</li>';
@@ -246,7 +246,7 @@
     b_txt += '</div>';// .bc_form
     b_txt += '<div class="bc_result bc_line _hidden"></div>';
     b_txt += '<div class="bc_tr1">';
-    b_txt += '<div class="bc_comic bc_line _hidden"><div class="_cm flex_wrap"><a class="_bc bc_100" href="javascript:void(0)" target="_blank"></a><input class="cm_ch bc_input _bc bc_50" type="text" placeholder="chapter"><button class="cm_edit bc_btn _bc _hidden">Edit</button></div></div>';
+    b_txt += '<div class="bc_comic bc_line _hidden"><div class="_cm flex_wrap"><a class="_bc bc_100" href="javascript:void(0)" target="_blank"></a><input class="cm_ch bc_input _bc bc_50" type="text" placeholder="chapter" disabled><button class="cm_edit bc_btn _bc _hidden">Edit</button></div></div>';
     b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _bc bc_100" type="text" placeholder="Search..."><button class="bc_btn _bc">GO</button></div>';
     b_txt += '<div class="bc_menu flex"><button class="bc_add bc_btn _bc">Add</button><button class="bc_out bc_btn _bc">Logout</button><span class="mn_notif _bc _selected _hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
