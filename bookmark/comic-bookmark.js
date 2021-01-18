@@ -225,7 +225,7 @@
     // css mobile
     b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // css custom
-    b_txt += '<style>.mangaku\\.pro .bmark_db.bc_shide{left:-370px;}.mangaku\\.pro .bc_mobile .bmark_db.bc_shide{left:-85%;}</style>';
+    b_txt += '<style>.mangaku\\.pro .bmark_db.bc_shide,.mangaindo\\.web\\.id .bmark_db.bc_shide{left:-370px;}.mangaku\\.pro .bc_mobile .bmark_db.bc_shide,.mangaindo\\.web\\.id .bc_mobile .bmark_db.bc_shide{left:-85%;}</style>';
     // html
     b_txt += '<div class="bc_bg _hidden"></div>';
     b_txt += '<div class="bmark_db s_shide bc_shide flex_wrap f_bottom">';
