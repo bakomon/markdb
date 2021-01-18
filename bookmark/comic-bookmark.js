@@ -1,26 +1,4 @@
 (function(d, w) {
-  // Simple querySelector https://codepen.io/pen/oKYOEK
-  function el(e,l,m) {
-    var elem, parent = l != 'all' && (l || l === null) ? l : document;
-    if (parent === null) {
-      elem = parent;
-      console.error('selector: '+ e +' => parent: '+ parent);
-    } else {
-      elem = (m || l == 'all') ? parent.querySelectorAll(e) : parent.querySelector(e);
-    }
-    return elem;
-  }
-  
-  // Add script to head. data, info, boolean, element. https://codepen.io/sekedus/pen/QWKYpVR
-  function addScript(i,n,f,o) {
-    var dJS = document.createElement('script');
-    dJS.type = 'text/javascript';
-    if (n == 'in') dJS.async = (n || f) === true ? true : false;
-    n == 'in' ? dJS.innerHTML = i : dJS.src = i;
-    var elm = n && n.tagName ? n : f && f.tagName ? f : o && o.tagName ? o : document.querySelector('head');
-    elm.appendChild(dJS);
-  }
-  
   // https://stackoverflow.com/a/32589289
   function firstCase(str, sep) {
     var separate = sep ? sep : ' ';
@@ -253,11 +231,11 @@
     b_txt += '<div class="bc_toggle bc_btn _bc bc_100 flex t_center">&#9733;</div>';
     b_txt += '</div>';// .bmark_db
     
-    var b_html = d.createElement('div');
+    var b_html = document.createElement('div');
     b_html.style.cssText = 'position:relative;z-index:2147483647;';
     b_html.className = '_bmark' + (isMobile() ? ' bc_mobile' : '');
     b_html.innerHTML = b_txt;
-    d.body.appendChild(b_html);
+    document.body.appendChild(b_html);
     
     // Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102
     firebase.auth().onAuthStateChanged(function(user) {
@@ -273,8 +251,8 @@
       }
     });
     
-    d.onkeyup = function(e) {
-      if (el('.bc_search input') === d.activeElement && e.keyCode == 13) {
+    document.onkeyup = function(e) {
+      if (el('.bc_search input') === document.activeElement && e.keyCode == 13) {
         el('.bc_search button').click(); //enter to search
       }
     };
@@ -284,7 +262,7 @@
       el('.bmark_db').classList.toggle('bc_shide');
       if (isMobile()) {
         el('.bc_bg').classList.toggle('_hidden');
-        d.body.style.overflow = el('.bmark_db').classList.contains('bc_shide') ? 'initial' : 'hidden';
+        document.body.style.overflow = el('.bmark_db').classList.contains('bc_shide') ? 'initial' : 'hidden';
       }
     };
     
@@ -371,7 +349,7 @@
     };
   }
   
-  var wl = w.location;
+  var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
   var is_login = false;
@@ -414,4 +392,4 @@
       }, 100);
     }
   }, 100);
-})(document, window);
+})();
