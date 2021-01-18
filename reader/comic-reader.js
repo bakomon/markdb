@@ -1,4 +1,4 @@
-(function() {
+function comic_reader() {
   // Position (X,Y) element https://stackoverflow.com/a/28222246
   function getOffset(el, p) {
     const rect = el.getBoundingClientRect();
@@ -590,7 +590,8 @@
           break;
         }
       }
-      eData = JSON.parse(eScript.match(/(\{[^\;]+)\)\;/)[1]);
+      eData = eScript.match(/(\{[^\;]+)\)\;/)[1];
+      eData = JSON.parse(eData);
       createImage(eData);
     } else if (wh.search(/manhwa\-san|katakomik|readcmic/) != -1) { //Show nextprev
       var nextprev = el('.alphanx') || el('.naviarea1') || el('.nextprev');
@@ -909,4 +910,4 @@
     if (wh.search(/kiryuu|komikindo.web.id|sektekomik|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|asurascans/) != -1) document.body.classList.add('new_themesia');
     checkAll();
   }
-})();
+}
