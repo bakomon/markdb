@@ -590,7 +590,7 @@
           break;
         }
       }
-      console.error('this');
+      var sssss = dedata;
       eData = eScript.match(/(\{[^\;]+)\)\;/)[1];
       eData = JSON.parse(eData);
       createImage(eData);
