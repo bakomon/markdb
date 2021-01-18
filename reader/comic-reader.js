@@ -187,7 +187,7 @@
     var r_txt = '';
     // css reader
     r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:150px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-150px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}._selected,.rc_btn:hover{background:#4267b2;border-color:#4267b2;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all{width:30px !important;margin-left:8px;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._hidden{display:none;}</style>';
-    r_txt += '<style></style>'; //css hidden
+    r_txt += '<style>.scrollToTop,[title*="Back To Top"]{display:none !important;}</style>'; //css hidden
     r_txt += '<style>.rc_mobile ._rc{font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>'; //css mobile
     r_txt += '<div class="reader_db flex_wrap f_bottom">';
     r_txt += '<div class="rc_tr1 flex_wrap">';
@@ -603,6 +603,18 @@
       var imgMS = dataMS('images');
       createImage(imgMS);
     } else if (wh.indexOf('mangaku') != -1) { //script
+      if (el('#data_mgk')) {
+        var par_elm = el('.singlep .section_ad.group_ad').parentNode.nextElementSibling; //dtxx
+        var r_area = document.createElement('div');
+        r_area.id = 'readerarea';
+        r_area.innerHTML = el('#data_mgk').innerHTML;
+        par_elm.parentNode.insertBefore(r_area, par_elm);
+        par_elm.parentNode.removeChild(par_elm);
+        
+        startImage();
+      }
+      
+      /* new
       var el_mgk = el('#contentwrap');
       var new_mgk = document.createElement('div');
       new_mgk.innerHTML = el_mgk.innerHTML;
@@ -634,9 +646,9 @@
         });
       });
       observer.observe(par_elm, { childList: true });
+      */
       
-      /*
-      
+      /* old
       function dePass(pr1, pr2) {
         var pr_list = '-ABCDEFGHIJKLMNOPQRSTUVWXYZ=0123456789abcdefghijklmnopqrstuvwxyz+';
         var pr_chk1 = pr_list.indexOf(pr1);
@@ -726,7 +738,6 @@
       new_txt.value = d_id1;
       //wl.hash = d_img;
       document.body.appendChild(new_txt);
-      
       */
     }
     
