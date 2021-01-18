@@ -1,9 +1,12 @@
 (function() {
-  // Position (X,Y) element https://stackoverflow.com/a/28222246
-  function getOffset(el, p) {
-    const rect = el.getBoundingClientRect();
-    var xy = p == 'left' ? rect.left + window.scrollX : rect.top + window.scrollY;
-    return xy;
+  // https://stackoverflow.com/a/32589289
+  function firstCase(str, sep) {
+    var separate = sep ? sep : ' ';
+    var splitStr = str.toLowerCase().split(separate);
+    for (var i = 0; i < splitStr.length; i++) {
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+    }
+    return splitStr.join(' '); 
   }
   
   // Detect mobile device https://stackoverflow.com/a/11381730/7598333
@@ -12,871 +15,381 @@
     return /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4));
   }
   
-  function removeElem(elem, num) {
-    var elmn = typeof elem == 'string' ? document.querySelectorAll(elem) : elem;
-    elmn = num ? (num == 'all' ? elmn : elmn[num]) : (typeof elem == 'string' ? elmn[0] : elmn);
-    
-    if (num == 'all') {
-      for (var i = 0; i < elmn.length; i++) {
-        elmn[i].parentNode.removeChild(elmn[i]);
-      }
-    } else {
-      elmn.parentNode.removeChild(elmn);
-    }
+  function bc_checkData(id) {
+    return firebase.database().ref(`comic/${id}`).once('value').then(function(snapshot) {
+        return snapshot.exists() ? true : false;
+    });
   }
   
-  function copyAttribute(element, new_node) {
-    var el_new = document.createElement(new_node);
-    var el_att = element.outerHTML.match(/<[^\s]+\s([^>]+)>/)[1];
-    el_att = el_att.match(/([^"]+"[^"]+"\s?)/g);
-    for (var i = 0; i < el_att.length; i++) {
-      var att_name = el_att[i].match(/([^=]+)="([^"]+)"/)[1].replace(/\s+/, '');
-      var att_value = el_att[i].match(/([^=]+)="([^"]+)"/)[2];
-      if (new_node == 'i' && att_name == 'href') att_name = 'data-'+ att_name; 
-      el_new.setAttribute(att_name, att_value);
-    }
-    return el_new;
-  }
-  
-  // Cookies https://www.quirksmode.org/js/cookies.html
-  function createCookie(name, value, timer) {
-    if (timer) {
-      var date = new Date();
-      //date.setTime(date.getTime()+(timer*60*1000)); //minutes
-      date.setTime(date.getTime()+(timer*24*60*60*1000)); //days
-      var expires = '; expires='+date.toGMTString();
-    } else {
-      var expires = '';
-    }
-    document.cookie = name+'='+value+expires+'; path=/';
-  }
-  
-  function readCookie(name) {
-    var nameEQ = name + '=';
-    var ca = document.cookie.split(';');
-    for (var i = 0;i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0)==' ') c = c.substring(1,c.length);
-      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-  }
-  
-  function eraseCookie(name) {
-    createCookie(name,'',-1);
-  }
-  
-  function getData(url) {
-    var x = new XMLHttpRequest();
-    x.onreadystatechange = function() {
-      if (x.readyState == XMLHttpRequest.DONE) {
-        var imgData = JSON.parse(x.responseText);
-        createImage(imgData);
-      }
-    };
-    x.open('GET', url, true);
-    x.send();
-  }
-  
-  function reloadComment(id) {
-    var par_dsqs = el('#disqus_thread').parentNode;
-    par_dsqs.removeChild(el('#disqus_thread'));
-    
-    var disqus_load = document.createElement('div');
-    disqus_load.innerHTML = '<div style="text-align:center;"><button id="disqus_trigger" style="border:0;padding:5px 10px;font-size:20px;cursor:pointer;">Post a Comment</button></div>';
-    par_dsqs.appendChild(disqus_load);
-    
-    var disqus_new = document.createElement('div');
-    par_dsqs.appendChild(disqus_new);
-    
-    el('#disqus_trigger').onclick = function() {
-      this.style.display = 'none';
-      disqus_new.id = 'disqus_thread';
-      addScript('//' + id + '.disqus.com/embed.js', true);
-    };
-  }
-  
-  function startChange(img, note) {
-    var imgs = '';
-    if (getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) || note != undefined) {
-      imgs = img.dataset.readImg;
-      if (loadCDN) imgs = imgs.replace(/(?:i\d+|cdn)\.(wp|statically)\.(?:com|io)\//g, '');
-      if (imgs.search(/(pending\-load|cdn\.statically\.io)/) != -1) {
-        imgs = imgs.replace(/\?(.*)/g, ''); //remove location.search ?=
-      } else if (loadSz) {
-        var sNum = el('.rc_size').innerHTML;
-        imgs = imgs.replace(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\//, '/'+ sNum +'/');
-        imgs = imgs.replace(/=[swh](\d+)[^\n]*/, '='+ sNum);
-        if (imgs.indexOf('docs.google') != -1) imgs = imgs.replace(/https?:\/\/docs\.google\.com\/uc\?export=view&id=(.*)/g, 'https://lh3.googleusercontent.com/d/$1='+ sNum);
-      }
-      img.src = imgs;
-      setTimeout(function() {img.style.minHeight = null}, 2000);
-    }
-  }
-  
-  function scrollImage(img) {
-    window.onscroll = function() {
-      for (var i = 0; i < img.length; i++) {
-        if (!lsImg) {
-          startChange(img[i]);
-        }
-        if (img[img.length-1].src) {lsImg = true;}
-      }
-    }
-  }
-  
-  function nextChapter() {
-    var chNav, chUrl, nextCh, nextChk, nextLink;
-    var chNum = wp.replace(/(?:\/(?:manga|comic|komik)\/)?[^\/]*\/([^\/]*)\/?/g, '$1');
-    if (wh.indexOf('mangacanblog') != -1) {
-      chNav = el('.pager select[name="chapter"]').options;
-    } else if (wh.indexOf('jaiminisbox') != -1) {
-      var ch_val = el('.tbtitle.dnone a[title*="hapter"]').href;
-      el('#csel option[value="'+ ch_val +'"]').selected = true;
-      chNav = el('#csel').options;
-    } else if (wh.indexOf('merakiscans') != -1) {
-      el('#chapter_select option[value="'+ chNum +'"]').selected = true;
-      chNav = el('#chapter_select').options;
-      chUrl = el('#reader_text a').href;
-      removeElem('#next');
-      removeElem('#nextbot');
-      removeElem('#page_select');
-    }
-    
-    nextChk = wh.search(/merakiscans/) != -1 ? 'nextElementSibling' : 'previousElementSibling';
-    for (var i = 0; i < chNav.length; i++) {
-      if (chNav[i].selected == true) {nextCh = chNav[i];}
-    }
-    
-    if (nextCh[nextChk]) {
-      nextLink = nextCh[nextChk].value;
-      if (wh.search(/merakiscans/) != -1) {
-        nextLink = chUrl +'/'+ nextLink;
-      } else if (wh.indexOf('mangacanblog') != -1) {
-        var manga_name = el('.pager select[name="manga"]').value;
-        var next_plus = ((nextLink-1)+2);
-        nextLink = '//'+ wh +'/baca-komik-'+ manga_name +'-'+ nextLink +'-'+ next_plus +'-bahasa-indonesia-'+ manga_name +'-'+ nextLink +'-terbaru.html';
-      }
-      var next_url = el('body').classList.contains('new_themesia') ? next_chap.dataset.href : next_chap.href;
-      el('.rc_next button').setAttribute('data-href', next_url);
-      el('.rc_next').classList.remove('_hidden');
-    }
-  }
-  
-  function createBtn(img) {
-    var r_txt = '';
-    // css reader
-    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:150px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-150px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}._selected,.rc_btn:hover{background:#4267b2;border-color:#4267b2;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all{width:30px !important;margin-left:8px;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._hidden{display:none;}</style>';
-    r_txt += '<style>.scrollToTop,[title*="Back To Top"],.back-to-top,.go-to-top,.btn-top{display:none !important;}</style>'; //css hidden
-    r_txt += '<style>.rc_mobile ._rc{font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>'; //css mobile
-    r_txt += '<div class="reader_db flex_wrap f_bottom">';
-    r_txt += '<div class="rc_tr1 flex_wrap">';
-    r_txt += '<div class="rc_others rc_line rc_100 flex _hidden">';
-    if (chcdn) r_txt += '<div class="rc_cdn rc_btn _rc" title="'+ cdnName +'">CDN</div>';
-    if (chgi) r_txt += '<div class="rc_size rc_btn _rc">'+ imgSize +'</div>';
-    r_txt += '</div>'; //.rc_others
-    r_txt += '<div class="rc_next rc_line rc_100 _hidden"><button class="rc_btn _rc" title="arrow right &#9656;" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
-    r_txt += '<div class="rc_load rc_line rc_100"><button class="rc_load rc_btn _rc" title="alt + a">Load</button><input class="rc_all rc_input _rc" value="all" onclick="this.select()"></div>';
-    r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (readCookie('reader-zoom') || imgArea.offsetWidth) +'"></div>';
-    r_txt += '</div>';// .rc_tr1
-    r_txt += '<div class="rc_tr2">';
-    r_txt += '<div class="rc_top rc_btn _rc flex t_center">&#9652;</div>';
-    r_txt += '<div class="rc_bottom rc_btn _rc flex t_center">&#9662;</div>';
-    r_txt += '<div class="rc_toggle rc_btn _rc flex t_center">&#174;</div>';
-    r_txt += '</div>';// .rc_tr2
-    r_txt += '</div>';// .reader_db
-    
-    var r_html = document.createElement('div');
-    r_html.style.cssText = 'position:relative;z-index:2147483646;';
-    r_html.className = '_reader cbr_mod' + (isMobile() ? ' rc_mobile' : '');
-    r_html.innerHTML = r_txt;
-    document.body.appendChild(r_html);
-    if (chcdn || chgi) el('.rc_others').classList.remove('_hidden');
-    if (readCookie('reader-zoom')) imgArea.style.cssText = 'max-width:'+ readCookie('reader-zoom') +'px !important;';
-    
-    if (wh.search(/mangacanblog|merakiscans|jaiminisbox/) != -1) {nextChapter();} //next button
-    
-    el('.rc_toggle').onclick = function() {
-      this.classList.toggle('_selected');
-      el('.reader_db').classList.toggle('rc_shide');
-    };
-    
-    // Load all images
-    el('.rc_load').onclick =  function() {
-      if (el('.rc_all').value == 'all') {
-        lsImg = true;
-        for (var i = 0; i < img.length; i++) {
-          startChange(img[i], 'all');
-        }
+  // Firebase update vs set https://stackoverflow.com/a/38924648
+  function bc_updateData(id, title, alternative, chapter, note, host, url) {
+    firebase.database().ref('comic/' + id).update({
+      id: id,
+      title: title,
+      alternative: alternative,
+      chapter: chapter,
+      note: note,
+      host: host,
+      url: url
+    }, (error) => {
+      if (error) {
+        el('.mn_notif').innerHTML = 'Error!!';
+        console.log(error);
       } else {
-        startChange(img[el('.rc_all').value - 1]);
+        el('.mn_notif').innerHTML = 'Done';
       }
-    };
-    
-    if (chgi) {
-      el('.rc_size').onclick = function() {
-        this.innerHTML = this.innerHTML == imgSize ? 's15000' : imgSize;
-        loadSz = this.innerHTML == imgSize ? false : true;
-      };
-    }
-    
-    if (chcdn) {
-      el('.rc_cdn').onclick = function() {
-        this.innerHTML = this.innerHTML == 'CDN' ? 'not' : 'CDN';
-        loadCDN = this.innerHTML == 'CDN' ? false : true;
-        if (chgi) {
-          el('.rc_size').innerHTML = 's15000';
-          el('.rc_size').click();
-        }
-      };
-    }
-    
-    el('.rc_zoom button', 'all').forEach(function(item) {
-      item.addEventListener('click', function(e) {
-        var load_zm = Number(el('.rc_zoom input').value);
-        if (item.classList.contains('rc_plus')) {
-          load_zm += 50;
-        } else {
-          load_zm += -50
-        }
-        imgArea.style.cssText = 'max-width:'+ load_zm +'px !important;';
-        el('.rc_zoom input').value = load_zm;
-        createCookie('reader-zoom', load_zm, 365);
-      });
+      el('.mn_notif').classList.remove('_hidden');
+      setTimeout(function() { el('.mn_notif').classList.add('_hidden'); }, 1000);
     });
     
-    // back to top
-    el('.rc_top').onclick = function() {
-      document.body.scrollIntoView();
-    };
-    
-    // back to bottom
-    el('.rc_bottom').onclick = function() {
-      if (el('#disqus_trigger')) {
-        el('#disqus_trigger').parentNode.scrollIntoView();
-      } else {
-        document.body.scrollIntoView(false);
-      }
-    };
-    
-    /*
-    note:
-    - .pager-cnt .pull-right = my Manga Reader CMS
-    - .btn-sm i[class*="right"] = new CMS "scans"
-    - i[rel="next"] = new_tab
-    */
-    var next_chap =  el('.mangayu\\.com a>i[class*="arrow-right"]') || el('.manhuaid\\.com a[class*="float-left"]') || el('.softkomik\\.site .baca-button .fa-chevron-right') || el('.mangadex\\.org .reader-controls-chapters a[class*="right"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
-    if (next_chap) {
-      next_chap = wh.search(/mangadropout|leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz|softkomik|mangayu/) != -1 ? next_chap.parentNode : next_chap;
-      var next_url = el('body').classList.contains('new_themesia') ? next_chap.dataset.href : next_chap.href;
-      el('.rc_next button').setAttribute('data-href', next_url);
-      el('.rc_next').classList.remove('_hidden');
+    if (is_search) {
+      el('.bc_search button').click();
+    } else {
+      bc_mainData('new');
     }
+  }
+  
+  function bc_setData(id, title, alternative, chapter, note, host, url) {
+    firebase.database().ref('comic/' + id).set({
+      id: id,
+      title: title,
+      alternative: alternative,
+      chapter: chapter,
+      note: note,
+      host: host,
+      url: url
+    }, (error) => {
+      if (error) {
+        el('.mn_notif').innerHTML = 'Error!!';
+        console.log(error);
+      } else {
+        el('.mn_notif').innerHTML = 'Done';
+      }
+      el('.mn_notif').classList.remove('_hidden');
+      setTimeout(function() { el('.mn_notif').classList.add('_hidden'); }, 1000);
+    });
+    
+    bc_mainData('new');
+  }
+  
+  function bc_searchResult(arr) {
+    var s_txt = '<div class="cs_list" style="margin-bottom:10px;"><ul>';
+    if (arr.length != 0) {
+      for (var i = 0; i < arr.length; i++) {
+        s_txt += '<li class="_cl';
+        if (i+1 < arr.length) s_txt += ' bc_line';
+        s_txt += ' flex_wrap" data-index="'+ i +'">';
+        s_txt += '<a class="_bc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
+        if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
+        s_txt += '</a>';
+        s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter +'" disabled>';
+        s_txt += '<button class="cs_edit bc_btn _bc">Edit</button>';
+        s_txt += '<span class="cs_num _bc _selected">'+ (i+1) +'</span>';
+        s_txt += '</li>';
+      }
+    } else {
+      s_txt += '<li>Oops! Comic not found</li>';
+    }
+    s_txt += '</ul></div>';
+    s_txt += '<div class="cs_text flex"><span class="bc_text">Search Result</span><span class="f_grow"></span><button class="cs_close bc_btn _bc">Close</button></div>';
+    
+    el('.bc_result').innerHTML = s_txt;
+    el('.bc_result').classList.remove('_hidden');
+    el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
+    el('.bmark_db').classList.remove('s_shide');
+    el('.mn_notif').classList.add('_hidden');
+      
+    el('.cs_close').onclick = function() {
+      is_search = false;
+      el('.bc_result').classList.add('_hidden');
+      el('.bmark_db').classList.add('s_shide');
+    };
+    
+    el('.bc_result .cs_edit', 'all').forEach(function(item) {
+      item.addEventListener('click', function() {
+        var cs_data = arr[item.parentNode.dataset.index];
+        bc_editData('search', cs_data);
+      });
+    });
+  }
+  
+  function bc_resetData() {
+    el('.bc_id').value = '';
+    el('.bc_title').value = '';
+    el('.bc_alt').value = '';
+    el('.bc_ch').value = '';
+    el('.bc_note').value = '';
+    el('.bc_host').value = '';
+    el('.bc_url').value = '';
+  }
+  
+  function bc_editData(note, data) {
+    el('.bc_comic').classList.add('_hidden');
+    if (is_search) el('.bmark_db').classList.add('s_shide');
+    el('.bc_form').classList.remove('_hidden');
+    el('.bc_set').classList.add('_hidden');
+    el('.bc_update').classList.remove('_hidden');
+    is_edit = true;
+    
+    el('.bc_id').value = data.id;
+    el('.bc_title').value = data.title;
+    el('.bc_alt').value = data.alternative;
+    el('.bc_ch').value = data.chapter;
+    el('.bc_note').value = data.note;
+    el('.bc_host').value = data.host;
+    el('.bc_url').value = data.url;
+    el('.bc_ch').select();
+  }
+  
+  function bc_showData() {
+    cm_data = undefined;
+    firebase.database().ref('comic/' + cm_ID).on('value', function(snapshot) {
+      cm_data = snapshot.val();
+      if (wh.indexOf(cm_data.host) != -1 && wp.indexOf(cm_ID) != -1) {
+        el('.cm_edit').classList.remove('_hidden');
+      } else {
+        el('.bc_comic a').href = cm_data.url;
+      }
+      el('.bc_comic a').innerHTML = cm_data.title;
+      el('.bc_comic .cm_ch').value = cm_data.chapter;
+      el('.bc_comic').classList.remove('_hidden');
+      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1) {
+        el('.bc_toggle').click();
+      }
+    });
+  }
+  
+  function bc_genData(json, query) {
+    var arr = [];
+    for (var key in json) {
+      arr.push(json[key]);
+      // check if comic data exist and show bookmark
+      var id_rgx = new RegExp(json[key].id.replace(/\-/g, ' '), 'i');
+      if (!query && (wp.indexOf(json[key].id) != -1 || el('title').innerHTML.search(id_rgx) != -1)) {
+        cm_ID = json[key].id;
+        is_comic = true;
+        bc_showData();
+      }
+    }
+    // search
+    if (query) {
+      var rgx = new RegExp(query, 'ig');
+      return arr.filter(item => (item.id.search(rgx) != -1 || item.title.search(rgx) != -1 || item.alternative.search(rgx) != -1 || item.host.search(rgx) != -1));
+    } else {
+      return arr;
+    }
+  }
+  
+  function bc_mainData(note, query) {
+    firebase.database().ref('comic').once('value', function(snapshot) {
+      if (query) {
+        bc_searchResult(bc_genData(snapshot.val(), query));
+      } else {
+        main_data = bc_genData(snapshot.val());
+      }
+    });
+    
+    if (note) {
+      bc_resetData();
+      el('.bc_form').classList.add('_hidden');
+    }
+  }
+  
+  function startBookmark() {
+    var b_txt = '';
+    // css control alread in css reader
+    // css bookmark
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._bc a{color:#ddd;font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}._selected,.bc_btn:hover{background:#4267b2;border-color:#4267b2;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,._hidden{display:none;}</style>';
+    // css mobile
+    b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
+    // html
+    b_txt += '<div class="bc_bg _hidden"></div>';
+    b_txt += '<div class="bmark_db s_shide bc_shide flex_wrap f_bottom">';
+    b_txt += '<div class="bc_login flex_wrap _hidden">';
+    b_txt += '<input class="bc_email bc_input _bc bc_100" type="email" placeholder="Email">';
+    b_txt += '<input class="bc_pass bc_input _bc bc_100" type="password" placeholder="Password">';
+    b_txt += '<div class="flex"><button class="bc_in bc_btn _bc">Login</button><span class="lg_notif _bc _selected _hidden"></span></div>';
+    b_txt += '</div>';// .bc_login
+    b_txt += '<div class="bc_data bc_100 _hidden">';
+    b_txt += '<div class="bc_form bc_line flex_wrap _hidden">';
+    b_txt += '<input class="bc_id bc_input _bc bc_100" type="text" placeholder="ID">';
+    b_txt += '<input class="bc_title bc_input _bc bc_100" type="text" placeholder="Title">';
+    b_txt += '<input class="bc_alt bc_input _bc bc_100" type="text" placeholder="Alternative Title">';
+    b_txt += '<input class="bc_ch bc_input _bc bc_100" type="text" placeholder="Chapter">';
+    b_txt += '<input class="bc_note bc_input _bc bc_100" type="text" placeholder="Note">';
+    b_txt += '<input class="bc_host bc_input _bc bc_100" type="text" placeholder="hostname">';
+    b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
+    b_txt += '<div class="bc_upnew bc_100 flex t_right"><button class="bc_gen bc_btn _bc">Generate</button><span class="f_grow"></span><button class="bc_close bc_btn _bc">Close</button><button class="bc_set bc_btn _bc _selected _hidden">Set</button><button class="bc_update bc_btn _bc _selected _hidden">Update</button></div>';
+    b_txt += '</div>';// .bc_form
+    b_txt += '<div class="bc_result bc_line _hidden"></div>';
+    b_txt += '<div class="bc_tr1">';
+    b_txt += '<div class="bc_comic bc_line _hidden"><div class="_cm flex_wrap"><a class="_bc bc_100" href="javascript:void(0)" target="_blank"></a><input class="cm_ch bc_input _bc bc_50" type="text" placeholder="chapter" disabled><button class="cm_edit bc_btn _bc _hidden">Edit</button></div></div>';
+    b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _bc bc_100" type="text" placeholder="Search..."><button class="bc_btn _bc">GO</button></div>';
+    b_txt += '<div class="bc_menu flex"><button class="bc_add bc_btn _bc">Add</button><button class="bc_out bc_btn _bc">Logout</button><span class="mn_notif _bc _selected _hidden"></span></div>';
+    b_txt += '</div>';// .bc_tr1
+    b_txt += '</div>';// .bc_data
+    b_txt += '<div class="bc_toggle bc_btn _bc bc_100 flex t_center">&#9733;</div>';
+    b_txt += '</div>';// .bmark_db
+    
+    var b_html = document.createElement('div');
+    b_html.style.cssText = 'position:relative;z-index:2147483647;';
+    b_html.className = '_bmark cbr_mod' + (isMobile() ? ' bc_mobile' : '');
+    b_html.innerHTML = b_txt;
+    document.body.appendChild(b_html);
+    
+    // Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) { //User is signed in.
+        is_login = true;
+        bc_mainData(); //Start firebase data
+        el('.bc_login').classList.add('_hidden');
+        el('.bc_data').classList.remove('_hidden');
+      } else {
+        is_login = false;
+        el('.bc_login').classList.remove('_hidden');
+        el('.bc_data').classList.add('_hidden');
+      }
+    });
     
     document.onkeyup = function(e) {
-      if ((e.altKey) && (e.keyCode == 65)) {
-        el('.rc_load').click(); //"alt & a" for load all
-      } else if ((e.shiftKey) && (e.keyCode == 38)) {
-        el('.rc_zoom .rc_plus').click(); //"shift & up" zoom +
-      } else if ((e.shiftKey) && (e.keyCode == 40)) {
-        el('.rc_zoom .rc_less').click(); //"shift & down" zoom -
-      } else if (e.keyCode == 39) { //arrow right
-        if (next_chap) {
-          if (wh.search(/mangadex|softkomik/) != -1) {
-            wl.href = next_chap.href;
-          } else if (document.body.classList.contains('new_tab')) {
-            wl.href = next_chap.dataset.href;
-          } else {
-            next_chap.click();
-          }
-        }
+      if (el('.bc_search input') === document.activeElement && e.keyCode == 13) {
+        el('.bc_search button').click(); //enter to search
       }
     };
-  }
-  
-  function startImage(prnt, imgs) {
-    var cp = document.createElement('div');
-    cp.id = 'check-point';
-    cp.style.cssText = 'z-index:2;color:transparent;position:fixed;bottom:-400px;';
-    cp.innerHTML = '.';
-    document.body.appendChild(cp);
-    checkPoint = el('#check-point');
     
-    if (!prnt && !imgs) {
-      var st = [
-        '0','#readerarea',
-        '1','.reading-content',
-        '2','.read-container',
-        '3','#readerareaimg',
-        '4','.reader-area',
-        '5','.viewer-cnt #all',
-        '6','#Gambar_komik',
-        '7','#viewer',
-        '8','#Blog1 .post-body',
-        'webtoons.com','.viewer_lst .viewer_img',
-        'mangaindo.web.id','.entry-content',
-        'mangacanblog.com','#imgholder',
-        'komikfoxy.xyz','#gallery-1',
-        'mangabat.com','.container-chapter-reader',
-        'mangadropout.net','#displayNoAds .col-md-12.text-center',
-        'manhuaid.com','.row.mb-4 .col-md-12',
-        'komiku.id','#Baca_Komik',
-        'bacakomik.co','#chimg-auh',
-        'rawdevart.com','#img-container'
-      ];
-      var area_s = el(st[1]) || el(st[3]) || el(st[5]) || el(st[7]) || el(st[9]) || el(st[11]) || el(st[13]) || el(st[15]) || el(st[17]);
-      var s_length = st.length;
-      if (s_length % 2 == 1) {
-        s_length--
+    el('.bc_toggle').onclick = function() {
+      this.classList.toggle('_selected');
+      el('.bmark_db').classList.toggle('bc_shide');
+      if (isMobile()) {
+        el('.bc_bg').classList.toggle('_hidden');
+        document.body.style.overflow = el('.bmark_db').classList.contains('bc_shide') ? 'initial' : 'hidden';
       }
-      for (var j = 16; j < s_length; j += 2) {
-        if (wh.indexOf(st[j]) != -1) {
-          imgArea = el(st[j + 1]);
-          break;
+    };
+    
+    el('.bc_login .bc_in').onclick = function() {
+      var userEmail = el('.bc_email').value;
+      var userPass = el('.bc_pass').value;
+      el('.lg_notif').innerHTML = 'Loading..';
+      el('.lg_notif').classList.remove('_hidden');
+      
+      firebase.auth().signInWithEmailAndPassword(userEmail, userPass).then((user) => {
+        el('.lg_notif').classList.add('_hidden');
+      }).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        el('.lg_notif').innerHTML = 'Error!!';
+      });
+    };
+    
+    el('.bc_menu .bc_out').onclick = function() {
+      firebase.auth().signOut();
+    };
+    
+    el('.bc_menu .bc_add').onclick = function() {
+      bc_resetData();
+      if (is_edit) {
+        is_edit = false;
+      } else {
+        el('.bc_form').classList.remove('_hidden');
+      }
+      el('.bc_set').classList.remove('_hidden');
+      el('.bc_update').classList.add('_hidden');
+      if (is_comic) el('.bc_comic').classList.add('_hidden');
+      if (is_search) el('.bmark_db').classList.add('s_shide');
+    };
+    
+    el('.bc_search button').onclick = function() {
+      var bc_query = el('.bc_search input').value;
+      if (bc_query == '') return;
+      bc_mainData('search', bc_query);
+      is_search = true;
+      el('.mn_notif').innerHTML = 'Loading..';
+      el('.mn_notif').classList.remove('_hidden');
+    };
+    
+    el('.cm_edit').onclick = function() {
+      bc_editData('comic', cm_data);
+    };
+    
+    // klik "Generate" harus pada halaman komik
+    el('.bc_gen').onclick = function() {
+      cm_ID = wp.match(/\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
+      el('.bc_id').value = cm_ID;
+      el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(cm_ID, '_') : firstCase(cm_ID, '-');
+      el('.bc_host').value = wh.replace(/w{3}\./, '');
+      el('.bc_url').value = '//'+ wh + wp;
+    };
+    
+    el('.bc_close').onclick = function() {
+    	bc_resetData();
+    	is_edit = false;
+      el('.bc_form').classList.add('_hidden');
+      if (is_comic) el('.bc_comic').classList.remove('_hidden');
+      if (is_search) el('.bmark_db').classList.remove('s_shide');
+    };
+    
+    el('.bc_set').onclick = function() {
+      if (el('.bc_id').value == '') return;
+      cm_ID = el('.bc_id').value;
+      bc_checkData(cm_ID).then(function(res) {
+        if (!res) {
+          bc_setData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_host').value, el('.bc_url').value);
         } else {
-          imgArea = area_s;
+          alert('Exist.');
+          el('.bc_set').classList.add('_hidden');
+          el('.bc_update').classList.remove('_hidden');
         }
-      }
-      console.log('imgArea:', document.body.contains(imgArea));
-      if (!imgArea) return;
-    }
-    if (prnt && imgs) imgArea = prnt;
-    imgList = prnt && imgs ? imgs.split(',') : el('img', imgArea, 'all');
-    if (!imgList) {return}
-    console.log('length', imgList.length);
-    
-    var reader_html = '<div id="reader-mod">';
-    for (var j = 0; j < imgList.length; j++) {
-      var imgLink;
-      //if (imgList[j].src && imgList[j].src == wl.href) continue;
-      if (prnt && imgs) {
-        imgLink = imgList[j];
-      } else if (imgList[j].getAttribute('original')) { //manhwa-san.xyz
-        imgLink = imgList[j].getAttribute('original');
-      } else if (wh.indexOf('komiku.id') != -1) { //komiku.id
-        imgLink = imgList[j].dataset.src ? imgList[j].dataset.src : imgList[j].src;
-        if (imgLink.indexOf('http') == -1) imgLink = '//img.komiku.co.id/low'+ imgLink; //hd, nor, low
-      } else if (imgList[j].dataset.src) {
-        imgLink = imgList[j].dataset.src;
-      } else if (imgList[j].dataset.lazySrc) {
-        imgLink = imgList[j].dataset.lazySrc;
-      } else if (imgList[j].dataset.url) {
-        imgLink = imgList[j].dataset.url;
-      } else if (imgList[j].dataset.imgsrc) {
-        imgLink = imgList[j].dataset.imgsrc;
-      } else if (imgList[j].dataset.cfsrc) {
-        imgLink = imgList[j].dataset.cfsrc;
-      } else {
-        imgLink = imgList[j].src;
-      }
-      
-      if (imgLink.search(/(?:i\d+|cdn)\.(wp|statically)\.(?:com|io)\//) != -1) {
-        chcdn = true;
-        cdnName = imgLink.match(/(?:i\d+|cdn)\.(wp|statically)\.(?:com|io)\//)[1];
-      }
-      
-      if (imgLink.search(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+)[^\n]+/) != -1) {
-        chgi = true;
-        imgSize = imgLink.match(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+)[^\n]+/);
-        imgSize = imgSize[1] || imgSize[2];
-        imgSize = Number(imgSize.replace(/[swh]/,''));
-        imgSize = imgSize == 0 || imgSize > 800 ? 's'+ imgSize : 's1600';
-      }
-      
-      reader_html += '<a href="'+ imgLink +'" target="_blank"><img style="min-height:750px;" data-read-img="'+ imgLink +'" title="' + (j+1) + '"></a>';
-    }
-    reader_html += '</div>';
-    
-    var reader_mod = document.createElement('div');
-    reader_mod.style.cssText = 'width:100%;';
-    reader_mod.innerHTML = reader_html;
-    if (prnt && imgs) {
-      imgArea.appendChild(reader_mod);
-    } else {
-      imgArea.parentNode.insertBefore(reader_mod, imgArea);
-      removeElem(imgArea);
-    }
-    imgArea = el('#reader-mod');
-    
-    scrollImage(el('#reader-mod img', 'all'));
-    createBtn(el('#reader-mod img', 'all'));
-    
-    if (wh.search(/manhwa\-san|katakomik|animesc-kun|readcmic/) != -1) {
-      var e_post = wh.indexOf('animesc-kun') != -1 ? el('#post-wrapper') : el('#main-wrapper');
-      e_post.style.width = '100%';
-      el('#sidebar-wrapper').parentNode.removeChild(el('#sidebar-wrapper'));
-    } else if (wh.indexOf('mangadex') != -1) {
-      imgArea.parentNode.style.cssText = 'padding-right: 20vw !important;';
-    }
-    
-    /*//webtoons auto like
-    window.addEventListener('load', function() {
-      if (wh.indexOf('webtoons') != -1) {
-        el('#likeItButton').scrollIntoView();
-        var e_like = setInterval(function() {
-          if (el('#footer_favorites.on')) {
-            clearInterval(e_like);
-            if (!el('#likeItButton ._btnLike.on')) el('#likeItButton').click();
-            setTimeout(function() { el('.paginate a[class*="pg_next"]').click(); }, 1200);
-          }
-        }, 100);
-      }
-    });*/
-  }
-  
-  // Comics api/data
-  function createImage(data) {
-    var csl, total;
-    if (wh.indexOf('mangadex') != -1) {
-      csl = '#content .reader-main';
-      total = data.page_array;
-    } else if (el('body').classList.contains('new_themesia')) {
-      csl = el('#readerarea').parentNode;
-      total = data.sources[0].images;
-    } else if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz/) != -1) {
-      csl = '#pages-container';
-      total = data;
-    } else if (wh.indexOf('merakiscans') != -1) {
-      csl = '#container';
-      total = data;
-    } else if (wh.indexOf('jaiminisbox') != -1) {
-      csl = '#page';
-      total = data;
-    } else if (wh.indexOf('softkomik') != -1) {
-      csl = el('.baca-button').nextElementSibling;
-      total = data.DataGambar;
-    }
-    var main = typeof csl == 'string' ? el(csl) : csl;
-    var img_api = '';
-    
-    for (var i = 0; i < total.length; i++) {
-      var data_src = '';
-      if (wh.indexOf('mangadex') != -1) {
-        data_src = data.server + data.hash + '/' + data.page_array[i];
-      } else if (wh.indexOf('jaiminisbox') != -1) {
-        data_src = data[i].thumb_url;
-      } else if (el('body').classList.contains('new_themesia')) {
-        data_src = total[i];
-      } else if (wh.indexOf('softkomik') != -1) {
-        data_src = '//api.softkomik.site/'+ total[i].url_gambar;
-      } else {
-        data_src = data[i];
-      }
-      img_api += data_src;
-      if (i < total.length-1) img_api += ',';
-    }
-    
-    // change, remove element
-    if (el('body').classList.contains('new_themesia')) {
-      localStorage.setItem('tsms_readingmode', 'full');
-      if (data.nextUrl == '') {
-        removeElem(el('.ctop .nextprev [rel="next"]'));
-        removeElem(el('.cbot .nextprev [rel="next"]'));
-      } else if (document.body.classList.contains('new_tab')) {
-        el('.ctop .nextprev [rel="next"]').dataset.href = data.nextUrl;
-        el('.cbot .nextprev [rel="next"]').dataset.href = data.nextUrl;
-      } else {
-        el('.ctop .nextprev [rel="next"]').href = data.nextUrl;
-        el('.cbot .nextprev [rel="next"]').href = data.nextUrl;
-      }
-      var new_div = document.createElement('div');
-      main.insertBefore(new_div, el('#readerarea'));
-      main.removeChild(el('#readerarea'));
-      if (el('#readerarea noscript')) main.removeChild(el('#readerarea'));
-      main = new_div;
-    } else if (wh.indexOf('mangadex') != -1) {
-      main.removeChild(el('.reader-images', main));
-      main.removeChild(el('.reader-page-bar', main));
-      el('#content').dataset.renderer = 'long-strip';
-    } else if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz/) != -1) {
-      main.innerHTML = '';
-      main.removeAttribute('id');
-    } else if (wh.indexOf('merakiscans') != -1) {
-      main.removeChild(el('#content', main));
-      el('#toHome').style.cssText = 'height:0;overflow:hidden;';
-      el('#toTop').style.cssText = 'height:0;overflow:hidden;';
-    } else if (wh.indexOf('jaiminisbox') != -1) {
-      main.removeChild(el('.inner', main));
-    } else if (wh.indexOf('softkomik') != -1) {
-      var new_div = document.createElement('div');
-      main.parentNode.insertBefore(new_div, main);
-      main.parentNode.removeChild(main);
-      main = new_div;
-    }
-    
-    startImage(main, img_api);
-  }
-  
-  function checkAll() {
-    if (wh.indexOf('mangadex') != -1 && wp.search(/title\/\d+/) != -1) {return}
-    //if (el('[rel="tag"]') && el('[rel="tag"]').innerHTML.search(/project/i) != -1) {return}
-    
-    if (wh.indexOf('mangadex') != -1) { //api
-      el('#content').style.cssText = 'position:initial;';
-      var eId = el('meta[name="app"]').dataset.chapterId;
-      getData('//mangadex.org/api/?id='+eId+'&type=chapter');
-      var eReader = el('.reader-controls-chapters');
-      eReader.addEventListener('click', function(e) {
-        wl.href = e.target.parentNode.href;
       });
-    } else if (wh.indexOf('softkomik') != -1) { //api
-      var eId = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[1];
-      var eCh = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[2];
-      var eReader = setInterval(function() {
-        if (el('#container .baca-button')) {
-          clearInterval(eReader);
-          getData('//softkomik.site/api/baca-chapter/'+ eId +'&'+ eCh);
-        }
-      }, 100);
-    } else if (wh.indexOf('komiku.id') != -1) { //click
-      document.body.classList.add('click');
-      el('.main').id = 'main-mod';
-      el('.main').classList.remove('main'); //stop infinite scroll
-    } else if (wh.indexOf('mangacanblog') != -1) { //click
-      var eAll = el('.pagers a');
-      if (eAll.innerHTML.indexOf('Full') != -1) eAll.click();
-    } else if (wh.indexOf('mangayu.com') != -1) {
-      //el('.ch-img').parentNode.parentNode.id = 'readerarea';
-    } else if (wh.indexOf('jaiminisbox') != -1) { //script
-      createImage(pages); //from web
-    } else if (wh.indexOf('mangapark') != -1) { //replace
-      var eAll = el('#sel_load option[value=""]');
-      if (eAll.selected == false) wl.href = el('link[rel="canonical"]').href;
-    } else if (wh.search(/bato\.to|mangawindow/) != -1) { //replace
-      var eAll = el('select [label="Load pages"] option[value="a"]');
-      if (eAll.selected == false) wl.href = wl.href.replace(/(\/chapter\/)(.*)/g, '$1'+ chapterId); //from web
-    } else if (wh.search(/readmng|funmanga/) != -1) { //replace
-      el('.img-responsive').parentNode.id = 'readerarea';
-      if (wp.indexOf('all-pages') == -1) wl.href = wl.href.replace(/(\/\d+)\/\d(.*)/g, '$1') + '/all-pages';
-      if (wh.indexOf('funmanga') != -1) el('.chapter-read').appendChild(el('.prev-next-post'));
-    } else if (wh.search(/readmanhua|ninjascans|klikmanga|mangasushi/) != -1) { //Madara theme
-      if (wl .href.indexOf('?style=list') == -1) wl.href = wl.href.replace(/\?style\=paged?/g, '') + '?style=list';
-    } else if (wh.search(/komikid.com|comicfx/) != -1) { //my Manga Reader CMS
-      el('#all').style.display = 'block';
-      el('#ppp').style.display = 'none';
-      if (el('.pager-cnt .pull-right')) el('.pull-right a').href = next_chapter; //from web
-    } else if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz/) != -1) { //new cms
-      var eShow = setInterval(function() {
-        if (window.chapterPages) {
-          clearInterval(eShow);
-          createImage(window.chapterPages);
-        }
-      }, 100); //'chapterPages' from web
-    } else if (el('body').classList.contains('new_themesia')) { //Themesia new
-      var eData, eScript = el('body script', 'all');
-      for (var i = 0; i < eScript.length; i++) {
-        if (eScript[i].innerHTML.search(/ts_reader\.run/) != -1) {
-          eScript = eScript[i].innerHTML; //from web
-          break;
-        }
-      }
-      eData = JSON.parse(eScript.match(/(\{[^\;]+)\)\;/)[1]);
-      createImage(eData);
-    } else if (wh.search(/manhwa\-san|katakomik|readcmic/) != -1) { //Show nextprev
-      var nextprev = el('.alphanx') || el('.naviarea1') || el('.nextprev');
-      el('.post-footer').insertBefore(nextprev, el('.post-footer').children[0]);
-    } else if (wh.indexOf('mangaindo') != -1) { //Show nextprev
-      var nextprev = el('#post-nav');
-      el('.readinfo').parentNode.insertBefore(nextprev, el('.readinfo'));
-    } else if (wh.indexOf('mangadropout') != -1) {
-      var mwp = wp.match(/collection[^\d]*\/\d+\/([^\/]*)/)[1];
-      var mid = el('#displayNoAds');
-      var mlnk = el('a', mid, 'all');
-      for (var i = 0; i < mlnk.length; i++) {
-        if (mlnk[i].href.indexOf('generelatelink') != -1) {
-          var mnm = mlnk[i].href.match(/generelatelink[^\d]*\/(\d+)\/([^\/\?\#]*)/);
-          mlnk[i].href = '//mangadropout.net/collection/link/'+mnm[1]+'/'+mwp+'/chapter/'+mnm[2];
-        }
-      }
-    } else if (wh.indexOf('merakiscans') != -1) { //script
-      function elemMS() {
-        var deferImg = el('script[defer]','all');
-        for (var i = 0; i < deferImg.length; i++) {
-          if (deferImg[i].innerHTML.indexOf('currentChapter ') != -1) {
-            return deferImg[i].innerHTML;
-          }
-        }
-      }
-      function dataMS(tImg) {
-        var regexImg = new RegExp('var\\s' + tImg + '\\s\\=\\s([^;]*)', 'g');
-        var allImg = scriptMS.match(regexImg).toString();
-        allImg = allImg.replace(regexImg, '$1');
-        return tImg == 'images' ? allImg.replace(/\[|\"\]/g, '').replace(/\"\,/g, ',').replace(/\"/g, '/manga/'+ dataMS('manga_slug') +'/'+ dataMS('viewschapter') + '/').split(',') : allImg.replace(/\"/g, '');
-      }
-      var scriptMS = elemMS();
-      var imgMS = dataMS('images');
-      createImage(imgMS);
-    } else if (wh.indexOf('mangaku') != -1) { //script
-      var mgk_chk = setInterval(function() {
-        if (el('#data_mgk')) {
-          clearInterval(mgk_chk);
-          var par_elm = el('.singlep .section_ad.group_ad').parentNode.nextElementSibling; //dtxx
-          var r_area = document.createElement('div');
-          r_area.id = 'readerarea';
-          r_area.innerHTML = el('#data_mgk').innerHTML;
-          par_elm.parentNode.insertBefore(r_area, par_elm);
-          par_elm.parentNode.removeChild(par_elm);
-          
-          startImage();
-        }
-      }, 100);
-      
-      /* #2
-      var el_mgk = el('#contentwrap');
-      var new_mgk = document.createElement('div');
-      new_mgk.innerHTML = el_mgk.innerHTML;
-      el_mgk.parentNode.insertBefore(new_mgk, el_mgk);
-      el_mgk.parentNode.removeChild(el_mgk);
-      
-      //if (el('i[class*="chevron-right"]')) el('i[class*="chevron-right"]').parentNode.parentNode.classList.add('next_page');
-      
-      var par_elm = el('.singlep .section_ad.group_ad').parentNode.nextElementSibling; //dtxx
-      var d_img = ''; //img[data-imgsrc]
-      
-      // https://stackoverflow.com/a/31371721
-      var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.addedNodes.length > 1) {
-            for (var i = 0; i < mutation.addedNodes.length; i++) {
-              d_img += mutation.addedNodes[i].outerHTML;
-            }
-            observer.disconnect();
-            
-            var r_area = document.createElement('div');
-            r_area.id = 'readerarea';
-            r_area.innerHTML = d_img;
-            par_elm.parentNode.insertBefore(r_area, par_elm);
-            par_elm.parentNode.removeChild(par_elm);
-            
-            startImage();
-          }
-        });
-      });
-      observer.observe(par_elm, { childList: true });
-      */
-      
-      /* #1
-      function dePass(pr1, pr2) {
-        var pr_list = '-ABCDEFGHIJKLMNOPQRSTUVWXYZ=0123456789abcdefghijklmnopqrstuvwxyz+';
-        var pr_chk1 = pr_list.indexOf(pr1);
-        if (pr_chk1 == -1) return null;
-        var pr_chk2 = pr_list.indexOf(pr2);
-        if (pr_chk2 == -1) return null;
-        var pr_right = pr_list.substring(pr_chk1, pr_list.length);
-        var pr_left = pr_list.substring(0, pr_chk1);
-        var pr_key = pr_right + pr_left;
-        var pr_pass = pr_key.split('')[pr_chk2];
-        return pr_pass;
-      }
-      
-      function getPass(ps1, ps2) {
-        var ps2_bs64 = btoa(ps2);
-        var ps2_arr = ps2_bs64.split('');
-        var ps1_arr = ps1.split('');
-        var ps_num = 0;
-        var ps_txt = '';
-        for (var i = 0; i < ps2_arr.length; i++) {
-          var the_pass = dePass(ps1_arr[ps_num], ps2_arr[i]);
-          if (the_pass) {
-            ps_txt += the_pass;  
-          } else {
-            return null;
-          }
-          ps_num == ps1_arr.length - 1 ? ps_num = 0 : ps_num++;
-        }
-        return ps_txt;
-      }
-      
-      function mgk_next() {
-        var d_pass = getPass(d_ps1, d_ps2);
-        var d_img = CryptoJS.AES.decrypt(window[d_id1], d_pass).toString(CryptoJS.enc.Utf8);
-        d_img = rsxxx(d_img);
-        d_img = _rscxx(d_img);
-        d_img = _rsx(d_img);
-        d_img = atob(d_img);
-        d_img = d_img.replace(/\+/g, '%20');
-        d_img = decodeURIComponent(d_img);
-        
-        var par_elm = el('.'+ window[d_id2]);
-        par_elm.parentNode.removeChild(par_elm.previousElementSibling);
-        el_scr.parentNode.removeChild(el_scr);
-        
-        var r_area = document.createElement('div');
-        r_area.id = 'readerarea';
-        r_area.innerHTML = d_img;
-        par_elm.parentNode.insertBefore(r_area, par_elm);
-        par_elm.parentNode.removeChild(par_elm);
-        
-        startImage();
-      }
-      
-      var en_img = el('noscript', el('.lds-ring-ct').parentNode).previousElementSibling;
-      var d_id1 = en_img.innerHTML.match(/;(?:const|let|var)\s([^\s\=]+)\s?\=/)[1];
-      var d_rgx = new RegExp('\\('+ d_id1 +',([^,\\)]+),([^,\\)]+),([^,\\)]+)\\)[;,]', 'i');
-      
-      var el_scr, d_txt, d_id2, d_ps1, d_ps2;
-      var d_scr = el('script', 'all');
-      for (var i = 0; i < d_scr.length; i++) {
-        if (d_scr[i].innerHTML.search(d_rgx) != -1) {
-          el_scr = d_scr[i];
-          d_txt = d_scr[i].innerHTML.match(d_rgx);
-          d_id2 = d_txt[1];
-          wl.hash = el('.post.singlep').outerHTML;
-          
-          var ps1_rgx = new RegExp('(?:const|let|var)\\s'+ d_txt[2] +'\\s?=\\s?[\'"]([^\\\'\\"]+)[\'"][;,]', 'i');
-          d_ps1 = d_scr[i].innerHTML.match(ps1_rgx)[1];
-          
-          //var ps2_rgx = new RegExp('(?:const|let|var)\\s'+ d_txt[3] +'\\s?=\\s?[\'"]([^\\\'\\"]+)[\'"][;,]', 'i');
-          //d_ps2 = d_scr[i].innerHTML.match(ps2_rgx)[1];
-          var mgk_chk = setInterval(function() {
-            if (el('meta[app-mgk="app-mgk"]')) {
-              clearInterval(mgk_chk);
-              d_ps2 = el('meta[app-mgk="app-mgk"]').getAttribute('content');
-              mgk_next();
-            }
-          }, 100);
-          
-          break;
-        }
-      }
-      
-      var new_txt = document.createElement('textarea');
-      new_txt.style.cssText = 'position:fixed;top:0;right:0;height:400px';
-      new_txt.value = d_id1;
-      //wl.hash = d_img;
-      document.body.appendChild(new_txt);
-      */
-    }
+    };
     
-    if (el('body').className.search(/new_themesia|mangadex|mangaku|kyuroku|merakiscans|leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz|jaiminisbox|softkomik/) == -1) { startImage(); }
-  }
-  
-  function removeAADB() {
-    var adb_id, adb_style = el('style','all');
-    for (var i = 0; i < adb_style.length; i++) {
-      if (adb_style[i].innerHTML.search(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/) != -1) {
-        adb_style[i].parentNode.removeChild(adb_style[i]);
-        adb_id = adb_style[i].innerHTML.match(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/)[1];
-        var adb_chk = setInterval(function() {
-          if (el(adb_id)) {
-            el(adb_id).parentNode.removeChild(el(adb_id));
-            clearInterval(adb_chk);
-            var adb_elem = el('[style*="display"','all');
-            for (var j = 0; j < adb_elem.length; j++) {
-              if (adb_elem[j].tagName.toLowerCase().search(/meta|link|style|script/) == -1) {
-                adb_elem[j].style.display = null;
-              }
-            }
-          }
-        }, 100);
-      }
-    }
+    el('.bc_update').onclick = function() {
+      if (el('.bc_id').value == '') return;
+      cm_ID = el('.bc_id').value;
+      bc_updateData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_host').value, el('.bc_url').value);
+    };
   }
   
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
-  var wk1 = /chapter(\/|\-)|\-bahasa|\-indonesia|ch\-|(\-|\/)\d+|(\-|\/)ep\d+|(chap|episode)\_|\/c\d+/;
-  var chcdn = false; //if image has wp.com or statically.io
-  var chgi = false; //if google images
-  var loadCDN = false;
-  var loadSz = false;
-  var lsImg = false; //all images loaded
-  var imgSize = ''; //image size
-  var checkPoint, imgArea, imgList, cdnName;
+  var is_login = false;
+  var is_comic = false;
+  var is_search = false;
+  var is_edit = false;
+  var main_data, cm_data, cm_ID;
   
-  // re-enable right click https://stackoverflow.com/a/43754205
-  window.addEventListener('contextmenu', function(e) {
-    e.stopPropagation();
-  }, true);
+  addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
   
-  document.body.classList.add(wl.hostname.replace(/www\./, ''));
-  removeAADB(); //remove anti adblock notify mangacanblog
+  // Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyBma6cWOGzwSE4sv8SsSewIbCjTPhm7qi0",
+    authDomain: "bakomon99.firebaseapp.com",
+    databaseURL: "https://bakomon99.firebaseio.com",
+    projectId: "bakomon99",
+    storageBucket: "bakomon99.appspot.com",
+    messagingSenderId: "894358128479",
+    appId: "1:894358128479:web:6fbf2d52cf76da755918ea",
+    measurementId: "G-Z4YQS31CXM"
+  };
   
-  // custom
-  if (wh.indexOf('webtoons') != -1) {
-    el('#wrap').classList.add('no-css');
-  } else if (wh.indexOf('komikcast') != -1) {
-    // https://stackoverflow.com/a/29998770
-    window.open = function (url, windowName, windowFeatures) {
-      console.log('window.open caught!');
-    };
-  } else if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga/) != -1) {
-  	document.body.classList.add('new_tab');
-    // skip syndication.exdynsrv.com || jomtingi.net
-    var el_a = el('a', 'all');
-    for (var i = 0; i < el_a.length; i++) {
-      var new_a = copyAttribute(el_a[i], 'i');
-      new_a.style.cssText = 'font-style:normal;cursor:pointer;';
-      new_a.innerHTML = el_a[i].innerHTML;
-      el_a[i].parentNode.insertBefore(new_a, el_a[i]);
-      el_a[i].parentNode.removeChild(el_a[i]);
-    }
-    el('i[data-href]', 'all').forEach(function(item) {
-      item.addEventListener('click', function(e) {
-        //e.preventDefault();
-        //window.open(item.dataset.href);
-        wl.href = item.dataset.href;
-      });
-    });
-  }
-  
-  // Dark mode
-  var switch_btn = el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch');
-  if (switch_btn) { //theme enduser.id|themesia.com
-    localStorage.setItem('thememode', 'darkmode');
-    localStorage.setItem('theme-mode', 'dark');
-    document.body.classList.add('darkmode', 'dark');
-    document.body.classList.remove('lightmode');
-  } else if (wh.indexOf('manhuaid.com') != -1) {
-    localStorage.setItem('theme', 'dark');
-    document.body.setAttribute('id', 'darkbody');
-    el('.isdark').setAttribute('id', 'darkmode');
-    el('nav').classList.add('bg-dark');
-    el('nav').classList.remove('bg-success', 'fixed-top');
-  }
-  
-  // Disqus
-  var cmt_chk = setInterval(function() {
-    if (el('#disqus_thread')) {
-      if (typeof embedVars != 'undefined') { //from web
-        clearInterval(cmt_chk);
-        reloadComment(embedVars.disqusShortname);
-      } else if (el('#disqus_thread').dataset.disqusShortname) {
-        clearInterval(cmt_chk);
-        reloadComment(el('#disqus_thread').dataset.disqusShortname);
-      } else if (el('#disqus_thread').nextElementSibling) {
-        clearInterval(cmt_chk);
-        if (el('#disqus_thread').nextElementSibling.innerHTML.indexOf('disqus') == -1) return;
-        var dsqs_sn = el('#disqus_thread').nextElementSibling.innerHTML;
-        dsqs_sn = dsqs_sn.match(/\/\/([^\n]+)\.disqus\.com[^\n]+\.js/)[1];
-        reloadComment(dsqs_sn);
-      } else {
-        clearInterval(cmt_chk);
-        var idDsqs, sDsqs = el('script', 'all');
-        for (var i = 0; i < sDsqs.length; i++) {
-          if (sDsqs[i].innerHTML.indexOf('disqus.com') != -1) {
-            idDsqs = sDsqs[i].innerHTML.match(/\/\/([^\n]+)\.disqus\.com[^\n]+\.js/)[1];
-            reloadComment(idDsqs);
-            break;
-          }
+  var db_chk = setInterval(function() {
+    if (typeof firebase !== 'undefined') {
+      clearInterval(db_chk);
+      firebase.initializeApp(firebaseConfig);
+      addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-database.js');
+      var db2_chk = setInterval(function() {
+        if (typeof firebase.database !== 'undefined') {
+          clearInterval(db2_chk);
+          addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-auth.js');
+          var db3_chk = setInterval(function() {
+            if (typeof firebase.auth !== 'undefined') {
+              clearInterval(db3_chk);
+              startBookmark();
+            }
+          }, 100);
         }
-      }
-    } else if (wh.indexOf('softkomik') != -1) { //api
-      clearInterval(cmt_chk);
-      /*var eDsqs = setInterval(function() {
-        if (el('#container #disqus_thread')) {
-          clearInterval(eDsqs);
-          reloadComment(el('#disqus_thread').dataset.disqusShortname);
-        }
-      }, 100);*/
-    } else {
-      clearInterval(cmt_chk);
+      }, 100);
     }
   }, 100);
-  
-  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1) && wl.search.indexOf('project') == -1 && wh.indexOf('tenseiscans') == -1) {
-    if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|asurascans/) != -1) document.body.classList.add('new_themesia');
-    checkAll();
-  }
 })();
