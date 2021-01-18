@@ -1,4 +1,4 @@
-function comic_reader() {
+(function() {
   // Position (X,Y) element https://stackoverflow.com/a/28222246
   function getOffset(el, p) {
     const rect = el.getBoundingClientRect();
@@ -910,4 +910,4 @@ function comic_reader() {
     if (wh.search(/kiryuu|komikindo.web.id|sektekomik|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|asurascans/) != -1) document.body.classList.add('new_themesia');
     checkAll();
   }
-}
+})();
