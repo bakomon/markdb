@@ -101,19 +101,19 @@
         s_txt += '<li class="_cl';
         if (i+1 < arr.length) s_txt += ' bc_line';
         s_txt += ' flex_wrap" data-index="'+ i +'">';
-        s_txt += '<a class="_rc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
+        s_txt += '<a class="_bc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
         if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
         s_txt += '</a>';
-        s_txt += '<input class="cs_ch bc_input _rc bc_50" type="text" value="'+ arr[i].chapter +'">';
-        s_txt += '<button class="cs_edit _rc bc_btn">Edit</button>';
-        s_txt += '<span class="cs_num _rc _selected">'+ (i+1) +'</span>';
+        s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter +'">';
+        s_txt += '<button class="cs_edit bc_btn _bc">Edit</button>';
+        s_txt += '<span class="cs_num _bc _selected">'+ (i+1) +'</span>';
         s_txt += '</li>';
       }
     } else {
       s_txt += '<li>Oops! Comic not found</li>';
     }
     s_txt += '</ul></div>';
-    s_txt += '<div class="cs_text flex"><span class="_text">Search Result</span><span class="f_grow"></span><button class="cs_close _rc bc_btn">Close</button></div>';
+    s_txt += '<div class="cs_text flex"><span class="_text">Search Result</span><span class="f_grow"></span><button class="cs_close bc_btn _bc">Close</button></div>';
     
     el('.bc_result').innerHTML = s_txt;
     el('.bc_result').classList.remove('_hidden');
@@ -219,35 +219,39 @@
   
   function startBookmark() {
     var b_txt = '';
-    b_txt += '<style>*,*:before,*:after{outline:0;-webkit-box-sizing:border-box;box-sizing:border-box;}.flex{display:-webkit-flex;display:flex;}.flex_wrap{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;}.flex_center{position:fixed;top:0;left:0;width:100%;height:100%;display:-webkit-flex;display:flex;} /* Perfect Centering */.f_center{-webkit-align-items:center;align-items:center;-webkit-align-content:center;align-content:center;}.f_bottom{-webkit-align-items:flex-end;align-items:flex-end;-webkit-align-content:flex-end;align-content:flex-end;}.f_grow{-webkit-flex-grow:1;flex-grow:1;}.f_between{-webkit-justify-content:space-between;justify-content:space-between;}.t_center{text-align:center;justify-content:center;}.t_left{text-align:left;justify-content:flex-start;}.t_right{text-align:right;justify-content:flex-end;}.t_justify{text-align:justify;}</style>'; //css control
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}._text{padding:4px 8px;margin:4px;}._selected,.bc_btn:hover{background:#4267b2;border-color:#4267b2;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.bc_all{width:30px !important;margin-left:8px;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,._hidden{display:none;}</style>'; //css
-    b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._rc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>'; //css mobile
+    // css control
+    b_txt += '<style>*,*:before,*:after{outline:0;-webkit-box-sizing:border-box;box-sizing:border-box;}.flex{display:-webkit-flex;display:flex;}.flex_wrap{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;}.flex_center{position:fixed;top:0;left:0;width:100%;height:100%;display:-webkit-flex;display:flex;} /* Perfect Centering */.f_center{-webkit-align-items:center;align-items:center;-webkit-align-content:center;align-content:center;}.f_bottom{-webkit-align-items:flex-end;align-items:flex-end;-webkit-align-content:flex-end;align-content:flex-end;}.f_grow{-webkit-flex-grow:1;flex-grow:1;}.f_between{-webkit-justify-content:space-between;justify-content:space-between;}.t_center{text-align:center;justify-content:center;}.t_left{text-align:left;justify-content:flex-start;}.t_right{text-align:right;justify-content:flex-end;}.t_justify{text-align:justify;}</style>';
+    // css
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._bc a{color:#ddd;font-size:14px;text-decoration:none;}._text{padding:4px 8px;margin:4px;}._selected,.bc_btn:hover{background:#4267b2;border-color:#4267b2;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,._hidden{display:none;}</style>';
+    // css mobile
+    b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
+    // html
     b_txt += '<div class="bc_bg _hidden"></div>';
     b_txt += '<div class="bmark_db s_shide bc_shide flex_wrap f_bottom">';
     b_txt += '<div class="bc_login flex_wrap _hidden">';
-    b_txt += '<input class="bc_email bc_input _rc bc_100" type="email" placeholder="Email">';
-    b_txt += '<input class="bc_pass bc_input _rc bc_100" type="password" placeholder="Password">';
-    b_txt += '<div class="flex"><button class="bc_in _rc bc_btn">Login</button><span class="lg_notif _rc _selected _hidden"></span></div>';
+    b_txt += '<input class="bc_email bc_input _bc bc_100" type="email" placeholder="Email">';
+    b_txt += '<input class="bc_pass bc_input _bc bc_100" type="password" placeholder="Password">';
+    b_txt += '<div class="flex"><button class="bc_in bc_btn _bc">Login</button><span class="lg_notif _bc _selected _hidden"></span></div>';
     b_txt += '</div>';// .bc_login
     b_txt += '<div class="bc_data bc_100 _hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap _hidden">';
-    b_txt += '<input class="bc_id bc_input _rc bc_100" type="text" placeholder="ID">';
-    b_txt += '<input class="bc_title bc_input _rc bc_100" type="text" placeholder="Title">';
-    b_txt += '<input class="bc_alt bc_input _rc bc_100" type="text" placeholder="Alternative Title">';
-    b_txt += '<input class="bc_ch bc_input _rc bc_100" type="text" placeholder="Chapter">';
-    b_txt += '<input class="bc_note bc_input _rc bc_100" type="text" placeholder="Note">';
-    b_txt += '<input class="bc_host bc_input _rc bc_100" type="text" placeholder="hostname">';
-    b_txt += '<input class="bc_url bc_input _rc bc_100" type="text" placeholder="URL">';
-    b_txt += '<div class="bc_upnew bc_100 flex t_right"><button class="bc_gen _rc bc_btn">Generate</button><span class="f_grow"></span><button class="bc_close _rc bc_btn">Close</button><button class="bc_set _rc bc_btn _selected _hidden">Set</button><button class="bc_update _rc bc_btn _selected _hidden">Update</button></div>';
+    b_txt += '<input class="bc_id bc_input _bc bc_100" type="text" placeholder="ID">';
+    b_txt += '<input class="bc_title bc_input _bc bc_100" type="text" placeholder="Title">';
+    b_txt += '<input class="bc_alt bc_input _bc bc_100" type="text" placeholder="Alternative Title">';
+    b_txt += '<input class="bc_ch bc_input _bc bc_100" type="text" placeholder="Chapter">';
+    b_txt += '<input class="bc_note bc_input _bc bc_100" type="text" placeholder="Note">';
+    b_txt += '<input class="bc_host bc_input _bc bc_100" type="text" placeholder="hostname">';
+    b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
+    b_txt += '<div class="bc_upnew bc_100 flex t_right"><button class="bc_gen bc_btn _bc">Generate</button><span class="f_grow"></span><button class="bc_close bc_btn _bc">Close</button><button class="bc_set bc_btn _bc _selected _hidden">Set</button><button class="bc_update bc_btn _bc _selected _hidden">Update</button></div>';
     b_txt += '</div>';// .bc_form
     b_txt += '<div class="bc_result bc_line _hidden"></div>';
     b_txt += '<div class="bc_tr1">';
-    b_txt += '<div class="bc_comic bc_line _hidden"><div class="_cm flex_wrap"><a class="_rc bc_100" href="javascript:void(0)" target="_blank"></a><input class="cm_ch bc_input _rc bc_50" type="text" placeholder="chapter"><button class="cm_edit _rc bc_btn _hidden">Edit</button></div></div>';
-    b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _rc bc_100" type="text" placeholder="Search..."><button class="_rc bc_btn">GO</button></div>';
-    b_txt += '<div class="bc_menu flex"><button class="bc_add _rc bc_btn">Add</button><button class="bc_out _rc bc_btn">Logout</button><span class="mn_notif _rc _selected _hidden"></span></div>';
+    b_txt += '<div class="bc_comic bc_line _hidden"><div class="_cm flex_wrap"><a class="_bc bc_100" href="javascript:void(0)" target="_blank"></a><input class="cm_ch bc_input _bc bc_50" type="text" placeholder="chapter"><button class="cm_edit bc_btn _bc _hidden">Edit</button></div></div>';
+    b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _bc bc_100" type="text" placeholder="Search..."><button class="bc_btn _bc">GO</button></div>';
+    b_txt += '<div class="bc_menu flex"><button class="bc_add bc_btn _bc">Add</button><button class="bc_out bc_btn _bc">Logout</button><span class="mn_notif _bc _selected _hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
     b_txt += '</div>';// .bc_data
-    b_txt += '<div class="bc_toggle _rc bc_btn bc_100 flex t_center">&#9733;</div>';
+    b_txt += '<div class="bc_toggle bc_btn _bc bc_100 flex t_center">&#9733;</div>';
     b_txt += '</div>';// .bmark_db
     
     var b_html = d.createElement('div');
