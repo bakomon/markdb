@@ -118,13 +118,13 @@
     el('.bc_result').innerHTML = s_txt;
     el('.bc_result').classList.remove('_hidden');
     el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
-    el('.reader_db').classList.remove('s_shide');
+    el('.bmark_db').classList.remove('s_shide');
     el('.mn_notif').classList.add('_hidden');
       
     el('.cs_close').onclick = function() {
       is_search = false;
       el('.bc_result').classList.add('_hidden');
-      el('.reader_db').classList.add('s_shide');
+      el('.bmark_db').classList.add('s_shide');
     };
     
     el('.bc_result .cs_edit', 'all').forEach(function(item) {
@@ -147,7 +147,7 @@
   
   function bc_editData(note, data) {
     el('.bc_comic').classList.add('_hidden');
-    if (is_search) el('.reader_db').classList.add('s_shide');
+    if (is_search) el('.bmark_db').classList.add('s_shide');
     el('.bc_form').classList.remove('_hidden');
     el('.bc_set').classList.add('_hidden');
     el('.bc_update').classList.remove('_hidden');
@@ -175,7 +175,7 @@
       el('.bc_comic a').innerHTML = cm_data.title;
       el('.bc_comic .cm_ch').value = cm_data.chapter;
       el('.bc_comic').classList.remove('_hidden');
-      if (el('.reader_db').classList.contains('bc_shide') && wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1) {
+      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1) {
         el('.bc_toggle').click();
       }
     });
@@ -220,16 +220,16 @@
   function startBookmark() {
     var b_txt = '';
     b_txt += '<style>*,*:before,*:after{outline:0;-webkit-box-sizing:border-box;box-sizing:border-box;}.flex{display:-webkit-flex;display:flex;}.flex_wrap{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;}.flex_center{position:fixed;top:0;left:0;width:100%;height:100%;display:-webkit-flex;display:flex;} /* Perfect Centering */.f_center{-webkit-align-items:center;align-items:center;-webkit-align-content:center;align-content:center;}.f_bottom{-webkit-align-items:flex-end;align-items:flex-end;-webkit-align-content:flex-end;align-content:flex-end;}.f_grow{-webkit-flex-grow:1;flex-grow:1;}.f_between{-webkit-justify-content:space-between;justify-content:space-between;}.t_center{text-align:center;justify-content:center;}.t_left{text-align:left;justify-content:flex-start;}.t_right{text-align:right;justify-content:flex-end;}.t_justify{text-align:justify;}</style>'; //css control
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}.reader_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.reader_db.bc_shide{left:-350px;}.reader_db ul{padding:0;margin:0;}.bc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}._text{padding:4px 8px;margin:4px;}._selected,.bc_btn:hover{background:#4267b2;border-color:#4267b2;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.bc_all{width:30px !important;margin-left:8px;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.reader_db.s_shide .bc_result,._hidden{display:none;}</style>'; //css
-    b_txt += '<style>.bc_mobile .reader_db{width:80%;}.bc_mobile .reader_db.bc_shide{left:-80%;}.bc_mobile ._rc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>'; //css mobile
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}._text{padding:4px 8px;margin:4px;}._selected,.bc_btn:hover{background:#4267b2;border-color:#4267b2;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.bc_all{width:30px !important;margin-left:8px;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,._hidden{display:none;}</style>'; //css
+    b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._rc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>'; //css mobile
     b_txt += '<div class="bc_bg _hidden"></div>';
-    b_txt += '<div class="reader_db s_shide bc_shide flex_wrap f_bottom">';
+    b_txt += '<div class="bmark_db s_shide bc_shide flex_wrap f_bottom">';
     b_txt += '<div class="bc_login flex_wrap _hidden">';
     b_txt += '<input class="bc_email bc_input _rc bc_100" type="email" placeholder="Email">';
     b_txt += '<input class="bc_pass bc_input _rc bc_100" type="password" placeholder="Password">';
     b_txt += '<div class="flex"><button class="bc_in _rc bc_btn">Login</button><span class="lg_notif _rc _selected _hidden"></span></div>';
     b_txt += '</div>';// .bc_login
-    b_txt += '<div class="bc_reader bc_100 _hidden">';
+    b_txt += '<div class="bc_data bc_100 _hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap _hidden">';
     b_txt += '<input class="bc_id bc_input _rc bc_100" type="text" placeholder="ID">';
     b_txt += '<input class="bc_title bc_input _rc bc_100" type="text" placeholder="Title">';
@@ -246,13 +246,13 @@
     b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _rc bc_100" type="text" placeholder="Search..."><button class="_rc bc_btn">GO</button></div>';
     b_txt += '<div class="bc_menu flex"><button class="bc_add _rc bc_btn">Add</button><button class="bc_out _rc bc_btn">Logout</button><span class="mn_notif _rc _selected _hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
-    b_txt += '</div>';// .bc_reader
+    b_txt += '</div>';// .bc_data
     b_txt += '<div class="bc_toggle _rc bc_btn bc_100 flex t_center">&#9733;</div>';
-    b_txt += '</div>';// .reader_db
+    b_txt += '</div>';// .bmark_db
     
     var b_html = d.createElement('div');
     b_html.style.cssText = 'position:relative;z-index:2147483647;';
-    b_html.className = 'reader_bm' + (isMobile() ? ' bc_mobile' : '');
+    b_html.className = '_bmark' + (isMobile() ? ' bc_mobile' : '');
     b_html.innerHTML = b_txt;
     d.body.appendChild(b_html);
     
@@ -262,11 +262,11 @@
         is_login = true;
         bc_mainData(); //Start firebase data
         el('.bc_login').classList.add('_hidden');
-        el('.bc_reader').classList.remove('_hidden');
+        el('.bc_data').classList.remove('_hidden');
       } else {
         is_login = false;
         el('.bc_login').classList.remove('_hidden');
-        el('.bc_reader').classList.add('_hidden');
+        el('.bc_data').classList.add('_hidden');
       }
     });
     
@@ -278,10 +278,10 @@
     
     el('.bc_toggle').onclick = function() {
       this.classList.toggle('_selected');
-      el('.reader_db').classList.toggle('bc_shide');
+      el('.bmark_db').classList.toggle('bc_shide');
       if (isMobile()) {
         el('.bc_bg').classList.toggle('_hidden');
-        d.body.style.overflow = el('.reader_db').classList.contains('bc_shide') ? 'initial' : 'hidden';
+        d.body.style.overflow = el('.bmark_db').classList.contains('bc_shide') ? 'initial' : 'hidden';
       }
     };
     
@@ -314,7 +314,7 @@
       el('.bc_set').classList.remove('_hidden');
       el('.bc_update').classList.add('_hidden');
       if (is_comic) el('.bc_comic').classList.add('_hidden');
-      if (is_search) el('.reader_db').classList.add('s_shide');
+      if (is_search) el('.bmark_db').classList.add('s_shide');
     };
     
     el('.bc_search button').onclick = function() {
@@ -344,7 +344,7 @@
     	is_edit = false;
       el('.bc_form').classList.add('_hidden');
       if (is_comic) el('.bc_comic').classList.remove('_hidden');
-      if (is_search) el('.reader_db').classList.remove('s_shide');
+      if (is_search) el('.bmark_db').classList.remove('s_shide');
     };
     
     el('.bc_set').onclick = function() {
