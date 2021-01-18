@@ -1,16 +1,22 @@
+/*
+
+CSS DRAFT, MOVE TO JS
+
 /* Custom Scrollbar */
 body::-webkit-scrollbar {
   width: 15px;
 }
 body::-webkit-scrollbar-track {
-  background: #312f40; 
+  background: #312f40;
 }
 body::-webkit-scrollbar-thumb {
-  background: #151515; 
+  background: #151515;
 }
 
 html, body, article {
     background: #151515 !important;
+    -webkit-user-select: text;
+    user-select: text;
 }
 .mangainfo li a:visited, .komikinfo li a:visited, .animeinfo li a:visited, .animeinfo .episodelist a:visited, .wp-manga-chapter a:visited, .bixbox li a:visited, .bxcl li a:visited, #scans a:visited h3, #latestchapters .updates a:visited, #list .chapter a:visited, .chapter-container .chapter-row a:visited, .elementor-icon-list-item a:visited, .epxs a:visited, .chapter-item a:visited, .fixyear a:visited, .fixyear a:visited .year .ytps a:visited, .chli .cli a:visited, .Manga_Chapter a:visited .viewind {
     color: #607d8b !important;
@@ -135,7 +141,8 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
 .hidden-items {
     position: fixed;
     top: -9999px;
-    left: -9999px;}
+    left: -9999px;
+}
 
 /* exception */
 .judulseries .iklan {
