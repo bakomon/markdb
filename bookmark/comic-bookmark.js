@@ -44,12 +44,13 @@
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
-  function bc_updateData(id, title, alternative, chapter, host, url) {
+  function bc_updateData(id, title, alternative, chapter, note, host, url) {
     firebase.database().ref('comic/' + id).update({
       id: id,
       title: title,
       alternative: alternative,
       chapter: chapter,
+      note: note,
       host: host,
       url: url
     }, (error) => {
@@ -70,12 +71,13 @@
     }
   }
   
-  function bc_setData(id, title, alternative, chapter, host, url) {
+  function bc_setData(id, title, alternative, chapter, note, host, url) {
     firebase.database().ref('comic/' + id).set({
       id: id,
       title: title,
       alternative: alternative,
       chapter: chapter,
+      note: note,
       host: host,
       url: url
     }, (error) => {
@@ -93,7 +95,7 @@
   }
   
   function bc_searchResult(arr) {
-    var s_txt = '<ul style="margin-bottom:10px;">';
+    var s_txt = '<div class="cs_list" style="margin-bottom:10px;"><ul>';
     if (arr.length != 0) {
       for (var i = 0; i < arr.length; i++) {
         s_txt += '<li class="_cl';
@@ -108,14 +110,14 @@
         s_txt += '</li>';
       }
     } else {
-      s_txt += '<li>not found.</li>';
+      s_txt += '<li>Oops! Comic not found</li>';
     }
-    s_txt += '</ul>';
+    s_txt += '</ul></div>';
     s_txt += '<div class="cs_text flex"><span class="_text">Search Result</span><span class="f_grow"></span><button class="cs_close _rc bc_btn">Close</button></div>';
     
     el('.bc_result').innerHTML = s_txt;
-    el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
     el('.bc_result').classList.remove('_hidden');
+    el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
     el('.reader_db').classList.remove('s_shide');
     el('.mn_notif').classList.add('_hidden');
       
@@ -126,21 +128,9 @@
     };
     
     el('.bc_result .cs_edit', 'all').forEach(function(item) {
-      item.addEventListener('click', function(e) {
+      item.addEventListener('click', function() {
         var cs_data = arr[item.parentNode.dataset.index];
-        el('.reader_db').classList.add('s_shide');
-        el('.bc_form').classList.remove('_hidden');
-        el('.bc_set').classList.add('_hidden');
-        el('.bc_update').classList.remove('_hidden');
-        is_edit = true;
-      
-        el('.bc_id').value = cs_data.id;
-        el('.bc_title').value = cs_data.title;
-        el('.bc_alt').value = cs_data.alternative;
-        el('.bc_ch').value = cs_data.chapter;
-        el('.bc_host').value = cs_data.host;
-        el('.bc_url').value = cs_data.url;
-        el('.bc_ch').select();
+        bc_editData('search', cs_data);
       });
     });
   }
@@ -150,8 +140,27 @@
     el('.bc_title').value = '';
     el('.bc_alt').value = '';
     el('.bc_ch').value = '';
+    el('.bc_note').value = '';
     el('.bc_host').value = '';
     el('.bc_url').value = '';
+  }
+  
+  function bc_editData(note, data) {
+    el('.bc_comic').classList.add('_hidden');
+    if (is_search) el('.reader_db').classList.add('s_shide');
+    el('.bc_form').classList.remove('_hidden');
+    el('.bc_set').classList.add('_hidden');
+    el('.bc_update').classList.remove('_hidden');
+    is_edit = true;
+    
+    el('.bc_id').value = data.id;
+    el('.bc_title').value = data.title;
+    el('.bc_alt').value = data.alternative;
+    el('.bc_ch').value = data.chapter;
+    el('.bc_note').value = data.note;
+    el('.bc_host').value = data.host;
+    el('.bc_url').value = data.url;
+    el('.bc_ch').select();
   }
   
   function bc_showData() {
@@ -166,7 +175,7 @@
       el('.bc_comic a').innerHTML = cm_data.title;
       el('.bc_comic .cm_ch').value = cm_data.chapter;
       el('.bc_comic').classList.remove('_hidden');
-      if (wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1) {
+      if (el('.reader_db').classList.contains('bc_shide') && wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1) {
         el('.bc_toggle').click();
       }
     });
@@ -184,9 +193,10 @@
         bc_showData();
       }
     }
+    // search
     if (query) {
       var rgx = new RegExp(query, 'ig');
-      return arr.filter(item => (item.id.search(rgx) != -1 || item.title.search(rgx) != -1 || item.alternative.search(rgx) != -1));
+      return arr.filter(item => (item.id.search(rgx) != -1 || item.title.search(rgx) != -1 || item.alternative.search(rgx) != -1 || item.host.search(rgx) != -1));
     } else {
       return arr;
     }
@@ -209,22 +219,23 @@
   
   function startReader() {
     var r_txt = '';
-    r_txt += '<style>*,*:before,*:after{outline:0;-webkit-box-sizing:border-box;box-sizing:border-box;}.flex{display:-webkit-flex;display:flex;}.flex_wrap{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;}.flex_center{position:fixed;top:0;left:0;width:100%;height:100%;display:-webkit-flex;display:flex;} /* Perfect Centering */.f_alter{-webkit-align-items:center;align-items:center;-webkit-align-content:center;align-content:center;}.f_grow{-webkit-flex-grow:1;flex-grow:1;}.f_between{-webkit-justify-content:space-between;justify-content:space-between;}.t_center{text-align:center;justify-content:center;}.t_left{text-align:left;justify-content:flex-start;}.t_right{text-align:right;justify-content:flex-end;}.t_justify{text-align:justify;}</style>'; //css control
-    r_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}.reader_db{position:fixed;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border:1px solid #333;border-bottom:0;border-left:0;}.reader_db:not(.s_shide){top:0;}.reader_db.bc_shide{left:-350px;}.reader_db ul{padding:0;margin:0;}.bc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}._text{padding:4px 8px;margin:4px;}._selected,.bc_btn:hover{background:#4267b2;border-color:#4267b2;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.bc_all{width:30px !important;margin-left:8px;}.bc_result ul{height:100%;overflow-y:auto;}.bc_result li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.reader_db.s_shide .bc_result,._hidden{display:none;}</style>'; //css
+    r_txt += '<style>*,*:before,*:after{outline:0;-webkit-box-sizing:border-box;box-sizing:border-box;}.flex{display:-webkit-flex;display:flex;}.flex_wrap{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;}.flex_center{position:fixed;top:0;left:0;width:100%;height:100%;display:-webkit-flex;display:flex;} /* Perfect Centering */.f_center{-webkit-align-items:center;align-items:center;-webkit-align-content:center;align-content:center;}.f_bottom{-webkit-align-items:flex-end;align-items:flex-end;-webkit-align-content:flex-end;align-content:flex-end;}.f_grow{-webkit-flex-grow:1;flex-grow:1;}.f_between{-webkit-justify-content:space-between;justify-content:space-between;}.t_center{text-align:center;justify-content:center;}.t_left{text-align:left;justify-content:flex-start;}.t_right{text-align:right;justify-content:flex-end;}.t_justify{text-align:justify;}</style>'; //css control
+    r_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}.reader_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border:1px solid #333;border-bottom:0;border-left:0;}.reader_db.bc_shide{left:-350px;}.reader_db ul{padding:0;margin:0;}.bc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}._text{padding:4px 8px;margin:4px;}._selected,.bc_btn:hover{background:#4267b2;border-color:#4267b2;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.bc_all{width:30px !important;margin-left:8px;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.reader_db.s_shide .bc_result,._hidden{display:none;}</style>'; //css
     r_txt += '<style>.bc_mobile .reader_db{width:80%;}.bc_mobile .reader_db.bc_shide{left:-80%;}.bc_mobile ._rc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>'; //css mobile
     r_txt += '<div class="bc_bg _hidden"></div>';
-    r_txt += '<div class="reader_db s_shide bc_shide">';
+    r_txt += '<div class="reader_db s_shide bc_shide flex_wrap f_bottom">';
     r_txt += '<div class="bc_login flex_wrap _hidden">';
     r_txt += '<input class="bc_email bc_input _rc bc_100" type="email" placeholder="Email">';
     r_txt += '<input class="bc_pass bc_input _rc bc_100" type="password" placeholder="Password">';
     r_txt += '<div class="flex"><button class="bc_in _rc bc_btn">Login</button><span class="lg_notif _rc _selected _hidden"></span></div>';
     r_txt += '</div>';// .bc_login
-    r_txt += '<div class="bc_reader _hidden">';
+    r_txt += '<div class="bc_reader bc_100 _hidden">';
     r_txt += '<div class="bc_form bc_line flex_wrap _hidden">';
     r_txt += '<input class="bc_id bc_input _rc bc_100" type="text" placeholder="ID">';
     r_txt += '<input class="bc_title bc_input _rc bc_100" type="text" placeholder="Title">';
     r_txt += '<input class="bc_alt bc_input _rc bc_100" type="text" placeholder="Alternative Title">';
     r_txt += '<input class="bc_ch bc_input _rc bc_100" type="text" placeholder="Chapter">';
+    r_txt += '<input class="bc_note bc_input _rc bc_100" type="text" placeholder="Note">';
     r_txt += '<input class="bc_host bc_input _rc bc_100" type="text" placeholder="hostname">';
     r_txt += '<input class="bc_url bc_input _rc bc_100" type="text" placeholder="URL">';
     r_txt += '<div class="bc_upnew bc_100 flex t_right"><button class="bc_gen _rc bc_btn">Generate</button><span class="f_grow"></span><button class="bc_close _rc bc_btn">Close</button><button class="bc_set _rc bc_btn _selected _hidden">Set</button><button class="bc_update _rc bc_btn _selected _hidden">Update</button></div>';
@@ -291,13 +302,13 @@
       bc_resetData();
       if (is_edit) {
         is_edit = false;
-        if (is_comic) el('.bc_comic').classList.remove('_hidden');
       } else {
-        if (is_search) el('.bc_result').classList.toggle('_hidden');
-        el('.bc_form').classList.toggle('_hidden');
+        el('.bc_form').classList.remove('_hidden');
       }
       el('.bc_set').classList.remove('_hidden');
       el('.bc_update').classList.add('_hidden');
+      if (is_comic) el('.bc_comic').classList.add('_hidden');
+      if (is_search) el('.reader_db').classList.add('s_shide');
     };
     
     el('.bc_search button').onclick = function() {
@@ -310,20 +321,7 @@
     };
     
     el('.cm_edit').onclick = function() {
-      el('.bc_comic').classList.add('_hidden');
-      if (is_search) el('.reader_db').classList.add('s_shide');
-      el('.bc_form').classList.remove('_hidden');
-      el('.bc_set').classList.add('_hidden');
-      el('.bc_update').classList.remove('_hidden');
-      is_edit = true;
-      
-      el('.bc_id').value = cm_data.id;
-      el('.bc_title').value = cm_data.title;
-      el('.bc_alt').value = cm_data.alternative;
-      el('.bc_ch').value = cm_data.chapter;
-      el('.bc_host').value = cm_data.host;
-      el('.bc_url').value = cm_data.url;
-      el('.bc_ch').select();
+      bc_editData('comic', cm_data);
     };
     
     // klik "Generate" harus pada halaman komik
@@ -337,7 +335,7 @@
     
     el('.bc_close').onclick = function() {
     	bc_resetData();
-    	if (is_edit) is_edit = false;
+    	is_edit = false;
       el('.bc_form').classList.add('_hidden');
       if (is_comic) el('.bc_comic').classList.remove('_hidden');
       if (is_search) el('.reader_db').classList.remove('s_shide');
@@ -348,7 +346,7 @@
       cm_ID = el('.bc_id').value;
       bc_checkData(cm_ID).then(function(res) {
         if (!res) {
-          bc_setData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_host').value, el('.bc_url').value);
+          bc_setData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_host').value, el('.bc_url').value);
         } else {
           alert('Exist.');
           el('.bc_set').classList.add('_hidden');
@@ -360,7 +358,7 @@
     el('.bc_update').onclick = function() {
       if (el('.bc_id').value == '') return;
       cm_ID = el('.bc_id').value;
-      bc_updateData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_host').value, el('.bc_url').value);
+      bc_updateData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_host').value, el('.bc_url').value);
     };
   }
   
