@@ -53,7 +53,8 @@
     el_att = el_att.match(/([^"]+"[^"]+"\s?)/g);
     for (var i = 0; i < el_att.length; i++) {
       var att_name = el_att[i].match(/([^=]+)="([^"]+)"/)[1];
-      var att_value = el_att[i].match(/([^=]+)="([^"]+)"/)[2]; 
+      var att_value = el_att[i].match(/([^=]+)="([^"]+)"/)[2];
+      if (new_node == 'i' && att_name == 'href') att_name = 'data-'+ att_name; 
       el_new.setAttribute(att_name, att_value);
     }
     return el_new;
@@ -304,7 +305,7 @@
           if (wh.search(/mangadex|softkomik/) != -1) {
             wl.href = next_chap.href;
           } else if (document.body.classList.contains('new_tab')) {
-            wl.href = next_chap.getAttribute('href');
+            wl.href = next_chap.dataset.href;
           } else {
             next_chap.click();
           }
@@ -322,12 +323,35 @@
     checkPoint = el('#check-point');
     
     if (!prnt && !imgs) {
-      var st = ['0','1','2','3','4','5','6','7','8','webtoons.com','mangaindo.web.id','mangacanblog.com','komikfoxy.xyz','mangabat.com','mangadropout.net','manhuaid.com','komiku.id','bacakomik.co','rawdevart.com'];
-      var sl = ['#readerarea','.reading-content','.read-container','.viewer-cnt #all','#readerareaimg','#Gambar_komik','#viewer','.reader-area','#Blog1 .post-body','.viewer_lst .viewer_img','.entry-content','#imgholder','#gallery-1','.container-chapter-reader','#displayNoAds .col-md-12.text-center','.row.mb-4 .col-md-12','#Baca_Komik','#chimg-auh','#img-container'];
-      var area_s = el(sl[0]) || el(sl[1]) || el(sl[2]) || el(sl[3]) || el(sl[4]) || el(sl[5]) || el(sl[6]) || el(sl[7]) || el(sl[8]);
-      for (var j = 8; j < st.length; j++) {
+      var st = [
+        '0','#readerarea',
+        '1','.reading-content',
+        '2','.read-container',
+        '3','#readerareaimg',
+        '4','.reader-area',
+        '5','.viewer-cnt #all',
+        '6','#Gambar_komik',
+        '7','#viewer',
+        '8','#Blog1 .post-body',
+        'webtoons.com','.viewer_lst .viewer_img',
+        'mangaindo.web.id','.entry-content',
+        'mangacanblog.com','#imgholder',
+        'komikfoxy.xyz','#gallery-1',
+        'mangabat.com','.container-chapter-reader',
+        'mangadropout.net','#displayNoAds .col-md-12.text-center',
+        'manhuaid.com','.row.mb-4 .col-md-12',
+        'komiku.id','#Baca_Komik',
+        'bacakomik.co','#chimg-auh',
+        'rawdevart.com','#img-container'
+      ];
+      var area_s = el(st[1]) || el(st[3]) || el(st[5]) || el(st[7]) || el(st[9]) || el(st[11]) || el(st[13]) || el(st[15]) || el(st[17]);
+      var s_length = st.length;
+      if (s_length % 2 == 1) {
+        s_length--
+      }
+      for (var j = 16; j < s_length; j += 2) {
         if (wh.indexOf(st[j]) != -1) {
-          imgArea = el(sl[j]);
+          imgArea = el(st[j + 1]);
           break;
         } else {
           imgArea = area_s;
@@ -469,8 +493,8 @@
         removeElem(el('.ctop .nextprev [rel="next"]'));
         removeElem(el('.cbot .nextprev [rel="next"]'));
       } else if (document.body.classList.contains('new_tab')) {
-        el('.ctop .nextprev [rel="next"]').getAttribute('href') = data.nextUrl;
-        el('.cbot .nextprev [rel="next"]').getAttribute('href') = data.nextUrl;
+        el('.ctop .nextprev [rel="next"]').dataset.href = data.nextUrl;
+        el('.cbot .nextprev [rel="next"]').dataset.href = data.nextUrl;
       } else {
         el('.ctop .nextprev [rel="next"]').href = data.nextUrl;
         el('.cbot .nextprev [rel="next"]').href = data.nextUrl;
@@ -818,11 +842,11 @@
       el_a[i].parentNode.insertBefore(new_a, el_a[i]);
       el_a[i].parentNode.removeChild(el_a[i]);
     }
-    el('i[href]', 'all').forEach(function(item) {
+    el('i[data-href]', 'all').forEach(function(item) {
       item.addEventListener('click', function(e) {
         //e.preventDefault();
-        //window.open(item.getAttribute('href'));
-        wl.href = item.getAttribute('href');
+        //window.open(item.dataset.href);
+        wl.href = item.dataset.href;
       });
     });
   }
@@ -881,7 +905,7 @@
     }
   }, 100);
   
-  if (wp.search(wk1) != -1 && wl.search.indexOf('project') == -1) {
+  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1) && wl.search.indexOf('project') == -1) {
     if (wh.search(/kiryuu|komikindo.web.id|sektekomik|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|westmanga|komikru|asurascans/) != -1) document.body.classList.add('new_themesia');
     checkAll();
   }
