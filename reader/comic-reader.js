@@ -557,6 +557,8 @@
     } else if (wh.indexOf('mangacanblog') != -1) { //click
       var eAll = el('.pagers a');
       if (eAll.innerHTML.indexOf('Full') != -1) eAll.click();
+    } else if (wh.indexOf('mangayu.com') != -1) {
+      //el('.ch-img').parentNode.parentNode.id = 'readerarea';
     } else if (wh.indexOf('jaiminisbox') != -1) { //script
       createImage(pages); //from web
     } else if (wh.indexOf('mangapark') != -1) { //replace
@@ -905,8 +907,8 @@
     }
   }, 100);
   
-  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1) && wl.search.indexOf('project') == -1) {
-    if (wh.search(/kiryuu|komikindo.web.id|sektekomik|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|asurascans/) != -1) document.body.classList.add('new_themesia');
+  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1) && wl.search.indexOf('project') == -1 && wh.indexOf('tenseiscans') != -1) {
+    if (wh.search(/kiryuu|komikindo.web.id|sektekomik|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|asurascans/) != -1) document.body.classList.add('new_themesia');
     checkAll();
   }
 })();
