@@ -585,14 +585,12 @@
     } else if (el('body').classList.contains('new_themesia')) { //Themesia new
       var eData, eScript = el('script', 'all');
       for (var i = 0; i < eScript.length; i++) {
-        if (eScript[i].innerHTML.indexOf('ts_reader.run') != -1) {
+        if (eScript[i].innerHTML.search(/ts_reader\.run/) != -1) {
           eScript = eScript[i].innerHTML; //from web
           break;
         }
       }
-      eData = eScript.match(/(\{[^\;]+)\)\;/)[1];
-      alert(eData);
-      eData = JSON.parse(eData);
+      eData = JSON.parse(eScript.match(/(\{[^\;]+)\)\;/)[1]);
       createImage(eData);
     } else if (wh.search(/manhwa\-san|katakomik|readcmic/) != -1) { //Show nextprev
       var nextprev = el('.alphanx') || el('.naviarea1') || el('.nextprev');
