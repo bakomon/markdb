@@ -277,10 +277,8 @@
     el('.bc_toggle').onclick = function() {
       this.classList.toggle('_selected');
       el('.bmark_db').classList.toggle('bc_shide');
-      if (is_mobile) {
-        el('.bc_bg').classList.toggle('_hidden');
-        document.body.style.overflow = el('.bmark_db').classList.contains('bc_shide') ? 'initial' : 'hidden';
-      }
+      el('.bc_bg').classList.toggle('_hidden');
+      if (is_mobile) document.body.style.overflow = el('.bmark_db').classList.contains('bc_shide') ? 'initial' : 'hidden';
     };
     
     el('.bc_bg').onclick = function() {
