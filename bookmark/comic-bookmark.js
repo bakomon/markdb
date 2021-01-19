@@ -336,8 +336,8 @@
       cm_ID = wp.match(/\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
       el('.bc_id').value = cm_ID;
       el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(cm_ID, '_') : firstCase(cm_ID, '-');
-      el('.bc_host').value = wh.replace(/w{3}\./, '');
-      el('.bc_url').value = '//'+ wh + wp;
+      el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
+      el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp;
     };
     
     el('.bc_close').onclick = function() {
