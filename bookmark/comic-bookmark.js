@@ -180,7 +180,7 @@
     for (var key in json) {
       arr.push(json[key]);
       // check if comic data exist and show bookmark
-      var title_rgx = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').match(/^(?:manga|[kc]omi[kc])?\s?([^\-|\||–]+)(?:\s[\-|\||–])?/)[1];
+      var title_rgx = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').match(/^(?:manga|[kc]omi[kc])?\s?([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
       title_rgx = new RegExp(title_rgx, 'ig');
       if (!query && (wp.indexOf(json[key].id) != -1 || json[key].id.replace(/\-/g, ' ').search(title_rgx) != -1 || json[key].title.search(title_rgx) != -1 || json[key].alternative.search(title_rgx) != -1)) {
         cm_ID = json[key].id;
