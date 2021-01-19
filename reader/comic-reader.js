@@ -195,6 +195,7 @@
     if (chgi) r_txt += '<div class="rc_size rc_btn _rc">'+ imgSize +'</div>';
     r_txt += '</div>'; //.rc_others
     r_txt += '<div class="rc_next rc_line rc_100 _hidden"><button class="rc_btn _rc" title="arrow right &#9656;" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
+    r_txt += '<div class="rc_home rc_btn _rc rc_line rc_100" onclick="window.location.href=\'//\'+window.location.hostname">Homepage</div>';
     r_txt += '<div class="rc_load rc_line flex">';
     r_txt += '<button class="rc_ldImg rc_btn _rc" title="alt + a">Load</button>';
     r_txt += '<input class="rc_all rc_input _rc" value="all" onclick="this.select()">';
