@@ -123,7 +123,7 @@
         var sNum = el('.rc_size').innerHTML;
         imgs = imgs.replace(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\//, '/'+ sNum +'/');
         imgs = imgs.replace(/=[swh](\d+)[^\n]*/, '='+ sNum);
-        if (imgs.indexOf('docs.google') != -1) imgs = imgs.replace(/https?:\/\/docs\.google\.com\/uc\?export=view&id=(.*)/g, 'https://lh3.googleusercontent.com/d/$1='+ sNum);
+        if (imgs.indexOf('docs.google') != -1) imgs = 'https://lh3.googleusercontent.com/d/'+ imgs.match(/[^\n]+id=([^&]+)/)[1] +'='+ sNum;
       }
       img.src = imgs;
       setTimeout(function() {img.style.minHeight = null}, 2000);
