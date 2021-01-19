@@ -180,7 +180,7 @@
     for (var key in json) {
       arr.push(json[key]);
       // check if comic data exist and show bookmark
-      var title_rgx = new RegExp(el('title').innerHTML, 'ig');
+      var title_rgx = new RegExp(el('title').innerHTML.match(/^([^\-|\||–]+)\s[\-|\||–]/)[1], 'ig');
       if (!query && (wp.indexOf(json[key].id) != -1 || json[key].id.replace(/\-/g, ' ').search(title_rgx) != -1 || json[key].title.search(title_rgx) != -1 || json[key].alternative.search(title_rgx) != -1)) {
         cm_ID = json[key].id;
         is_comic = true;
@@ -280,6 +280,10 @@
         el('.bc_bg').classList.toggle('_hidden');
         document.body.style.overflow = el('.bmark_db').classList.contains('bc_shide') ? 'initial' : 'hidden';
       }
+    };
+    
+    el('.bc_bg').onclick = function() {
+      el('.bc_toggle').click();
     };
     
     el('.bc_login .bc_in').onclick = function() {
