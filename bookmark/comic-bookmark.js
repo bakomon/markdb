@@ -165,6 +165,7 @@
         el('.cm_edit').classList.remove('_hidden');
       } else {
         el('.bc_comic a').href = cm_data.url;
+        el('.bc_comic a').setAttribute('target', '_blank');
       }
       el('.bc_comic a').innerHTML = cm_data.title;
       el('.bc_comic .cm_ch').value = cm_data.chapter;
@@ -240,7 +241,7 @@
     b_txt += '</div>';// .bc_form
     b_txt += '<div class="bc_result bc_line _hidden"></div>';
     b_txt += '<div class="bc_tr1">';
-    b_txt += '<div class="bc_comic bc_line _hidden"><div class="_cm flex_wrap"><a class="_bc bc_100" href="javascript:void(0)" target="_blank"></a><input class="cm_ch bc_input _bc bc_50" type="text" placeholder="chapter" disabled><button class="cm_edit bc_btn _bc _hidden">Edit</button></div></div>';
+    b_txt += '<div class="bc_comic bc_line _hidden"><div class="_cm flex_wrap"><a class="_bc bc_100" href="javascript:void(0)"></a><input class="cm_ch bc_input _bc bc_50" type="text" placeholder="chapter" disabled><button class="cm_edit bc_btn _bc _hidden">Edit</button></div></div>';
     b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _bc bc_100" type="text" placeholder="Search..."><button class="bc_btn _bc">GO</button></div>';
     b_txt += '<div class="bc_menu flex"><button class="bc_add bc_btn _bc">Add</button><button class="bc_out bc_btn _bc">Logout</button><span class="mn_notif _bc _selected _hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
@@ -336,7 +337,7 @@
       el('.bc_id').value = cm_ID;
       el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(cm_ID, '_') : firstCase(cm_ID, '-');
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
-      el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp;
+      el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
     };
     
     el('.bc_close').onclick = function() {
