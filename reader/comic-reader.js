@@ -194,7 +194,7 @@
     r_txt += '</div>'; //.rc_others
     r_txt += '<div class="rc_next rc_line rc_100 _hidden"><button class="rc_btn _rc" title="arrow right &#9656;" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
     r_txt += '<div class="rc_load rc_line flex">';
-    r_txt += '<button class="rc_load rc_btn _rc" title="alt + a">Load</button>';
+    r_txt += '<button class="rc_ldImg rc_btn _rc" title="alt + a">Load</button>';
     r_txt += '<input class="rc_all rc_input _rc" value="all" onclick="this.select()">';
     r_txt += '<button class="rc_pause rc_btn _rc" title="Pause images from loading">X</button>';
     r_txt += '</div>';// .rc_load
@@ -224,7 +224,7 @@
     };
     
     // Load all images
-    el('.rc_load').onclick =  function() {
+    el('.rc_ldImg').onclick =  function() {
       if (el('.rc_all').value == 'all') {
         lsImg = true;
         for (var i = 0; i < img.length; i++) {
@@ -237,7 +237,7 @@
     
     el('.rc_pause').onclick =  function() {
       this.classList.toggle('_selected');
-      el('.rc_p').disabled = isPause ? false : true;
+      el('.rc_ldImg').disabled = isPause ? false : true;
       isPause = isPause ? false : true;
     };
     
@@ -318,7 +318,7 @@
       } else if ((e.altKey) && (e.keyCode == 88)) {
         el('.rc_stop').click(); //"alt & x" for stop page loading
       } else if ((e.altKey) && (e.keyCode == 65)) {
-        el('.rc_load').click(); //"alt & a" for load all
+        el('.rc_ldImg').click(); //"alt & a" for load all
       } else if ((e.shiftKey) && (e.keyCode == 38)) {
         el('.rc_zoom .rc_plus').click(); //"shift & up" zoom +
       } else if ((e.shiftKey) && (e.keyCode == 40)) {
