@@ -197,6 +197,7 @@
     r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (readCookie('reader-zoom') || imgArea.offsetWidth) +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2">';
+    r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex t_center _hidden" onclick="window.location.reload()">&#8635;</div><div class="rc_stop rc_btn _rc flex t_center">&#10007;</div></div>';
     r_txt += '<div class="rc_top rc_btn _rc flex t_center">&#9652;</div>';
     r_txt += '<div class="rc_bottom rc_btn _rc flex t_center">&#9662;</div>';
     r_txt += '<div class="rc_toggle rc_btn _rc flex t_center">&#174;</div>';
@@ -261,6 +262,17 @@
         createCookie('reader-zoom', load_zm, 365);
       });
     });
+    
+    window.onload = function() {
+      el('.rc_reload').classList.remove('_hidden');
+      el('.rc_stop').classList.add('_hidden');
+    };
+    
+    el('.rc_stop').onclick = function() {
+      window.stop();
+      this.classList.add('_hidden');
+      el('.rc_reload').classList.remove('_hidden');
+    };
     
     // back to top
     el('.rc_top').onclick = function() {
