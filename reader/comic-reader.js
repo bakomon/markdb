@@ -224,7 +224,7 @@
     };
     
     // Load all images
-    el('.rc_p').onclick =  function() {
+    el('.rc_load').onclick =  function() {
       if (el('.rc_all').value == 'all') {
         lsImg = true;
         for (var i = 0; i < img.length; i++) {
