@@ -132,13 +132,15 @@
   
   function scrollImage(img) {
     window.onscroll = function() {
-      for (var i = 0; i < img.length; i++) {
-        if (!lsImg) {
-          startChange(img[i]);
+      if (!isPause) {
+        for (var i = 0; i < img.length; i++) {
+          if (!lsImg) {
+            startChange(img[i]);
+          }
+          if (img[img.length-1].src) {lsImg = true;}
         }
-        if (img[img.length-1].src) {lsImg = true;}
       }
-    }
+    };
   }
   
   function nextChapter() {
