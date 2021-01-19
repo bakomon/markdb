@@ -6,28 +6,6 @@
     return xy;
   }
   
-  // Simple querySelector https://codepen.io/pen/oKYOEK
-  function el(e,l,m) {
-    var elem, parent = l != 'all' && (l || l === null) ? l : document;
-    if (parent === null) {
-      elem = parent;
-      console.error('selector: '+ e +' => parent: '+ parent);
-    } else {
-      elem = (m || l == 'all') ? parent.querySelectorAll(e) : parent.querySelector(e);
-    }
-    return elem;
-  }
-  
-  // Add script to head. data, info, boolean, element. https://codepen.io/sekedus/pen/QWKYpVR
-  function addScript(i,n,f,o) {
-    var dJS = document.createElement('script');
-    dJS.type = 'text/javascript';
-    if (n == 'in') dJS.async = (n || f) === true ? true : false;
-    n == 'in' ? dJS.innerHTML = i : dJS.src = i;
-    var elm = n && n.tagName ? n : f && f.tagName ? f : o && o.tagName ? o : document.querySelector('head');
-    elm.appendChild(dJS);
-  }
-  
   // Detect mobile device https://stackoverflow.com/a/11381730/7598333
   function isMobile() {
     var a = navigator.userAgent || navigator.vendor || window.opera;
