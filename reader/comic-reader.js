@@ -183,7 +183,7 @@
     var r_txt = '';
     // css control & main already in css tools
     // css reader
-    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:150px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-150px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}._selected,.rc_btn:hover{background:#4267b2;border-color:#4267b2;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all{width:30px !important;margin-left:8px;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._hidden{display:none;}</style>';
+    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:150px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-150px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}._selected,.rc_btn:hover{background:#4267b2;border-color:#4267b2;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._hidden{display:none;}</style>';
     r_txt += '<style>.scrollToTop,[title*="Back To Top"],.back-to-top,.go-to-top,.btn-top{display:none !important;}</style>'; //css hidden
     r_txt += '<style>.rc_mobile ._rc{font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>'; //css mobile
     r_txt += '<div class="reader_db flex_wrap f_bottom">';
@@ -193,11 +193,15 @@
     if (chgi) r_txt += '<div class="rc_size rc_btn _rc">'+ imgSize +'</div>';
     r_txt += '</div>'; //.rc_others
     r_txt += '<div class="rc_next rc_line rc_100 _hidden"><button class="rc_btn _rc" title="arrow right &#9656;" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
-    r_txt += '<div class="rc_load rc_line rc_100"><button class="rc_load rc_btn _rc" title="alt + a">Load</button><input class="rc_all rc_input _rc" value="all" onclick="this.select()"></div>';
+    r_txt += '<div class="rc_load rc_line flex">';
+    r_txt += '<button class="rc_load rc_btn _rc" title="alt + a">Load</button>';
+    r_txt += '<input class="rc_all rc_input _rc" value="all" onclick="this.select()">';
+    r_txt += '<button class="rc_pause rc_btn _rc" title="Pause images from loading">X</button>';
+    r_txt += '</div>';// .rc_load
     r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (readCookie('reader-zoom') || imgArea.offsetWidth) +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2">';
-    r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex t_center _hidden" onclick="window.location.reload()">&#8635;</div><div class="rc_stop rc_btn _rc flex t_center">&#10007;</div></div>';
+    r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex t_center _hidden" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="rc_stop rc_btn _rc flex t_center" title="alt + x">&#10007;</div></div>';
     r_txt += '<div class="rc_top rc_btn _rc flex t_center">&#9652;</div>';
     r_txt += '<div class="rc_bottom rc_btn _rc flex t_center">&#9662;</div>';
     r_txt += '<div class="rc_toggle rc_btn _rc flex t_center">&#174;</div>';
@@ -220,7 +224,7 @@
     };
     
     // Load all images
-    el('.rc_load').onclick =  function() {
+    el('.rc_p').onclick =  function() {
       if (el('.rc_all').value == 'all') {
         lsImg = true;
         for (var i = 0; i < img.length; i++) {
@@ -229,6 +233,12 @@
       } else {
         startChange(img[el('.rc_all').value - 1]);
       }
+    };
+    
+    el('.rc_pause').onclick =  function() {
+      this.classList.toggle('_selected');
+      el('.rc_p').disabled = isPause ? false : true;
+      isPause = isPause ? false : true;
     };
     
     if (chgi) {
@@ -303,7 +313,11 @@
     }
     
     document.onkeyup = function(e) {
-      if ((e.altKey) && (e.keyCode == 65)) {
+      if ((e.altKey) && (e.keyCode == 82)) {
+        el('.rc_reload').click(); //"alt & r" for reload page
+      } else if ((e.altKey) && (e.keyCode == 88)) {
+        el('.rc_stop').click(); //"alt & x" for stop page loading
+      } else if ((e.altKey) && (e.keyCode == 65)) {
         el('.rc_load').click(); //"alt & a" for load all
       } else if ((e.shiftKey) && (e.keyCode == 38)) {
         el('.rc_zoom .rc_plus').click(); //"shift & up" zoom +
@@ -812,6 +826,7 @@
   var loadCDN = false;
   var loadSz = false;
   var lsImg = false; //all images loaded
+  var isPause = false; //pause images from loading
   var isMobile = document.documentElement.classList.contains('is_mobile') ? true : false; //from comic tools
   var imgSize = ''; //image size
   var checkPoint, imgArea, imgList, cdnName;
