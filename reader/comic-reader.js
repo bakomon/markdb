@@ -936,8 +936,8 @@
       }
     } else if (el('body').classList.contains('new_cms') && el('#comic-details-container')) { //from web
       clearInterval(cmt_chk);
-      /*el('#comic-details-container').id = 'disqus_thread';
-      reloadComment(window['disqusName']);*/
+      el('#comic-details-container').id = 'disqus_thread';
+      reloadComment(window['disqusName']);
     } else if (wh.indexOf('softkomik') != -1) { //api
       clearInterval(cmt_chk);
       /*var eDsqs = setInterval(function() {
@@ -951,7 +951,7 @@
     }
   }, 100);
   
-  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1) && wl.search.indexOf('project') == -1 && wh.indexOf('tenseiscans') == -1 || (el('body').classList.contains('new_cms') && el('meta[property*="title"]').getAttribute('content').search(/chapter/i) != -1)) {
+  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1) && wl.search.indexOf('project') == -1 && wh.indexOf('tenseiscans') == -1 || el('meta[property*="title"]').getAttribute('content').search(/chapter/i) != -1) {
     checkAll();
   }
 })();
