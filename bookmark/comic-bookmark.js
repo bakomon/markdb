@@ -183,7 +183,7 @@
       // check if comic data exist and show bookmark
       var title_rgx = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
       title_rgx = new RegExp(title_rgx, 'ig');
-      if (!query && wp != '/' && (json[key].id.replace(/\-/g, ' ').search(title_rgx) != -1 || json[key].title.search(title_rgx) != -1 || json[key].alternative.search(title_rgx) != -1 || wp.indexOf(json[key].id) != -1)) {
+      if (!query && wp != '/' && (wp.indexOf(json[key].id) != -1 || json[key].id.replace(/\-/g, ' ').search(title_rgx) != -1 || json[key].title.search(title_rgx) != -1 || json[key].alternative.search(title_rgx) != -1)) {
         cm_ID = json[key].id;
         is_comic = true;
         bc_showData();
