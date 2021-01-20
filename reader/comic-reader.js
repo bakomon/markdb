@@ -610,13 +610,15 @@
         }
       }, 100); //'chapterPages' from web
     } else if (el('body').classList.contains('new_themesia')) { //Themesia new
-      var eData, eScript = el('body script', 'all');
+      var eData = '';
+      var eScript = el('body script', 'all');
       for (var i = 0; i < eScript.length; i++) {
         if (eScript[i].innerHTML.search(/ts_reader\.run/) != -1) {
           eData = eScript[i].innerHTML; //from web
           break;
         }
       }
+      //console.log('ts_reader', eData);
       eData = JSON.parse(eData.match(/(\{[^\;]+)\)\;/)[1]);
       createImage(eData);
     } else if (wh.search(/manhwa\-san|katakomik|readcmic/) != -1) { //Show nextprev
