@@ -170,7 +170,7 @@
       el('.bc_comic a').innerHTML = cm_data.title;
       el('.bc_comic .cm_ch').value = cm_data.chapter;
       el('.bc_comic').classList.remove('_hidden');
-      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1) && el('title').innerHTML.search(/ch\.?(apter)?/i) == -1 {
+      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1 && el('title').innerHTML.search(/ch\.?(apter)?/i) == -1) {
         el('.bc_toggle').click();
       }
     });
