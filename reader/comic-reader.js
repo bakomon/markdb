@@ -572,7 +572,7 @@
       var eReader = setInterval(function() {
         if (el('#container .baca-button')) {
           clearInterval(eReader);
-          getData('//softkomik.site/api/baca-chapter/'+ eId +'&'+ eCh);
+          getData('//api.softkomik.online/api/baca-chapter/'+ eId +'&'+ eCh);
         }
       }, 100);
       el('a', 'all').forEach(function(item) {
