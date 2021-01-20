@@ -610,17 +610,24 @@
         }
       }, 100); //'chapterPages' from web
     } else if (el('body').classList.contains('new_themesia')) { //Themesia new
-      var eData = '';
-      var eScript = el('body script', 'all');
-      for (var i = 0; i < eScript.length; i++) {
-        if (eScript[i].innerHTML.search(/ts_reader\.run/) != -1) {
-          eData = eScript[i].innerHTML.toString(); //from web
-          console.log('ts_reader', eData);
-          break;
+      function getDataImage() {
+        var eData = '';
+        var eScript = el('body script', 'all');
+        for (var i = 0; i < eScript.length; i++) {
+          if (eScript[i].innerHTML.search(/ts_reader\.run/) != -1) {
+            eData = eScript[i].innerHTML.toString(); //from web
+            break;
+          }
         }
+        eData = JSON.parse(eData.match(/(\{[^\;]+)\)\;/)[1]);
+        return eData == '' ? false : eData;
       }
-      eData = JSON.parse(eData.match(/(\{[^\;]+)\)\;/)[1]);
-      createImage(eData);
+      var ths_chk = setInterval(function() {
+        if (getDataImage()) {
+          clearInterval(ths_chk);
+          createImage(getDataImage());
+        }
+      }, 100);
     } else if (wh.search(/manhwa\-san|katakomik|readcmic/) != -1) { //Show nextprev
       var nextprev = el('.alphanx') || el('.naviarea1') || el('.nextprev');
       el('.post-footer').insertBefore(nextprev, el('.post-footer').children[0]);
