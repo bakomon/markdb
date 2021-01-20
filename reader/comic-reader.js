@@ -842,7 +842,7 @@
   removeAADB(); //remove anti adblock notify mangacanblog
   if (wh.search(/mangaku|komikru/) != -1) el('body').classList.add('_rightclick');
   if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga/) != -1) el('body').classList.add('new_tab');
-  if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz/) != -1) el('body').classList.add('new_cms');
+  if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) el('body').classList.add('new_cms');
   if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|asurascans/) != -1) el('body').classList.add('new_themesia');
   
   // custom
@@ -951,7 +951,7 @@
     }
   }, 100);
   
-  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1) && wl.search.indexOf('project') == -1 && wh.indexOf('tenseiscans') == -1 || el('meta[property*="title"]').getAttribute('content').search(/chapter/i) != -1) {
+  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1) && wl.search.indexOf('project') == -1 && wh.indexOf('tenseiscans') == -1 || el('title').innerHTML.search(/ch\.?(apter)?/i) != -1) {
     checkAll();
   }
 })();
