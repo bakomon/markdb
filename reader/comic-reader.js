@@ -575,6 +575,11 @@
           getData('//softkomik.site/api/baca-chapter/'+ eId +'&'+ eCh);
         }
       }, 100);
+      el('a', 'all').forEach(function(item) {
+        item.addEventListener('click', function(e) {
+          wl.href = item.href;
+        });
+      });
     } else if (wh.indexOf('komiku.id') != -1) { //click
       document.body.classList.add('click');
       el('.main').id = 'main-mod';
