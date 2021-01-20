@@ -327,10 +327,8 @@
         el('.rc_zoom .rc_less').click(); //"shift & down" zoom -
       } else if (e.keyCode == 39) { //arrow right
         if (next_chap) {
-          if (wh.search(/mangadex|softkomik/) != -1) {
-            wl.href = next_chap.href;
-          } else if (document.body.classList.contains('new_tab')) {
-            wl.href = next_chap.dataset.href;
+          if (wh.search(/mangadex|softkomik/) != -1 || document.body.classList.contains('new_tab')) {
+            wl.href = el('.rc_next').dataset.href;
           } else {
             next_chap.click();
           }
@@ -863,7 +861,7 @@
     };
   } else if (wh.indexOf('softkomik') != -1) {
     var soft_chk = setInterval(function() {
-      if (el('.container')) {
+      if (el('.container .relatif .bg-content')) {
         clearInterval(soft_chk);
         el('a', 'all').forEach(function(item) {
           item.addEventListener('click', function() {
