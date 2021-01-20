@@ -490,7 +490,7 @@
       csl = '#page';
       total = data;
     } else if (wh.indexOf('softkomik') != -1) {
-      csl = el('#content-mod').children[0];
+      csl = el('#content-mod #readerarea');
       total = data.DataGambar;
     }
     var main = typeof csl == 'string' ? el(csl) : csl;
@@ -545,13 +545,10 @@
     } else if (wh.indexOf('jaiminisbox') != -1) {
       main.removeChild(el('.inner', main));
     } else if (wh.indexOf('softkomik') != -1) {
-    	main.innerHTML = '';
-      if (data.NextChapter) {
-        var next_div = document.createElement('a');
-        next_div.setAttribute('rel', 'next');
-        next_div.setAttribute('href', '/'+ data.DataKomik.title_slug +'/chapter/'+ data.NextChapter.chapter);
-        main.appendChild(next_div);
-      }
+    	if (data.NextChapter) {
+    		el('#content-mod a').setAttribute('rel', 'next');
+    	  el('#content-mod a').href = '/'+ data.DataKomik.title_slug +'/chapter/'+ data.NextChapter.chapter;
+    	}
     }
     
     startImage(main, img_api);
@@ -570,7 +567,12 @@
         wl.href = e.target.parentNode.href;
       });
     } else if (wh.indexOf('softkomik') != -1) { //api
-      el('#__next').id = 'content-mod';
+      var content = el('#__next');
+      var new_content = document.createElement('div');
+      new_content.id = 'content-mod';
+      new_content.innerHTML = '<div id="readerarea"></div><a href="#">next</a>';
+      content.parentNode.insertBefore(new_content, content);
+      content.parentNode.removeChild(el('#__next'));
       var eId = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[1];
       var eCh = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[2];
       getData('//api.softkomik.online/api/baca-chapter/'+ eId +'&'+ eCh);
