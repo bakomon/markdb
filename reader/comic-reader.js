@@ -613,12 +613,12 @@
       var eData, eScript = el('body script', 'all');
       for (var i = 0; i < eScript.length; i++) {
         if (eScript[i].innerHTML.search(/ts_reader\.run/) != -1) {
-          eScript = eScript[i].innerHTML.toString(); //from web
+          eScript = eScript[i].innerHTML; //from web
           break;
         }
       }
       console.log('data-new-themesia: '+ eScript);
-      eData = JSON.parse(eScript.match(/(\{[^\;]+)\)\;/)[1]);
+      eData = JSON.parse(eScript.toString().match(/(\{[^\;]+)\)\;/)[1]);
       createImage(eData);
     } else if (wh.search(/manhwa\-san|katakomik|readcmic/) != -1) { //Show nextprev
       var nextprev = el('.alphanx') || el('.naviarea1') || el('.nextprev');
