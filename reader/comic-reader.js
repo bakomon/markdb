@@ -307,9 +307,9 @@
     - .btn-sm i[class*="right"] = new CMS "scans"
     - i[rel="next"] = new_tab
     */
-    var next_chap =  el('.mangayu\\.com a>i[class*="arrow-right"]') || el('.manhuaid\\.com a[class*="float-left"]') || el('.softkomik\\.site .baca-button .fa-chevron-right') || el('.mangadex\\.org .reader-controls-chapters a[class*="right"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
+    var next_chap =  el('.mangayu\\.com a>i[class*="arrow-right"]') || el('.manhuaid\\.com a[class*="float-left"]') || el('.mangadex\\.org .reader-controls-chapters a[class*="right"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
     if (next_chap) {
-      next_chap = wh.search(/mangadropout|leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz|softkomik|mangayu/) != -1 ? next_chap.parentNode : next_chap;
+      next_chap = wh.search(/mangadropout|leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz|mangayu/) != -1 ? next_chap.parentNode : next_chap;
       var next_url = el('body').classList.contains('new_tab') ? next_chap.dataset.href : next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
       el('.rc_next').classList.remove('_hidden');
@@ -490,7 +490,7 @@
       csl = '#page';
       total = data;
     } else if (wh.indexOf('softkomik') != -1) {
-      csl = el('.baca-button').nextElementSibling;
+      csl = el('#content-mod').children[0];
       total = data.DataGambar;
     }
     var main = typeof csl == 'string' ? el(csl) : csl;
@@ -505,7 +505,7 @@
       } else if (el('body').classList.contains('new_themesia')) {
         data_src = total[i];
       } else if (wh.indexOf('softkomik') != -1) {
-        data_src = '//api.softkomik.site/'+ total[i].url_gambar;
+        data_src = '//img.softkomik.online/'+ total[i].url_gambar;
       } else {
         data_src = data[i];
       }
@@ -545,10 +545,13 @@
     } else if (wh.indexOf('jaiminisbox') != -1) {
       main.removeChild(el('.inner', main));
     } else if (wh.indexOf('softkomik') != -1) {
-      var new_div = document.createElement('div');
-      main.parentNode.insertBefore(new_div, main);
-      main.parentNode.removeChild(main);
-      main = new_div;
+    	main.innerHTML = '';
+      if (data.NextChapter) {
+        var next_div = document.createElement('a');
+        next_div.setAttribute('rel', 'next');
+        next_div.setAttribute('href', '/'+ data.DataKomik.title_slug +'/chapter/'+ data.NextChapter.chapter);
+        main.appendChild(next_div);
+      }
     }
     
     startImage(main, img_api);
@@ -567,19 +570,10 @@
         wl.href = e.target.parentNode.href;
       });
     } else if (wh.indexOf('softkomik') != -1) { //api
+      el('#__next').id = 'content-mod';
       var eId = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[1];
       var eCh = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[2];
-      var eReader = setInterval(function() {
-        if (el('#container .baca-button')) {
-          clearInterval(eReader);
-          getData('//api.softkomik.online/api/baca-chapter/'+ eId +'&'+ eCh);
-        }
-      }, 100);
-      el('a', 'all').forEach(function(item) {
-        item.addEventListener('click', function(e) {
-          wl.href = item.href;
-        });
-      });
+      getData('//api.softkomik.online/api/baca-chapter/'+ eId +'&'+ eCh);
     } else if (wh.indexOf('komiku.id') != -1) { //click
       document.body.classList.add('click');
       el('.main').id = 'main-mod';
@@ -836,7 +830,8 @@
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
-  var wk1 = /chapter(\/|\-)|\-bahasa|\-indonesia|ch\-|(\-|\/)\d+|(\-|\/)ep\d+|(chap|episode)\_|\/c\d+/;
+  var wk1 = /(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/;;
+  //var wk1 = /chapter(\/|\-)|\-bahasa|\-indonesia|ch\-|(\-|\/)\d+|(\-|\/)ep\d+|(chap|episode)\_|\/c\d+/;
   var chcdn = false; //if image has wp.com or statically.io
   var chgi = false; //if google images
   var loadCDN = false;
@@ -863,6 +858,17 @@
     window.open = function (url, windowName, windowFeatures) {
       console.log('window.open caught!');
     };
+  } else if (wh.indexOf('softkomik') != -1) {
+    var soft_chk = setInterval(function() {
+      if (el('.container')) {
+        clearInterval(soft_chk);
+        el('a', 'all').forEach(function(item) {
+          item.addEventListener('click', function() {
+            wl.href = item.href;
+          });
+        });
+      }
+    }, 100);
   } else if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga/) != -1) {
   	document.body.classList.add('new_tab');
     // skip syndication.exdynsrv.com || jomtingi.net
