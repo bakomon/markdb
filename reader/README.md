@@ -10,7 +10,7 @@
 
 ## Manga List
 ```
-- Mangaku.web.id|in|co|pro => .singlep .section_ad.group_ad
+- Mangaku.web.id|in|co|pro
 - Mangaindo.web.id
 - Komikstation.com
 - Subapics.com | Ngomik.in|net
@@ -23,7 +23,7 @@
 - Maid.my.id
 - Mangakyo.net|com|me
 - Otakuindo.net | Komiku.co|co.id|id
-- Otakuindo.web.id | Komiku.net | Tokusiro.com (check)
+- Otakuindo.web.id | Komiku.net | Tokusiro.com
 - Komikav.com
 - Manhwa-san.xyz
 - Matakomik.com
@@ -49,6 +49,8 @@
 - Kaisarkomik.com
 - Softkomik.site
 - Mgkomik.my.id
+- Kumamanga.my.id
+- Komikru.com
 - Yuumanga.blogspot.com || Yuumanga.com
 - Katakomik.blogspot.com || Katakomik.site
 - Animesc-kun.blogspot.com
@@ -74,6 +76,8 @@
 - Reaperscans.com
 - Asurascans.com
 - Secretscans.co
+- Rawdevart.com
+- Azoramanga.com
 ```
 
 ## Anime List
