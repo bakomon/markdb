@@ -535,10 +535,10 @@
       el('#toHome').style.cssText = 'height:0;overflow:hidden;';
       el('#toTop').style.cssText = 'height:0;overflow:hidden;';
     } else if (wh.indexOf('softkomik') != -1) {
-    	if (data.NextChapter) {
-    	  el('#content-mod a').setAttribute('rel', 'next');
-    	  el('#content-mod a').href = '/'+ data.DataKomik.title_slug +'/chapter/'+ data.NextChapter.chapter;
-    	}
+      if (data.NextChapter) {
+        el('#content-mod a').setAttribute('rel', 'next');
+        el('#content-mod a').href = '/'+ data.DataKomik.title_slug +'/chapter/'+ data.NextChapter.chapter;
+      }
     }
     
     startImage(main, img_api);
@@ -838,13 +838,12 @@
   var imgSize = ''; //image size
   var checkPoint, imgArea, imgList, cdnName;
   
-  // re-enable right click https://stackoverflow.com/a/43754205
-  window.addEventListener('contextmenu', function(e) {
-    e.stopPropagation();
-  }, true);
-  
-  el('body').classList.add(wl.hostname.replace(/www\./, ''));
+  el('body').classList.add(wl.hostname.replace(/(w{3}|m)\./, ''));
   removeAADB(); //remove anti adblock notify mangacanblog
+  if (wh.search(/mangaku/) != -1) el('body').classList.add('_rightclick');
+  if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga/) != -1) el('body').classList.add('new_tab');
+  if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz/) != -1) el('body').classList.add('new_cms');
+  if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|asurascans/) != -1) el('body').classList.add('new_themesia');
   
   // custom
   if (wh.indexOf('webtoons') != -1) {
@@ -854,6 +853,11 @@
     window.open = function (url, windowName, windowFeatures) {
       console.log('window.open caught!');
     };
+  } else if (el('body').classList.contains('_rightclick')) {
+    // re-enable right click https://stackoverflow.com/a/43754205
+    window.addEventListener('contextmenu', function(e) {
+      e.stopPropagation();
+    });
   } else if (wh.indexOf('softkomik') != -1) {
     var soft_chk = setInterval(function() {
       if (el('.container .relatif .bg-content')) {
@@ -865,8 +869,7 @@
         });
       }
     }, 100);
-  } else if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga/) != -1) {
-  	el('body').classList.add('new_tab');
+  } else if (el('body').classList.contains('new_tab')) {
     // skip syndication.exdynsrv.com || jomtingi.net
     var el_a = el('a', 'all');
     for (var i = 0; i < el_a.length; i++) {
@@ -888,12 +891,11 @@
       });
     });
   }
-  if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz/) != -1) el('body').classList.add('new_cms');
-  if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|asurascans/) != -1) el('body').classList.add('new_themesia');
   
   // Dark mode
   var switch_btn = el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch');
-  if (switch_btn) { //theme enduser.id|themesia.com
+  if (switch_btn) {
+    // theme enduser.id|themesia.com
     localStorage.setItem('thememode', 'darkmode');
     localStorage.setItem('theme-mode', 'dark');
     el('body').classList.add('darkmode', 'dark');
