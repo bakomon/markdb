@@ -618,7 +618,7 @@
           break;
         }
       }
-      //console.log('ts_reader', eData);
+      console.log('ts_reader', eData);
       eData = JSON.parse(eData.match(/(\{[^\;]+)\)\;/)[1]);
       createImage(eData);
     } else if (wh.search(/manhwa\-san|katakomik|readcmic/) != -1) { //Show nextprev
