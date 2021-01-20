@@ -615,6 +615,7 @@
       for (var i = 0; i < eScript.length; i++) {
         if (eScript[i].innerHTML.search(/ts_reader\.run/) != -1) {
           eData = eScript[i].innerHTML; //from web
+      console.log(eData);
           break;
         }
       }
