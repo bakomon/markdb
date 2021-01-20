@@ -214,7 +214,7 @@
     r_html.style.cssText = 'position:relative;z-index:2147483646;';
     r_html.className = '_reader cbr_mod' + (isMobile ? ' rc_mobile' : '');
     r_html.innerHTML = r_txt;
-    document.body.appendChild(r_html);
+    el('body').appendChild(r_html);
     if (chcdn || chgi) el('.rc_others').classList.remove('_hidden');
     if (readCookie('reader-zoom')) imgArea.style.cssText = 'max-width:'+ readCookie('reader-zoom') +'px !important;';
     
@@ -288,7 +288,7 @@
     
     // back to top
     el('.rc_top').onclick = function() {
-      document.body.scrollIntoView();
+      el('body').scrollIntoView();
     };
     
     // back to bottom
@@ -296,7 +296,7 @@
       if (el('#disqus_trigger')) {
         el('#disqus_trigger').parentNode.scrollIntoView();
       } else {
-        document.body.scrollIntoView(false);
+        el('body').scrollIntoView(false);
       }
     };
     
@@ -308,7 +308,7 @@
     */
     var next_chap =  el('.mangayu\\.com a>i[class*="arrow-right"]') || el('.manhuaid\\.com a[class*="float-left"]') || el('.mangadex\\.org .reader-controls-chapters a[class*="right"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
     if (next_chap) {
-      next_chap = wh.search(/mangadropout|leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz|mangayu/) != -1 ? next_chap.parentNode : next_chap;
+      next_chap = el('body').className.search(/new_cms|mangadropout|mangayu/) != -1 ? next_chap.parentNode : next_chap;
       var next_url = el('body').classList.contains('new_tab') ? next_chap.dataset.href : next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
       el('.rc_next').classList.remove('_hidden');
@@ -327,7 +327,7 @@
         el('.rc_zoom .rc_less').click(); //"shift & down" zoom -
       } else if (e.keyCode == 39) { //arrow right
         if (next_chap) {
-          if (wh.search(/mangadex|softkomik/) != -1 || document.body.classList.contains('new_tab')) {
+          if (wh.search(/mangadex|softkomik/) != -1 || el('body').classList.contains('new_tab')) {
             wl.href = el('.rc_next').dataset.href;
           } else {
             next_chap.click();
@@ -342,7 +342,7 @@
     cp.id = 'check-point';
     cp.style.cssText = 'z-index:2;color:transparent;position:fixed;bottom:-400px;';
     cp.innerHTML = '.';
-    document.body.appendChild(cp);
+    el('body').appendChild(cp);
     checkPoint = el('#check-point');
     
     if (!prnt && !imgs) {
@@ -380,7 +380,7 @@
           imgArea = area_s;
         }
       }
-      console.log('imgArea:', document.body.contains(imgArea));
+      console.log('imgArea:', el('body').contains(imgArea));
       if (!imgArea) return;
     }
     if (prnt && imgs) imgArea = prnt;
@@ -434,7 +434,7 @@
     var reader_mod = document.createElement('div');
     reader_mod.style.cssText = 'width:100%;';
     reader_mod.innerHTML = reader_html;
-    if (prnt && imgs && wh.search(/mangapark/) == -1) {
+    if (prnt && imgs && el('body').className.search(/new_cms|new_themesia|mangapark/) == -1) {
       imgArea.appendChild(reader_mod);
     } else {
       imgArea.parentNode.insertBefore(reader_mod, imgArea);
@@ -475,9 +475,9 @@
       csl = '#content .reader-main';
       total = data.page_array;
     } else if (el('body').classList.contains('new_themesia')) {
-      csl = el('#readerarea').parentNode;
+      csl = el('#readerarea');
       total = data.sources[0].images;
-    } else if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz/) != -1) {
+    } else if (el('body').classList.contains('new_cms')) {
       csl = '#pages-container';
       total = data;
     } else if (wh.indexOf('merakiscans') != -1) {
@@ -516,23 +516,18 @@
       if (data.nextUrl == '') {
         removeElem(el('.ctop .nextprev [rel="next"]'));
         removeElem(el('.cbot .nextprev [rel="next"]'));
-      } else if (document.body.classList.contains('new_tab')) {
+      } else if (el('body').classList.contains('new_tab')) {
         el('.ctop .nextprev [rel="next"]').dataset.href = data.nextUrl;
         el('.cbot .nextprev [rel="next"]').dataset.href = data.nextUrl;
       } else {
         el('.ctop .nextprev [rel="next"]').href = data.nextUrl;
         el('.cbot .nextprev [rel="next"]').href = data.nextUrl;
       }
-      var new_div = document.createElement('div');
-      main.insertBefore(new_div, el('#readerarea'));
-      main.removeChild(el('#readerarea'));
-      if (el('#readerarea noscript')) main.removeChild(el('#readerarea'));
-      main = new_div;
     } else if (wh.indexOf('mangadex') != -1) {
       main.removeChild(el('.reader-images', main));
       main.removeChild(el('.reader-page-bar', main));
       el('#content').dataset.renderer = 'long-strip';
-    } else if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz/) != -1) {
+    } else if (el('body').classList.contains('new_cms')) {
       main.innerHTML = '';
       main.removeAttribute('id');
     } else if (wh.indexOf('merakiscans') != -1) {
@@ -572,7 +567,7 @@
       var eCh = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[2];
       getData('//api.softkomik.online/api/baca-chapter/'+ eId +'&'+ eCh);
     } else if (wh.indexOf('komiku.id') != -1) { //click
-      document.body.classList.add('click');
+      el('body').classList.add('click');
       el('.main').id = 'main-mod';
       el('.main').classList.remove('main'); //stop infinite scroll
     } else if (wh.indexOf('mangacanblog') != -1) { //click
@@ -602,11 +597,11 @@
       el('#all').style.display = 'block';
       el('#ppp').style.display = 'none';
       if (el('.pager-cnt .pull-right')) el('.pull-right a').href = next_chapter; //from web
-    } else if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz/) != -1) { //new cms
+    } else if (el('body').classList.contains('new_cms')) { //new cms
       var eShow = setInterval(function() {
-        if (window.chapterPages) {
+        if (window['chapterPages']) {
           clearInterval(eShow);
-          createImage(window.chapterPages); //from web
+          createImage(window['chapterPages']); //from web
         }
       }, 100);
     } else if (el('body').classList.contains('new_themesia')) { //Themesia new
@@ -799,11 +794,11 @@
       new_txt.style.cssText = 'position:fixed;top:0;right:0;height:400px';
       new_txt.value = d_id1;
       //wl.hash = d_img;
-      document.body.appendChild(new_txt);
+      el('body').appendChild(new_txt);
       */
     }
     
-    if (el('body').className.search(/new_themesia|mangadex|mangaku|kyuroku|merakiscans|leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz|mangapark|softkomik/) == -1) { startImage(); }
+    if (el('body').className.search(/new_cms|new_themesia|mangadex|mangaku|kyuroku|merakiscans|mangapark|softkomik/) == -1) { startImage(); }
   }
   
   function removeAADB() {
@@ -848,7 +843,7 @@
     e.stopPropagation();
   }, true);
   
-  document.body.classList.add(wl.hostname.replace(/www\./, ''));
+  el('body').classList.add(wl.hostname.replace(/www\./, ''));
   removeAADB(); //remove anti adblock notify mangacanblog
   
   // custom
@@ -871,7 +866,7 @@
       }
     }, 100);
   } else if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga/) != -1) {
-  	document.body.classList.add('new_tab');
+  	el('body').classList.add('new_tab');
     // skip syndication.exdynsrv.com || jomtingi.net
     var el_a = el('a', 'all');
     for (var i = 0; i < el_a.length; i++) {
@@ -887,19 +882,25 @@
         //window.open(item.dataset.href);
         wl.href = item.dataset.href;
       });
+      // right click
+      item.addEventListener('contextmenu', function(e) {
+        window.open(item.dataset.href);
+      });
     });
   }
+  if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscanz/) != -1) el('body').classList.add('new_cms');
+  if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|asurascans/) != -1) el('body').classList.add('new_themesia');
   
   // Dark mode
   var switch_btn = el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch');
   if (switch_btn) { //theme enduser.id|themesia.com
     localStorage.setItem('thememode', 'darkmode');
     localStorage.setItem('theme-mode', 'dark');
-    document.body.classList.add('darkmode', 'dark');
-    document.body.classList.remove('lightmode');
+    el('body').classList.add('darkmode', 'dark');
+    el('body').classList.remove('lightmode');
   } else if (wh.indexOf('manhuaid.com') != -1) {
     localStorage.setItem('theme', 'dark');
-    document.body.setAttribute('id', 'darkbody');
+    el('body').setAttribute('id', 'darkbody');
     el('.isdark').setAttribute('id', 'darkmode');
     el('nav').classList.add('bg-dark');
     el('nav').classList.remove('bg-success', 'fixed-top');
@@ -931,6 +932,10 @@
           }
         }
       }
+    } else if (el('body').classList.contains('new_cms') && el('#comic-details-container')) { //from web
+      clearInterval(cmt_chk);
+      el('#comic-details-container').id = 'disqus_thread';
+      reloadComment(window['disqusName']);
     } else if (wh.indexOf('softkomik') != -1) { //api
       clearInterval(cmt_chk);
       /*var eDsqs = setInterval(function() {
@@ -944,8 +949,7 @@
     }
   }, 100);
   
-  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1) && wl.search.indexOf('project') == -1 && wh.indexOf('tenseiscans') == -1) {
-    if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|asurascans/) != -1) document.body.classList.add('new_themesia');
+  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1) && wl.search.indexOf('project') == -1 && wh.indexOf('tenseiscans') == -1 || (el('body').classList.contains('new_cms') && el('meta[property*="title"]').getAttribute('content').search(/chapter/i) != -1)) {
     checkAll();
   }
 })();
