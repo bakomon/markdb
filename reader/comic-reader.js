@@ -306,13 +306,23 @@
     - .btn-sm i[class*="right"] = new CMS "scans"
     - i[rel="next"] = new_tab
     */
-    var next_chap =  el('.mangayu\\.com a>i[class*="arrow-right"]') || el('.manhuaid\\.com a[class*="float-left"]') || el('.mangadex\\.org .reader-controls-chapters a[class*="right"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
+    var next_chap =  el('.mangayu\\.com a>i[class*="arrow-right"]') || el('.manhuaid\\.com a[class*="float-left"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
     if (next_chap) {
       next_chap = el('body').className.search(/new_cms|mangadropout|mangayu/) != -1 ? next_chap.parentNode : next_chap;
       var next_url = el('body').classList.contains('new_tab') ? next_chap.dataset.href : next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
       el('.rc_next').classList.remove('_hidden');
     }
+    
+    var next_chk = setInterval(function() {
+      var elm_url = el('.mangadex\\.org .reader-controls-chapters a[class*="right"]');
+      if (elm_url.href != wl.href) {
+        clearInterval(next_chk);
+        if (wh.indexOf('mangadex') != -1) {
+          el('.rc_next button').dataset.href = elm_url.href;
+        }
+      }
+    }, 100);
     
     document.onkeyup = function(e) {
       if ((e.altKey) && (e.keyCode == 82)) {
@@ -328,7 +338,7 @@
       } else if (e.keyCode == 39) { //arrow right
         if (next_chap) {
           if (wh.search(/mangadex|softkomik/) != -1 || el('body').classList.contains('new_tab')) {
-            wl.href = el('.rc_next').dataset.href;
+            wl.href = el('.rc_next button').dataset.href;
           } else {
             next_chap.click();
           }
@@ -551,7 +561,7 @@
     if (wh.indexOf('mangadex') != -1) { //api
       el('#content').style.cssText = 'position:initial;';
       var eId = el('meta[name="app"]').dataset.chapterId;
-      getData('//mangadex.org/api/?id='+eId+'&type=chapter');
+      getData('//mangadex.org/api/?type=chapter&id='+ eId);
       var eReader = el('.reader-controls-chapters');
       eReader.addEventListener('click', function(e) {
         wl.href = e.target.parentNode.href;
