@@ -316,7 +316,7 @@
     
     var next_chk = setInterval(function() {
       var elm_url = el('.mangadex\\.org .reader-controls-chapters a[class*="right"]');
-      if (elm_url.href != wl.href) {
+      if (elm_url && elm_url.href != wl.href) {
         clearInterval(next_chk);
         if (wh.indexOf('mangadex') != -1) {
           el('.rc_next button').dataset.href = elm_url.href;
