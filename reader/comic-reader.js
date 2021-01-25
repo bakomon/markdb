@@ -176,7 +176,7 @@
         nextLink = '//'+ wh +'/baca-komik-'+ manga_name +'-'+ nextLink +'-'+ next_plus +'-bahasa-indonesia-'+ manga_name +'-'+ nextLink +'-terbaru.html';
       }
       el('.rc_next button').setAttribute('data-href', nextLink);
-      el('.rc_next').classList.remove('_hidden');
+      el('.rc_next').classList.remove('rc_hidden');
     }
   }
   
@@ -184,16 +184,16 @@
     var r_txt = '';
     // css control & main already in css tools
     // css reader
-    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:150px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-150px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._hidden{display:none;}</style>';
+    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:150px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-150px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.rc_hidden{display:none;}</style>';
     r_txt += '<style>.scrollToTop,[title*="Back To Top"],.back-to-top,.go-to-top,.btn-top{display:none !important;}</style>'; //css hidden
     r_txt += '<style>.rc_mobile ._rc{font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>'; //css mobile
     r_txt += '<div class="reader_db flex_wrap f_bottom">';
     r_txt += '<div class="rc_tr1 flex_wrap">';
-    r_txt += '<div class="rc_others rc_line rc_100 flex _hidden">';
+    r_txt += '<div class="rc_others rc_line rc_100 flex rc_hidden">';
     if (chcdn) r_txt += '<div class="rc_cdn rc_btn _rc" title="'+ cdnName +'">CDN</div>';
     if (chgi) r_txt += '<div class="rc_size rc_btn _rc">'+ imgSize +'</div>';
     r_txt += '</div>'; //.rc_others
-    r_txt += '<div class="rc_next rc_line rc_100 _hidden"><button class="rc_btn _rc" title="arrow right &#9656;" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
+    r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
     r_txt += '<div class="rc_home rc_line rc_100"><button class="rc_btn _rc" onclick="window.location.href=\'//\'+window.location.hostname">Homepage</button></div>';
     r_txt += '<div class="rc_load rc_line flex">';
     r_txt += '<button class="rc_ldImg rc_btn _rc" title="alt + a">Load</button>';
@@ -203,7 +203,7 @@
     r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (readCookie('reader-zoom') || imgArea.offsetWidth) +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2">';
-    r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex t_center _hidden" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="rc_stop rc_btn _rc flex t_center" title="alt + x">&#10007;</div></div>';
+    r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex t_center rc_hidden" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="rc_stop rc_btn _rc flex t_center" title="alt + x">&#10007;</div></div>';
     r_txt += '<div class="rc_top rc_btn _rc flex t_center">&#9652;</div>';
     r_txt += '<div class="rc_bottom rc_btn _rc flex t_center">&#9662;</div>';
     r_txt += '<div class="rc_toggle rc_btn _rc flex t_center">&#174;</div>';
@@ -215,7 +215,8 @@
     r_html.className = '_reader cbr_mod' + (isMobile ? ' rc_mobile' : '');
     r_html.innerHTML = r_txt;
     el('body').appendChild(r_html);
-    if (chcdn || chgi) el('.rc_others').classList.remove('_hidden');
+    if (isMobile) el('.rc_toggle').classList.add('rc_no_hover');
+    if (chcdn || chgi) el('.rc_others').classList.remove('rc_hidden');
     if (readCookie('reader-zoom')) imgArea.style.cssText = 'max-width:'+ readCookie('reader-zoom') +'px !important;';
     
     if (wh.search(/mangacanblog|merakiscans|mangapark/) != -1) {nextChapter();} //next button
@@ -276,14 +277,14 @@
     });
     
     window.onload = function() {
-      el('.rc_reload').classList.remove('_hidden');
-      el('.rc_stop').classList.add('_hidden');
+      el('.rc_reload').classList.remove('rc_hidden');
+      el('.rc_stop').classList.add('rc_hidden');
     };
     
     el('.rc_stop').onclick = function() {
       window.stop();
-      this.classList.add('_hidden');
-      el('.rc_reload').classList.remove('_hidden');
+      this.classList.add('rc_hidden');
+      el('.rc_reload').classList.remove('rc_hidden');
     };
     
     // back to top
@@ -311,7 +312,7 @@
       next_chap = el('body').className.search(/new_cms|mangadropout|mangayu/) != -1 ? next_chap.parentNode : next_chap;
       var next_url = el('body').classList.contains('new_tab') ? next_chap.dataset.href : next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
-      el('.rc_next').classList.remove('_hidden');
+      el('.rc_next').classList.remove('rc_hidden');
     }
     
     var next_chk = setInterval(function() {
