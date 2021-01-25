@@ -404,7 +404,7 @@
       //if (imgList[j].src && imgList[j].src == wl.href) continue;
       if (prnt && imgs) {
         imgLink = imgList[j];
-      } else if (imgList[j].getAttribute('original')) { //manhwa-san.xyz
+      } else if (imgList[j].getAttribute('original')) { //manhwa-san.com
         imgLink = imgList[j].getAttribute('original');
       } else if (wh.indexOf('komiku.id') != -1) { //komiku.id
         imgLink = imgList[j].dataset.src ? imgList[j].dataset.src : imgList[j].src;
@@ -455,7 +455,7 @@
     scrollImage(el('#reader-mod img', 'all'));
     createBtn(el('#reader-mod img', 'all'));
     
-    if (wh.search(/manhwa\-san|katakomik|animesc-kun|readcmic/) != -1) {
+    if (wh.search(/katakomik|animesc-kun|readcmic/) != -1) {
       var e_post = wh.indexOf('animesc-kun') != -1 ? el('#post-wrapper') : el('#main-wrapper');
       e_post.style.width = '100%';
       el('#sidebar-wrapper').parentNode.removeChild(el('#sidebar-wrapper'));
@@ -632,8 +632,8 @@
           createImage(JSON.parse(getDataImage().match(/(\{[^\;]+)\)\;/)[1]));
         }
       }, 100);
-    } else if (wh.search(/manhwa\-san|katakomik|readcmic/) != -1) { //Show nextprev
-      var nextprev = el('.alphanx') || el('.naviarea1') || el('.nextprev');
+    } else if (wh.search(/katakomik|readcmic/) != -1) { //Show nextprev
+      var nextprev = el('.naviarea1') || el('.nextprev');
       el('.post-footer').insertBefore(nextprev, el('.post-footer').children[0]);
     } else if (wh.indexOf('mangaindo') != -1) { //Show nextprev
       var nextprev = el('#post-nav');
@@ -903,7 +903,7 @@
   }
   
   // Dark mode
-  var switch_btn = el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch');
+  var switch_btn = el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch') || el('.manhwa-san\\.com .dark-switch');
   if (switch_btn) {
     // theme enduser.id|themesia.com
     localStorage.setItem('thememode', 'darkmode');
@@ -916,6 +916,9 @@
     el('.isdark').setAttribute('id', 'darkmode');
     el('nav').classList.add('bg-dark');
     el('nav').classList.remove('bg-success', 'fixed-top');
+  } else if (wh.indexOf('manhua-san') != -1) {
+    localStorage.setItem('mode', 'darkmode');
+    el('#mainContent').classList.add('dark-mode');
   }
   
   // Disqus
