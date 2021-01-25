@@ -916,7 +916,7 @@
     el('.isdark').setAttribute('id', 'darkmode');
     el('nav').classList.add('bg-dark');
     el('nav').classList.remove('bg-success', 'fixed-top');
-  } else if (wh.indexOf('manhua-san') != -1) {
+  } else if (wh.indexOf('manhwa-san') != -1) {
     localStorage.setItem('mode', 'darkmode');
     el('#mainContent').classList.add('dark-mode');
   }
