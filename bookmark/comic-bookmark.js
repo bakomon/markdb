@@ -46,13 +46,10 @@
         alert('Remove failed: ' + error.message);
       });
     
-    if (is_search) {
-      el('.bc_search button').click();
-    } else {
-      bc_mainData('new');
-      is_comic = false;
-      el('.bc_comic').classList.add('bc_hidden');
-    }
+    if (is_search) el('.bc_search button').click();
+    bc_mainData('new');
+    is_comic = false;
+    el('.bc_comic').classList.add('bc_hidden');
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
@@ -76,11 +73,8 @@
       setTimeout(function() { el('.mn_notif').classList.add('bc_hidden'); }, 1000);
     });
     
-    if (is_search) {
-      el('.bc_search button').click();
-    } else {
-      bc_mainData('new');
-    }
+    if (is_search) el('.bc_search button').click();
+    bc_mainData('new');
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
@@ -141,18 +135,20 @@
       el('.bmark_db').classList.add('s_shide');
     };
     
-    el('.bc_result .cs_edit', 'all').forEach(function(item) {
+    el('.cs_edit', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
         var cs_data = arr[item.parentNode.dataset.index];
         bc_editData('search', cs_data);
       });
     });
-      
-    el('.cs_delete').onclick = function() {
-      if (confirm('Delete '+ this.dataset.id +' ??')) {
-        bc_deleteData(this.dataset.id);
-      }
-    };
+    
+    el('.cs_delete', 'all').forEach(function(item) {
+      item.addEventListener('click', function() {
+        if (confirm('Delete '+ this.dataset.id +' ??')) {
+          bc_deleteData(this.dataset.id);
+        }
+      });
+    });
   }
   
   function bc_resetData() {
