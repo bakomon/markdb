@@ -279,6 +279,7 @@
     b_html.className = '_bmark cbr_mod' + (is_mobile ? ' bc_mobile' : '');
     b_html.innerHTML = b_txt;
     document.body.appendChild(b_html);
+    if (is_mobile) el('.bc_toggle').classList.add('bc_no_hover');
     
     // Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102
     firebase.auth().onAuthStateChanged(function(user) {
