@@ -202,12 +202,13 @@
   
   function bc_genData(json, query) {
     var arr = [];
+    var title_elm = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
+    var title_rgx = new RegExp(title_elm, 'ig');
     for (var key in json) {
       arr.push(json[key]);
       // check if comic data exist and show bookmark
-      var title_rgx = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
-      title_rgx = new RegExp(title_rgx, 'ig');
-      if (!query && wp != '/' && (wp.indexOf(json[key].id) != -1 || json[key].id.replace(/\-/g, ' ').search(title_rgx) != -1 || json[key].title.search(title_rgx) != -1 || json[key].alternative.search(title_rgx) != -1)) {
+      if (!query && wp != '/' && (json[key].id.replace(/\-/g, ' ').search(title_rgx) != -1 || json[key].title.search(title_rgx) != -1 || json[key].alternative.search(title_rgx) != -1)) {
+        //wp.indexOf(json[key].id) != -1 || 
         cm_ID = json[key].id;
         is_comic = true;
         bc_showData();
@@ -215,8 +216,8 @@
     }
     // search
     if (query) {
-      var rgx = new RegExp(query, 'ig');
-      return arr.filter(item => (item.id.search(rgx) != -1 || item.title.search(rgx) != -1 || item.alternative.search(rgx) != -1 || item.host.search(rgx) != -1));
+      var key_rgx = new RegExp(query, 'ig');
+      return arr.filter(item => (item.id.search(key_rgx) != -1 || item.title.search(key_rgx) != -1 || item.alternative.search(key_rgx) != -1 || item.host.search(key_rgx) != -1));
     } else {
       return arr;
     }
@@ -361,7 +362,7 @@
       }
     };
     
-    // klik "Generate" harus pada halaman komik
+    // klik "Generate" harus pada halaman komik project
     el('.bc_gen').onclick = function() {
       cm_ID = wp.match(/\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
       el('.bc_id').value = cm_ID;
