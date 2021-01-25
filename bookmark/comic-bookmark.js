@@ -39,6 +39,12 @@
   
   function bc_deleteData(id) {
     firebase.database().ref('comic/' + id).remove();
+    
+    if (is_search) {
+      el('.bc_search button').click();
+    } else {
+      bc_mainData('new');
+    }
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
@@ -105,7 +111,7 @@
         s_txt += '</a>';
         s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter +'" disabled>';
         s_txt += '<button class="cs_edit bc_btn _bc">Edit</button>';
-        s_txt += '<button class="cs_delete bc_btn _bc bc_active bc_no_hover" data-id="'+ arr[i].id +'">Delete</button>';
+        s_txt += '<button class="cs_delete bc_btn _bc bc_active bc_no_hover" data-id="'+ arr[i].id +'">X</button>';
         s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
         s_txt += '</li>';
       }
@@ -251,11 +257,11 @@
     b_txt += '<input class="bc_note bc_input _bc bc_100" type="text" placeholder="Note">';
     b_txt += '<input class="bc_host bc_input _bc bc_100" type="text" placeholder="hostname">';
     b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
-    b_txt += '<div class="bc_upnew bc_100 flex t_right"><button class="bc_gen bc_btn _bc">Generate</button><span class="f_grow"></span><button class="bc_close bc_btn _bc">Close</button><button class="bc_set bc_btn _bc bc_selected _hidden">Set</button><button class="bc_update bc_btn _bc bc_selected _hidden">Update</button></div>';
+    b_txt += '<div class="bc_upnew bc_100 flex t_right"><button class="bc_gen bc_btn _bc">Generate</button><span class="f_grow"></span><button class="bc_close bc_btn _bc">Close</button><button class="bc_set bc_btn _bc bc_active bc_no_hover _hidden">Set</button><button class="bc_update bc_btn _bc bc_active bc_no_hover _hidden">Update</button></div>';
     b_txt += '</div>';// .bc_form
     b_txt += '<div class="bc_result bc_line _hidden"></div>';
     b_txt += '<div class="bc_tr1">';
-    b_txt += '<div class="bc_comic bc_line _hidden"><div class="_cm flex_wrap"><a class="_bc bc_100" href="javascript:void(0)"></a><input class="cm_ch bc_input _bc bc_50" type="text" placeholder="chapter" disabled><button class="cm_edit bc_btn _bc _hidden">Edit</button><button class="cm_delete bc_btn _bc bc_active bc_no_hover _hidden">Delete</button></div></div>';
+    b_txt += '<div class="bc_comic bc_line _hidden"><div class="_cm flex_wrap"><a class="_bc bc_100" href="javascript:void(0)"></a><input class="cm_ch bc_input _bc bc_50" type="text" placeholder="chapter" disabled><button class="cm_edit bc_btn _bc _hidden">Edit</button><button class="cm_delete bc_btn _bc _hidden">X</button></div></div>';
     b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _bc bc_100" type="text" placeholder="Search..."><button class="bc_btn _bc">GO</button></div>';
     b_txt += '<div class="bc_menu flex"><button class="bc_add bc_btn _bc">Add</button><button class="bc_out bc_btn _bc">Logout</button><span class="mn_notif _bc bc_selected _hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
