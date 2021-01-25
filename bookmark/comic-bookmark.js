@@ -50,6 +50,8 @@
       el('.bc_search button').click();
     } else {
       bc_mainData('new');
+      is_comic = false;
+      el('.bc_comic').classList.add('bc_hidden');
     }
   }
   
@@ -117,7 +119,7 @@
         s_txt += '</a>';
         s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter +'" disabled>';
         s_txt += '<button class="cs_edit bc_btn _bc">Edit</button>';
-        s_txt += '<button class="cs_delete bc_btn _bc bc_active bc_no_hover" data-id="'+ arr[i].id +'">X</button>';
+        s_txt += '<button class="cs_delete bc_btn _bc" data-id="'+ arr[i].id +'">X</button>';
         s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
         s_txt += '</li>';
       }
@@ -213,8 +215,6 @@
         cm_ID = json[key].id;
         is_comic = true;
         bc_showData();
-      } else {
-        el('.bc_comic').classList.add('bc_hidden');
       }
     }
     // search
