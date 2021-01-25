@@ -365,7 +365,7 @@
         '5','.viewer-cnt #all',
         '6','#Gambar_komik',
         '7','#viewer',
-        '8','#Blog1 .post-body',
+        '8','[id^="Blog"] .post-body',
         'webtoons.com','.viewer_lst .viewer_img',
         'mangaindo.web.id','.entry-content',
         'mangacanblog.com','#imgholder',
@@ -903,7 +903,7 @@
   }
   
   // Dark mode
-  var switch_btn = el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch') || el('.manhwa-san\\.com .dark-switch');
+  var switch_btn = el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch'); // theme enduser.id|themesia.com
   if (switch_btn) {
     // theme enduser.id|themesia.com
     localStorage.setItem('thememode', 'darkmode');
