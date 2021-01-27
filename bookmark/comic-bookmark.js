@@ -190,12 +190,12 @@
     var chk = data.host.search(not_support) != -1 || (wh.indexOf(data.host) != -1 && wp.indexOf(data.id) != -1);
     var s_txt = '<ul>';
     s_txt += '<li class="_cm flex_wrap" data-id="'+ data.id +'">';
-    s_txt += '<a class="_bc bc_100" '+ (chk ? 'href="'+ data.url +'" target="_blank"' : 'href="javascript:void(0)"') +'>'+ data.title;
+    s_txt += '<a class="_bc bc_100" '+ (chk ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
     s_txt += '<input class="cm_ch bc_input _bc bc_50" type="text" value="'+ data.chapter +'" disabled>';
-    s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? ' hidden' : '') +'">Edit</button>';
-    s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? ' hidden' : '') +'">X</button>';
+    s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' hidden') +'">Edit</button>';
+    s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' hidden') +'">X</button>';
     s_txt += '</li>';
     s_txt += '</ul>';
     
