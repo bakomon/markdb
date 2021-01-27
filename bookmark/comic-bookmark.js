@@ -47,7 +47,7 @@
       });
     
     if (is_search) el('.bc_search button').click();
-    bc_mainData('new');
+    bc_mainData('remove');
     is_comic = false;
     el('.bc_comic').classList.add('bc_hidden');
   }
@@ -76,7 +76,7 @@
     });
     
     if (is_search) el('.bc_search button').click();
-    bc_mainData('new');
+    bc_mainData('update');
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
@@ -102,7 +102,7 @@
       setTimeout(function() { el('.mn_notif').classList.add('bc_hidden'); }, 1000);
     });
     
-    bc_mainData('new');
+    bc_mainData('set');
   }
   
   function bc_searchResult(arr) {
@@ -111,13 +111,13 @@
       for (var i = 0; i < arr.length; i++) {
         s_txt += '<li class="_cl';
         if (i+1 < arr.length) s_txt += ' bc_line';
-        s_txt += ' flex_wrap" data-index="'+ i +'">';
+        s_txt += ' flex_wrap" data-id="'+ arr[i].id +'">';
         s_txt += '<a class="_bc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
         if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
         s_txt += '</a>';
         s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter +'" disabled>';
         s_txt += '<button class="cs_edit bc_btn _bc">Edit</button>';
-        s_txt += '<button class="cs_delete bc_btn _bc" data-id="'+ arr[i].id +'">X</button>';
+        s_txt += '<button class="cs_delete bc_btn _bc">X</button>';
         s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
         s_txt += '</li>';
       }
@@ -141,15 +141,14 @@
     
     el('.cs_edit', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
-        var cs_data = arr[item.parentNode.dataset.index];
-        bc_editData('search', cs_data);
+        bc_editData('search', main_data[item.parentNode.dataset.id]);
       });
     });
     
     el('.cs_delete', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
-        if (confirm('Delete '+ this.dataset.id +' ??')) {
-          bc_deleteData(this.dataset.id);
+        if (confirm('Delete '+ item.parentNode.dataset.id +' ?')) {
+          bc_deleteData(item.parentNode.dataset.id);
         }
       });
     });
@@ -161,8 +160,10 @@
     el('.bc_alt').value = '';
     el('.bc_ch').value = '';
     el('.bc_note').value = '';
+    el('.bc_type').value = '';
     el('.bc_host').value = '';
     el('.bc_url').value = '';
+    el('.bc_similar').value = '';
   }
   
   function bc_editData(note, data) {
@@ -178,53 +179,69 @@
     el('.bc_alt').value = data.alternative;
     el('.bc_ch').value = data.chapter;
     el('.bc_note').value = data.note;
+    el('.bc_type').value = data.type;
     el('.bc_host').value = data.host;
     el('.bc_url').value = data.url;
+    el('.bc_similar').value = data.similar;
     el('.bc_ch').select();
   }
   
-  function bc_showData() {
-    cm_data = undefined;
-    firebase.database().ref('bookmark/comic/' + cm_ID).on('value', function(snapshot) {
-      cm_data = snapshot.val();
-      if (wh.indexOf(cm_data.host) != -1 && wp.indexOf(cm_ID) != -1) {
-        el('.cm_edit').classList.remove('bc_hidden');
-        el('.cm_delete').classList.remove('bc_hidden');
-        el('.cm_delete').setAttribute('data-id', cm_ID);
-      } else {
-        el('.bc_comic a').href = cm_data.url;
-        el('.bc_comic a').setAttribute('target', '_blank');
-      }
-      el('.bc_comic a').innerHTML = cm_data.title;
-      el('.cm_ch').value = cm_data.chapter;
-      el('.bc_comic').classList.remove('bc_hidden');
-      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1 && el('title').innerHTML.search(/\sch\.?(apter)?\s/i) == -1) {
-        el('.bc_toggle').click();
-      }
-    });
+  function bc_showHtml(data) {
+  	var chk = wh.indexOf(data.host) != -1 && wp.indexOf(data.id) != -1;
+    var s_txt = '<ul>';
+    s_txt += '<li class="_cm flex_wrap" data-id="'+ data.id +'">';
+    s_txt += '<a class="_bc bc_100" '+ (chk ? 'href="'+ data.url +'" target="_blank"' : 'href="javascript:void(0)"') +'>'+ data.title;
+    if (data.alternative != '') s_txt += ', '+ data.alternative;
+    s_txt += '</a>';
+    s_txt += '<input class="cm_ch bc_input _bc bc_50" type="text" value="'+ data.chapter +'" disabled>';
+    s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? ' hidden' : '') +'">Edit</button>';
+    s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? ' hidden' : '') +'">X</button>';
+    s_txt += '</li>';
+    s_txt += '</ul>';
+    
+    el('.bc_comic').innerHTML += s_txt;
+    if (data.type != '') document.body.classList.add('is_'+ data.type);
   }
   
-  function bc_checkID(arr, chk) {
-  	var id_chk = false;
+  function bc_showComic(arr, chk) {
+  	var cm_data, id_chk = false;
     var title_elm = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
     var title_rgx = new RegExp(title_elm, 'ig');
     for (var i = 0; i < arr.length; i++) {
       if (title_elm.toLowerCase().replace(/\s+/g, '-') == arr[i].id) {
-        cm_ID = arr[i].id;
+        cm_data = arr[i];
         id_chk = true;
         break;
       }
       if (chk == 2 && (wp.indexOf(arr[i].id) != -1 || arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1)) {
-        cm_ID = arr[i].id;
+        cm_data = arr[i];
         id_chk = true;
       }
     }
     
-    if (!id_chk && chk != 2) {
-      bc_checkID(arr, 2); //double check if title not same as id
-    } else {
+    if (!id_chk && chk != 2) bc_showComic(arr, 2); //double check if title not same as id
+    if (cm_data) {
       is_comic = true;
-      bc_showData();
+      bc_showHtml(main_data[cm_data.id]);
+      if (cm_data != '') bc_showHtml(main_data[cm_data.similar]);
+      el('.bc_comic').classList.remove('bc_hidden');
+      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1 && el('title').innerHTML.search(/\sch\.?(ap(ter)?)?\s/i) == -1) {
+        el('.bc_toggle').click();
+      }  
+      
+      el('.cm_edit', 'all').forEach(function(item) {
+        item.addEventListener('click', function() {
+          bc_editData('comic', main_data[item.parentNode.dataset.id]);
+        });
+      });
+      
+      el('.cm_delete', 'all').forEach(function(item) {
+        item.addEventListener('click', function() {
+          if (confirm('Delete '+ item.parentNode.dataset.id +' ?')) {
+            bc_deleteData(item.parentNode.dataset.id);
+          }
+        });
+      });
     }
   }
   
@@ -234,13 +251,10 @@
       arr.push(json[key]);
     }
     
-    // check if comic data exist and show bookmark
-    if (!query && wp != '/') bc_checkID(arr);
-    
     // search
     if (query) {
       var key_rgx = new RegExp(query, 'ig');
-      return arr.filter(item => (item.id.search(key_rgx) != -1 || item.title.search(key_rgx) != -1 || item.alternative.search(key_rgx) != -1 || item.host.search(key_rgx) != -1));
+      return arr.filter(item => (item.id.search(key_rgx) != -1 || item.title.search(key_rgx) != -1 || item.alternative.search(key_rgx) != -1 || item.note.search(key_rgx) != -1 || item.type.search(key_rgx) != -1 || item.host.search(key_rgx) != -1));
     } else {
       return arr;
     }
@@ -248,10 +262,12 @@
   
   function bc_mainData(note, query) {
     firebase.database().ref('bookmark/comic').once('value', function(snapshot) {
+      main_data = snapshot.val();
       if (query) {
         bc_searchResult(bc_genData(snapshot.val(), query));
       } else {
-        main_data = bc_genData(snapshot.val());
+        arr_data = bc_genData(snapshot.val());
+        if (wp != '/') bc_showComic(arr_data); //check if comic data exist and show bookmark
       }
     });
     
@@ -291,7 +307,7 @@
     b_txt += '</div>';// .bc_form
     b_txt += '<div class="bc_result bc_line bc_hidden"></div>';
     b_txt += '<div class="bc_tr1">';
-    b_txt += '<div class="bc_comic bc_line bc_hidden"><div class="_cm flex_wrap"><a class="_bc bc_100" href="javascript:void(0)"></a><input class="cm_ch bc_input _bc bc_50" type="text" placeholder="chapter" disabled><button class="cm_edit bc_btn _bc bc_hidden">Edit</button><button class="cm_delete bc_btn _bc bc_hidden">X</button></div></div>';
+    b_txt += '<div class="bc_comic bc_line bc_hidden"></div>';
     b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _bc bc_100" type="text" placeholder="Search..."><button class="bc_btn _bc">GO</button></div>';
     b_txt += '<div class="bc_menu flex"><button class="bc_add bc_btn _bc">Add</button><button class="bc_out bc_btn _bc">Logout</button><span class="mn_notif _bc bc_selected bc_hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
@@ -378,21 +394,11 @@
       el('.mn_notif').classList.remove('bc_hidden');
     };
     
-    el('.cm_edit').onclick = function() {
-      bc_editData('comic', cm_data);
-    };
-      
-    el('.cm_delete').onclick = function() {
-      if (confirm('Delete '+ this.dataset.id +' ??')) {
-        bc_deleteData(this.dataset.id);
-      }
-    };
-    
     // klik "Generate" harus pada halaman komik project
     el('.bc_gen').onclick = function() {
-      cm_ID = wp.match(/\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
-      el('.bc_id').value = cm_ID;
-      el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(cm_ID, '_') : firstCase(cm_ID, '-');
+      var comic_id = wp.match(/\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
+      el('.bc_id').value = comic_id;
+      el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
       el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
     };
@@ -407,10 +413,9 @@
     
     el('.bc_set').onclick = function() {
       if (el('.bc_id').value == '') return;
-      cm_ID = el('.bc_id').value;
-      bc_checkData(cm_ID).then(function(res) {
+      bc_checkData(el('.bc_id').value).then(function(res) {
         if (!res) {
-          bc_setData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value.toLowerCase(), el('.bc_note').value, el('.bc_type').value.toLowerCase(), el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
+          bc_setData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value.toLowerCase(), el('.bc_note').value, el('.bc_type').value.toLowerCase(), el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
         } else {
           alert('Exist.');
           el('.bc_set').classList.add('bc_hidden');
@@ -421,8 +426,7 @@
     
     el('.bc_update').onclick = function() {
       if (el('.bc_id').value == '') return;
-      cm_ID = el('.bc_id').value;
-      bc_updateData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
+      bc_updateData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
     };
   }
   
@@ -434,7 +438,7 @@
   var is_search = false;
   var is_mobile = document.documentElement.classList.contains('is_mobile') ? true : false; //from comic tools
   var is_edit = false;
-  var main_data, cm_data, cm_ID;
+  var main_data, arr_data;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
   
