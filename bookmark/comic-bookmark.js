@@ -187,7 +187,7 @@
   }
   
   function bc_showHtml(data, note) {
-    var chk = wh.indexOf(data.host) != -1 && wp.indexOf(data.id) != -1;
+    var chk = data.host.search(not_support) != -1 || (wh.indexOf(data.host) != -1 && wp.indexOf(data.id) != -1);
     var s_txt = '<ul>';
     s_txt += '<li class="_cm flex_wrap" data-id="'+ data.id +'">';
     s_txt += '<a class="_bc bc_100" '+ (chk ? 'href="'+ data.url +'" target="_blank"' : 'href="javascript:void(0)"') +'>'+ data.title;
@@ -443,6 +443,7 @@
   var is_search = false;
   var is_mobile = document.documentElement.classList.contains('is_mobile') ? true : false; //from comic tools
   var is_edit = false;
+  var not_support = /mangaku|mangacanblog|bacakomik.co|mangayu|klankomik|softkomik|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
   var main_data, arr_data;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
