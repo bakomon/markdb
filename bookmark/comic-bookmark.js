@@ -32,13 +32,13 @@
   }
   
   function bc_checkData(id) {
-    return firebase.database().ref(`comic/${id}`).once('value').then(function(snapshot) {
+    return firebase.database().ref(`bookmark/comic/${id}`).once('value').then(function(snapshot) {
         return snapshot.exists() ? true : false;
     });
   }
   
   function bc_deleteData(id) {
-    firebase.database().ref('comic/' + id).remove()
+    firebase.database().ref('bookmark/comic/' + id).remove()
       .then(function() {
         //console.log('Remove succeeded.');
       })
@@ -54,7 +54,7 @@
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
   function bc_updateData(id, title, alternative, chapter, note, host, url) {
-    firebase.database().ref('comic/' + id).update({
+    firebase.database().ref('bookmark/comic/' + id).update({
       id: id,
       title: title,
       alternative: alternative,
@@ -79,7 +79,7 @@
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
   function bc_setData(id, title, alternative, chapter, note, host, url) {
-    firebase.database().ref('comic/' + id).set({
+    firebase.database().ref('bookmark/comic/' + id).set({
       id: id,
       title: title,
       alternative: alternative,
@@ -181,7 +181,7 @@
   
   function bc_showData() {
     cm_data = undefined;
-    firebase.database().ref('comic/' + cm_ID).on('value', function(snapshot) {
+    firebase.database().ref('bookmark/comic/' + cm_ID).on('value', function(snapshot) {
       cm_data = snapshot.val();
       if (wh.indexOf(cm_data.host) != -1 && wp.indexOf(cm_ID) != -1) {
         el('.cm_edit').classList.remove('bc_hidden');
@@ -200,19 +200,39 @@
     });
   }
   
-  function bc_genData(json, query) {
-    var arr = [];
+  function bc_checkID(arr, chk) {
+  	var id_chk = false;
     var title_elm = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
     var title_rgx = new RegExp(title_elm, 'ig');
-    for (var key in json) {
-      arr.push(json[key]);
-      // check if comic data exist and show bookmark
-      if (!query && wp != '/' && (wp.indexOf(json[key].id) != -1 || json[key].id.replace(/\-/g, ' ').search(title_rgx) != -1 || json[key].title.search(title_rgx) != -1 || json[key].alternative.search(title_rgx) != -1)) {
-        cm_ID = json[key].id;
-        is_comic = true;
-        bc_showData();
+    for (var i = 0; i < arr.length; i++) {
+      if (title_elm.toLowerCase().replace(/\s+/g, '-') == arr[i].id) {
+        cm_ID = arr[i].id;
+        id_chk = true;
+        break;
+      }
+      if (chk == 2 && (wp.indexOf(arr[i].id) != -1 || arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1)) {
+        cm_ID = arr[i].id;
+        id_chk = true;
       }
     }
+    
+    if (!id_chk && chk != 2) {
+      bc_checkID(arr, 2); //double check if title not same as id
+    } else {
+      is_comic = true;
+      bc_showData();
+    }
+  }
+  
+  function bc_genData(json, query) {
+    var arr = [];
+    for (var key in json) {
+      arr.push(json[key]);
+    }
+    
+    // check if comic data exist and show bookmark
+    if (!query && wp != '/') bc_checkID(arr);
+    
     // search
     if (query) {
       var key_rgx = new RegExp(query, 'ig');
@@ -223,7 +243,7 @@
   }
   
   function bc_mainData(note, query) {
-    firebase.database().ref('comic').once('value', function(snapshot) {
+    firebase.database().ref('bookmark/comic').once('value', function(snapshot) {
       if (query) {
         bc_searchResult(bc_genData(snapshot.val(), query));
       } else {
