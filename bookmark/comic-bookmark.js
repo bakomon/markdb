@@ -186,7 +186,7 @@
     el('.bc_ch').select();
   }
   
-  function bc_showHtml(data) {
+  function bc_showHtml(data, note) {
   	var chk = wh.indexOf(data.host) != -1 && wp.indexOf(data.id) != -1;
     var s_txt = '<ul>';
     s_txt += '<li class="_cm flex_wrap" data-id="'+ data.id +'">';
@@ -199,7 +199,11 @@
     s_txt += '</li>';
     s_txt += '</ul>';
     
-    el('.bc_comic').innerHTML += s_txt;
+    if (note) {
+      el('.bc_comic').innerHTML += s_txt;
+    } else {
+      el('.bc_comic').innerHTML = s_txt;
+    }
     if (data.type != '') document.body.classList.add('is_'+ data.type);
   }
   
@@ -223,7 +227,7 @@
     if (cm_data) {
       is_comic = true;
       bc_showHtml(cm_data);
-      if (cm_data.similar != '') bc_showHtml(main_data[cm_data.similar]);
+      if (cm_data.similar != '') bc_showHtml(main_data[cm_data.similar], 'similar');
       el('.bc_comic').classList.remove('bc_hidden');
       if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1 && el('title').innerHTML.search(/\sch\.?(ap(ter)?)?\s/i) == -1) {
         el('.bc_toggle').click();
