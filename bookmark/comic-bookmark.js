@@ -187,7 +187,7 @@
   }
   
   function bc_showHtml(data, note) {
-  	var chk = wh.indexOf(data.host) != -1 && wp.indexOf(data.id) != -1;
+    var chk = wh.indexOf(data.host) != -1 && wp.indexOf(data.id) != -1;
     var s_txt = '<ul>';
     s_txt += '<li class="_cm flex_wrap" data-id="'+ data.id +'">';
     s_txt += '<a class="_bc bc_100" '+ (chk ? 'href="'+ data.url +'" target="_blank"' : 'href="javascript:void(0)"') +'>'+ data.title;
@@ -208,7 +208,7 @@
   }
   
   function bc_showComic(arr, chk) {
-  	var cm_data, id_chk = false;
+    var cm_data, id_chk = false;
     var title_elm = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
     var title_rgx = new RegExp(title_elm, 'ig');
     for (var i = 0; i < arr.length; i++) {
@@ -390,9 +390,9 @@
     };
     
     el('.bc_search button').onclick = function() {
-      var bc_query = el('.bc_search input').value;
-      if (bc_query == '') return;
-      bc_mainData('search', bc_query);
+      if (el('.bc_search input').value == '') return;
+      if (is_edit) el('.bc_form .bc_close').click();
+      bc_mainData('search', el('.bc_search input').value);
       is_search = true;
       el('.mn_notif').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden');
@@ -407,9 +407,9 @@
       el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
     };
     
-    el('.bc_close').onclick = function() {
-    	bc_resetData();
-    	is_edit = false;
+    el('.bc_form .bc_close').onclick = function() {
+      bc_resetData();
+      is_edit = false;
       el('.bc_form').classList.add('bc_hidden');
       if (is_comic) el('.bc_comic').classList.remove('bc_hidden');
       if (is_search) el('.bmark_db').classList.remove('s_shide');
