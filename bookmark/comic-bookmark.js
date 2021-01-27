@@ -194,8 +194,8 @@
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
     s_txt += '<input class="cm_ch bc_input _bc bc_50" type="text" value="'+ data.chapter +'" disabled>';
-    s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' hidden') +'">Edit</button>';
-    s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' hidden') +'">X</button>';
+    s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
+    s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">X</button>';
     s_txt += '</li>';
     s_txt += '</ul>';
     
