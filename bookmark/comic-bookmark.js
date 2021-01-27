@@ -53,15 +53,17 @@
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
-  function bc_updateData(id, title, alternative, chapter, note, host, url) {
+  function bc_updateData(id, title, alternative, chapter, note, type, host, url, similar) {
     firebase.database().ref('bookmark/comic/' + id).update({
       id: id,
       title: title,
       alternative: alternative,
       chapter: chapter,
       note: note,
+      type: type,
       host: host,
-      url: url
+      url: url,
+      similar: similar
     }, (error) => {
       if (error) {
         el('.mn_notif').innerHTML = 'Error!!';
@@ -78,15 +80,17 @@
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
-  function bc_setData(id, title, alternative, chapter, note, host, url) {
+  function bc_setData(id, title, alternative, chapter, note, type, host, url, similar) {
     firebase.database().ref('bookmark/comic/' + id).set({
       id: id,
       title: title,
       alternative: alternative,
       chapter: chapter,
       note: note,
+      type: type,
       host: host,
-      url: url
+      url: url,
+      similar: similar
     }, (error) => {
       if (error) {
         el('.mn_notif').innerHTML = 'Error!!';
@@ -279,8 +283,10 @@
     b_txt += '<input class="bc_alt bc_input _bc bc_100" type="text" placeholder="Alternative Title">';
     b_txt += '<input class="bc_ch bc_input _bc bc_100" type="text" placeholder="Chapter">';
     b_txt += '<input class="bc_note bc_input _bc bc_100" type="text" placeholder="Note">';
+    b_txt += '<input class="bc_type bc_input _bc bc_100" type="text" placeholder="Type">';
     b_txt += '<input class="bc_host bc_input _bc bc_100" type="text" placeholder="hostname">';
     b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
+    b_txt += '<input class="bc_similar bc_input _bc bc_100" type="text" placeholder="Similar">';
     b_txt += '<div class="bc_upnew bc_100 flex t_right"><button class="bc_gen bc_btn _bc">Generate</button><span class="f_grow"></span><button class="bc_close bc_btn _bc">Close</button><button class="bc_set bc_btn _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update bc_btn _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
     b_txt += '</div>';// .bc_form
     b_txt += '<div class="bc_result bc_line bc_hidden"></div>';
@@ -404,7 +410,7 @@
       cm_ID = el('.bc_id').value;
       bc_checkData(cm_ID).then(function(res) {
         if (!res) {
-          bc_setData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_host').value, el('.bc_url').value);
+          bc_setData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value.toLowerCase(), el('.bc_note').value, el('.bc_type').value.toLowerCase(), el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
         } else {
           alert('Exist.');
           el('.bc_set').classList.add('bc_hidden');
@@ -416,7 +422,7 @@
     el('.bc_update').onclick = function() {
       if (el('.bc_id').value == '') return;
       cm_ID = el('.bc_id').value;
-      bc_updateData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_host').value, el('.bc_url').value);
+      bc_updateData(cm_ID, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
     };
   }
   
