@@ -381,6 +381,7 @@
       if (is_edit) {
         is_edit = false;
       } else {
+        is_edit = true;
         el('.bc_form').classList.remove('bc_hidden');
       }
       el('.bc_set').classList.remove('bc_hidden');
