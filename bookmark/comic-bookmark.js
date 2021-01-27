@@ -187,6 +187,7 @@
   }
   
   function bc_showHtml(data, note) {
+    // not-support from comic tools
     var chk = document.body.classList.contains('not-support') || (wh.indexOf(data.host) != -1 && wp.indexOf(data.id) != -1);
     var s_txt = '<ul>';
     s_txt += '<li class="_cm flex_wrap" data-id="'+ data.id +'">';
