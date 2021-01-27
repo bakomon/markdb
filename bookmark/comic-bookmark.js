@@ -117,7 +117,7 @@
         s_txt += '</a>';
         s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter +'" disabled>';
         s_txt += '<button class="cs_edit bc_btn _bc">Edit</button>';
-        s_txt += '<button class="cs_delete bc_btn _bc">X</button>';
+        s_txt += '<button class="cs_delete bc_btn _bc" title="Delete">X</button>';
         s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
         s_txt += '</li>';
       }
@@ -195,7 +195,7 @@
     s_txt += '</a>';
     s_txt += '<input class="cm_ch bc_input _bc bc_50" type="text" value="'+ data.chapter +'" disabled>';
     s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
-    s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">X</button>';
+    s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
     s_txt += '</li>';
     s_txt += '</ul>';
     
