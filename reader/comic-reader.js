@@ -200,8 +200,8 @@
     r_txt += '<input class="rc_all rc_input _rc" value="all" onclick="this.select()">';
     r_txt += '<button class="rc_pause rc_btn _rc rc_no_hover" title="Pause images from loading">X</button>';
     r_txt += '</div>';// .rc_load
-    var zoom_size = el('body').classList.contains('is-manga') ? '750' : el('body').classList.contains('is-manhua') ? '650' : '500';
-    r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (zoom_size || readCookie('reader-zoom') || imgArea.offsetWidth) +'"></div>';
+    //var zoom_size = el('body').classList.contains('is-manga') ? '750' : el('body').classList.contains('is-manhua') ? '650' : '500'; //from comic bookmark
+    r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (readCookie('reader-zoom') || imgArea.offsetWidth) +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2">';
     r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex t_center rc_hidden" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="rc_stop rc_btn _rc flex t_center" title="alt + x">&#10007;</div></div>';
