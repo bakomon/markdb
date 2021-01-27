@@ -443,7 +443,7 @@
   var is_search = false;
   var is_mobile = document.documentElement.classList.contains('is_mobile') ? true : false; //from comic tools
   var is_edit = false;
-  var not_support = /mangaku|mangacanblog|bacakomik.co|mangayu|klankomik|softkomik|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
+  var not_support = /komikempus|mangaku|mangacanblog|bacakomik.co|mangayu|klankomik|softkomik|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
   var main_data, arr_data;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
