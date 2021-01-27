@@ -204,7 +204,7 @@
     } else {
       el('.bc_comic').innerHTML = s_txt;
     }
-    if (data.type != '') document.body.classList.add('is_'+ data.type);
+    if (data.type != '') document.body.classList.add('is-'+ data.type);
   }
   
   function bc_showComic(arr, chk) {
