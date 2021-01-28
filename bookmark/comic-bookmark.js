@@ -229,7 +229,7 @@
     if (cm_data) {
       is_comic = true;
       bc_showHtml(cm_data);
-      if (cm_data.similar != '') bc_showHtml(main_data[cm_data.similar], 'similar');
+      if (cm_data.similar != '' && main_data[cm_data.similar]) bc_showHtml(main_data[cm_data.similar], 'similar');
       el('.bc_comic').classList.remove('bc_hidden');
       if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(ch(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1 && el('title').innerHTML.search(/\sch\.?(ap(ter)?)?\s/i) == -1) {
         el('.bc_toggle').click();
