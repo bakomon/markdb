@@ -592,8 +592,10 @@
     } else if (wh.indexOf('mangacanblog') != -1) { //click
       var eAll = el('.pagers a');
       if (eAll.innerHTML.indexOf('Full') != -1) eAll.click();
-    } else if (wh.indexOf('mangayu.com') != -1) {
+    } else if (wh.indexOf('mangayu') != -1) {
       //el('.ch-img').parentNode.parentNode.id = 'readerarea';
+    } else if (wh.indexOf('komiknesia') != -1) { //eastheme
+      if (wl.href.indexOf('?read=list') == -1) wl.href = wl.href.replace(/\?read\=paged?/g, '') + '?read=list';
     } else if (wh.indexOf('mangapark') != -1) { //script
       // window[data]  = from web
       if (window['_page_sub_c'] != '') {
@@ -611,7 +613,7 @@
       if (wp.indexOf('all-pages') == -1) wl.href = wl.href.replace(/(\/\d+)\/\d(.*)/g, '$1') + '/all-pages';
       if (wh.indexOf('funmanga') != -1) el('.chapter-read').appendChild(el('.prev-next-post'));
     } else if (wh.search(/readmanhua|ninjascans|klikmanga|mangasushi/) != -1) { //Madara theme
-      if (wl .href.indexOf('?style=list') == -1) wl.href = wl.href.replace(/\?style\=paged?/g, '') + '?style=list';
+      if (wl.href.indexOf('?style=list') == -1) wl.href = wl.href.replace(/\?style\=paged?/g, '') + '?style=list';
     } else if (wh.search(/komikid.com|comicfx/) != -1) { //my Manga Reader CMS
       el('#all').style.display = 'block';
       el('#ppp').style.display = 'none';
@@ -912,12 +914,16 @@
   }
   
   // Dark mode
-  var switch_btn = el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch'); // theme enduser.id|themesia.com
-  if (switch_btn) {
+  if (el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch')) {
     // theme enduser.id|themesia.com
     localStorage.setItem('thememode', 'darkmode');
     localStorage.setItem('theme-mode', 'dark');
     el('body').classList.add('darkmode', 'dark');
+    el('body').classList.remove('lightmode');
+  } else if (el('.theme.switchmode')) {
+    // theme eastheme.com
+    localStorage.setItem('theme-mode', 'darkmode');
+    el('body').classList.add('darkmode');
     el('body').classList.remove('lightmode');
   } else if (wh.indexOf('manhuaid.com') != -1) {
     localStorage.setItem('theme', 'dark');
