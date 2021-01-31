@@ -71,7 +71,6 @@
       } else {
         el('.mn_notif').innerHTML = 'Done';
       }
-      el('.mn_notif').classList.remove('bc_hidden');
       setTimeout(function() { el('.mn_notif').classList.add('bc_hidden'); }, 1000);
     });
     
@@ -98,7 +97,6 @@
       } else {
         el('.mn_notif').innerHTML = 'Done';
       }
-      el('.mn_notif').classList.remove('bc_hidden');
       setTimeout(function() { el('.mn_notif').classList.add('bc_hidden'); }, 1000);
     });
     
@@ -211,7 +209,7 @@
   
   function bc_showComic(arr, chk) {
     var cm_data, id_chk = false;
-    var comic_id = wp.match(/\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
+    var comic_id = wp.match(id_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
     var title_id = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
     var title_rgx = new RegExp(title_id, 'ig');
     for (var i = 0; i < arr.length; i++) {
@@ -404,7 +402,7 @@
     
     // klik "Generate" harus pada halaman komik project
     el('.bc_gen').onclick = function() {
-      var comic_id = wp.match(/\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
+      var comic_id = wp.match(id_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
       el('.bc_id').value = comic_id;
       el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
@@ -420,12 +418,18 @@
     };
     
     el('.bc_set').onclick = function() {
-      if (el('.bc_id').value == '') return;
+      if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
+        el('.lg_notif').innerHTML = 'ID or Chapter empty';
+        el('.lg_notif').classList.remove('bc_hidden');
+        return;
+      }
       bc_checkData(el('.bc_id').value).then(function(res) {
+        el('.lg_notif').classList.remove('bc_hidden');
         if (!res) {
+          el('.lg_notif').innerHTML = 'Loading..';
           bc_setData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value.toLowerCase(), el('.bc_note').value, el('.bc_type').value.toLowerCase(), el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
         } else {
-          alert('Exist.');
+          el('.lg_notif').innerHTML = 'Comic already exist';
           el('.bc_set').classList.add('bc_hidden');
           el('.bc_update').classList.remove('bc_hidden');
         }
@@ -433,7 +437,12 @@
     };
     
     el('.bc_update').onclick = function() {
-      if (el('.bc_id').value == '') return;
+      el('.lg_notif').classList.remove('bc_hidden');
+      if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
+        el('.lg_notif').innerHTML = 'ID or Chapter empty';
+        return;
+      }
+      el('.lg_notif').innerHTML = 'Loading..';
       bc_updateData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
     };
   }
@@ -446,6 +455,7 @@
   var is_search = false;
   var is_mobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
   var is_edit = false;
+  var id_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i;
   var not_support = /komikempus|mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|komikindo.web.id|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
   var main_data, arr_data;
   
