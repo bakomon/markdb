@@ -163,6 +163,7 @@
     el('.bc_url').value = '';
     el('.bc_similar').value = '';
     el('.mn_notif').innerHTML = '';
+    el('.mn_notif').classList.add('bc_hidden');
   }
   
   function bc_editData(note, data) {
