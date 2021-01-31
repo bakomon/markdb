@@ -115,7 +115,7 @@
         s_txt += '<a class="_bc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
         if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
         s_txt += '</a>';
-        s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter +'" disabled>';
+        s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter + (arr[i].note ? '('+ arr[i].note +')' : '') +'" disabled>';
         s_txt += '<button class="cs_edit bc_btn _bc">Edit</button>';
         s_txt += '<button class="cs_delete bc_btn _bc" title="Delete">X</button>';
         s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
@@ -195,7 +195,7 @@
     s_txt += '<a class="_bc bc_100" '+ (chk ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
-    s_txt += '<input class="cm_ch bc_input _bc bc_50" type="text" value="'+ data.chapter +'" disabled>';
+    s_txt += '<input class="cm_ch bc_input _bc bc_50" type="text" value="'+ data.chapter + (data.note ? '('+ data.note +')' : '') +'" disabled>';
     s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
     s_txt += '</li>';
@@ -211,10 +211,11 @@
   
   function bc_showComic(arr, chk) {
     var cm_data, id_chk = false;
-    var title_elm = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
-    var title_rgx = new RegExp(title_elm, 'ig');
+    var comic_id = wp.match(/\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
+    var title_id = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
+    var title_rgx = new RegExp(title_id, 'ig');
     for (var i = 0; i < arr.length; i++) {
-      if (title_elm.toLowerCase().replace(/\s+/g, '-') == arr[i].id) {
+      if (title_id.toLowerCase().replace(/\s+/g, '-') == arr[i].id || comic_id == arr[i].id) {
         cm_data = arr[i];
         id_chk = true;
         break;
@@ -445,7 +446,7 @@
   var is_search = false;
   var is_mobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
   var is_edit = false;
-  var not_support = /komikempus|mangaku|mangacanblog|bacakomik.co|mangayu|klankomik|softkomik|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
+  var not_support = /komikempus|mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|komikindo.web.id|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
   var main_data, arr_data;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
