@@ -162,6 +162,7 @@
     el('.bc_host').value = '';
     el('.bc_url').value = '';
     el('.bc_similar').value = '';
+    el('.mn_notif').innerHTML = '';
   }
   
   function bc_editData(note, data) {
@@ -419,30 +420,28 @@
     
     el('.bc_set').onclick = function() {
       if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
-        el('.lg_notif').innerHTML = 'ID or Chapter empty';
-        el('.lg_notif').classList.remove('bc_hidden');
+        el('.mn_notif').innerHTML = 'ID or Chapter empty';
+        el('.mn_notif').classList.remove('bc_hidden');
         return;
       }
       bc_checkData(el('.bc_id').value).then(function(res) {
-        el('.lg_notif').classList.remove('bc_hidden');
+        el('.mn_notif').classList.remove('bc_hidden');
         if (!res) {
-          el('.lg_notif').innerHTML = 'Loading..';
+          el('.mn_notif').innerHTML = 'Loading..';
           bc_setData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value.toLowerCase(), el('.bc_note').value, el('.bc_type').value.toLowerCase(), el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
         } else {
-          el('.lg_notif').innerHTML = 'Comic already exist';
-          el('.bc_set').classList.add('bc_hidden');
-          el('.bc_update').classList.remove('bc_hidden');
+          el('.mn_notif').innerHTML = 'Comic already exist';
         }
       });
     };
     
     el('.bc_update').onclick = function() {
-      el('.lg_notif').classList.remove('bc_hidden');
+      el('.mn_notif').classList.remove('bc_hidden');
       if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
-        el('.lg_notif').innerHTML = 'ID or Chapter empty';
+        el('.mn_notif').innerHTML = 'ID or Chapter empty';
         return;
       }
-      el('.lg_notif').innerHTML = 'Loading..';
+      el('.mn_notif').innerHTML = 'Loading..';
       bc_updateData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
     };
   }
