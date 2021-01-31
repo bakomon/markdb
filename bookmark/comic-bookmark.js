@@ -115,7 +115,7 @@
         s_txt += '<a class="_bc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
         if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
         s_txt += '</a>';
-        s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter + (arr[i].note ? '('+ arr[i].note +')' : '') +'" disabled>';
+        s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter + (arr[i].note ? ' ('+ arr[i].note +')' : '') +'" disabled>';
         s_txt += '<button class="cs_edit bc_btn _bc">Edit</button>';
         s_txt += '<button class="cs_delete bc_btn _bc" title="Delete">X</button>';
         s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
@@ -195,7 +195,7 @@
     s_txt += '<a class="_bc bc_100" '+ (chk ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
-    s_txt += '<input class="cm_ch bc_input _bc bc_50" type="text" value="'+ data.chapter + (data.note ? '('+ data.note +')' : '') +'" disabled>';
+    s_txt += '<input class="cm_ch bc_input _bc bc_50" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
     s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
     s_txt += '</li>';
