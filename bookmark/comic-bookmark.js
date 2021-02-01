@@ -348,6 +348,11 @@
       if (el('.bc_search input') === document.activeElement && e.keyCode == 13) {
         el('.bc_search button').click(); //enter to search
       }
+      // enter to set/update
+      if (!el('.bc_form').classList.contains('bc_hidden') && e.keyCode == 13) {
+        if (el('.bc_set').classList.contains('bc_hidden')) el('.bc_update').click();
+        if (el('.bc_update').classList.contains('bc_hidden')) el('.bc_set').click();
+      }
     };
     
     el('.bc_toggle').onclick = function() {
