@@ -305,7 +305,7 @@
     b_txt += '<input class="bc_id bc_input _bc bc_100" type="text" placeholder="ID">';
     b_txt += '<input class="bc_title bc_input _bc bc_100" type="text" placeholder="Title">';
     b_txt += '<input class="bc_alt bc_input _bc bc_100" type="text" placeholder="Alternative Title">';
-    b_txt += '<input class="bc_ch bc_input _bc bc_100" type="text" placeholder="Chapter">';
+    b_txt += '<input class="bc_ch bc_input _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
     b_txt += '<input class="bc_note bc_input _bc bc_100" type="text" placeholder="Note">';
     b_txt += '<input class="bc_type bc_input _bc bc_100" type="text" placeholder="Type">';
     b_txt += '<input class="bc_host bc_input _bc bc_100" type="text" placeholder="hostname">';
