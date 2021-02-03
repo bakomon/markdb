@@ -206,6 +206,7 @@
     r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (readCookie('reader-zoom') || imgArea.offsetWidth) +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2">';
+    r_txt += '<div class="rc_next2 rc_btn _rc flex t_center rc_hidden" onclick="window.location.href=document.querySelector(\'.rc_next button\').dataset.href">&#9656;</div>';
     r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex t_center rc_hidden" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="rc_stop rc_btn _rc flex t_center" title="alt + x">&#10007;</div></div>';
     r_txt += '<div class="rc_top rc_btn _rc flex t_center">&#9652;</div>';
     r_txt += '<div class="rc_bottom rc_btn _rc flex t_center">&#9662;</div>';
@@ -228,6 +229,7 @@
       this.classList.toggle('rc_selected');
       el('.reader_db').classList.toggle('rc_shide');
       if (isMobile) el('.rc_bg').classList.toggle('rc_hidden');
+      if (el('.rc_next button').dataset.href) el('.rc_next2').classList.toggle('rc_hidden');
     };
     
     el('.rc_bg').onclick = function() {
@@ -535,6 +537,7 @@
       if (data.nextUrl == '') {
         removeElem(el('.ctop .nextprev [rel="next"]'));
         removeElem(el('.cbot .nextprev [rel="next"]'));
+        if (el('.readingnav .nextprev [rel="next"]')) removeElem(el('.readingnav .nextprev [rel="next"]'));
       } else if (el('body').classList.contains('new_tab')) {
         el('.ctop .nextprev [rel="next"]').dataset.href = data.nextUrl;
         el('.cbot .nextprev [rel="next"]').dataset.href = data.nextUrl;
