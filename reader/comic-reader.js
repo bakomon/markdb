@@ -980,6 +980,7 @@
   }, 100);
   
   if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1 || el('title').innerHTML.search(/\sch\.?(apter)?\s/i) != -1) && wl.search.indexOf('project') == -1 && wh.indexOf('tenseiscans') == -1) {
+    console.log('chapter page');
     checkAll();
   }
 })();
