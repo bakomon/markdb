@@ -216,7 +216,7 @@
     var title_id = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
     var title_rgx = new RegExp(title_id, 'ig');
     for (var i = 0; i < arr.length; i++) {
-      if (title_id.toLowerCase().replace(/\s+/g, '-') == arr[i].id || comic_id == arr[i].id) {
+      if (comic_id == arr[i].id || title_id.toLowerCase().replace(/\s+/g, '-') == arr[i].id) {
         cm_data = arr[i];
         id_chk = true;
         break;
