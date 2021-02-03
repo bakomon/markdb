@@ -847,7 +847,7 @@
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
-  var wk1 = /((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/;
+  var wk1 = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/;
   //var wk1 = /chapter(\/|\-)|\-bahasa|\-indonesia|ch\-|(\-|\/)\d+|(\-|\/)ep\d+|(chap|episode)\_|\/c\d+/;
   var chcdn = false; //if image has wp.com or statically.io
   var chgi = false; //if google images
