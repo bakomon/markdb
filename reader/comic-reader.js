@@ -878,7 +878,7 @@
     // re-enable right click https://stackoverflow.com/a/43754205
     window.addEventListener('contextmenu', function(e) {
       e.stopPropagation();
-    });
+    }, true);
   } else if (wh.indexOf('softkomik') != -1) {
     var soft_chk = setInterval(function() {
       if (el('.container .relatif .bg-content')) {
