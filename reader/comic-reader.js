@@ -197,7 +197,6 @@
     r_html.className = '_reader cbr_mod'+ (isMobile ? ' rc_mobile' : '');
     r_html.innerHTML = r_txt;
     document.body.appendChild(r_html);
-    if (!document.body.classList.contains('new_themesia') && el('.rc_reload').classList.contains('rc_hidden')) el('.rc_stop').click(); //auto click stop page
     if (isMobile) el('.rc_toggle').classList.add('rc_no_hover');
     if (chcdn || chgi) el('.rc_others').classList.remove('rc_hidden');
     if (localStorage.getItem('reader-zoom')) imgArea.style.cssText = 'max-width:'+ localStorage.getItem('reader-zoom') +'px !important;';
@@ -217,7 +216,7 @@
     };
     
     // Load all images
-    el('.rc_ld_img').onclick =  function() {
+    el('.rc_load .rc_ld_img').onclick =  function() {
       if (el('.rc_all').value == 'all') {
         lsImg = true;
         for (var i = 0; i < img.length; i++) {
@@ -228,7 +227,7 @@
       }
     };
     
-    el('.rc_pause').onclick =  function() {
+    el('.rc_load .rc_pause').onclick =  function() {
       this.classList.toggle('rc_active');
       el('.rc_ld_img').disabled = isPause ? false : true;
       isPause = isPause ? false : true;
@@ -276,6 +275,7 @@
       this.classList.add('rc_hidden');
       el('.rc_reload').classList.remove('rc_hidden');
     };
+    if (!document.body.classList.contains('new_themesia') && el('.rc_reload').classList.contains('rc_hidden')) el('.rc_stop').click(); //auto click stop page
     
     // back to top
     el('.rc_top').onclick = function() {
