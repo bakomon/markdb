@@ -177,6 +177,7 @@
       }
       el('.rc_next button').setAttribute('data-href', nextLink);
       el('.rc_next').classList.remove('rc_hidden');
+      el('.rc_next2').classList.remove('rc_hidden');
     }
   }
   
@@ -206,7 +207,7 @@
     r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (readCookie('reader-zoom') || imgArea.offsetWidth) +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2">';
-    r_txt += '<div class="rc_next2 rc_btn _rc flex t_center" onclick="window.location.href=document.querySelector(\'.rc_next button\').dataset.href">&#9656;</div>';
+    r_txt += '<div class="rc_next2 rc_btn _rc flex t_center rc_hidden" onclick="window.location.href=document.querySelector(\'.rc_next button\').dataset.href">&#9656;</div>';
     r_txt += '<div class="rc_load2 rc_btn _rc flex t_center" onclick="document.querySelector(\'.rc_ld_img\').click()">&#671;</div>';
     r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex t_center rc_hidden" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="rc_stop rc_btn _rc flex t_center" title="alt + x">&#10007;</div></div>';
     r_txt += '<div class="rc_top rc_btn _rc flex t_center">&#9652;</div>';
@@ -325,6 +326,7 @@
       var next_url = el('body').classList.contains('new_tab') ? next_chap.dataset.href : next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
       el('.rc_next').classList.remove('rc_hidden');
+      el('.rc_next2').classList.remove('rc_hidden');
     }
     
     var next_chk = setInterval(function() {
