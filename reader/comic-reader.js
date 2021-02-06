@@ -207,7 +207,7 @@
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2">';
     r_txt += '<div class="rc_next2 rc_btn _rc flex t_center" onclick="window.location.href=document.querySelector(\'.rc_next button\').dataset.href">&#9656;</div>';
-    r_txt += '<div class="rc_load2 rc_btn _rc flex t_center" onclick="document.querySelector(\'.rc_ld_img\').click()">&#76;</div>';
+    r_txt += '<div class="rc_load2 rc_btn _rc flex t_center" onclick="document.querySelector(\'.rc_ld_img\').click()">&#671;</div>';
     r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex t_center rc_hidden" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="rc_stop rc_btn _rc flex t_center" title="alt + x">&#10007;</div></div>';
     r_txt += '<div class="rc_top rc_btn _rc flex t_center">&#9652;</div>';
     r_txt += '<div class="rc_bottom rc_btn _rc flex t_center">&#9662;</div>';
