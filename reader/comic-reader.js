@@ -188,8 +188,8 @@
     r_txt += '<style>.scrollToTop,[title*="Back To Top"],.back-to-top,.go-to-top,.btn-top{display:none !important;}</style>'; //css hidden
     r_txt += '<style>.rc_mobile ._rc{font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}.rc_mobile .rc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}</style>'; //css mobile
     // html
-    r_txt += '<div class="rc_bg"></div>';
-    r_txt += '<div class="reader_db flex_wrap f_bottom">';
+    r_txt += '<div class="rc_bg rc_hidden"></div>';
+    r_txt += '<div class="reader_db rc_shide flex_wrap f_bottom">';
     r_txt += '<div class="rc_tr1 flex_wrap">';
     r_txt += '<div class="rc_others rc_line rc_100 flex rc_hidden">';
     if (chcdn) r_txt += '<div class="rc_cdn rc_btn _rc" title="'+ cdnName +'">CDN</div>';
@@ -206,7 +206,7 @@
     r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (readCookie('reader-zoom') || imgArea.offsetWidth) +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2">';
-    r_txt += '<div class="rc_next2 rc_btn _rc flex t_center rc_hidden" onclick="window.location.href=document.querySelector(\'.rc_next button\').dataset.href">&#9656;</div>';
+    r_txt += '<div class="rc_next2 rc_btn _rc flex t_center" onclick="window.location.href=document.querySelector(\'.rc_next button\').dataset.href">&#9656;</div>';
     r_txt += '<div class="rc_load2 rc_btn _rc flex t_center" onclick="document.querySelector(\'.rc_ld_img\').click()">&#76;</div>';
     r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex t_center rc_hidden" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="rc_stop rc_btn _rc flex t_center" title="alt + x">&#10007;</div></div>';
     r_txt += '<div class="rc_top rc_btn _rc flex t_center">&#9652;</div>';
@@ -231,6 +231,7 @@
       el('.reader_db').classList.toggle('rc_shide');
       if (isMobile) el('.rc_bg').classList.toggle('rc_hidden');
       if (el('.rc_next button').dataset.href) el('.rc_next2').classList.toggle('rc_hidden');
+      el('.rc_load2').classList.toggle('rc_hidden');
     };
     
     el('.rc_bg').onclick = function() {
