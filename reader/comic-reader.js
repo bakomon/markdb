@@ -265,10 +265,12 @@
       });
     });
     
-    window.addEventListener('DOMContentLoaded', function() {
-      el('.rc_reload').classList.remove('rc_hidden');
-      el('.rc_stop').classList.add('rc_hidden');
-    });
+    if (!isMobile) {
+      window.addEventListener('DOMContentLoaded', function() {
+        el('.rc_reload').classList.remove('rc_hidden');
+        el('.rc_stop').classList.add('rc_hidden');
+      });
+    }
     
     el('.rc_stop').onclick = function() {
       window.stop();
