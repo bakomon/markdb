@@ -571,6 +571,10 @@
     //if (el('[rel="tag"]') && el('[rel="tag"]').innerHTML.search(/project/i) != -1) {return}
     
     if (wh.indexOf('mangadex') != -1) { //api
+      var mgdx_css = document.createElement('link');
+      mgdx_css.setAttribute('rel', 'stylesheet');
+      mgdx_css.href = 'https://mangadex.org/scripts/css/Dark-Slate.css';
+      el('head').appendChild(mgdx_css);
       el('#content').style.cssText = 'position:initial;';
       var eId = el('meta[name="app"]').dataset.chapterId;
       getData('//mangadex.org/api/?type=chapter&id='+ eId);
