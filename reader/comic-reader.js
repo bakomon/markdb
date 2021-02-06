@@ -179,7 +179,7 @@
     r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (localStorage.getItem('reader-zoom') || imgArea.offsetWidth) +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2 '+ (isMobile ? ' flex f_bottom' : '') +'">';
-    r_txt += '<div class="rc_td1'+ (isMobile ? ' rc_hidden' : '') +'">';
+    r_txt += '<div class="rc_td1'+ (isMobile ? '' : ' rc_hidden') +'">';
     r_txt += '<div class="rc_next2 rc_btn _rc flex f_center rc_hidden" onclick="window.location.href=document.querySelector(\'.rc_next button\').dataset.href">&#9656;</div>';
     r_txt += '<div class="rc_load2 rc_btn _rc flex f_center" onclick="document.querySelector(\'.rc_ld_img\').click()">&#671;</div>';
     r_txt += '</div>';// .rc_td1
