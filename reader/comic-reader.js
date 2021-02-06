@@ -149,7 +149,7 @@
       }
       el('.rc_next button').setAttribute('data-href', nextLink);
       el('.rc_next').classList.remove('rc_hidden');
-      el('.rc_next2').classList.remove('rc_hidden');
+      if (isMobile) el('.rc_next2').classList.remove('rc_hidden');
     }
   }
   
@@ -303,7 +303,7 @@
       var next_url = document.body.classList.contains('new_tab') ? next_chap.dataset.href : next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
       el('.rc_next').classList.remove('rc_hidden');
-      el('.rc_next2').classList.remove('rc_hidden');
+      if (isMobile) el('.rc_next2').classList.remove('rc_hidden');
     }
     
     var next_chk = setInterval(function() {
