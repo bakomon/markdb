@@ -235,7 +235,7 @@
         if (cm_data.similar.indexOf(',') == -1 && main_data[cm_data.similar]) {
           bc_showHtml(main_data[cm_data.similar], 'similar');
         } else if (cm_data.similar.indexOf(',') != -1) {
-          var smlr_list = cm_data.similar.split(',');
+          var smlr_list = cm_data.similar.replace(/\s/g, '').split(',');
           for (var j = 0; j < smlr_list.length; j++) {
             bc_showHtml(main_data[smlr_list[j]], 'similar');
           }
