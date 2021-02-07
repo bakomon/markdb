@@ -200,7 +200,7 @@
     s_txt += '<a class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
-    if (data.read != '') s_txt += '<a class="_bc" href="'+ data.read +'" target="_blank">Read</a>';
+    if (data.read != '') s_txt += '<a class="_bc'+ (chk ? '' : ' bc_hidden') +'" href="'+ data.read +'" target="_blank">Read</a>';
     s_txt += '<input class="cm_ch bc_input _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
     s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
@@ -483,7 +483,7 @@
   var is_edit = false;
   var chapter_rgx = /\sch\.?(ap(ter)?)?\s/i;
   var id_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i;
-  var not_support = /komikempus|mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|komikindo.web.id|sektekomik|tenseiscans|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
+  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|komikindo.web.id|sektekomik|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
   var main_data, arr_data;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
