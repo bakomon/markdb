@@ -192,7 +192,7 @@
   }
   
   function bc_showHtml(data, note) {
-    var chk = data.host.search(not_support) != -1 || wh.indexOf(data.host) != -1;
+    var chk = data.host.search(not_support) != -1 || (wh.indexOf(data.host) != -1 && el('title').innerHTML.search(chapter_rgx) == -1);
     var s_txt = '<ul>';
     s_txt += '<li class="_cm';
     if (data.similar != '' && note) s_txt += ' cm_similar';
@@ -200,6 +200,7 @@
     s_txt += '<a class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
+    if (data.read != '') s_txt += '<a class="_bc" href="'+ data.read +'" target="_blank">Read</a>';
     s_txt += '<input class="cm_ch bc_input _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
     s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
@@ -248,7 +249,7 @@
       }
       
       el('.bc_comic').classList.remove('bc_hidden');
-      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1 && el('title').innerHTML.search(/\sch\.?(ap(ter)?)?\s/i) == -1) {
+      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1 && el('title').innerHTML.search(chapter_rgx) == -1) {
         el('.bc_toggle').click();
       }  
       
@@ -480,6 +481,7 @@
   var is_search = false;
   var is_mobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
   var is_edit = false;
+  var chapter_rgx = /\sch\.?(ap(ter)?)?\s/i;
   var id_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i;
   var not_support = /komikempus|mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|komikindo.web.id|sektekomik|tenseiscans|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
   var main_data, arr_data;
