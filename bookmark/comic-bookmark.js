@@ -55,15 +55,15 @@
   // Firebase update vs set https://stackoverflow.com/a/38924648
   function bc_updateData(id, title, alternative, chapter, note, type, host, url, similar) {
     firebase.database().ref('bookmark/comic/' + id).update({
-      id: id,
+      id: id.toLowerCase(),
       title: title,
       alternative: alternative,
-      chapter: chapter,
-      note: note,
-      type: type,
-      host: host,
-      url: url,
-      similar: similar
+      chapter: chapter.toLowerCase(),
+      note: note.toLowerCase(),
+      type: type.toLowerCase(),
+      host: host.toLowerCase(),
+      url: url.toLowerCase(),
+      similar: similar.toLowerCase()
     }, (error) => {
       if (error) {
         el('.mn_notif').innerHTML = 'Error!!';
@@ -81,15 +81,15 @@
   // Firebase update vs set https://stackoverflow.com/a/38924648
   function bc_setData(id, title, alternative, chapter, note, type, host, url, similar) {
     firebase.database().ref('bookmark/comic/' + id).set({
-      id: id,
+      id: id.toLowerCase(),
       title: title,
       alternative: alternative,
-      chapter: chapter,
-      note: note,
-      type: type,
-      host: host,
-      url: url,
-      similar: similar
+      chapter: chapter.toLowerCase(),
+      note: note.toLowerCase(),
+      type: type.toLowerCase(),
+      host: host.toLowerCase(),
+      url: url.toLowerCase(),
+      similar: similar.toLowerCase()
     }, (error) => {
       if (error) {
         el('.mn_notif').innerHTML = 'Error!!';
@@ -213,7 +213,7 @@
   function bc_showComic(arr, chk) {
     var cm_data, id_chk = false;
     var comic_id = wp.match(id_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
-    var title_id = el('title').innerHTML.replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
+    var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;\s?/ig, '').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
     var title_rgx = new RegExp(title_id, 'ig');
     for (var i = 0; i < arr.length; i++) {
       if (comic_id == arr[i].id || title_id.toLowerCase().replace(/\s+/g, '-') == arr[i].id) {
@@ -436,7 +436,7 @@
         el('.mn_notif').classList.remove('bc_hidden','bc_danger');
         if (!res) {
           el('.mn_notif').innerHTML = 'Loading..';
-          bc_setData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value.toLowerCase(), el('.bc_note').value, el('.bc_type').value.toLowerCase(), el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
+          bc_setData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
         } else {
           el('.mn_notif').innerHTML = 'Comic already exist';
           el('.mn_notif').classList.add('bc_danger');
