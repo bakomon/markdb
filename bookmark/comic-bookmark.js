@@ -200,8 +200,8 @@
     s_txt += '<a class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
-    if (data.read != '') s_txt += '<a class="_bc'+ (chk ? '' : ' bc_hidden') +'" href="'+ data.read +'" target="_blank">Read</a>';
     s_txt += '<input class="cm_ch bc_input _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
+    if (data.read != '') s_txt += '<a class="_bc'+ (chk ? '' : ' bc_hidden') +'" href="'+ data.read +'" target="_blank">Read</a>';
     s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
     s_txt += '</li>';
