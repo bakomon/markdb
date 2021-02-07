@@ -53,7 +53,7 @@
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
-  function bc_updateData(id, title, alternative, chapter, note, type, host, url, similar) {
+  function bc_updateData(id, title, alternative, chapter, note, type, host, url, read, similar) {
     firebase.database().ref('bookmark/comic/' + id).update({
       id: id.toLowerCase(),
       title: title,
@@ -63,6 +63,7 @@
       type: type.toLowerCase(),
       host: host.toLowerCase(),
       url: url.toLowerCase(),
+      read: read.toLowerCase(),
       similar: similar.toLowerCase()
     }, (error) => {
       if (error) {
@@ -79,7 +80,7 @@
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
-  function bc_setData(id, title, alternative, chapter, note, type, host, url, similar) {
+  function bc_setData(id, title, alternative, chapter, note, type, host, url, read, similar) {
     firebase.database().ref('bookmark/comic/' + id).set({
       id: id.toLowerCase(),
       title: title,
@@ -89,6 +90,7 @@
       type: type.toLowerCase(),
       host: host.toLowerCase(),
       url: url.toLowerCase(),
+      read: read.toLowerCase(),
       similar: similar.toLowerCase()
     }, (error) => {
       if (error) {
@@ -161,6 +163,7 @@
     el('.bc_type').value = '';
     el('.bc_host').value = '';
     el('.bc_url').value = '';
+    el('.bc_read').value = '';
     el('.bc_similar').value = '';
     el('.mn_notif').innerHTML = '';
     el('.mn_notif').classList.add('bc_hidden');
@@ -183,6 +186,7 @@
     el('.bc_type').value = data.type;
     el('.bc_host').value = data.host;
     el('.bc_url').value = data.url;
+    el('.bc_read').value = data.read;
     el('.bc_similar').value = data.similar;
     el('.bc_ch').select();
   }
@@ -196,7 +200,7 @@
     s_txt += '<a class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
-    s_txt += '<input class="cm_ch bc_input _bc bc_50" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
+    s_txt += '<input class="cm_ch bc_input _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
     s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
     s_txt += '</li>';
@@ -300,7 +304,7 @@
     var b_txt = '';
     // css control already in css tools
     // css bookmark
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._bc a{color:#ddd;font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,.bc_btn:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.cm_main{background:#4267b2;color:#ddd;padding:8px 10px;border:0;}.cm_similar{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._bc a{color:#ddd;font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,.bc_btn:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;color:#ddd;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
@@ -321,6 +325,7 @@
     b_txt += '<input class="bc_type bc_input _bc bc_100" type="text" placeholder="Type">';
     b_txt += '<input class="bc_host bc_input _bc bc_100" type="text" placeholder="hostname">';
     b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
+    b_txt += '<input class="bc_read bc_input _bc bc_100" type="text" placeholder="Read">';
     b_txt += '<input class="bc_similar bc_input _bc bc_100" type="text" placeholder="Similar">';
     b_txt += '<div class="bc_upnew bc_100 flex"><button class="bc_gen bc_btn _bc">Generate</button><span class="f_grow"></span><button class="bc_close bc_btn _bc">Close</button><button class="bc_set bc_btn _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update bc_btn _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
     b_txt += '</div>';// .bc_form
@@ -447,7 +452,7 @@
         el('.mn_notif').classList.remove('bc_hidden','bc_danger');
         if (!res) {
           el('.mn_notif').innerHTML = 'Loading..';
-          bc_setData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
+          bc_setData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_read').value, el('.bc_similar').value);
         } else {
           el('.mn_notif').innerHTML = 'Comic already exist';
           el('.mn_notif').classList.add('bc_danger');
@@ -463,7 +468,7 @@
         return;
       }
       el('.mn_notif').innerHTML = 'Loading..';
-      bc_updateData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_similar').value);
+      bc_updateData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_read').value, el('.bc_similar').value);
     };
   }
   
