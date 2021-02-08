@@ -31,23 +31,6 @@
     return splitStr.join(' '); 
   }
   
-  // loadXMLDoc https://codepen.io/sekedus/pen/vYGYBNP
-  function loadXMLDoc(url, callback, info) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == XMLHttpRequest.DONE && this.status == 200) {
-        var response = this.responseText;
-        if (info == 'parse') {
-          var resHTML = new DOMParser();
-          response = resHTML.parseFromString(response, 'text/html');
-        }
-        callback(response);
-      }
-    };
-    xhr.open('GET', url, true);
-    xhr.send();
-  }
-  
   function bc_checkData(id) {
     return firebase.database().ref(`bookmark/comic/${id}`).once('value').then(function(snapshot) {
         return snapshot.exists() ? true : false;
@@ -242,7 +225,7 @@
       el('.bc_comic').innerHTML = s_txt;
     }
     if (data.type != '') {
-      if (!localStorage.getItem(data.id)) localStorage.setItem(data.id, 'is_'+ data.type);
+      //if (!localStorage.getItem(data.id)) localStorage.setItem(data.id, 'is_'+ data.type);
       //document.body.classList.add('is-'+ data.type);
     }
   }
@@ -459,16 +442,6 @@
       el('.mn_notif').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden');
     };
-    
-    function bc_mgdxData(data) {
-      data = JSON.parse(data);
-      if (data.code == 200) {
-        data = data.data;
-        el('.bc_image').value = data.mainCover;
-      } else {
-        alert(data.message);
-      }
-    }
     
     // klik "Generate" harus pada halaman komik project
     el('.bc_gen').onclick = function() {
