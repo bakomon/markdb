@@ -176,7 +176,7 @@
     r_txt += '<button class="rc_pause rc_btn _rc rc_no_hover" title="Pause images from loading">X</button>';
     r_txt += '</div>';// .rc_load
     //var zoom_size = document.body.classList.contains('is-manga') ? '750' : document.body.classList.contains('is-manhua') ? '650' : '500'; //from comic bookmark
-    r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (localStorage.getItem('reader-zoom') || imgArea.offsetWidth) +'"></div>';
+    r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (localStorage.getItem(titleId) || imgArea.offsetWidth) +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2 '+ (isMobile ? ' flex f_bottom' : '') +'">';
     r_txt += '<div class="rc_td1'+ (isMobile ? '' : ' rc_hidden') +'">';
@@ -199,7 +199,7 @@
     document.body.appendChild(r_html);
     if (isMobile) el('.rc_toggle').classList.add('rc_no_hover');
     if (chcdn || chgi) el('.rc_others').classList.remove('rc_hidden');
-    if (localStorage.getItem('reader-zoom')) imgArea.style.cssText = 'max-width:'+ localStorage.getItem('reader-zoom') +'px !important;';
+    if (localStorage.getItem(titleId)) imgArea.style.cssText = 'max-width:'+ localStorage.getItem(titleId) +'px !important;';
     
     if (wh.search(/mangacanblog|merakiscans|mangapark/) != -1) {nextChapter();} //next button
     
@@ -261,7 +261,7 @@
         }
         imgArea.style.cssText = 'max-width:'+ load_zm +'px !important;';
         el('.rc_zoom input').value = load_zm;
-        localStorage.setItem('reader-zoom', load_zm, 365);
+        localStorage.setItem(titleId, load_zm);
       });
     });
     
@@ -836,11 +836,11 @@
   var isPause = false; //pause images from loading
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
   var imgSize = ''; //image size
-  var checkPoint, imgArea, imgList, cdnName;
+  var checkPoint, imgArea, imgList, cdnName, titleId;
   
   document.body.classList.add(wh.replace(/(w{3}|m)\./, ''));
   removeAADB(); //remove anti adblock notify mangacanblog
-  if (wh.search(/mangaku|komikru/) != -1) document.body.classList.add('_rightclick');
+  if (wh.search(/mangaku|komikru|comicfx/) != -1) document.body.classList.add('_rightclick');
   if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga/) != -1) document.body.classList.add('new_tab');
   if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
   if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|asurascans/) != -1) document.body.classList.add('new_themesia');
@@ -963,7 +963,8 @@
     }
   }, 100);
   
-  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1 || el('title').innerHTML.search(/\sch\.?(apter)?\s/i) != -1) && wl.search.indexOf('project') == -1 && wh.indexOf('tenseiscans') == -1) {
+  if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1 || el('title').innerHTML.search(/\sch\.?(apter)?\s/i) != -1) && wl.search.indexOf('project') == -1 && wh.search(/tenseiscans|komikempus/) == -1) {
+    titleId = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '').replace(/[^\s\w]/g, '').replace(/\s/g, '-').toLowerCase();
     console.log('chapter page');
     checkAll();
   }
