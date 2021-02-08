@@ -31,6 +31,23 @@
     return splitStr.join(' '); 
   }
   
+  // loadXMLDoc https://codepen.io/sekedus/pen/vYGYBNP
+  function loadXMLDoc(url, callback, info) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == XMLHttpRequest.DONE && this.status == 200) {
+        var response = this.responseText;
+        if (info == 'parse') {
+          var resHTML = new DOMParser();
+          response = resHTML.parseFromString(response, 'text/html');
+        }
+        callback(response);
+      }
+    };
+    xhr.open('GET', url, true);
+    xhr.send();
+  }
+  
   function bc_checkData(id) {
     return firebase.database().ref(`bookmark/comic/${id}`).once('value').then(function(snapshot) {
         return snapshot.exists() ? true : false;
@@ -53,9 +70,10 @@
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
-  function bc_updateData(id, title, alternative, chapter, note, type, host, url, read, similar) {
+  function bc_updateData(id, mangadex, title, alternative, chapter, note, type, host, url, read, image, update, similar) {
     firebase.database().ref('bookmark/comic/' + id).update({
       id: id.toLowerCase(),
+      mangadex: mangadex,
       title: title,
       alternative: alternative,
       chapter: chapter.toLowerCase(),
@@ -64,6 +82,8 @@
       host: host.toLowerCase(),
       url: url.toLowerCase(),
       read: read.toLowerCase(),
+      image: image,
+      update: new Date(update).getTime(),
       similar: similar.toLowerCase()
     }, (error) => {
       if (error) {
@@ -80,9 +100,10 @@
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
-  function bc_setData(id, title, alternative, chapter, note, type, host, url, read, similar) {
+  function bc_setData(id, mangadex, title, alternative, chapter, note, type, host, url, read, image, update, similar) {
     firebase.database().ref('bookmark/comic/' + id).set({
       id: id.toLowerCase(),
+      mangadex: mangadex,
       title: title,
       alternative: alternative,
       chapter: chapter.toLowerCase(),
@@ -91,6 +112,8 @@
       host: host.toLowerCase(),
       url: url.toLowerCase(),
       read: read.toLowerCase(),
+      image: image,
+      update: new Date(update).getTime(),
       similar: similar.toLowerCase()
     }, (error) => {
       if (error) {
@@ -156,6 +179,7 @@
   
   function bc_resetData() {
     el('.bc_id').value = '';
+    el('.bc_mangadex').value = '';
     el('.bc_title').value = '';
     el('.bc_alt').value = '';
     el('.bc_ch').value = '';
@@ -164,6 +188,8 @@
     el('.bc_host').value = '';
     el('.bc_url').value = '';
     el('.bc_read').value = '';
+    el('.bc_image').value = '';
+    el('.bc_last').value = '';
     el('.bc_similar').value = '';
     el('.mn_notif').innerHTML = '';
     el('.mn_notif').classList.add('bc_hidden');
@@ -179,6 +205,7 @@
     is_edit = true;
     
     el('.bc_id').value = data.id;
+    el('.bc_mangadex').value = data.mangadex;
     el('.bc_title').value = data.title;
     el('.bc_alt').value = data.alternative;
     el('.bc_ch').value = data.chapter;
@@ -187,6 +214,8 @@
     el('.bc_host').value = data.host;
     el('.bc_url').value = data.url;
     el('.bc_read').value = data.read;
+    el('.bc_image').value = data.image;
+    el('.bc_last').valueAsDate = new Date();
     el('.bc_similar').value = data.similar;
     el('.bc_ch').select();
   }
@@ -197,7 +226,7 @@
     s_txt += '<li class="_cm';
     if (data.similar != '' && note) s_txt += ' cm_similar';
     s_txt += ' flex_wrap" data-id="'+ data.id +'">';
-    s_txt += '<a class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk && el('title').innerHTML.search(chapter_rgx) == -1 ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
+    s_txt += '<a class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk && el('title').innerHTML.search(chapter_title_rgx) == -1 ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
     s_txt += '<input class="cm_ch bc_input _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
@@ -212,16 +241,19 @@
     } else {
       el('.bc_comic').innerHTML = s_txt;
     }
-    if (data.type != '') document.body.classList.add('is-'+ data.type);
+    if (data.type != '') {
+      if (!localStorage.getItem(data.id)) localStorage.setItem(data.id, 'is_'+ data.type);
+      //document.body.classList.add('is-'+ data.type);
+    }
   }
   
   function bc_showComic(arr, chk) {
     var cm_data, id_chk = false;
     var comic_id = wp.match(id_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
-    var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;\s?/ig, '').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
-    var title_rgx = new RegExp(title_id, 'ig');
+    var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
+    var title_rgx = new RegExp(title_id, 'i');
     for (var i = 0; i < arr.length; i++) {
-      if (comic_id == arr[i].id || title_id.toLowerCase().replace(/\s+/g, '-') == arr[i].id) {
+      if (comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id) {
         cm_data = arr[i];
         id_chk = true;
         break;
@@ -249,7 +281,7 @@
       }
       
       el('.bc_comic').classList.remove('bc_hidden');
-      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(/(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i) == -1 && el('title').innerHTML.search(chapter_rgx) == -1) {
+      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(chapter_wp_rgx) == -1 && el('title').innerHTML.search(chapter_title_rgx) == -1) {
         el('.bc_toggle').click();
       }  
       
@@ -305,7 +337,7 @@
     var b_txt = '';
     // css control already in css tools
     // css bookmark
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,.bc_btn:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,.bc_btn:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_mgdx_go{position:absolute;top:0;right:0;margin-right:-4px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
@@ -319,6 +351,7 @@
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
     b_txt += '<input class="bc_id bc_input _bc bc_100" type="text" placeholder="ID">';
+    b_txt += '<div style="position:relative;"><input class="bc_mangadex bc_input _bc bc_100" type="text" placeholder="Mangadex ID"><a class="bc_mgdx_go _bc bc_selected bc_hidden" href="#" target="_blank">Search</a></div>';
     b_txt += '<input class="bc_title bc_input _bc bc_100" type="text" placeholder="Title">';
     b_txt += '<input class="bc_alt bc_input _bc bc_100" type="text" placeholder="Alternative Title">';
     b_txt += '<input class="bc_ch bc_input _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
@@ -326,7 +359,9 @@
     b_txt += '<input class="bc_type bc_input _bc bc_100" type="text" placeholder="Type">';
     b_txt += '<input class="bc_host bc_input _bc bc_100" type="text" placeholder="hostname">';
     b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
-    b_txt += '<input class="bc_read bc_input _bc bc_100" type="text" placeholder="Read">';
+    b_txt += '<input class="bc_read bc_input _bc bc_100" type="text" placeholder="Read (if web to read is different)">';
+    b_txt += '<input class="bc_image bc_input _bc bc_100" type="text" placeholder="Image">';
+    b_txt += '<input class="bc_last bc_input _bc bc_100" type="date" title="Last Update">';
     b_txt += '<input class="bc_similar bc_input _bc bc_100" type="text" placeholder="Similar">';
     b_txt += '<div class="bc_upnew bc_100 flex"><button class="bc_gen bc_btn _bc">Generate</button><span class="f_grow"></span><button class="bc_close bc_btn _bc">Close</button><button class="bc_set bc_btn _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update bc_btn _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
     b_txt += '</div>';// .bc_form
@@ -425,13 +460,32 @@
       el('.mn_notif').classList.remove('bc_hidden');
     };
     
+    function bc_mgdxData(data) {
+      data = JSON.parse(data);
+      if (data.code == 200) {
+        data = data.data;
+        el('.bc_image').value = data.mainCover;
+      } else {
+        alert(data.message);
+      }
+    }
+    
     // klik "Generate" harus pada halaman komik project
     el('.bc_gen').onclick = function() {
       var comic_id = wp.match(id_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
       el('.bc_id').value = comic_id;
-      el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
+      //el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
       el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
+      el('.bc_mgdx_go').href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ');
+      el('.bc_mgdx_go').classList.remove('bc_hidden');
+      // for .bc_image if mangadex id exists then leave it blank, if none then it must be filled
+      el('.bc_last').valueAsDate = new Date();
+      
+      /* Mangadex image format, example: 
+      - https://mangadex.org/images/manga/58050.jpg
+      - https://mangadex.org/images/manga/58050.large.jpg
+      */
     };
     
     el('.bc_form .bc_close').onclick = function() {
@@ -443,17 +497,31 @@
     };
     
     el('.bc_set').onclick = function() {
+      el('.bc_mangadex').value = el('.bc_mangadex').value.toLowerCase();
+      
       if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
-        el('.mn_notif').innerHTML = 'ID or Chapter empty';
-        el('.mn_notif').classList.remove('bc_hidden');
-        el('.mn_notif').classList.add('bc_danger');
+        alert('id or chapter is empty');
         return;
       }
+      if (el('.bc_mangadex').value == '') {
+        alert('mangadex id is empty or fill with "none"');
+        return;
+      } else {
+        if (el('.bc_mangadex').value == 'none' && el('.bc_image').value == '') {
+          alert('cover image is empty');
+          return;
+        }
+        if (el('.bc_mangadex').value != '' && el('.bc_image').value != '') {
+          alert('delete image, image is included in mangadex id');
+          return;
+        }
+      }
+      
       bc_checkData(el('.bc_id').value).then(function(res) {
         el('.mn_notif').classList.remove('bc_hidden','bc_danger');
         if (!res) {
           el('.mn_notif').innerHTML = 'Loading..';
-          bc_setData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_read').value, el('.bc_similar').value);
+          bc_setData(el('.bc_id').value, el('.bc_mangadex').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_read').value, el('.bc_image').value, el('.bc_last').value, el('.bc_similar').value);
         } else {
           el('.mn_notif').innerHTML = 'Comic already exist';
           el('.mn_notif').classList.add('bc_danger');
@@ -462,14 +530,26 @@
     };
     
     el('.bc_update').onclick = function() {
-      el('.mn_notif').classList.remove('bc_hidden','bc_danger');
       if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
-        el('.mn_notif').innerHTML = 'ID or Chapter empty';
-        el('.mn_notif').classList.add('bc_danger');
+        alert('id or chapter is empty');
         return;
       }
+      if (el('.bc_mangadex').value == '') {
+        alert('mangadex id is empty or fill with "none"');
+        return;
+      } else {
+        if (el('.bc_mangadex').value == 'none' && el('.bc_image').value == '') {
+          alert('cover image is empty');
+          return;
+        }
+        if (el('.bc_mangadex').value != '' && el('.bc_image').value != '') {
+          alert('delete image, image is included in mangadex id');
+          return;
+        }
+      }
+      
       el('.mn_notif').innerHTML = 'Loading..';
-      bc_updateData(el('.bc_id').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_read').value, el('.bc_similar').value);
+      bc_updateData(el('.bc_id').value, el('.bc_mangadex').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_read').value, el('.bc_image').value, el('.bc_last').value, el('.bc_similar').value);
     };
   }
   
@@ -481,9 +561,10 @@
   var is_search = false;
   var is_mobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
   var is_edit = false;
-  var chapter_rgx = /\sch\.?(ap(ter)?)?\s/i;
+  var chapter_title_rgx = /\sch\.?(ap(ter)?)?\s/i;
+  var chapter_wp_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i;
   var id_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i;
-  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|komikindo.web.id|sektekomik|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
+  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|sektekomik|bacakomik.co|komikindo.web.id|mangaindo.web.id|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
   var main_data, arr_data;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
