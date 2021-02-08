@@ -484,7 +484,7 @@
           alert('cover image is empty');
           return;
         }
-        if (el('.bc_mangadex').value != '' && el('.bc_image').value != '') {
+        if (el('.bc_mangadex').value != 'none' && el('.bc_image').value != '') {
           alert('delete image, image is included in mangadex id');
           return;
         }
@@ -515,7 +515,7 @@
           alert('cover image is empty');
           return;
         }
-        if (el('.bc_mangadex').value != '' && el('.bc_image').value != '') {
+        if (el('.bc_mangadex').value != 'none' && el('.bc_image').value != '') {
           alert('delete image, image is included in mangadex id');
           return;
         }
