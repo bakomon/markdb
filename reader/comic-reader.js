@@ -282,7 +282,8 @@
       if (el('#disqus_trigger')) {
         el('#disqus_trigger').parentNode.scrollIntoView();
       } else {
-        document.body.scrollIntoView(false);
+        //document.body.scrollIntoView(false);
+        window.scrollTo(0, document.body.scrollHeight);
       }
     };
     
