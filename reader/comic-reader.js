@@ -386,7 +386,7 @@
     if (prnt && imgs) imgArea = prnt;
     imgList = prnt && imgs ? imgs.split(',') : el('img', imgArea, 'all');
     if (!imgList) {return}
-    console.log('length: ', imgList.length);
+    console.log('imgList.length: ', imgList.length);
     
     var reader_html = '<div id="reader-mod">';
     for (var j = 0; j < imgList.length; j++) {
