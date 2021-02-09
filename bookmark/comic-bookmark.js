@@ -346,7 +346,7 @@
     b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
     b_txt += '<input class="bc_read bc_input _bc bc_100" type="text" placeholder="Read (if web to read is different)">';
     b_txt += '<input class="bc_image bc_input _bc bc_100" type="text" placeholder="Image">';
-    b_txt += '<div class="flex bc_100" style="position:relative;"><input class="bc_last bc_input _bc bc_100" type="date" title="Last Update"><button class="bc_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(this.dataset.date)">Before</button></div>';
+    b_txt += '<div class="flex bc_100" style="position:relative;"><input class="bc_last bc_input _bc bc_100" type="date" title="Last Update"><button class="bc_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
     b_txt += '<input class="bc_similar bc_input _bc bc_100" type="text" placeholder="Similar">';
     b_txt += '<div class="bc_upnew bc_100 flex"><button class="bc_gen _bc">Generate</button><span class="f_grow"></span><button class="bc_close _bc">Close</button><button class="bc_set _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
     b_txt += '</div>';// .bc_form
