@@ -964,7 +964,7 @@
   }, 100);
   
   if ((wp.search(wk1) != -1 || wl.search.search(wk1) != -1 || el('title').innerHTML.search(/\sch\.?(apter)?\s/i) != -1) && wl.search.indexOf('project') == -1 && wh.search(/tenseiscans|komikempus/) == -1) {
-    titleId = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '').replace(/[^\s\w]/g, '').replace(/\s/g, '-').toLowerCase();
+    titleId = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '').replace(/[^\s\w]/g, '').replace(/\s/g, '-').toLowerCase();
     console.log('chapter page');
     checkAll();
   }
