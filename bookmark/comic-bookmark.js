@@ -182,6 +182,7 @@
   }
   
   function bc_editData(note, data) {
+    var local_date = new Date().toISOString().split('T')[0];
     el('.bc_comic').classList.add('bc_hidden');
     if (is_search) el('.bmark_db').classList.add('s_shide');
     el('.bc_form').classList.remove('bc_hidden');
@@ -217,7 +218,7 @@
     s_txt += '<li class="_cm';
     if (data.similar != '' && note) s_txt += ' cm_similar';
     s_txt += ' flex_wrap" data-id="'+ data.id +'">';
-    s_txt += '<a class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk && el('title').innerHTML.search(chapter_title_rgx) == -1 ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
+    s_txt += '<a class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk && el('title').innerHTML.search(chapter_t_rgx) == -1 ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
     s_txt += '<input class="cm_ch bc_input _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
@@ -240,7 +241,7 @@
   
   function bc_showComic(arr, chk) {
     var cm_data, id_chk = false;
-    var comic_id = wp.match(id_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
+    var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
     var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
     var title_rgx = new RegExp(title_id, 'i');
     for (var i = 0; i < arr.length; i++) {
@@ -273,7 +274,7 @@
       }
       
       el('.bc_comic').classList.remove('bc_hidden');
-      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(chapter_wp_rgx) == -1 && el('title').innerHTML.search(chapter_title_rgx) == -1) {
+      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(chapter_w_rgx) == -1 && el('title').innerHTML.search(chapter_t_rgx) == -1) {
         el('.bc_toggle').click();
       }  
       
@@ -455,7 +456,7 @@
     
     // klik "Generate" harus pada halaman komik project
     el('.bc_gen').onclick = function() {
-      var comic_id = wp.match(id_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '');
+      var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
       el('.bc_id').value = comic_id;
       el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
@@ -545,10 +546,9 @@
   var is_search = false;
   var is_edit = false;
   var is_mobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
-  var local_date = new Date().toISOString().split('T')[0];
-  var chapter_title_rgx = /\sch\.?(ap(ter)?)?\s/i;
-  var chapter_wp_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i;
-  var id_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i;
+  var chapter_t_rgx = /\s(ch\.?(ap(ter)?)?|ep\.?(isode)?)(\s?\d+|\s)/i; //chek for <title>
+  var chapter_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i; //check for window.location
+  var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
   var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|sektekomik|bacakomik.co|komikindo.web.id|mangaindo.web.id|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
