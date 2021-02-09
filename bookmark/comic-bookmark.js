@@ -314,6 +314,7 @@
     
     if (note) {
       bc_resetData();
+      is_edit = false;
       el('.bc_form').classList.add('bc_hidden');
     }
   }
