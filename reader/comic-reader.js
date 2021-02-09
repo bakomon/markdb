@@ -154,6 +154,7 @@
   }
   
   function createBtn(img) {
+  	var readSize = localStorage.getItem(titleId) && !isMobile ? localStorage.getItem(titleId) : imgArea.offsetWidth;
     var r_txt = '';
     // css control & main already in css tools
     // css reader
@@ -176,7 +177,7 @@
     r_txt += '<button class="rc_pause rc_btn _rc rc_no_hover" title="Pause images from loading">X</button>';
     r_txt += '</div>';// .rc_load
     //var zoom_size = document.body.classList.contains('is-manga') ? '750' : document.body.classList.contains('is-manhua') ? '650' : '500'; //from comic bookmark
-    r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ (localStorage.getItem(titleId) || imgArea.offsetWidth) +'"></div>';
+    r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ readSize +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2 '+ (isMobile ? ' flex f_bottom' : '') +'">';
     r_txt += '<div class="rc_td1'+ (isMobile ? '' : ' rc_hidden') +'">';
@@ -199,7 +200,7 @@
     document.body.appendChild(r_html);
     if (isMobile) el('.rc_toggle').classList.add('rc_no_hover');
     if (chcdn || chgi) el('.rc_others').classList.remove('rc_hidden');
-    if (localStorage.getItem(titleId)) imgArea.style.cssText = 'max-width:'+ localStorage.getItem(titleId) +'px !important;';
+    imgArea.style.cssText = 'max-width:'+ readSize +'px !important;';
     
     if (wh.search(/mangacanblog|merakiscans|mangapark/) != -1) {nextChapter();} //next button
     
