@@ -122,8 +122,8 @@
         if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
         s_txt += '</a>';
         s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter + (arr[i].note ? ' ('+ arr[i].note +')' : '') +'" disabled>';
-        s_txt += '<button class="cs_edit bc_btn _bc">Edit</button>';
-        s_txt += '<button class="cs_delete bc_btn _bc" title="Delete">X</button>';
+        s_txt += '<button class="cs_edit _bc">Edit</button>';
+        s_txt += '<button class="cs_delete _bc" title="Delete">X</button>';
         s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
         s_txt += '</li>';
       }
@@ -131,7 +131,7 @@
       s_txt += '<li>Oops! Comic not found</li>';
     }
     s_txt += '</ul></div>';
-    s_txt += '<div class="cs_text flex"><span class="bc_text">Search Result</span><span class="f_grow"></span><button class="cs_close bc_btn _bc">Close</button></div>';
+    s_txt += '<div class="cs_text flex"><span class="bc_text">Search Result</span><span class="f_grow"></span><button class="cs_close _bc">Close</button></div>';
     
     el('.bc_result').innerHTML = s_txt;
     el('.bc_result').classList.remove('bc_hidden');
@@ -198,9 +198,11 @@
     el('.bc_url').value = data.url;
     el('.bc_read').value = data.read;
     el('.bc_image').value = data.image;
-    el('.bc_last').valueAsDate = new Date();
+    el('.bc_last').valueAsDate = new Date(local_date);
     el('.bc_similar').value = data.similar;
     el('.bc_ch').select();
+    el('.bc_before').setAttribute('data-date', data.update);
+    el('.bc_before').classList.remove('bc_hidden');
   }
   
   function bc_showHtml(data, note) {
@@ -214,8 +216,8 @@
     s_txt += '</a>';
     s_txt += '<input class="cm_ch bc_input _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
     if (data.read != '') s_txt += '<a class="_bc bc_selected'+ (chk ? '' : ' bc_hidden') +'" href="'+ data.read +'" target="_blank">Read</a>';
-    s_txt += '<button class="cm_edit bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
-    s_txt += '<button class="cm_delete bc_btn _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
+    s_txt += '<button class="cm_edit _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
+    s_txt += '<button class="cm_delete _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
     s_txt += '</li>';
     s_txt += '</ul>';
     
@@ -320,7 +322,7 @@
     var b_txt = '';
     // css control already in css tools
     // css bookmark
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,.bc_btn:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_mgdx_go{position:absolute;top:0;right:0;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_mgdx_go{position:absolute;top:0;right:0;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
@@ -329,7 +331,7 @@
     b_txt += '<div class="bc_login flex_wrap bc_hidden">';
     b_txt += '<input class="bc_email bc_input _bc bc_100" type="email" placeholder="Email">';
     b_txt += '<input class="bc_pass bc_input _bc bc_100" type="password" placeholder="Password">';
-    b_txt += '<div class="flex"><button class="bc_in bc_btn _bc">Login</button><span class="lg_notif _bc bc_selected bc_hidden"></span></div>';
+    b_txt += '<div class="flex"><button class="bc_in _bc">Login</button><span class="lg_notif _bc bc_selected bc_hidden"></span></div>';
     b_txt += '</div>';// .bc_login
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
@@ -344,18 +346,18 @@
     b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
     b_txt += '<input class="bc_read bc_input _bc bc_100" type="text" placeholder="Read (if web to read is different)">';
     b_txt += '<input class="bc_image bc_input _bc bc_100" type="text" placeholder="Image">';
-    b_txt += '<input class="bc_last bc_input _bc bc_100" type="date" title="Last Update">';
+    b_txt += '<div class="flex bc_100" style="position:relative;"><input class="bc_last bc_input _bc bc_100" type="date" title="Last Update"><button class="bc_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(this.dataset.date)">Before</button></div>';
     b_txt += '<input class="bc_similar bc_input _bc bc_100" type="text" placeholder="Similar">';
-    b_txt += '<div class="bc_upnew bc_100 flex"><button class="bc_gen bc_btn _bc">Generate</button><span class="f_grow"></span><button class="bc_close bc_btn _bc">Close</button><button class="bc_set bc_btn _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update bc_btn _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
+    b_txt += '<div class="bc_upnew bc_100 flex"><button class="bc_gen _bc">Generate</button><span class="f_grow"></span><button class="bc_close _bc">Close</button><button class="bc_set _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
     b_txt += '</div>';// .bc_form
     b_txt += '<div class="bc_result bc_line bc_hidden"></div>';
     b_txt += '<div class="bc_tr1">';
     b_txt += '<div class="bc_comic bc_line bc_hidden"></div>';
-    b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _bc bc_100" type="text" placeholder="Search..."><button class="bc_btn _bc">GO</button></div>';
-    b_txt += '<div class="bc_menu flex"><button class="bc_add bc_btn _bc">Add</button><button class="bc_out bc_btn _bc">Logout</button><span class="mn_notif _bc bc_selected bc_hidden"></span></div>';
+    b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _bc bc_100" type="text" placeholder="Search..."><button class="_bc">GO</button></div>';
+    b_txt += '<div class="bc_menu flex"><button class="bc_add _bc">Add</button><button class="bc_out _bc">Logout</button><span class="mn_notif _bc bc_selected bc_hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
     b_txt += '</div>';// .bc_data
-    b_txt += '<div class="bc_toggle bc_btn _bc bc_100 flex f_center">&#9733;</div>';
+    b_txt += '<div class="bc_toggle _bc bc_100 flex f_center">&#9733;</div>';
     b_txt += '</div>';// .bmark_db
     
     var b_html = document.createElement('div');
@@ -429,6 +431,7 @@
         el('.bc_form').classList.remove('bc_hidden');
       }
       el('.bc_set').classList.remove('bc_hidden');
+      el('.bc_before').classList.add('bc_hidden');
       el('.bc_update').classList.add('bc_hidden');
       if (is_comic) el('.bc_comic').classList.add('bc_hidden');
       if (is_search) el('.bmark_db').classList.add('s_shide');
@@ -526,19 +529,20 @@
     };
   }
   
+  var main_data, arr_data;
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
   var is_login = false;
   var is_comic = false;
   var is_search = false;
-  var is_mobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
   var is_edit = false;
+  var is_mobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
+  var local_date = new Date().toISOString().split('T')[0];
   var chapter_title_rgx = /\sch\.?(ap(ter)?)?\s/i;
   var chapter_wp_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i;
   var id_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i;
   var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|sektekomik|bacakomik.co|komikindo.web.id|mangaindo.web.id|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
-  var main_data, arr_data;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
   
