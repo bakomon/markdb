@@ -244,11 +244,12 @@
     var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
     var title_rgx = new RegExp(title_id, 'i');
     for (var i = 0; i < arr.length; i++) {
-      if (comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id) {
+      if (comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id || wp.indexOf('/title/'+ arr[i].mangadex) != -1) {
         cm_data = arr[i];
         id_chk = true;
         break;
       }
+      // chk = 2, double check
       if (chk == 2 && (wp.indexOf(arr[i].id) != -1 || arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1)) {
         cm_data = arr[i];
         id_chk = true;
