@@ -177,8 +177,8 @@
     el('.mn_notif').innerHTML = '';
     el('.mn_notif').classList.add('bc_hidden');
     el('.mn_notif').classList.remove('bc_danger');
-    el('.bc_before').classList.add('bc_hidden');
-    el('.bc_mgdx_go').classList.remove('bc_hidden');
+    el('.bc_mgdx_search').classList.add('bc_hidden');
+    el('.bc_date_before').classList.add('bc_hidden');
   }
   
   function bc_editData(note, data) {
@@ -203,9 +203,12 @@
     el('.bc_last').valueAsDate = new Date(local_date);
     el('.bc_similar').value = data.similar;
     el('.bc_ch').select();
-    el('.bc_before').setAttribute('data-date', data.update);
-    el('.bc_before').classList.remove('bc_hidden');
-    if (el('.bc_mangadex').value != '' && el('.bc_mangadex').value != 'none') el('.bc_mgdx_go').classList.add('bc_hidden');
+    el('.bc_date_before').setAttribute('data-date', data.update);
+    el('.bc_date_before').classList.remove('bc_hidden');
+    if (el('.bc_mangadex').value == 'none') {
+      el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ');
+      el('.bc_mgdx_search').classList.remove('bc_hidden');
+    }
   }
   
   function bc_showHtml(data, note) {
@@ -340,7 +343,7 @@
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
     b_txt += '<input class="bc_id bc_input _bc bc_100" type="text" placeholder="ID">';
-    b_txt += '<div class="flex bc_100"><input class="bc_mangadex bc_input _bc bc_100" type="text" placeholder="Mangadex ID"><a class="bc_mgdx_go _bc bc_selected" href="#" target="_blank">Search</a></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_mangadex bc_input _bc bc_100" type="text" placeholder="Mangadex ID"><a class="bc_mgdx_search _bc bc_selected bc_hidden" href="#" target="_blank">Search</a></div>';
     b_txt += '<input class="bc_title bc_input _bc bc_100" type="text" placeholder="Title">';
     b_txt += '<input class="bc_alt bc_input _bc bc_100" type="text" placeholder="Alternative Title">';
     b_txt += '<input class="bc_ch bc_input _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
@@ -350,7 +353,7 @@
     b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
     b_txt += '<input class="bc_read bc_input _bc bc_100" type="text" placeholder="Link to read (if web to read is different)">';
     b_txt += '<input class="bc_image bc_input _bc bc_100" type="text" placeholder="Image">';
-    b_txt += '<div class="flex bc_100"><input class="bc_last bc_input _bc bc_100" type="date" title="Last Update"><button class="bc_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_last bc_input _bc bc_100" type="date" title="Last Update"><button class="bc_date_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
     b_txt += '<input class="bc_similar bc_input _bc bc_100" type="text" placeholder="Similar">';
     b_txt += '<div class="bc_upnew bc_100 flex"><button class="bc_gen _bc">Generate</button><span class="f_grow"></span><button class="bc_close _bc">Close</button><button class="bc_set _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
     b_txt += '</div>';// .bc_form
@@ -456,7 +459,8 @@
       el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
       el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
-      el('.bc_mgdx_go').href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ');
+      el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ');
+      el('.bc_mgdx_search').classList.remove('bc_hidden');
       // for .bc_image if mangadex id exists then leave it blank, if none then it must be filled
       el('.bc_last').valueAsDate = new Date();
       
