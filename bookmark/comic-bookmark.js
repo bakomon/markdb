@@ -177,6 +177,8 @@
     el('.mn_notif').innerHTML = '';
     el('.mn_notif').classList.add('bc_hidden');
     el('.mn_notif').classList.remove('bc_danger');
+    el('.bc_before').classList.add('bc_hidden');
+    el('.bc_mgdx_go').classList.remove('bc_hidden');
   }
   
   function bc_editData(note, data) {
@@ -338,7 +340,7 @@
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
     b_txt += '<input class="bc_id bc_input _bc bc_100" type="text" placeholder="ID">';
-    b_txt += '<div class="flex bc_100"><input class="bc_mangadex bc_input _bc bc_100" type="text" placeholder="Mangadex ID"><a class="bc_mgdx_go _bc bc_selected bc_hidden" href="#" target="_blank">Search</a></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_mangadex bc_input _bc bc_100" type="text" placeholder="Mangadex ID"><a class="bc_mgdx_go _bc bc_selected" href="#" target="_blank">Search</a></div>';
     b_txt += '<input class="bc_title bc_input _bc bc_100" type="text" placeholder="Title">';
     b_txt += '<input class="bc_alt bc_input _bc bc_100" type="text" placeholder="Alternative Title">';
     b_txt += '<input class="bc_ch bc_input _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
@@ -433,7 +435,6 @@
         el('.bc_form').classList.remove('bc_hidden');
       }
       el('.bc_set').classList.remove('bc_hidden');
-      el('.bc_before').classList.add('bc_hidden');
       el('.bc_update').classList.add('bc_hidden');
       if (is_comic) el('.bc_comic').classList.add('bc_hidden');
       if (is_search) el('.bmark_db').classList.add('s_shide');
@@ -456,7 +457,6 @@
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
       el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
       el('.bc_mgdx_go').href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ');
-      el('.bc_mgdx_go').classList.remove('bc_hidden');
       // for .bc_image if mangadex id exists then leave it blank, if none then it must be filled
       el('.bc_last').valueAsDate = new Date();
       
