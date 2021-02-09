@@ -195,7 +195,7 @@
     el('.bc_alt').value = data.alternative;
     el('.bc_ch').value = data.chapter;
     el('.bc_note').value = data.note;
-    el('.bc_type').value = data.type;
+    el('.bc_type option[value="'+ data.type +'"]').selected = true;
     el('.bc_host').value = data.host;
     el('.bc_url').value = data.url;
     el('.bc_read').value = data.read;
@@ -329,7 +329,7 @@
     var b_txt = '';
     // css control already in css tools
     // css bookmark
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
@@ -348,7 +348,7 @@
     b_txt += '<input class="bc_alt bc_input _bc bc_100" type="text" placeholder="Alternative Title">';
     b_txt += '<input class="bc_ch bc_input _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
     b_txt += '<input class="bc_note bc_input _bc bc_100" type="text" placeholder="Note">';
-    b_txt += '<input class="bc_type bc_input _bc bc_100" type="text" placeholder="Type">';
+    b_txt += '<select class="bc_type bc_input _bc bc_100" required><option value="" selected disabled hidden>Type</option><option value="manga">manga</option><option value="manhua">manhua</option><option value="manhwa">manhwa</option></select>';
     b_txt += '<input class="bc_host bc_input _bc bc_100" type="text" placeholder="hostname">';
     b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
     b_txt += '<input class="bc_read bc_input _bc bc_100" type="text" placeholder="Link to read (if web to read is different)">';
