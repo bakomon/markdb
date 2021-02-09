@@ -270,7 +270,6 @@
       this.classList.add('rc_hidden');
       el('.rc_reload').classList.remove('rc_hidden');
     };
-    if (el('.rc_reload').classList.contains('rc_hidden')) el('.rc_stop').click(); //auto click stop page
     
     // back to top
     el('.rc_top').onclick = function() {
@@ -332,6 +331,9 @@
         }
       }
     };
+    
+    // after html and js _reader loaded then auto click to stop page
+    if (el('.rc_reload').classList.contains('rc_hidden')) el('.rc_stop').click();
   }
   
   function startImage(prnt, imgs) {
