@@ -318,7 +318,7 @@
         bc_searchResult(bc_genData(snapshot.val(), query));
       } else {
         arr_data = bc_genData(snapshot.val());
-        if (wp != '/') bc_showComic(arr_data); //check if comic data exist and show bookmark
+        if (wp != '/' || wp.search(/\/(\?s=|search\?)/) == -1) bc_showComic(arr_data); //check if comic data exist and show bookmark
       }
     });
     
