@@ -121,7 +121,7 @@
         s_txt += '<a class="_bc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
         if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
         s_txt += '</a>';
-        s_txt += '<input class="cs_ch bc_input _bc bc_50" type="text" value="'+ arr[i].chapter + (arr[i].note ? ' ('+ arr[i].note +')' : '') +'" disabled>';
+        s_txt += '<input class="cs_ch _bc bc_50" type="text" value="'+ arr[i].chapter + (arr[i].note ? ' ('+ arr[i].note +')' : '') +'" disabled>';
         s_txt += '<button class="cs_edit _bc">Edit</button>';
         s_txt += '<button class="cs_delete _bc" title="Delete">X</button>';
         s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
@@ -142,6 +142,7 @@
     el('.cs_close').onclick = function() {
       is_search = false;
       el('.bc_result').classList.add('bc_hidden');
+      el('.bc_search input').value = '';
       el('.bmark_db').classList.add('s_shide');
     };
     
@@ -182,12 +183,12 @@
   }
   
   function bc_editData(note, data) {
-    var local_date = new Date().toISOString().split('T')[0];
-    el('.bc_comic').classList.add('bc_hidden');
-    if (is_search) el('.bmark_db').classList.add('s_shide');
     el('.bc_form').classList.remove('bc_hidden');
-    el('.bc_set').classList.add('bc_hidden');
-    el('.bc_update').classList.remove('bc_hidden');
+    el('.bc_form_btn').classList.remove('bc_hidden');
+    el('.bc_form_btn .bc_set').classList.add('bc_hidden');
+    el('.bc_form_btn .bc_update').classList.remove('bc_hidden');
+    if (is_search) el('.bmark_db').classList.add('s_shide');
+    el('.bc_tr1').classList.add('bc_hidden');
     is_edit = true;
     
     el('.bc_id').value = data.id;
@@ -221,7 +222,7 @@
     s_txt += '<a class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk && el('title').innerHTML.search(chapter_t_rgx) == -1 ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</a>';
-    s_txt += '<input class="cm_ch bc_input _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
+    s_txt += '<input class="cm_ch _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
     if (data.read != '') s_txt += '<a class="_bc bc_selected'+ (chk ? '' : ' bc_hidden') +'" href="'+ data.read +'" target="_blank">Read</a>';
     s_txt += '<button class="cm_edit _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
@@ -324,6 +325,8 @@
       bc_resetData();
       is_edit = false;
       el('.bc_form').classList.add('bc_hidden');
+      el('.bc_form_btn').classList.add('bc_hidden');
+      el('.bc_tr1').classList.remove('bc_hidden');
     }
   }
   
@@ -331,41 +334,41 @@
     var b_txt = '';
     // css control already in css tools
     // css bookmark
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
     b_txt += '<div class="bc_bg bc_hidden"></div>';
     b_txt += '<div class="bmark_db s_shide bc_shide flex_wrap f_bottom">';
-    b_txt += '<div class="bc_login flex_wrap bc_hidden">';
-    b_txt += '<input class="bc_email bc_input _bc bc_100" type="email" placeholder="Email">';
-    b_txt += '<input class="bc_pass bc_input _bc bc_100" type="password" placeholder="Password">';
-    b_txt += '<div class="flex"><button class="bc_in _bc">Login</button><span class="lg_notif _bc bc_selected bc_hidden"></span></div>';
-    b_txt += '</div>';// .bc_login
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
-    b_txt += '<input class="bc_id bc_input _bc bc_100" type="text" placeholder="ID">';
-    b_txt += '<div class="flex bc_100"><input class="bc_mangadex bc_input _bc bc_100" type="text" placeholder="Mangadex ID"><a class="bc_mgdx_search _bc bc_selected bc_hidden" href="#" target="_blank">Search</a></div>';
-    b_txt += '<input class="bc_title bc_input _bc bc_100" type="text" placeholder="Title">';
-    b_txt += '<input class="bc_alt bc_input _bc bc_100" type="text" placeholder="Alternative Title">';
-    b_txt += '<input class="bc_ch bc_input _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
-    b_txt += '<input class="bc_note bc_input _bc bc_100" type="text" placeholder="Note">';
-    b_txt += '<select class="bc_type bc_input _bc bc_100" required><option value="" selected disabled hidden>Type</option><option value="manga">manga</option><option value="manhua">manhua</option><option value="manhwa">manhwa</option></select>';
-    b_txt += '<input class="bc_host bc_input _bc bc_100" type="text" placeholder="hostname">';
-    b_txt += '<input class="bc_url bc_input _bc bc_100" type="text" placeholder="URL">';
-    b_txt += '<input class="bc_read bc_input _bc bc_100" type="text" placeholder="Link to read (if web to read is different)">';
-    b_txt += '<input class="bc_image bc_input _bc bc_100" type="text" placeholder="Image">';
-    b_txt += '<div class="flex bc_100"><input class="bc_last bc_input _bc bc_100" type="date" title="Last Update"><button class="bc_date_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
-    b_txt += '<input class="bc_similar bc_input _bc bc_100" type="text" placeholder="Similar">';
-    b_txt += '<div class="bc_upnew bc_100 flex"><button class="bc_gen _bc">Generate</button><span class="f_grow"></span><button class="bc_close _bc">Close</button><button class="bc_set _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
+    b_txt += '<input class="bc_id _bc bc_100" type="text" placeholder="ID">';
+    b_txt += '<div class="flex bc_100"><input class="bc_mangadex _bc bc_100" type="text" placeholder="Mangadex ID"><a class="bc_mgdx_search _bc bc_selected bc_hidden" href="#" target="_blank">Search</a></div>';
+    b_txt += '<input class="bc_title _bc bc_100" type="text" placeholder="Title">';
+    b_txt += '<input class="bc_alt _bc bc_100" type="text" placeholder="Alternative Title">';
+    b_txt += '<input class="bc_ch _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
+    b_txt += '<input class="bc_note _bc bc_100" type="text" placeholder="Note">';
+    b_txt += '<select class="bc_type _bc bc_100" required><option value="" selected disabled hidden>Type</option><option value="manga">manga</option><option value="manhua">manhua</option><option value="manhwa">manhwa</option></select>';
+    b_txt += '<input class="bc_host _bc bc_100" type="text" placeholder="hostname">';
+    b_txt += '<input class="bc_url _bc bc_100" type="text" placeholder="URL">';
+    b_txt += '<input class="bc_read _bc bc_100" type="text" placeholder="Link to read (if web to read is different)">';
+    b_txt += '<input class="bc_image _bc bc_100" type="text" placeholder="Cover image">';
+    b_txt += '<div class="flex bc_100"><input class="bc_last _bc bc_100" type="date" title="Last Update"><button class="bc_date_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
+    b_txt += '<input class="bc_similar _bc bc_100" type="text" placeholder="Similar">';
     b_txt += '</div>';// .bc_form
+    b_txt += '<div class="bc_form_btn bc_100 flex bc_hidden"><button class="bc_gen _bc">Generate</button><span class="f_grow"></span><button class="bc_close _bc">Close</button><button class="bc_set _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
     b_txt += '<div class="bc_result bc_line bc_hidden"></div>';
     b_txt += '<div class="bc_tr1">';
     b_txt += '<div class="bc_comic bc_line bc_hidden"></div>';
-    b_txt += '<div class="bc_search bc_line flex"><input class="bc_input _bc bc_100" type="text" placeholder="Search..."><button class="_bc">GO</button></div>';
+    b_txt += '<div class="bc_search bc_line flex"><input class="_bc bc_100" type="text" placeholder="Search..."><button class="_bc">GO</button></div>';
     b_txt += '<div class="bc_menu flex"><button class="bc_add _bc">Add</button><button class="bc_out _bc">Logout</button><span class="mn_notif _bc bc_selected bc_hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
     b_txt += '</div>';// .bc_data
+    b_txt += '<div class="bc_login flex_wrap bc_hidden">';
+    b_txt += '<input class="bc_email _bc bc_100" type="email" placeholder="Email">';
+    b_txt += '<input class="bc_pass _bc bc_100" type="password" placeholder="Password">';
+    b_txt += '<div class="flex"><button class="bc_in _bc">Login</button><span class="lg_notif _bc bc_selected bc_hidden"></span></div>';
+    b_txt += '</div>';// .bc_login
     b_txt += '<div class="bc_toggle _bc bc_100 flex f_center">&#9733;</div>';
     b_txt += '</div>';// .bmark_db
     
@@ -375,6 +378,7 @@
     b_html.innerHTML = b_txt;
     document.body.appendChild(b_html);
     if (is_mobile) el('.bc_toggle').classList.add('bc_no_hover');
+    el('.bc_form').style.cssText = 'height:'+ (window.innerHeight - (el('.bc_menu').offsetHeight + 70)) + 'px;overflow-y:auto;';
     
     // Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102
     firebase.auth().onAuthStateChanged(function(user) {
@@ -433,21 +437,17 @@
     
     el('.bc_menu .bc_add').onclick = function() {
       bc_resetData();
-      if (is_edit) {
-        is_edit = false;
-      } else {
-        is_edit = true;
-        el('.bc_form').classList.remove('bc_hidden');
-      }
-      el('.bc_set').classList.remove('bc_hidden');
-      el('.bc_update').classList.add('bc_hidden');
-      if (is_comic) el('.bc_comic').classList.add('bc_hidden');
+      is_edit = true;
+      el('.bc_form').classList.remove('bc_hidden');
+      el('.bc_form_btn').classList.remove('bc_hidden');
+      el('.bc_form_btn .bc_set').classList.remove('bc_hidden');
+      el('.bc_form_btn .bc_update').classList.add('bc_hidden');
       if (is_search) el('.bmark_db').classList.add('s_shide');
+      el('.bc_tr1').classList.add('bc_hidden');
     };
     
     el('.bc_search button').onclick = function() {
       if (el('.bc_search input').value == '') return;
-      if (is_edit) el('.bc_form .bc_close').click();
       bc_mainData('search', el('.bc_search input').value);
       is_search = true;
       el('.mn_notif').innerHTML = 'Loading..';
@@ -455,7 +455,7 @@
     };
     
     // klik "Generate" harus pada halaman komik project
-    el('.bc_gen').onclick = function() {
+    el('.bc_form_btn .bc_gen').onclick = function() {
       var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
       el('.bc_id').value = comic_id;
       el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
@@ -464,7 +464,7 @@
       el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ');
       el('.bc_mgdx_search').classList.remove('bc_hidden');
       // for .bc_image if mangadex id exists then leave it blank, if none then it must be filled
-      el('.bc_last').valueAsDate = new Date();
+      el('.bc_last').valueAsDate = new Date(local_date);
       
       /* Mangadex image format, example: 
       - https://mangadex.org/images/manga/58050.jpg
@@ -472,15 +472,16 @@
       */
     };
     
-    el('.bc_form .bc_close').onclick = function() {
+    el('.bc_form_btn .bc_close').onclick = function() {
       bc_resetData();
       is_edit = false;
       el('.bc_form').classList.add('bc_hidden');
-      if (is_comic) el('.bc_comic').classList.remove('bc_hidden');
+      el('.bc_form_btn').classList.add('bc_hidden');
       if (is_search) el('.bmark_db').classList.remove('s_shide');
+      el('.bc_tr1').classList.remove('bc_hidden');
     };
     
-    el('.bc_set').onclick = function() {
+    el('.bc_form_btn .bc_set').onclick = function() {
       el('.bc_mangadex').value = el('.bc_mangadex').value.toLowerCase();
       
       if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
@@ -513,7 +514,7 @@
       });
     };
     
-    el('.bc_update').onclick = function() {
+    el('.bc_form_btn .bc_update').onclick = function() {
       if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
         alert('id or chapter is empty');
         return;
@@ -546,6 +547,7 @@
   var is_search = false;
   var is_edit = false;
   var is_mobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
+  var local_date = new Date().toISOString().split('T')[0];
   var chapter_t_rgx = /\s(ch\.?(ap(ter)?)?|ep\.?(isode)?)(\s?\d+|\s)/i; //chek for <title>
   var chapter_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i; //check for window.location
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
