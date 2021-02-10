@@ -385,6 +385,7 @@
       if (!imgArea) return;
     }
     if (prnt && imgs) imgArea = prnt;
+    if (el('img[src=""]')) removeElem(el('img[src=""]')); //komikcast
     imgList = prnt && imgs ? imgs.split(',') : el('img', imgArea, 'all');
     if (!imgList) {return}
     console.log('imgList.length: '+ imgList.length);
