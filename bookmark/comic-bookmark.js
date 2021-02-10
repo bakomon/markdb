@@ -21,6 +21,25 @@
     elm.appendChild(dJS);
   }
   
+    // Local time with timezone ISO standart https://stackoverflow.com/a/17415677/7598333
+  function toISOLocal(d) {
+    d = d || new Date();
+    var tzo = -d.getTimezoneOffset(),
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function(num) {
+        var norm = Math.floor(Math.abs(num));
+        return (norm < 10 ? '0' : '') + norm;
+      };
+    return d.getFullYear() +
+      '-' + pad(d.getMonth() + 1) +
+      '-' + pad(d.getDate()) +
+      'T' + pad(d.getHours()) +
+      ':' + pad(d.getMinutes()) +
+      ':' + pad(d.getSeconds()) +
+      dif + pad(tzo / 60) +
+      ':' + pad(tzo % 60);
+  }
+  
   // https://stackoverflow.com/a/32589289
   function firstCase(str, sep) {
     var separate = sep ? sep : ' ';
@@ -203,7 +222,7 @@
     el('.bc_url').value = data.url;
     el('.bc_read').value = data.read;
     el('.bc_image').value = data.image;
-    el('.bc_last').valueAsDate = new Date(local_date);
+    el('.bc_last').valueAsDate = new Date(toISOLocal());
     el('.bc_similar').value = data.similar;
     el('.bc_ch').select();
     el('.bc_date_before').setAttribute('data-date', data.update);
@@ -467,7 +486,7 @@
       el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ');
       el('.bc_mgdx_search').classList.remove('bc_hidden');
       // for .bc_image if mangadex id exists then leave it blank, if none then it must be filled
-      el('.bc_last').valueAsDate = new Date(local_date);
+      el('.bc_last').valueAsDate = new Date(toISOLocal());
       
       /* Mangadex image format, example: 
       - https://mangadex.org/images/manga/58050.jpg
@@ -551,7 +570,6 @@
   var is_search = false;
   var is_edit = false;
   var is_mobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
-  var local_date = new Date().toISOString().split('T')[0];
   var chapter_t_rgx = /\s(ch\.?(ap(ter)?)?|ep\.?(isode)?)(\s?\d+|\s)/i; //chek for <title>
   var chapter_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i; //check for window.location
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
