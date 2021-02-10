@@ -392,7 +392,7 @@
     b_txt += '<div class="flex"><button class="bc_in _bc">Login</button><span class="lg_notif _bc bc_selected bc_hidden"></span></div>';
     b_txt += '</div>';// .bc_login
     b_txt += '<div class="bc_toggle _bc bc_100 flex f_center">&#9733;</div>';
-    b_txt += '<div class="mn_notif _bc bc_hidden"></div>';// .bmark_db
+    b_txt += '<div class="mn_notif flex flex_perfect bc_hidden" style="position:absolute;"><span class="_bc fp_content"></span></div>';// .bmark_db
     b_txt += '</div>';// .bmark_db
     
     var b_html = document.createElement('div');
@@ -526,8 +526,8 @@
         }
       }
       
+      el('.mn_notif').classList.remove('bc_hidden','bc_danger');
       bc_checkData(el('.bc_id').value).then(function(res) {
-        el('.mn_notif').classList.remove('bc_hidden','bc_danger');
         if (!res) {
           el('.mn_notif').innerHTML = 'Loading..';
           bc_setData(el('.bc_id').value, el('.bc_mangadex').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_read').value, el('.bc_image').value, el('.bc_last').value, el('.bc_similar').value);
@@ -558,6 +558,7 @@
       }
       
       el('.mn_notif').innerHTML = 'Loading..';
+      el('.mn_notif').classList.remove('bc_hidden');
       bc_updateData(el('.bc_id').value, el('.bc_mangadex').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_read').value, el('.bc_image').value, el('.bc_last').value, el('.bc_similar').value);
     };
   }
