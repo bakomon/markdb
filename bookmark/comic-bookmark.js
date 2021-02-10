@@ -136,14 +136,14 @@
     el('.bc_result').innerHTML = s_txt;
     el('.bc_result').classList.remove('bc_hidden');
     el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
-    el('.bmark_db').classList.remove('s_shide');
+    el('.bmark_db').classList.remove('bc_s_shide');
     el('.mn_notif').classList.add('bc_hidden');
       
     el('.cs_close').onclick = function() {
       is_search = false;
       el('.bc_result').classList.add('bc_hidden');
       el('.bc_search input').value = '';
-      el('.bmark_db').classList.add('s_shide');
+      el('.bmark_db').classList.add('bc_s_shide');
     };
     
     el('.cs_edit', 'all').forEach(function(item) {
@@ -183,11 +183,12 @@
   }
   
   function bc_editData(note, data) {
+    if (is_mobile) el('.bc_data').classList.add('bc_f_edit');
     el('.bc_form').classList.remove('bc_hidden');
     el('.bc_form_btn').classList.remove('bc_hidden');
     el('.bc_form_btn .bc_set').classList.add('bc_hidden');
     el('.bc_form_btn .bc_update').classList.remove('bc_hidden');
-    if (is_search) el('.bmark_db').classList.add('s_shide');
+    if (is_search) el('.bmark_db').classList.add('bc_s_shide');
     el('.bc_tr1').classList.add('bc_hidden');
     is_edit = true;
     
@@ -324,6 +325,7 @@
     if (note) {
       bc_resetData();
       is_edit = false;
+      if (is_mobile) el('.bc_data').classList.remove('bc_f_edit');
       el('.bc_form').classList.add('bc_hidden');
       el('.bc_form_btn').classList.add('bc_hidden');
       el('.bc_tr1').classList.remove('bc_hidden');
@@ -334,12 +336,12 @@
     var b_txt = '';
     // css control already in css tools
     // css bookmark
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.s_shide .bc_result,.bc_hidden{display:none;}</style>';
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db .bc_f_edit{height:100%;overflow-y:auto;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.bc_s_shide .bc_result,.bc_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.bc_mobile .bmark_db{width:80%;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
     b_txt += '<div class="bc_bg bc_hidden"></div>';
-    b_txt += '<div class="bmark_db s_shide bc_shide flex_wrap f_bottom">';
+    b_txt += '<div class="bmark_db bc_s_shide bc_shide flex_wrap f_bottom">';
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
     b_txt += '<input class="bc_id _bc bc_100" type="text" placeholder="ID">';
@@ -377,10 +379,7 @@
     b_html.className = '_bmark cbr_mod' + (is_mobile ? ' bc_mobile' : '');
     b_html.innerHTML = b_txt;
     document.body.appendChild(b_html);
-    if (is_mobile) {
-      el('.bc_toggle').classList.add('bc_no_hover');
-      el('.bc_form').style.cssText = 'height:'+ (window.innerHeight - (el('.bc_menu').offsetHeight + 70)) + 'px;overflow-y:auto;';
-    }
+    if (is_mobile) el('.bc_toggle').classList.add('bc_no_hover');
     
     // Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102
     firebase.auth().onAuthStateChanged(function(user) {
@@ -440,11 +439,12 @@
     el('.bc_menu .bc_add').onclick = function() {
       bc_resetData();
       is_edit = true;
+      if (is_mobile) el('.bc_data').classList.add('bc_f_edit');
       el('.bc_form').classList.remove('bc_hidden');
       el('.bc_form_btn').classList.remove('bc_hidden');
       el('.bc_form_btn .bc_set').classList.remove('bc_hidden');
       el('.bc_form_btn .bc_update').classList.add('bc_hidden');
-      if (is_search) el('.bmark_db').classList.add('s_shide');
+      if (is_search) el('.bmark_db').classList.add('bc_s_shide');
       el('.bc_tr1').classList.add('bc_hidden');
     };
     
@@ -477,9 +477,10 @@
     el('.bc_form_btn .bc_close').onclick = function() {
       bc_resetData();
       is_edit = false;
+      if (is_mobile) el('.bc_data').classList.remove('bc_f_edit');
       el('.bc_form').classList.add('bc_hidden');
       el('.bc_form_btn').classList.add('bc_hidden');
-      if (is_search) el('.bmark_db').classList.remove('s_shide');
+      if (is_search) el('.bmark_db').classList.remove('bc_s_shide');
       el('.bc_tr1').classList.remove('bc_hidden');
     };
     
