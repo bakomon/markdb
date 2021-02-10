@@ -222,7 +222,7 @@
     el('.bc_url').value = data.url;
     el('.bc_read').value = data.read;
     el('.bc_image').value = data.image;
-    el('.bc_last').valueAsDate = new Date(toISOLocal());
+    el('.bc_last').valueAsDate = local_date;
     el('.bc_similar').value = data.similar;
     el('.bc_ch').select();
     el('.bc_date_before').setAttribute('data-date', data.update);
@@ -383,7 +383,7 @@
     b_txt += '<div class="bc_tr1">';
     b_txt += '<div class="bc_comic bc_line bc_hidden"></div>';
     b_txt += '<div class="bc_search bc_line flex"><input class="_bc bc_100" type="text" placeholder="Search..."><button class="_bc">GO</button></div>';
-    b_txt += '<div class="bc_menu flex"><button class="bc_add _bc">Add</button><button class="bc_out _bc">Logout</button><span class="mn_notif _bc bc_selected bc_hidden"></span></div>';
+    b_txt += '<div class="bc_menu flex"><button class="bc_add _bc">Add</button><button class="bc_out _bc">Logout</button></div>';
     b_txt += '</div>';// .bc_tr1
     b_txt += '</div>';// .bc_data
     b_txt += '<div class="bc_login flex_wrap bc_hidden">';
@@ -392,6 +392,7 @@
     b_txt += '<div class="flex"><button class="bc_in _bc">Login</button><span class="lg_notif _bc bc_selected bc_hidden"></span></div>';
     b_txt += '</div>';// .bc_login
     b_txt += '<div class="bc_toggle _bc bc_100 flex f_center">&#9733;</div>';
+    b_txt += '<div class="mn_notif _bc bc_hidden"></div>';// .bmark_db
     b_txt += '</div>';// .bmark_db
     
     var b_html = document.createElement('div');
@@ -486,7 +487,7 @@
       el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ');
       el('.bc_mgdx_search').classList.remove('bc_hidden');
       // for .bc_image if mangadex id exists then leave it blank, if none then it must be filled
-      el('.bc_last').valueAsDate = new Date(toISOLocal());
+      el('.bc_last').valueAsDate = local_date;
       
       /* Mangadex image format, example: 
       - https://mangadex.org/images/manga/58050.jpg
@@ -570,6 +571,7 @@
   var is_search = false;
   var is_edit = false;
   var is_mobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
+  var local_date = new Date(toISOLocal().split('T')[0]);
   var chapter_t_rgx = /\s(ch\.?(ap(ter)?)?|ep\.?(isode)?)(\s?\d+|\s)/i; //chek for <title>
   var chapter_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i; //check for window.location
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
