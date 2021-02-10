@@ -57,18 +57,16 @@
   }
   
   function bc_deleteData(id) {
+    el('.mn_notif span').innerHTML = 'Loading..';
+    el('.mn_notif').classList.remove('bc_hidden');
+      
     firebase.database().ref('bookmark/comic/' + id).remove()
       .then(function() {
-        //console.log('Remove succeeded.');
+        bc_mainData('remove');
       })
       .catch(function(error) {
-        alert('Remove failed: ' + error.message);
+        el('.mn_notif span').innerHTML = 'Error!!';
       });
-    
-    if (is_search) el('.bc_search button').click();
-    bc_mainData('remove');
-    is_comic = false;
-    el('.bc_comic').classList.add('bc_hidden');
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
@@ -89,16 +87,14 @@
       similar: similar.toLowerCase()
     }, (error) => {
       if (error) {
-        el('.mn_notif').innerHTML = 'Error!!';
         console.log(error);
+        el('.mn_notif span').innerHTML = 'Error!!';
+        el('.mn_notif span').classList.add('bc_danger');
+        setTimeout(function() { el('.mn_notif').classList.add('bc_hidden'); }, 1500);
       } else {
-        el('.mn_notif').innerHTML = 'Done';
+        bc_mainData('update');
       }
-      setTimeout(function() { el('.mn_notif').classList.add('bc_hidden'); }, 1000);
     });
-    
-    if (is_search) el('.bc_search button').click();
-    bc_mainData('update');
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
@@ -119,15 +115,14 @@
       similar: similar.toLowerCase()
     }, (error) => {
       if (error) {
-        el('.mn_notif').innerHTML = 'Error!!';
         console.log(error);
+        el('.mn_notif span').innerHTML = 'Error!!';
+        el('.mn_notif span').classList.add('bc_danger');
+        setTimeout(function() { el('.mn_notif').classList.add('bc_hidden'); }, 1500);
       } else {
-        el('.mn_notif').innerHTML = 'Done';
+        bc_mainData('set');
       }
-      setTimeout(function() { el('.mn_notif').classList.add('bc_hidden'); }, 1000);
     });
-    
-    bc_mainData('set');
   }
   
   function bc_searchResult(arr) {
@@ -156,7 +151,6 @@
     el('.bc_result').classList.remove('bc_hidden');
     el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
     el('.bmark_db').classList.remove('bc_s_shide');
-    el('.mn_notif').classList.add('bc_hidden');
       
     el('.cs_close').onclick = function() {
       is_search = false;
@@ -194,11 +188,13 @@
     el('.bc_image').value = '';
     el('.bc_last').value = '';
     el('.bc_similar').value = '';
-    el('.mn_notif').innerHTML = '';
-    el('.mn_notif').classList.add('bc_hidden');
-    el('.mn_notif').classList.remove('bc_danger');
     el('.bc_mgdx_search').classList.add('bc_hidden');
     el('.bc_date_before').classList.add('bc_hidden');
+    setTimeout(function() {
+      el('.mn_notif').classList.add('bc_hidden');
+      el('.mn_notif span').innerHTML = '';
+      el('.mn_notif span').classList.remove('bc_danger');
+    }, 700);
   }
   
   function bc_editData(note, data) {
@@ -284,13 +280,13 @@
       bc_showHtml(cm_data);
       
       if (cm_data.similar != '') {
-        if (cm_data.similar.indexOf(',') == -1 && main_data[cm_data.similar]) {
-          bc_showHtml(main_data[cm_data.similar], 'similar');
-        } else if (cm_data.similar.indexOf(',') != -1) {
+        if (cm_data.similar.indexOf(',') != -1) {
           var smlr_list = cm_data.similar.replace(/\s/g, '').split(',');
           for (var j = 0; j < smlr_list.length; j++) {
-            bc_showHtml(main_data[smlr_list[j]], 'similar');
+            if (main_data[smlr_list[j]]) bc_showHtml(main_data[smlr_list[j]], 'similar');
           }
+        } else {
+          if (main_data[cm_data.similar]) bc_showHtml(main_data[cm_data.similar], 'similar');
         }
       }
       
@@ -312,50 +308,51 @@
           }
         });
       });
+    } else {
+      is_comic = false;
+      el('.bc_comic').classList.add('bc_hidden');
     }
   }
   
-  function bc_genData(json, query) {
+  function bc_genData(json) {
     var arr = [];
     for (var key in json) {
       arr.push(json[key]);
     }
-    
-    // search
-    if (query) {
-      var key_rgx = new RegExp(query, 'ig');
-      return arr.filter(item => (item.id.search(key_rgx) != -1 || item.title.search(key_rgx) != -1 || item.alternative.search(key_rgx) != -1 || item.note.search(key_rgx) != -1 || item.type.search(key_rgx) != -1 || item.host.search(key_rgx) != -1));
-    } else {
-      return arr;
-    }
+    return arr;
   }
   
   function bc_mainData(note, query) {
     firebase.database().ref('bookmark/comic').once('value', function(snapshot) {
       main_data = snapshot.val();
+      arr_data = bc_genData(snapshot.val());
+      if (wp != '/' || wp.search(/\/(\?s=|search\?)/) == -1) bc_showComic(arr_data); //check if comic data exist and show bookmark
+      
+      if (note != 'start') {
+        el('.mn_notif span').innerHTML = 'Done';
+        bc_resetData();
+        is_edit = false;
+        if (is_mobile) el('.bc_data').classList.remove('bc_f_edit');
+        el('.bc_form').classList.add('bc_hidden');
+        el('.bc_form_btn').classList.add('bc_hidden');
+        el('.bc_tr1').classList.remove('bc_hidden');
+      }
+      
+      // search
+      query = note != 'start' && is_search ? el('.bc_search input').value : query;
       if (query) {
-        bc_searchResult(bc_genData(snapshot.val(), query));
-      } else {
-        arr_data = bc_genData(snapshot.val());
-        if (wp != '/' || wp.search(/\/(\?s=|search\?)/) == -1) bc_showComic(arr_data); //check if comic data exist and show bookmark
+        var key_rgx = new RegExp(query, 'ig');
+        var search_data = arr_data.filter(item => (item.id.search(key_rgx) != -1 || item.title.search(key_rgx) != -1 || item.alternative.search(key_rgx) != -1 || item.note.search(key_rgx) != -1 || item.type.search(key_rgx) != -1 || item.host.search(key_rgx) != -1));
+        bc_searchResult(search_data);
       }
     });
-    
-    if (note) {
-      bc_resetData();
-      is_edit = false;
-      if (is_mobile) el('.bc_data').classList.remove('bc_f_edit');
-      el('.bc_form').classList.add('bc_hidden');
-      el('.bc_form_btn').classList.add('bc_hidden');
-      el('.bc_tr1').classList.remove('bc_hidden');
-    }
   }
   
   function startBookmark() {
     var b_txt = '';
     // css control already in css tools
     // css bookmark
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db .bc_f_edit{overflow-y:auto;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.bc_s_shide .bc_result,.bc_hidden{display:none;}</style>';
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db .bc_f_edit{overflow-y:auto;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.bc_s_shide .bc_result,.bc_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.bc_mobile .bmark_db{width:80%;flex-direction:column;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
@@ -406,7 +403,7 @@
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) { //User is signed in.
         is_login = true;
-        bc_mainData(); //Start firebase data
+        bc_mainData('start'); //Start firebase data
         el('.bc_login').classList.add('bc_hidden');
         el('.bc_data').classList.remove('bc_hidden');
       } else {
@@ -471,10 +468,10 @@
     
     el('.bc_search button').onclick = function() {
       if (el('.bc_search input').value == '') return;
-      bc_mainData('search', el('.bc_search input').value);
       is_search = true;
-      el('.mn_notif').innerHTML = 'Loading..';
+      el('.mn_notif span').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden');
+      bc_mainData('search', el('.bc_search input').value);
     };
     
     // klik "Generate" harus pada halaman komik project
@@ -526,14 +523,15 @@
         }
       }
       
+      el('.mn_notif span').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden','bc_danger');
       bc_checkData(el('.bc_id').value).then(function(res) {
         if (!res) {
-          el('.mn_notif').innerHTML = 'Loading..';
           bc_setData(el('.bc_id').value, el('.bc_mangadex').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_read').value, el('.bc_image').value, el('.bc_last').value, el('.bc_similar').value);
         } else {
-          el('.mn_notif').innerHTML = 'Comic already exist';
-          el('.mn_notif').classList.add('bc_danger');
+          el('.mn_notif span').innerHTML = 'Comic already exist';
+          el('.mn_notif span').classList.add('bc_danger');
+          setTimeout(function() { el('.mn_notif').classList.add('bc_hidden'); }, 1500);
         }
       });
     };
@@ -557,7 +555,7 @@
         }
       }
       
-      el('.mn_notif').innerHTML = 'Loading..';
+      el('.mn_notif span').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden');
       bc_updateData(el('.bc_id').value, el('.bc_mangadex').value, el('.bc_title').value, el('.bc_alt').value, el('.bc_ch').value, el('.bc_note').value, el('.bc_type').value, el('.bc_host').value, el('.bc_url').value, el('.bc_read').value, el('.bc_image').value, el('.bc_last').value, el('.bc_similar').value);
     };
