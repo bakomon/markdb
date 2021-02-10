@@ -661,20 +661,6 @@
       var imgMS = dataMS('images');
       createImage(imgMS);
     } else if (wh.indexOf('mangaku') != -1) { //script
-      var mgk_chk = setInterval(function() {
-        if (el('#data_mgk')) {
-          clearInterval(mgk_chk);
-          var par_elm = el('.singlep .section_ad.group_ad').parentNode.nextElementSibling; //dtxx
-          var r_area = document.createElement('div');
-          r_area.id = 'readerarea';
-          r_area.innerHTML = el('#data_mgk').innerHTML;
-          par_elm.parentNode.insertBefore(r_area, par_elm);
-          par_elm.parentNode.removeChild(par_elm);
-          
-          startImage();
-        }
-      }, 100);
-      
       /* #2
       var el_mgk = el('#contentwrap');
       var new_mgk = document.createElement('div');
