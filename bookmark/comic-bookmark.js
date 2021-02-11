@@ -199,7 +199,7 @@
     el('.bc_date_before').setAttribute('data-date', data.update);
     el('.bc_date_before').classList.remove('bc_hidden');
     if (el('.bc_mangadex').value == 'none') {
-      el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ') +'#listing';
+      el('.bc_mgdx_search').dataset.href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ') +'#listing';
       el('.bc_mgdx_search').classList.remove('bc_hidden');
     }
   }
@@ -211,10 +211,11 @@
         s_txt += '<li class="_cl';
         if (i+1 < arr.length) s_txt += ' bc_line';
         s_txt += ' flex_wrap" data-id="'+ arr[i].id +'">';
-        s_txt += '<a class="_bc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
+        s_txt += '<button class="_bc bc_100" onclick="window.open('+ arr[i].url +')">'+ arr[i].title;
         if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
-        s_txt += '</a>';
+        s_txt += '</button>';
         s_txt += '<input class="cs_ch _bc bc_50" type="text" value="'+ arr[i].chapter + (arr[i].note ? ' ('+ arr[i].note +')' : '') +'" disabled>';
+        if (arr[i].read != '') s_txt += '<button class="_bc bc_selected" onclick="window.open('+ arr[i].read +')">Read</button>';
         s_txt += '<button class="cs_edit _bc">Edit</button>';
         s_txt += '<button class="cs_delete _bc" title="Delete">X</button>';
         s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
@@ -259,11 +260,11 @@
     s_txt += '<li class="_cm';
     if (data.similar != '' && note) s_txt += ' cm_similar';
     s_txt += ' flex_wrap" data-id="'+ data.id +'">';
-    s_txt += '<a class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk && el('title').innerHTML.search(chapter_t_rgx) == -1 ? 'href="javascript:void(0)"' : 'href="'+ data.url +'" target="_blank"') +'>'+ data.title;
+    s_txt += '<button class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk && el('title').innerHTML.search(chapter_t_rgx) == -1 ? '' : 'onclick="window.open('+ data.url +')"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
-    s_txt += '</a>';
+    s_txt += '</button>';
     s_txt += '<input class="cm_ch _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
-    if (data.read != '') s_txt += '<a class="_bc bc_selected'+ (chk ? '' : ' bc_hidden') +'" href="'+ data.read +'" target="_blank">Read</a>';
+    if (data.read != '') s_txt += '<button class="_bc bc_selected'+ (chk ? '' : ' bc_hidden') +'" onclick="window.open('+ data.read +')">Read</button>';
     s_txt += '<button class="cm_edit _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
     s_txt += '</li>';
@@ -386,7 +387,7 @@
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
     b_txt += '<input class="bc_id _bc bc_100" type="text" placeholder="ID">';
-    b_txt += '<div class="flex bc_100"><input class="bc_mangadex _bc bc_100" type="text" placeholder="Mangadex ID"><a class="bc_mgdx_search _bc bc_selected bc_hidden" href="#" target="_blank">Search</a></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_mangadex _bc bc_100" type="text" placeholder="Mangadex ID"><button class="bc_mgdx_search _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">Search</button></div>';
     b_txt += '<input class="bc_title _bc bc_100" type="text" placeholder="Title">';
     b_txt += '<input class="bc_alt _bc bc_100" type="text" placeholder="Alternative Title">';
     b_txt += '<input class="bc_ch _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
@@ -505,7 +506,7 @@
       el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
       el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
-      el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ') +'#listing';
+      el('.bc_mgdx_search').dataset.href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ') +'#listing';
       el('.bc_mgdx_search').classList.remove('bc_hidden');
       // for .bc_image if mangadex id exists then leave it blank, if none then it must be filled
       el('.bc_last').valueAsDate = local_date;
