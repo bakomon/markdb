@@ -845,12 +845,14 @@
   if (wh.indexOf('webtoons') != -1) {
     el('#wrap').classList.add('no-css');
   } else if (wh.indexOf('komikcast') != -1) {
-    // https://stackoverflow.com/a/29998770
-    window.open = function (url, windowName, windowFeatures) {
+    // https://codepen.io/crmolloy/pen/YqdagV
+    var windowOpenBackup = window.open;
+    window.open = function(url, name, features) {
       console.log('window.open caught!');
+      window.open = windowOpenBackup;
     };
   } else if (document.body.classList.contains('_rightclick')) {
-    // re-enable right click https://stackoverflow.com/a/43754205
+    // re-enable right click (don't forget "true") https://stackoverflow.com/a/43754205
     window.addEventListener('contextmenu', function(e) {
       e.stopPropagation();
     }, true);
