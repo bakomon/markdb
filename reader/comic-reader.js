@@ -335,7 +335,7 @@
     };
     
     // after html and js _reader loaded then auto click to stop page
-    if (el('.rc_reload' && wh.indexOf('webtoons') == -1).classList.contains('rc_hidden')) el('.rc_stop').click();
+    if (el('.rc_reload').classList.contains('rc_hidden') && wh.indexOf('webtoons') == -1) el('.rc_stop').click();
   }
   
   function startImage(prnt, imgs) {
