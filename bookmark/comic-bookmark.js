@@ -199,7 +199,7 @@
     el('.bc_date_before').setAttribute('data-date', data.update);
     el('.bc_date_before').classList.remove('bc_hidden');
     if (el('.bc_mangadex').value == 'none') {
-      el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ');
+      el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ') +'#listing';
       el('.bc_mgdx_search').classList.remove('bc_hidden');
     }
   }
