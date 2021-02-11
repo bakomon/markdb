@@ -1,3 +1,4 @@
+// COMIC BOOKMARK
 (function() {
   // Simple querySelector https://codepen.io/pen/oKYOEK
   function el(e,l,m) {
@@ -125,30 +126,6 @@
     });
   }
   
-  function bc_formCheck() {
-    if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
-      alert('id or chapter is empty');
-      return;
-    }
-    if (el('.bc_type').value == '') {
-      alert('comic type is empty');
-      return;
-    }
-    if (el('.bc_mangadex').value == '') {
-      alert('mangadex id is empty or fill with "none"');
-      return;
-    } else {
-      if (el('.bc_mangadex').value == 'none' && el('.bc_image').value == '') {
-        alert('cover image is empty');
-        return;
-      }
-      if (el('.bc_mangadex').value != 'none' && el('.bc_image').value != '') {
-        alert('delete image, image is included in mangadex id');
-        return;
-      }
-    }
-  }
-  
   function bc_resetData() {
     el('.bc_id').value = '';
     el('.bc_mangadex').value = '';
@@ -202,6 +179,31 @@
       el('.bc_mgdx_search').dataset.href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ') +'#listing';
       el('.bc_mgdx_search').classList.remove('bc_hidden');
     }
+  }
+  
+  function bc_formCheck() {
+    if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
+      alert('id or chapter is empty');
+      return false;
+    }
+    if (el('.bc_type').value == '') {
+      alert('comic type is empty');
+      return false;
+    }
+    if (el('.bc_mangadex').value == '') {
+      alert('mangadex id is empty or fill with "none"');
+      return false;
+    } else {
+      if (el('.bc_mangadex').value == 'none' && el('.bc_image').value == '') {
+        alert('cover image is empty');
+        return false;
+      }
+      if (el('.bc_mangadex').value != 'none' && el('.bc_image').value != '') {
+        alert('delete image, image is included in mangadex id');
+        return false;
+      }
+    }
+    return true;
   }
   
   function bc_searchResult(arr) {
@@ -281,61 +283,62 @@
     }
   }
   
-  function bc_showComic(arr, chk) {
-    var cm_data, id_chk = false;
-    var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
-    var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
-    var title_rgx = new RegExp(title_id, 'i');
-    for (var i = 0; i < arr.length; i++) {
-      if (comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id || wp.indexOf('/title/'+ arr[i].mangadex) != -1) {
-        cm_data = arr[i];
-        id_chk = true;
-        break;
-      }
-      // chk = 2, double check
-      if (chk == 2 && (wp.indexOf(arr[i].id) != -1 || arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1)) {
-        cm_data = arr[i];
-        id_chk = true;
+  function bc_showComic(data, note) {
+    is_comic = true;
+    bc_showHtml(data);
+    el('.bc_comic').classList.remove('bc_hidden');
+    
+    if (data.similar != '') {
+      if (data.similar.indexOf(',') != -1) {
+        var smlr_list = data.similar.replace(/\s/g, '').split(',');
+        for (var j = 0; j < smlr_list.length; j++) {
+          if (main_data[smlr_list[j]]) bc_showHtml(main_data[smlr_list[j]], 'similar');
+        }
+      } else {
+        if (main_data[data.similar]) bc_showHtml(main_data[data.similar], 'similar');
       }
     }
     
-    if (!id_chk && chk != 2) bc_showComic(arr, 2); //double check if title not same as id
-    if (cm_data) {
-      is_comic = true;
-      bc_showHtml(cm_data);
-      
-      if (cm_data.similar != '') {
-        if (cm_data.similar.indexOf(',') != -1) {
-          var smlr_list = cm_data.similar.replace(/\s/g, '').split(',');
-          for (var j = 0; j < smlr_list.length; j++) {
-            if (main_data[smlr_list[j]]) bc_showHtml(main_data[smlr_list[j]], 'similar');
-          }
-        } else {
-          if (main_data[cm_data.similar]) bc_showHtml(main_data[cm_data.similar], 'similar');
+    if (el('.bmark_db').classList.contains('bc_shide') && wp.search(chapter_w_rgx) == -1 && el('title').innerHTML.search(chapter_t_rgx) == -1) {
+      el('.bc_toggle').click();
+    }  
+    
+    el('.cm_edit', 'all').forEach(function(item) {
+      item.addEventListener('click', function() {
+        bc_editData('comic', main_data[item.parentNode.dataset.id]);
+      });
+    });
+    
+    el('.cm_delete', 'all').forEach(function(item) {
+      item.addEventListener('click', function() {
+        if (confirm('Delete '+ item.parentNode.dataset.id +' ?')) {
+          bc_deleteData(item.parentNode.dataset.id);
         }
+      });
+    });
+  }
+  
+  function bc_checkComic(arr, chk) {
+    var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
+    var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
+    var title_rgx = new RegExp(title_id, 'i');
+    
+    for (var i = 0; i < arr.length; i++) {
+      // same id
+      if (comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id || wp.indexOf('/title/'+ arr[i].mangadex) != -1) {
+        bc_showComic(arr[i], 'same');
+        break;
       }
-      
-      el('.bc_comic').classList.remove('bc_hidden');
-      if (el('.bmark_db').classList.contains('bc_shide') && wp.search(chapter_w_rgx) == -1 && el('title').innerHTML.search(chapter_t_rgx) == -1) {
-        el('.bc_toggle').click();
-      }  
-      
-      el('.cm_edit', 'all').forEach(function(item) {
-        item.addEventListener('click', function() {
-          bc_editData('comic', main_data[item.parentNode.dataset.id]);
-        });
-      });
-      
-      el('.cm_delete', 'all').forEach(function(item) {
-        item.addEventListener('click', function() {
-          if (confirm('Delete '+ item.parentNode.dataset.id +' ?')) {
-            bc_deleteData(item.parentNode.dataset.id);
-          }
-        });
-      });
-    } else {
-      is_comic = false;
-      el('.bc_comic').classList.add('bc_hidden');
+      // contains id, double-check
+      if (chk && (wp.indexOf(arr[i].id) != -1 || arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1)) {
+        bc_showComic(arr[i], 'contains');
+        break;
+      }
+      if (i == arr.length-1) {
+        is_comic = false;
+        el('.bc_comic').classList.add('bc_hidden');
+        if (!chk) bc_checkComic(arr, 'double-check'); //double check if title not same as id
+      }
     }
   }
   
@@ -351,7 +354,8 @@
     firebase.database().ref('bookmark/comic').once('value', function(snapshot) {
       main_data = snapshot.val();
       arr_data = bc_genData(snapshot.val());
-      if (wp != '/' || wp.search(/\/(\?s=|search\?)/) == -1) bc_showComic(arr_data); //check if comic data exist and show bookmark
+      console.log('comic bookmark: '+ arr_data.length);
+      if (wp != '/' || wp.search(/\/(\?s=|search\?)/) == -1) bc_checkComic(arr_data); //check if comic data exist and show bookmark
       
       if (note != 'start') {
         el('.mn_notif span').innerHTML = 'Done';
@@ -377,7 +381,7 @@
     var b_txt = '';
     // css control already in css tools
     // css bookmark
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db .bc_f_edit{overflow-y:auto;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic a.cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch,.bc_result .cs_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.bc_s_shide .bc_result,.bc_hidden{display:none;}</style>';
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db .bc_f_edit{overflow-y:auto;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc a{font-size:14px;text-decoration:none;}.bc_text{padding:4px 8px;margin:4px;}.bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.bc_active{background:#238636;border-color:#238636;}.bc_danger{background:#ea4335;border-color:#ea4335;}input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._bc:hover{border-color:#3e3949;}.bc_comic .cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_ch,.bc_result .cs_ch{max-width:130px;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}.bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.bc_s_shide .bc_result,.bc_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.bc_mobile .bmark_db{width:80%;flex-direction:column;}.bc_mobile .bmark_db.bc_shide{left:-80%;}.bc_mobile ._bc{font-size:16px;}.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
@@ -529,7 +533,7 @@
     
     el('.bc_form_btn .bc_set').onclick = function() {
       el('.bc_mangadex').value = el('.bc_mangadex').value.toLowerCase();
-      bc_formCheck();
+      if (!bc_formCheck()) return;
       
       el('.mn_notif span').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden','bc_danger');
@@ -545,7 +549,7 @@
     };
     
     el('.bc_form_btn .bc_update').onclick = function() {
-      bc_formCheck();
+      if (!bc_formCheck()) return;
       
       el('.mn_notif span').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden');
