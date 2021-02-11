@@ -125,53 +125,28 @@
     });
   }
   
-  function bc_searchResult(arr) {
-    var s_txt = '<div class="cs_list" style="margin-bottom:10px;"><ul>';
-    if (arr.length != 0) {
-      for (var i = 0; i < arr.length; i++) {
-        s_txt += '<li class="_cl';
-        if (i+1 < arr.length) s_txt += ' bc_line';
-        s_txt += ' flex_wrap" data-id="'+ arr[i].id +'">';
-        s_txt += '<a class="_bc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
-        if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
-        s_txt += '</a>';
-        s_txt += '<input class="cs_ch _bc bc_50" type="text" value="'+ arr[i].chapter + (arr[i].note ? ' ('+ arr[i].note +')' : '') +'" disabled>';
-        s_txt += '<button class="cs_edit _bc">Edit</button>';
-        s_txt += '<button class="cs_delete _bc" title="Delete">X</button>';
-        s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
-        s_txt += '</li>';
-      }
-    } else {
-      s_txt += '<li>Oops! Comic not found</li>';
+  function bc_formCheck() {
+    if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
+      alert('id or chapter is empty');
+      return;
     }
-    s_txt += '</ul></div>';
-    s_txt += '<div class="cs_text flex"><span class="bc_text">Search Result</span><span class="f_grow"></span><button class="cs_close _bc">Close</button></div>';
-    
-    el('.bc_result').innerHTML = s_txt;
-    el('.bc_result').classList.remove('bc_hidden');
-    el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
-    el('.bmark_db').classList.remove('bc_s_shide');
-      
-    el('.cs_close').onclick = function() {
-      is_search = false;
-      el('.bc_result').classList.add('bc_hidden');
-      el('.bc_search input').value = '';
-      el('.bmark_db').classList.add('bc_s_shide');
-    };
-    
-    el('.cs_edit', 'all').forEach(function(item) {
-      item.addEventListener('click', function() {
-        bc_editData('search', main_data[item.parentNode.dataset.id]);
-      });
-    });
-    
-    el('.cs_delete', 'all').forEach(function(item) {
-      item.addEventListener('click', function() {
-        if (confirm('Delete '+ item.parentNode.dataset.id +' ?')) {
-          bc_deleteData(item.parentNode.dataset.id);
-        }
-      });
-    });
+    if (el('.bc_type').value == '') {
+      alert('comic type is empty');
+      return;
+    }
+    if (el('.bc_mangadex').value == '') {
+      alert('mangadex id is empty or fill with "none"');
+      return;
+    } else {
+      if (el('.bc_mangadex').value == 'none' && el('.bc_image').value == '') {
+        alert('cover image is empty');
+        return;
+      }
+      if (el('.bc_mangadex').value != 'none' && el('.bc_image').value != '') {
+        alert('delete image, image is included in mangadex id');
+        return;
+      }
+    }
   }
   
   function bc_resetData() {
@@ -227,6 +202,55 @@
       el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ');
       el('.bc_mgdx_search').classList.remove('bc_hidden');
     }
+  }
+  
+  function bc_searchResult(arr) {
+    var s_txt = '<div class="cs_list" style="margin-bottom:10px;"><ul>';
+    if (arr.length != 0) {
+      for (var i = 0; i < arr.length; i++) {
+        s_txt += '<li class="_cl';
+        if (i+1 < arr.length) s_txt += ' bc_line';
+        s_txt += ' flex_wrap" data-id="'+ arr[i].id +'">';
+        s_txt += '<a class="_bc bc_100" href="'+ arr[i].url +'" target="_blank">'+ arr[i].title;
+        if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
+        s_txt += '</a>';
+        s_txt += '<input class="cs_ch _bc bc_50" type="text" value="'+ arr[i].chapter + (arr[i].note ? ' ('+ arr[i].note +')' : '') +'" disabled>';
+        s_txt += '<button class="cs_edit _bc">Edit</button>';
+        s_txt += '<button class="cs_delete _bc" title="Delete">X</button>';
+        s_txt += '<span class="cs_num _bc bc_selected">'+ (i+1) +'</span>';
+        s_txt += '</li>';
+      }
+    } else {
+      s_txt += '<li>Oops! Comic not found</li>';
+    }
+    s_txt += '</ul></div>';
+    s_txt += '<div class="cs_text flex"><span class="bc_text">Search Result</span><span class="f_grow"></span><button class="cs_close _bc">Close</button></div>';
+    
+    el('.bc_result').innerHTML = s_txt;
+    el('.bc_result').classList.remove('bc_hidden');
+    el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
+    el('.bmark_db').classList.remove('bc_s_shide');
+      
+    el('.cs_close').onclick = function() {
+      is_search = false;
+      el('.bc_result').classList.add('bc_hidden');
+      el('.bc_search input').value = '';
+      el('.bmark_db').classList.add('bc_s_shide');
+    };
+    
+    el('.cs_edit', 'all').forEach(function(item) {
+      item.addEventListener('click', function() {
+        bc_editData('search', main_data[item.parentNode.dataset.id]);
+      });
+    });
+    
+    el('.cs_delete', 'all').forEach(function(item) {
+      item.addEventListener('click', function() {
+        if (confirm('Delete '+ item.parentNode.dataset.id +' ?')) {
+          bc_deleteData(item.parentNode.dataset.id);
+        }
+      });
+    });
   }
   
   function bc_showHtml(data, note) {
@@ -504,24 +528,7 @@
     
     el('.bc_form_btn .bc_set').onclick = function() {
       el('.bc_mangadex').value = el('.bc_mangadex').value.toLowerCase();
-      
-      if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
-        alert('id or chapter is empty');
-        return;
-      }
-      if (el('.bc_mangadex').value == '') {
-        alert('mangadex id is empty or fill with "none"');
-        return;
-      } else {
-        if (el('.bc_mangadex').value == 'none' && el('.bc_image').value == '') {
-          alert('cover image is empty');
-          return;
-        }
-        if (el('.bc_mangadex').value != 'none' && el('.bc_image').value != '') {
-          alert('delete image, image is included in mangadex id');
-          return;
-        }
-      }
+      bc_formCheck();
       
       el('.mn_notif span').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden','bc_danger');
@@ -537,23 +544,7 @@
     };
     
     el('.bc_form_btn .bc_update').onclick = function() {
-      if (el('.bc_id').value == '' || el('.bc_ch').value == '') {
-        alert('id or chapter is empty');
-        return;
-      }
-      if (el('.bc_mangadex').value == '') {
-        alert('mangadex id is empty or fill with "none"');
-        return;
-      } else {
-        if (el('.bc_mangadex').value == 'none' && el('.bc_image').value == '') {
-          alert('cover image is empty');
-          return;
-        }
-        if (el('.bc_mangadex').value != 'none' && el('.bc_image').value != '') {
-          alert('delete image, image is included in mangadex id');
-          return;
-        }
-      }
+      bc_formCheck();
       
       el('.mn_notif span').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden');
