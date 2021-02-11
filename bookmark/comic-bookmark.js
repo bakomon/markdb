@@ -211,9 +211,9 @@
         s_txt += '<li class="_cl';
         if (i+1 < arr.length) s_txt += ' bc_line';
         s_txt += ' flex_wrap" data-id="'+ arr[i].id +'">';
-        s_txt += '<button class="_bc bc_100" onclick="window.open('+ arr[i].url +')">'+ arr[i].title;
+        s_txt += '<div class="_bc bc_100" onclick="window.open('+ arr[i].url +')">'+ arr[i].title;
         if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
-        s_txt += '</button>';
+        s_txt += '</div>';
         s_txt += '<input class="cs_ch _bc bc_50" type="text" value="'+ arr[i].chapter + (arr[i].note ? ' ('+ arr[i].note +')' : '') +'" disabled>';
         if (arr[i].read != '') s_txt += '<button class="_bc bc_selected" onclick="window.open('+ arr[i].read +')">Read</button>';
         s_txt += '<button class="cs_edit _bc">Edit</button>';
@@ -260,9 +260,9 @@
     s_txt += '<li class="_cm';
     if (data.similar != '' && note) s_txt += ' cm_similar';
     s_txt += ' flex_wrap" data-id="'+ data.id +'">';
-    s_txt += '<button class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'" '+ (chk && el('title').innerHTML.search(chapter_t_rgx) == -1 ? '' : 'onclick="window.open('+ data.url +')"') +'>'+ data.title;
+    s_txt += '<div class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'"'+ (chk && el('title').innerHTML.search(chapter_t_rgx) == -1 ? '' : ' onclick="window.open('+ data.url +')"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
-    s_txt += '</button>';
+    s_txt += '</div>';
     s_txt += '<input class="cm_ch _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
     if (data.read != '') s_txt += '<button class="_bc bc_selected'+ (chk ? '' : ' bc_hidden') +'" onclick="window.open('+ data.read +')">Read</button>';
     s_txt += '<button class="cm_edit _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
