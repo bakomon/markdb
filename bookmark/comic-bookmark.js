@@ -505,7 +505,7 @@
       el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
       el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
-      el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ');
+      el('.bc_mgdx_search').href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ') +'#listing';
       el('.bc_mgdx_search').classList.remove('bc_hidden');
       // for .bc_image if mangadex id exists then leave it blank, if none then it must be filled
       el('.bc_last').valueAsDate = local_date;
