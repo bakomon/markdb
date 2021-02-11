@@ -335,7 +335,7 @@
     };
     
     // after html and js _reader loaded then auto click to stop page
-    if (el('.rc_reload').classList.contains('rc_hidden')) el('.rc_stop').click();
+    if (el('.rc_reload' && wh.indexOf('webtoons') == -1).classList.contains('rc_hidden')) el('.rc_stop').click();
   }
   
   function startImage(prnt, imgs) {
@@ -385,7 +385,7 @@
       if (!imgArea) return;
     }
     if (prnt && imgs) imgArea = prnt;
-    if (el('img[src=""]')) removeElem(el('img[src=""]')); //komikcast
+    if (el('img[src=""]', imgArea)) removeElem(el('img[src=""]', imgArea)); //komikcast
     imgList = prnt && imgs ? imgs.split(',') : el('img', imgArea, 'all');
     if (!imgList) {return}
     console.log('imgList.length: '+ imgList.length);
