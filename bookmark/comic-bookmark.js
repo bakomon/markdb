@@ -262,7 +262,7 @@
     s_txt += '<li class="_cm';
     if (data.similar != '' && note) s_txt += ' cm_similar';
     s_txt += ' flex_wrap" data-id="'+ data.id +'">';
-    s_txt += '<div class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'"'+ (chk && el('title').innerHTML.search(chapter_t_rgx) == -1 ? '' : ' onclick="window.open(\''+ data.url +'\')"') +'>'+ data.title;
+    s_txt += '<div class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'"'+ (wh.indexOf(data.host) != -1 && el('title').innerHTML.search(chapter_t_rgx) == -1 ? '' : ' onclick="window.open(\''+ data.url +'\')"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</div>';
     s_txt += '<input class="cm_ch _bc bc_100" type="text" value="'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'" disabled>';
@@ -443,14 +443,16 @@
     });
     
     document.onkeyup = function(e) {
+      // enter to search
       if (el('.bc_search input') === document.activeElement && e.keyCode == 13) {
-        el('.bc_search button').click(); //enter to search
+        el('.bc_search button').click();
       }
       // enter to set/update
       if (!el('.bc_form').classList.contains('bc_hidden') && e.keyCode == 13) {
         if (el('.bc_set').classList.contains('bc_hidden')) el('.bc_update').click();
         if (el('.bc_update').classList.contains('bc_hidden')) el('.bc_set').click();
       }
+      document.activeElement.blur();
     };
     
     el('.bc_toggle').onclick = function() {
@@ -498,7 +500,6 @@
     el('.bc_search button').onclick = function() {
       if (el('.bc_search input').value == '') return;
       is_search = true;
-      el('.bc_search input').blur();
       el('.mn_notif span').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden');
       bc_mainData('search', el('.bc_search input').value);
