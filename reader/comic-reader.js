@@ -431,7 +431,7 @@
         imgSize = imgSize == 0 || imgSize > 800 ? 's'+ imgSize : 's1600';
       }
       
-      reader_html += '<a href="'+ imgLink +'" target="_blank"><img style="min-height:750px;" data-read-img="'+ imgLink +'" title="' + (j+1) + '"></a>';
+      reader_html += '<div onclick="window.open(\''+ imgLink +'\')"><img style="min-height:750px;" data-read-img="'+ imgLink +'" title="' + (j+1) + '"></div>';
     }
     reader_html += '</div>';
     
