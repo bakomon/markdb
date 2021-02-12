@@ -171,7 +171,7 @@
     if (chcdn) r_txt += '<div class="rc_cdn rc_btn _rc" title="'+ cdnName +'">CDN</div>';
     if (chgi) r_txt += '<div class="rc_size rc_btn _rc">'+ imgSize +'</div>';
     r_txt += '</div>'; //.rc_others
-    r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" oncontextmenu="window.location.href=this.dataset.href" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
+    r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" oncontextmenu="window.open(this.dataset.href)" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
     r_txt += '<div class="rc_home rc_line rc_100"><button class="rc_btn _rc" onclick="window.location.href=\'//\'+window.location.hostname">Homepage</button></div>';
     r_txt += '<div class="rc_load rc_line flex">';
     r_txt += '<button class="rc_ld_img rc_btn _rc" title="alt + a">Load</button>';
