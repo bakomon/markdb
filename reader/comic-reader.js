@@ -87,7 +87,7 @@
   
   function startChange(img, note) {
     var imgs = '';
-    if (!img.classList.contains('rc_loaded') && getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) || note != undefined) {
+    if ((getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) && !img.classList.contains('rc_loaded')) || note != undefined) {
       imgs = img.dataset.readImg;
       if (loadCDN) imgs = imgs.replace(/(?:i\d+|cdn)\.(wp|statically)\.(?:com|io)\//g, '');
       if (imgs.search(/(pending\-load|cdn\.statically\.io)/) != -1) {
@@ -226,7 +226,7 @@
           startChange(img[i], 'all');
         }
       } else {
-        startChange(img[el('.rc_all').value - 1]);
+        startChange(img[Number(el('.rc_all').value) - 1], 'single');
       }
     };
     
