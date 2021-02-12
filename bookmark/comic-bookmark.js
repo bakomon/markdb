@@ -498,6 +498,7 @@
     el('.bc_search button').onclick = function() {
       if (el('.bc_search input').value == '') return;
       is_search = true;
+      el('.bc_search input').blur();
       el('.mn_notif span').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden');
       bc_mainData('search', el('.bc_search input').value);
