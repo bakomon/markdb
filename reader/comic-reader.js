@@ -87,19 +87,20 @@
   
   function startChange(img, note) {
     var imgs = '';
-    if (getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) || note != undefined) {
+    if (!img.classList.contains('rc_loaded') && getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) || note != undefined) {
       imgs = img.dataset.readImg;
       if (loadCDN) imgs = imgs.replace(/(?:i\d+|cdn)\.(wp|statically)\.(?:com|io)\//g, '');
       if (imgs.search(/(pending\-load|cdn\.statically\.io)/) != -1) {
         imgs = imgs.replace(/\?(.*)/g, ''); //remove location.search ?=
-      } else if (loadSz) {
+      } else if (loadSize) {
         var sNum = el('.rc_size').innerHTML;
         imgs = imgs.replace(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\//, '/'+ sNum +'/');
         imgs = imgs.replace(/=[swh](\d+)[^\n]*/, '='+ sNum);
         if (imgs.indexOf('docs.google') != -1) imgs = 'https://lh3.googleusercontent.com/d/'+ imgs.match(/[^\n]+id=([^&]+)/)[1] +'='+ sNum;
       }
       img.src = imgs;
-      setTimeout(function() {img.style.minHeight = null}, 2000);
+      img.classList.add('rc_loaded');
+      setTimeout(function() {img.style.minHeight = null}, 1500);
     }
   }
   
@@ -107,10 +108,10 @@
     window.onscroll = function() {
       if (!isPause) {
         for (var i = 0; i < img.length; i++) {
-          if (!lsImg) {
+          if (!loadImage) {
             startChange(img[i]);
           }
-          if (img[img.length-1].src) {lsImg = true;}
+          if (img[img.length-1].src) {loadImage = true;}
         }
       }
     };
@@ -170,7 +171,7 @@
     if (chcdn) r_txt += '<div class="rc_cdn rc_btn _rc" title="'+ cdnName +'">CDN</div>';
     if (chgi) r_txt += '<div class="rc_size rc_btn _rc">'+ imgSize +'</div>';
     r_txt += '</div>'; //.rc_others
-    r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
+    r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" oncontextmenu="window.location.href=this.dataset.href" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
     r_txt += '<div class="rc_home rc_line rc_100"><button class="rc_btn _rc" onclick="window.location.href=\'//\'+window.location.hostname">Homepage</button></div>';
     r_txt += '<div class="rc_load rc_line flex">';
     r_txt += '<button class="rc_ld_img rc_btn _rc" title="alt + a">Load</button>';
@@ -219,8 +220,8 @@
     
     // Load all images
     el('.rc_load .rc_ld_img').onclick =  function() {
-      if (el('.rc_all').value == 'all') {
-        lsImg = true;
+      if (el('.rc_all').value.search(/all/i) != -1) {
+        loadImage = true;
         for (var i = 0; i < img.length; i++) {
           startChange(img[i], 'all');
         }
@@ -238,7 +239,7 @@
     if (chgi) {
       el('.rc_size').onclick = function() {
         this.innerHTML = this.innerHTML == imgSize ? 's15000' : imgSize;
-        loadSz = this.innerHTML == imgSize ? false : true;
+        loadSize = this.innerHTML == imgSize ? false : true;
       };
     }
     
@@ -821,8 +822,8 @@
   var chcdn = false; //if image has wp.com or statically.io
   var chgi = false; //if google images
   var loadCDN = false;
-  var loadSz = false;
-  var lsImg = false; //all images loaded
+  var loadSize = false;
+  var loadImage = false; //all images loaded
   var isPause = false; //pause images from loading
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
   var imgSize = ''; //image size
@@ -873,6 +874,7 @@
     var el_a = el('a', 'all');
     for (var i = 0; i < el_a.length; i++) {
       var new_a = copyAttribute(el_a[i], 'i');
+      new_a.classList.add('link-mod');
       new_a.style.cssText = 'font-style:normal;cursor:pointer;';
       new_a.innerHTML = el_a[i].innerHTML;
       el_a[i].parentNode.insertBefore(new_a, el_a[i]);
