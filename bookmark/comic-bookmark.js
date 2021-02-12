@@ -452,7 +452,7 @@
         if (el('.bc_set').classList.contains('bc_hidden')) el('.bc_update').click();
         if (el('.bc_update').classList.contains('bc_hidden')) el('.bc_set').click();
       }
-      document.activeElement.blur();
+      if (e.keyCode == 13) document.activeElement.blur();
     };
     
     el('.bc_toggle').onclick = function() {
