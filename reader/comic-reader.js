@@ -826,6 +826,7 @@
   var loadSize = false;
   var loadImage = false; //all images loaded
   var isPause = false; //pause images from loading
+  var isComic = false;
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
   var imgSize = ''; //image size
   var checkPoint, imgArea, imgList, cdnName, titleId, wpId, zoomID;
@@ -965,7 +966,18 @@
     }
   }, 100);
   
-  if ((wp.search(chapter_w_rgx) != -1 || wl.search.search(chapter_w_rgx) != -1 || el('title').innerHTML.search(chapter_t_rgx) != -1) && wl.search.indexOf('project') == -1 && wh.search(read_rgx) == -1) {
+  // check if page is comic/project
+  if (localStorage.getItem('comic_tools_list')) {
+    var data_list = JSON.parse(localStorage.getItem('comic_tools_list'));
+    for (var j = 0; j < data_list.length; j++) {
+      if (data_list[j].url.indexOf(wp) != -1) {
+        isComic = true;
+        break;
+      }
+    }
+  }
+  
+  if ((wp.search(chapter_w_rgx) != -1 || wl.search.search(chapter_w_rgx) != -1 || el('title').innerHTML.search(chapter_t_rgx) != -1) && !isComic && wh.search(read_rgx) == -1) {
     titleId = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(chapter_t_rgx, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '').replace(/[^\s\w]/g, '').replace(/\s/g, '-').toLowerCase();
     wpId = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
     zoomID = wh.search(/webtoons/i) != -1 ? wpId : titleId;
