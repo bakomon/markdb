@@ -299,7 +299,7 @@
       }
     }
     
-    if (el('.bmark_db').classList.contains('bc_shide') && wp.search(chapter_w_rgx) == -1 && el('title').innerHTML.search(chapter_t_rgx) == -1) {
+    if (el('.bmark_db').classList.contains('bc_shide') && (data.url.indexOf(wp) != -1 || (wp.search(chapter_w_rgx) == -1 && el('title').innerHTML.search(chapter_t_rgx) == -1))) {
       el('.bc_toggle').click();
     }  
     
