@@ -342,7 +342,7 @@
     }
   }
   
-  function bc_genList() {
+  function bc_genList(data) {
     var list_txt = '{"list_comic":[';
     for (var i = 0; i < data.length; i++) {
       list_txt += '{"url":"'+ data.url +'"}';
