@@ -575,6 +575,7 @@
       document.body.classList.add('click');
       el('.main').id = 'main-mod';
       el('.main').classList.remove('main'); //stop infinite scroll
+      localStorage.removeItem('history');
     } else if (wh.indexOf('mangacanblog') != -1) { //click
       var eAll = el('.pagers a');
       if (eAll.innerHTML.indexOf('Full') != -1) eAll.click();
