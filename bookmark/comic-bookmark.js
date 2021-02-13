@@ -345,7 +345,7 @@
   function bc_genList(data) {
     var list_txt = '{"list_comic":[';
     for (var i = 0; i < data.length; i++) {
-      list_txt += '{"url":"'+ data.url +'"}';
+      list_txt += '{"url":"'+ data[i].url +'"}';
       if (i < data.length-1) list_txt += ',';
     }
     list_txt += ']}';
