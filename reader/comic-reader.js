@@ -969,7 +969,7 @@
   if (localStorage.getItem('comic_tools_list')) {
     var data_list = JSON.parse(localStorage.getItem('comic_tools_list'));
     for (var j = 0; j < data_list.length; j++) {
-      if (data_list[j].url.indexOf(wp) != -1) {
+      if (wp != '/' && data_list[j].url.indexOf(wp) != -1) {
         console.log('project page: '+ data_list[j].url);
         isComic = true;
         break;
