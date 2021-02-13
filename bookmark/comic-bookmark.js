@@ -366,7 +366,7 @@
       arr_data = bc_genData(snapshot.val());
       console.log('comic bookmark: '+ arr_data.length);
       bc_genList(arr_data);
-      if (wp != '/' || wp.search(/\/(\?s=|search\?)/) == -1) bc_checkComic(arr_data); //check if comic data exist and show bookmark
+      if (wp != '/' && wp.search(/\/(\?s=|search\?)/) == -1) bc_checkComic(arr_data); //check if comic data exist and show bookmark
       
       if (note != 'start') {
         el('.mn_notif span').innerHTML = 'Done';
