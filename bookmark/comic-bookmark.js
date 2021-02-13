@@ -330,7 +330,7 @@
         break;
       }
       // contains id, double-check
-      if (chk && (wp.indexOf(arr[i].id) != -1 || arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1)) {
+      if (chk && (wp.indexOf(arr[i].id) != -1 || arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1) || arr[i].url.indexOf(wp) != -1) {
         bc_showComic(arr[i], 'contains');
         break;
       }
