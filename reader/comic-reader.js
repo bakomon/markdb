@@ -836,7 +836,7 @@
   var read_rgx = /tenseiscans|komikempus|kurutonime/;
   
   if (wh.search(/mangaku|komikru|comicfx/) != -1) document.body.classList.add('_rightclick');
-  if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga/) != -1) document.body.classList.add('new_tab');
+  if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('new_tab');
   if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
   if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|asurascans/) != -1) document.body.classList.add('new_themesia');
   
