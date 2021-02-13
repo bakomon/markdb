@@ -835,7 +835,6 @@
   var chapter_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i; //check for window.location
   //var chapter_w_rgx = /chapter(\/|\-)|\-bahasa|\-indonesia|ch\-|(\-|\/)\d+|(\-|\/)ep\d+|(chap|episode)\_|\/c\d+/;
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
-  var read_rgx = /tenseiscans|komikempus|kurutonime/;
   
   if (wh.search(/mangaku|komikru|comicfx/) != -1) document.body.classList.add('_rightclick');
   if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('new_tab');
@@ -977,7 +976,7 @@
     }
   }
   
-  if ((wp.search(chapter_w_rgx) != -1 || wl.search.search(chapter_w_rgx) != -1 || el('title').innerHTML.search(chapter_t_rgx) != -1) && wl.search.indexOf('project') == -1 && wh.search(read_rgx) == -1 && !isComic) {
+  if ((wp.search(chapter_w_rgx) != -1 || wl.search.search(chapter_w_rgx) != -1 || el('title').innerHTML.search(chapter_t_rgx) != -1) && wl.search.indexOf('project') == -1 && !isComic) {
     titleId = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(chapter_t_rgx, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '').replace(/[^\s\w]/g, '').replace(/\s/g, '-').toLowerCase();
     wpId = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
     zoomID = wh.search(/webtoons/i) != -1 ? wpId : titleId;
