@@ -342,6 +342,16 @@
     }
   }
   
+  function bc_genList() {
+    var list_txt = '{"list_comic":[';
+    for (var i = 0; i < data.length; i++) {
+      list_txt += '{"url":"'+ data.url +'"}';
+      if (i < data.length-1) list_txt += ',';
+    }
+    list_txt += ']}';
+    localStorage.setItem('comic_tools_list', list_txt);
+  }
+  
   function bc_genData(json) {
     var arr = [];
     for (var key in json) {
@@ -355,6 +365,7 @@
       main_data = snapshot.val();
       arr_data = bc_genData(snapshot.val());
       console.log('comic bookmark: '+ arr_data.length);
+      bc_genList(arr_data);
       if (wp != '/' || wp.search(/\/(\?s=|search\?)/) == -1) bc_checkComic(arr_data); //check if comic data exist and show bookmark
       
       if (note != 'start') {
