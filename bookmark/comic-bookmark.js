@@ -343,12 +343,12 @@
   }
   
   function bc_genList(data) {
-    var list_txt = '{"list_comic":[';
+    var list_txt = '[';
     for (var i = 0; i < data.length; i++) {
       list_txt += '{"url":"'+ data[i].url +'"}';
       if (i < data.length-1) list_txt += ',';
     }
-    list_txt += ']}';
+    list_txt += ']';
     localStorage.setItem('comic_tools_list', list_txt);
   }
   
