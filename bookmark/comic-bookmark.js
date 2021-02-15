@@ -327,6 +327,7 @@
   }
   
   function bc_checkComic(arr, chk) {
+    var id_chk = false;
     var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
     var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
     var title_rgx = new RegExp(title_id, 'i');
@@ -334,23 +335,26 @@
     for (var i = 0; i < arr.length; i++) {
       // same id
       if (comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id || wp.indexOf('/title/'+ arr[i].mangadex +'/') != -1) {
+        id_chk = true;
         bc_showComic(arr[i], 'same');
         break;
       }
       // contains id, check 2
       if (chk == 2 && (arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1 || arr[i].url.indexOf(wp) != -1)) {
+        id_chk = true;
         bc_showComic(arr[i], 'contains');
         break;
       }
       // wp contains id, check 3
       if (chk == 3 && wp.indexOf(arr[i].id) != -1) {
+        id_chk = true;
         bc_showComic(arr[i], 'wp contains');
       }
-      if (i == arr.length-1) {
+      if (i == arr.length-1 && !id_chk) {
         chk = chk ? (chk+1) : 1;
+        if (chk <= 3) bc_checkComic(arr, chk); //double check if title not same as id
         is_comic = false;
         el('.bc_comic').classList.add('bc_hidden');
-        if (chk <= 3) bc_checkComic(arr, chk); //double check if title not same as id
       }
     }
   }
