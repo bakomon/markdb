@@ -268,7 +268,7 @@
     if (data.similar != '' && note) s_txt += ' cm_similar';
     if (data.read != '') s_txt += ' bc_url_read';
     s_txt += ' flex_wrap">';
-    s_txt += '<div class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'"'+ (wh.indexOf(data.host) != -1 && el('title').innerHTML.search(chapter_t_rgx) == -1 ? '' : ' onclick="window.open(\''+ data.url +'\')"') +'>'+ data.title;
+    s_txt += '<div class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'"'+ (!note && wh.indexOf(data.host) != -1 && el('title').innerHTML.search(chapter_t_rgx) == -1 ? '' : ' onclick="window.open(\''+ data.url +'\')"') +'>'+ data.title;
     if (data.alternative != '') s_txt += ', '+ data.alternative;
     s_txt += '</div>';
     s_txt += '<div class="flex bc_100" data-id="'+ data.id +'">';
