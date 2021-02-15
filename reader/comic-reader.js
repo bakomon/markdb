@@ -453,7 +453,7 @@
       var e_post = wh.indexOf('animesc-kun') != -1 ? el('#post-wrapper') : el('#main-wrapper');
       e_post.style.width = '100%';
       el('#sidebar-wrapper').parentNode.removeChild(el('#sidebar-wrapper'));
-    } else if (wh.indexOf('mangadex') != -1) {
+    } else if (wh.indexOf('mangadex') != -1 && !isMobile) {
       imgArea.parentNode.style.cssText = 'padding-right: 20vw !important;';
     }
     
@@ -965,7 +965,7 @@
     }
   }, 100);
   
-  // check if page is comic/project
+  // check if page is comic/project, from comic bookmark
   if (localStorage.getItem('comic_tools_list')) {
     var data_list = JSON.parse(localStorage.getItem('comic_tools_list'));
     for (var j = 0; j < data_list.length; j++) {
