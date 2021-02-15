@@ -846,7 +846,7 @@
   // custom
   if (wh.indexOf('webtoons') != -1) {
     el('#wrap').classList.add('no-css');
-  } else if (wh.indexOf('komikcast') != -1) {
+  } else if (wh.search(/komikcast|masterkomik/) != -1) {
     // https://codepen.io/crmolloy/pen/YqdagV
     var windowOpenBackup = window.open;
     window.open = function(url, name, features) {
@@ -982,6 +982,8 @@
     zoomID = wh.search(/webtoons/i) != -1 ? wpId : titleId;
     console.log('page: chapter');
     checkAll();
+    if (localStorage.getItem('bookmark')) localStorage.removeItem('bookmark');
     if (localStorage.getItem('history')) localStorage.removeItem('history');
+    if (localStorage.getItem('bm_history')) localStorage.removeItem('bm_history');
   }
 })();
