@@ -846,19 +846,16 @@
   // custom
   if (wh.indexOf('webtoons') != -1) {
     el('#wrap').classList.add('no-css');
-  } else if (wh.search(/komikcast|masterkomik/) != -1) {
+  }
+  if (wh.search(/komikcast|masterkomik/) != -1) {
     // https://codepen.io/crmolloy/pen/YqdagV
     var windowOpenBackup = window.open;
     window.open = function(url, name, features) {
       console.log('window.open caught!');
       window.open = windowOpenBackup;
     };
-  } else if (document.body.classList.contains('_rightclick')) {
-    // re-enable right click (don't forget "true") https://stackoverflow.com/a/43754205
-    window.addEventListener('contextmenu', function(e) {
-      e.stopPropagation();
-    }, true);
-  } else if (wh.indexOf('softkomik') != -1) {
+  }
+  if (wh.indexOf('softkomik') != -1) {
     var soft_chk = setInterval(function() {
       if (el('.container .relatif .bg-content')) {
         clearInterval(soft_chk);
@@ -869,7 +866,14 @@
         });
       }
     }, 100);
-  } else if (document.body.classList.contains('new_tab')) {
+  }
+  if (document.body.classList.contains('_rightclick')) {
+    // re-enable right click (don't forget "true") https://stackoverflow.com/a/43754205
+    window.addEventListener('contextmenu', function(e) {
+      e.stopPropagation();
+    }, true);
+  }
+  if (document.body.classList.contains('new_tab')) {
     // skip syndication.exdynsrv.com || jomtingi.net
     var el_a = el('a', 'all');
     for (var i = 0; i < el_a.length; i++) {
