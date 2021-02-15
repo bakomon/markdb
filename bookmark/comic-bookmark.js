@@ -533,6 +533,7 @@
     el('.bc_form_btn .bc_gen').onclick = function() {
       var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
       el('.bc_id').value = comic_id;
+      if (wh.indexOf('mangadex') != -1 && wp.indexOf('/title/') != -1) el('.bc_mangadex').value = wp.match(/\/title\/([^\/]+)/)[1];
       el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
       el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
