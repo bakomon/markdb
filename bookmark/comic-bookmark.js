@@ -327,6 +327,7 @@
   }
   
   function bc_checkComic(arr, chk) {
+    chk = chk ? (chk+1) : 1;
     var id_chk = false;
     var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
     var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
@@ -351,10 +352,9 @@
         bc_showComic(arr[i], 'wp contains');
       }
       if (i == arr.length-1 && !id_chk) {
-        chk = chk ? (chk+1) : 1;
-        if (chk <= 3) bc_checkComic(arr, chk); //double check if title not same as id
         is_comic = false;
         el('.bc_comic').classList.add('bc_hidden');
+        if (chk <= 3) bc_checkComic(arr, chk); //double check if title not same as id
       }
     }
   }
