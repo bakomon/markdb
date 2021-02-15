@@ -141,6 +141,7 @@
     el('.bc_last').value = '';
     el('.bc_similar').value = '';
     el('.bc_mgdx_search').classList.add('bc_hidden');
+    el('.bc_mgdx_open').classList.add('bc_hidden');
     el('.bc_date_before').classList.add('bc_hidden');
     setTimeout(function() {
       el('.mn_notif').classList.add('bc_hidden');
@@ -179,6 +180,7 @@
       el('.bc_mgdx_search').dataset.href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ') +'#listing';
       el('.bc_mgdx_search').classList.remove('bc_hidden');
     }
+    if (el('.bc_mangadex').value != '' && el('.bc_mangadex').value != 'none') el('.bc_mgdx_open').classList.remove('bc_hidden');
   }
   
   function bc_formCheck() {
@@ -393,7 +395,7 @@
       query = note != 'start' && is_search ? el('.bc_search input').value : query;
       if (query) {
         var key_rgx = new RegExp(query, 'ig');
-        var search_data = arr_data.filter(item => (item.id.search(key_rgx) != -1 || item.title.search(key_rgx) != -1 || item.alternative.search(key_rgx) != -1 || item.note.search(key_rgx) != -1 || item.type.search(key_rgx) != -1 || item.host.search(key_rgx) != -1));
+        var search_data = arr_data.filter(item => (item.id.search(key_rgx) != -1 || item.mangadex.search(key_rgx) != -1 || item.title.search(key_rgx) != -1 || item.alternative.search(key_rgx) != -1 || item.note.search(key_rgx) != -1 || item.type.search(key_rgx) != -1 || item.host.search(key_rgx) != -1));
         bc_searchResult(search_data);
       }
     });
@@ -413,7 +415,7 @@
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
     b_txt += '<input class="bc_id _bc bc_100" type="text" placeholder="ID">';
-    b_txt += '<div class="flex bc_100"><input class="bc_mangadex _bc bc_100" type="text" placeholder="Mangadex ID"><button class="bc_mgdx_search _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">Search</button></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_mangadex _bc bc_100" type="text" placeholder="Mangadex ID"><button class="bc_mgdx_search _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">Search</button><button class="bc_mgdx_open _bc bc_selected bc_hidden" onclick="window.open(\'//mangadex.org/title/\'+document.querySelector(\'.bc_mangadex\').value+\'/\')">Open</button></div>';
     b_txt += '<input class="bc_title _bc bc_100" type="text" placeholder="Title">';
     b_txt += '<input class="bc_alt _bc bc_100" type="text" placeholder="Alternative Title">';
     b_txt += '<input class="bc_ch _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
