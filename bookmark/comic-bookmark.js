@@ -428,7 +428,7 @@
     b_txt += '<div class="flex bc_100"><input class="bc_last _bc bc_100" type="date" title="Last Update"><button class="bc_date_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
     b_txt += '<input class="bc_similar _bc bc_100" type="text" placeholder="Similar">';
     b_txt += '</div>';// .bc_form
-    b_txt += '<div class="bc_form_btn bc_100 flex bc_hidden"><button class="bc_gen _bc">Generate</button><span class="f_grow"></span><button class="bc_close _bc">Close</button><button class="bc_set _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
+    b_txt += '<div class="bc_form_btn bc_100 flex bc_hidden"><button class="bc_gen _bc'+ (wp != '/' && wp.search(/\/(\?s=|search\?)/) == -1 ? '' : ' bc_hidden') +'">Generate</button><span class="f_grow"></span><button class="bc_close _bc">Close</button><button class="bc_set _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
     b_txt += '<div class="bc_result bc_line bc_hidden"></div>';
     b_txt += '<div class="bc_tr1">';
     b_txt += '<div class="bc_comic bc_line bc_hidden"></div>';
