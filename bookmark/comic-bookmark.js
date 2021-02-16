@@ -335,7 +335,7 @@
     
     for (var i = 0; i < arr.length; i++) {
       // same id
-      if (comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id || wp.indexOf('/title/'+ arr[i].mangadex +'/') != -1) {
+      if (wp.indexOf('/title/'+ arr[i].mangadex +'/') != -1 || comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id) {
         id_chk = true;
         bc_showComic(arr[i], 'same');
         break;
