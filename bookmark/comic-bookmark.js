@@ -334,27 +334,33 @@
     var title_rgx = new RegExp(title_id, 'i');
     
     for (var i = 0; i < arr.length; i++) {
-      // same id
-      if (wp.indexOf('/title/'+ arr[i].mangadex +'/') != -1 || comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id) {
+      // mangadex
+      if (wp.indexOf('/title/'+ arr[i].mangadex +'/') != -1) {
+        id_chk = true;
+        bc_showComic(arr[i], 'mangadex');
+        break;
+      }
+      // same id, check 2
+      if (chk == 2 && (comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id)) {
         id_chk = true;
         bc_showComic(arr[i], 'same');
         break;
       }
-      // contains id, check 2
-      if (chk == 2 && (arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1 || arr[i].url.indexOf(wp) != -1)) {
+      // contains id, check 3
+      if (chk == 3 && (arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1 || arr[i].url.indexOf(wp) != -1)) {
         id_chk = true;
         bc_showComic(arr[i], 'contains');
         break;
       }
-      // wp contains id, check 3
-      if (chk == 3 && wp.indexOf(arr[i].id) != -1) {
+      // wp contains id, check 4
+      if (chk == 4 && wp.indexOf(arr[i].id) != -1) {
         id_chk = true;
         bc_showComic(arr[i], 'wp contains');
       }
       if (i == arr.length-1 && !id_chk) {
         is_comic = false;
         el('.bc_comic').classList.add('bc_hidden');
-        if (chk <= 3) bc_checkComic(arr, chk); //double check if title not same as id
+        if (chk <= 4) bc_checkComic(arr, chk); //double check if title not same as id
       }
     }
   }
