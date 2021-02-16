@@ -217,7 +217,7 @@
         if (arr[i].read != '') s_txt += ' bc_url_read';
         s_txt += ' flex_wrap">';
         s_txt += '<div class="_bc bc_100" onclick="window.open(\''+ arr[i].url +'\')">'+ arr[i].title;
-        if (arr[i].alternative != '') s_txt += ', '+ arr[i].alternative;
+        if (arr[i].alternative != '') s_txt += ' | '+ arr[i].alternative;
         s_txt += '</div>';
         s_txt += '<div class="flex bc_100" data-id="'+ arr[i].id +'">';
         s_txt += '<span class="cs_ch _bc bc_100 line_text">'+ arr[i].chapter + (arr[i].note ? ' ('+ arr[i].note +')' : '') +'</span>';
@@ -269,7 +269,7 @@
     if (data.read != '') s_txt += ' bc_url_read';
     s_txt += ' flex_wrap">';
     s_txt += '<div class="_bc bc_100'+ (data.similar != '' && !note ? ' cm_main' : '') +'"'+ (!note && wh.indexOf(data.host) != -1 && el('title').innerHTML.search(chapter_t_rgx) == -1 ? '' : ' onclick="window.open(\''+ data.url +'\')"') +'>'+ data.title;
-    if (data.alternative != '') s_txt += ', '+ data.alternative;
+    if (data.alternative != '') s_txt += ' | '+ data.alternative;
     s_txt += '</div>';
     s_txt += '<div class="flex bc_100" data-id="'+ data.id +'">';
     s_txt += '<span class="cm_ch _bc line_text'+ (chk ? ' bc_100' : ' bc_50') +'">'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'</span>';
@@ -298,7 +298,7 @@
     
     if (data.similar != '') {
       if (data.similar.indexOf(',') != -1) {
-        var smlr_list = data.similar.replace(/\s/g, '').split(',');
+        var smlr_list = data.similar.replace(/\s+/g, '').split(',');
         for (var j = 0; j < smlr_list.length; j++) {
           if (main_data[smlr_list[j]]) bc_showHtml(main_data[smlr_list[j]], 'similar');
         }
