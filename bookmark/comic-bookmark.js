@@ -74,7 +74,7 @@
   function bc_updateData(id, mangadex, title, alternative, chapter, note, type, host, url, read, image, update, similar) {
     firebase.database().ref('bookmark/comic/' + id).update({
       id: id.toLowerCase(),
-      mangadex: mangadex,
+      mangadex: mangadex.toLowerCase(),
       title: title,
       alternative: alternative,
       chapter: chapter.toLowerCase(),
@@ -102,7 +102,7 @@
   function bc_setData(id, mangadex, title, alternative, chapter, note, type, host, url, read, image, update, similar) {
     firebase.database().ref('bookmark/comic/' + id).set({
       id: id.toLowerCase(),
-      mangadex: mangadex,
+      mangadex: mangadex.toLowerCase(),
       title: title,
       alternative: alternative,
       chapter: chapter.toLowerCase(),
@@ -542,7 +542,7 @@
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
       el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
       el('.bc_mgdx_search').dataset.href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ') +'#listing';
-      el('.bc_mgdx_search').classList.remove('bc_hidden');
+      if (el('.bc_mangadex').value == '' || el('.bc_mangadex').value == 'none') el('.bc_mgdx_search').classList.remove('bc_hidden');
       // for .bc_image if mangadex id exists then leave it blank, if none then it must be filled
       el('.bc_last').valueAsDate = local_date;
       
