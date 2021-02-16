@@ -346,7 +346,7 @@
         bc_showComic(arr[i], 'same');
         break;
       }
-      // contains id, check 3
+      // contains title id, check 3
       if (chk == 3 && (arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1 || arr[i].url.indexOf(wp) != -1)) {
         id_chk = true;
         bc_showComic(arr[i], 'contains');
