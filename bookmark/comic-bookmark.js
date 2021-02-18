@@ -180,7 +180,7 @@
       el('.bc_mgdx_search').dataset.href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ') +'#listing';
       el('.bc_mgdx_search').classList.remove('bc_hidden');
     }
-    if (el('.bc_mangadex').value != '' && el('.bc_mangadex').value != 'none') el('.bc_mgdx_open').classList.remove('bc_hidden');
+    if (wh.indexOf('mangadex') == -1 && el('.bc_mangadex').value != '' && el('.bc_mangadex').value != 'none') el('.bc_mgdx_open').classList.remove('bc_hidden');
   }
   
   function bc_formCheck() {
