@@ -405,7 +405,7 @@
       query = note != 'start' && is_search ? el('.bc_search input').value : query;
       if (query) {
         var key_rgx = new RegExp(query, 'ig');
-        var search_data = arr_data.filter(item => (item.id.search(key_rgx) != -1 || item.mangadex.search(key_rgx) != -1 || item.title.search(key_rgx) != -1 || item.alternative.search(key_rgx) != -1 || item.note.search(key_rgx) != -1 || item.type.search(key_rgx) != -1 || item.host.search(key_rgx) != -1));
+        var search_data = arr_data.filter(item => (item.id.search(key_rgx) != -1 || item.mangadex.search(key_rgx) != -1 || item.title.search(key_rgx) != -1 || item.alternative.search(key_rgx) != -1 || item.chapter.search(key_rgx) != -1 || item.note.search(key_rgx) != -1 || item.type.search(key_rgx) != -1 || item.host.search(key_rgx) != -1));
         bc_searchResult(search_data);
       }
     });
