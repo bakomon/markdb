@@ -387,8 +387,11 @@
     firebase.database().ref('bookmark/comic').once('value', function(snapshot) {
       main_data = snapshot.val();
       arr_data = bc_genData(snapshot.val());
-      console.log('comic bookmark: '+ arr_data.length);
       bc_genList(arr_data);
+      console.log('comic bookmark: '+ arr_data.length);
+      el('.bc_total').innerHTML = 'Total: <b>'+ arr_data.length +'<b>';
+      el('.bc_total').classList.remove('bc_hidden');
+      
       if (wp != '/' && wp.search(/\/(\?s=|search\?)/) == -1) bc_checkComic(arr_data); //check if comic data exist and show bookmark
       
       if (note != 'start') {
@@ -443,7 +446,7 @@
     b_txt += '<div class="bc_tr1">';
     b_txt += '<div class="bc_comic bc_line bc_hidden"></div>';
     b_txt += '<div class="bc_search bc_line flex"><input class="_bc bc_100" type="text" placeholder="Search..."><button class="_bc">GO</button></div>';
-    b_txt += '<div class="bc_menu flex"><button class="bc_add _bc">Add</button><button class="bc_out _bc">Logout</button></div>';
+    b_txt += '<div class="bc_menu flex"><button class="bc_add _bc">Add</button><button class="bc_out _bc">Logout</button><span class="bc_total _bc bc_active bc_hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
     b_txt += '</div>';// .bc_data
     b_txt += '<div class="bc_login flex_wrap bc_hidden">';
