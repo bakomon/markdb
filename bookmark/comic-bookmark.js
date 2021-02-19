@@ -232,7 +232,7 @@
       s_txt += '<li>Oops! Comic not found</li>';
     }
     s_txt += '</ul></div>';
-    s_txt += '<div class="cs_text flex"><span class="bc_text">Search Result <span class="_bc bc_active">'+ arr.length +'</span></span><span class="f_grow"></span><button class="cs_close _bc">Close</button></div>';
+    s_txt += '<div class="cs_text flex"><span class="bc_text">Search Result <span class="_bc bc_active"><b>'+ arr.length +'</b></span></span><span class="f_grow"></span><button class="cs_close _bc">Close</button></div>';
     
     el('.bc_result').innerHTML = s_txt;
     el('.bc_result').classList.remove('bc_hidden');
