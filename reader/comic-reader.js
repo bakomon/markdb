@@ -910,7 +910,7 @@
     localStorage.setItem('theme-mode', 'darkmode');
     document.body.classList.add('darkmode');
     document.body.classList.remove('lightmode');
-  } else if (document.body.classList.contains('wp-manga-template-default')) {
+  } else if (document.body.classList.contains('text-ui-dark')) {
     // theme mangabooth.com (madara)
     document.body.classList.add('text-ui-light');
     document.body.classList.remove('text-ui-dark');
