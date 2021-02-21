@@ -910,6 +910,10 @@
     localStorage.setItem('theme-mode', 'darkmode');
     document.body.classList.add('darkmode');
     document.body.classList.remove('lightmode');
+  } else if (document.body.classList.contains('.wp-manga-template-default')) {
+    // theme mangabooth.com (madara)
+    document.body.classList.add('text-ui-light');
+    document.body.classList.remove('text-ui-dark');
   } else if (wh.indexOf('manhuaid.com') != -1) {
     localStorage.setItem('theme', 'dark');
     document.body.setAttribute('id', 'darkbody');
