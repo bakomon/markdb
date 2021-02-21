@@ -147,7 +147,7 @@
       el('.mn_notif').classList.add('bc_hidden');
       el('.mn_notif span').innerHTML = '';
       el('.mn_notif span').classList.remove('bc_danger');
-    }, 700);
+    }, 500);
   }
   
   function bc_editData(note, data) {
