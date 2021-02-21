@@ -242,7 +242,7 @@
     el('.cs_close').onclick = function() {
       is_search = false;
       el('.bc_result').classList.add('bc_hidden');
-      el('.bc_search input').value = '';
+      //el('.bc_search input').value = '';
       el('.bmark_db').classList.add('bc_s_shide');
     };
     
@@ -446,7 +446,7 @@
     b_txt += '<div class="bc_tr1">';
     b_txt += '<div class="bc_comic bc_line bc_hidden"></div>';
     b_txt += '<div class="bc_search bc_line flex"><input class="_bc bc_100" type="text" placeholder="Search..."><button class="_bc">GO</button></div>';
-    b_txt += '<div class="bc_menu flex"><button class="bc_add _bc">Add</button><button class="bc_out _bc">Logout</button><span class="bc_total _bc bc_active bc_hidden"></span></div>';
+    b_txt += '<div class="bc_menu flex"><button class="bc_add _bc">Add</button><button class="bc_out _bc">Logout</button><span class="f_grow"></span><span class="bc_total _bc bc_active bc_hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
     b_txt += '</div>';// .bc_data
     b_txt += '<div class="bc_login flex_wrap bc_hidden">';
@@ -537,6 +537,7 @@
     el('.bc_search button').onclick = function() {
       if (el('.bc_search input').value == '') return;
       is_search = true;
+      document.activeElement.blur();
       el('.mn_notif span').innerHTML = 'Loading..';
       el('.mn_notif').classList.remove('bc_hidden');
       bc_mainData('search', el('.bc_search input').value);
@@ -610,7 +611,7 @@
   var chapter_t_rgx = /\s(ch\.?(ap(ter)?)?|ep\.?(isode)?)(\s?\d+|\s)/i; //chek for <title>
   var chapter_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i; //check for window.location
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
-  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|sektekomik|bacakomik.co|komikindo.web.id|mangaindo.web.id|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
+  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|komikindo.web.id|mangaindo.web.id|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
   
