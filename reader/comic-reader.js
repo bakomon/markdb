@@ -281,12 +281,12 @@
     
     // back to bottom
     el('.rc_bottom').onclick = function() {
-      var cmt_el = el('#disqus_trigger') || el('.comment_area') || el('#comments');
+      var cmt_el = el('#disqus_trigger') || el('.webtoons\\.com .comment_area');
       if (cmt_el) {
         cmt_el.parentNode.scrollIntoView();
       } else {
         //document.body.scrollIntoView(false);
-        window.scrollTo(0, document.body.scrollHeight);
+        window.scrollTo(0, imgArea.scrollHeight);
       }
     };
     
