@@ -281,8 +281,9 @@
     
     // back to bottom
     el('.rc_bottom').onclick = function() {
-      if (el('#disqus_trigger')) {
-        el('#disqus_trigger').parentNode.scrollIntoView();
+      var cmt_el = el('#disqus_trigger') || el('.comment_area') || el('#comments');
+      if (cmt_el) {
+        cmt_el.parentNode.scrollIntoView();
       } else {
         //document.body.scrollIntoView(false);
         window.scrollTo(0, document.body.scrollHeight);
