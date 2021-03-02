@@ -873,7 +873,7 @@
     var list_manga = el('.page-item-detail.manga', 'all');
     for (var i = 0; i < list_manga.length; i++) {
       if (el('[id^="manga-item-"] .adult', list_manga[i])) {
-        list_manga[i].parentNode.style.display = 'none;'
+        list_manga[i].parentNode.style.display = 'none';
       }
     }
   }
