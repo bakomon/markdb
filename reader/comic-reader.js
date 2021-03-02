@@ -584,13 +584,6 @@
       //el('.ch-img').parentNode.parentNode.id = 'readerarea';
     } else if (wh.indexOf('komiknesia') != -1) { //eastheme
       if (wl.href.indexOf('?read=list') == -1) wl.href = wl.href.replace(/\?read\=paged?/g, '') + '?read=list';
-    } else if (wh.indexOf('toonily') != -1) { //hidden adult
-      var list_manga = el('.page-item-detail.manga', 'all');
-      for (var i = 0; i < list_manga.length; i++) {
-        if (el('[id^="manga-item-"] .adult', list_manga[i])) {
-          list_manga[i].parentNode.style.display = 'none;'
-        }
-      }
     } else if (wh.indexOf('mangapark') != -1) { //script
       // window[data]  = from web
       if (window['_page_sub_c'] != '') {
@@ -875,6 +868,14 @@
         });
       }
     }, 100);
+  }
+  if (wh.indexOf('toonily') != -1) { //hidden adult
+    var list_manga = el('.page-item-detail.manga', 'all');
+    for (var i = 0; i < list_manga.length; i++) {
+      if (el('[id^="manga-item-"] .adult', list_manga[i])) {
+        list_manga[i].parentNode.style.display = 'none;'
+      }
+    }
   }
   if (document.body.classList.contains('_rightclick')) {
     // re-enable right click (don't forget "true") https://stackoverflow.com/a/43754205
