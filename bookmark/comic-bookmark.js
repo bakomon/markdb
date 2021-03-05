@@ -10,16 +10,24 @@
       elem = (m || l == 'all') ? parent.querySelectorAll(e) : parent.querySelector(e);
     }
     return elem;
-  }
+  }  
   
-  // Add script to head. data, info, boolean, element. https://codepen.io/sekedus/pen/QWKYpVR
-  function addScript(i,n,f,o) {
-    var dJS = document.createElement('script');
-    dJS.type = 'text/javascript';
-    if (n == 'in') dJS.async = (n || f) === true ? true : false;
-    n == 'in' ? dJS.innerHTML = i : dJS.src = i;
-    var elm = n && n.tagName ? n : f && f.tagName ? f : o && o.tagName ? o : document.querySelector('head');
-    elm.appendChild(dJS);
+  // Add script to head https://codepen.io/sekedus/pen/QWKYpVR
+  function addScript(n,o,t,e,s) {
+    // data, id, info, boolean, parent
+    var js_async = e === true || t === true || o === true;
+    var js_new = document.createElement('script');
+    if (o && typeof o === 'string' && o.indexOf('#') != -1) js_new.id = o.replace(/#/, '');
+    js_new.async = js_async;
+    if (t == 'in' || o == 'in') {
+      js_new.type = 'text/javascript';
+      js_new.innerHTML = n;
+    } else {
+      js_new.src = n;
+    }
+    var parent = s || e || t || o;
+    parent = parent && parent.tagName ? parent : document.querySelector('head');
+    parent.appendChild(js_new);
   }
   
     // Local time with timezone ISO standart https://stackoverflow.com/a/17415677/7598333
