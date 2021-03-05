@@ -1002,12 +1002,25 @@
     }
   }
   
+  // https://stackoverflow.com/a/17473952/7598333
+  function databaseExists(dbname, callback) {
+    var dbExists = true;
+    var request = indexedDB.open(dbname);
+    request.onupgradeneeded = function(e) {
+      e.target.transaction.abort();
+      dbExists = false;
+      callback(dbExists);
+    }
+  }
+  
   if ((wp.search(chapter_w_rgx) != -1 || wl.search.search(chapter_w_rgx) != -1 || el('title').innerHTML.search(chapter_t_rgx) != -1) && !isComic) {
     titleId = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(chapter_t_rgx, '').replace(/\s+/g, ' ').replace(/^(baca|komik|manga|read)\s/i, '').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '').replace(/[^\s\w]/g, '').replace(/\s/g, '-').toLowerCase();
     wpId = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
     zoomID = wh.search(/webtoons/i) != -1 ? wpId : titleId;
     console.log('page: chapter');
     checkAll();
+    
+    databaseExists('ts_series_history', function(res) { if(res) indexedDB.deleteDatabase('ts_series_history'); });
     if (localStorage.getItem('bookmark')) localStorage.removeItem('bookmark');
     if (localStorage.getItem('history')) localStorage.removeItem('history');
     if (localStorage.getItem('bm_history')) localStorage.removeItem('bm_history');
