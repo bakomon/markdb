@@ -302,6 +302,7 @@
   function bc_showComic(data, note) {
     is_comic = true;
     bc_showHtml(data);
+    console.log(`check comic: ${note}`);
     el('.bc_comic').classList.remove('bc_hidden');
     
     if (data.similar != '') {
@@ -338,48 +339,38 @@
     chk = chk ? (chk+1) : 1;
     var id_chk = false;
     var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
-    var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/^(baca|komik|manga|read)\s/i, '').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').match(/^([^\-|\||–]+)(?:\s[\-|\||–])?/)[1].replace(/\s$/, '');
+    var title_id = el('title').innerHTML;
+    title_id = title_id.search(/[\||\-|\–](?:.(?![\||\-|\–]))+$/) == -1 ? title_id : title_id.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/^(baca|komik|manga|read)\s/i, '').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc])\s/i, '').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s$/, ''); //old ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
     var title_rgx = new RegExp(title_id, 'i');
     
     for (var i = 0; i < arr.length; i++) {
       // mangadex
       if (wp.indexOf('/title/'+ arr[i].mangadex +'/') != -1) {
         id_chk = true;
-        console.log('check comic: 1');
         bc_showComic(arr[i], 'mangadex');
         break;
       }
       // wp same with id, check 2
-      if (chk == 2 && comic_id == arr[i].id) {
+      if (chk == 2 && (comic_id == arr[i].id || title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s+/g, '-') == arr[i].id)) {
         id_chk = true;
-        console.log('check comic: 2');
         bc_showComic(arr[i], 'same');
         break;
       }
-      // title same with id, check 3
-      if (chk == 3 && title_id.toLowerCase().replace(/[^\s\w]/g, '').replace(/\s/g, '-') == arr[i].id) {
+      // contains title id, check 3
+      if (chk == 3 && (arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1 || arr[i].url.indexOf(wp) != -1)) {
         id_chk = true;
-        console.log('check comic: 3');
-        bc_showComic(arr[i], 'same');
-        break;
-      }
-      // contains title id, check 4
-      if (chk == 4 && (arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1 || arr[i].url.indexOf(wp) != -1)) {
-        id_chk = true;
-        console.log('check comic: 4');
         bc_showComic(arr[i], 'contains');
         break;
       }
-      // wp contains id, check 5
-      if (chk == 5 && wp.indexOf(arr[i].id) != -1) {
+      // wp contains id, check 4
+      if (chk == 4 && wp.indexOf(arr[i].id) != -1) {
         id_chk = true;
-        console.log('check comic: 5');
         bc_showComic(arr[i], 'wp contains');
       }
       if (i == arr.length-1 && !id_chk) {
         is_comic = false;
         el('.bc_comic').classList.add('bc_hidden');
-        if (chk <= 5) bc_checkComic(arr, chk); //double check if title not same as id
+        if (chk <= 4) bc_checkComic(arr, chk); //double check if title not same as id
       }
     }
   }
