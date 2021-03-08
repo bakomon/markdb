@@ -244,7 +244,7 @@
     
     el('.bc_result').innerHTML = s_txt;
     el('.bc_result').classList.remove('bc_hidden');
-    el('.bc_result ul').style.height = (window.innerHeight - (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight + 90)) + 'px';
+    el('.bc_result ul').style.height = 'calc(100vh - '+ (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight  + 90) +'px)';
     el('.bmark_db').classList.remove('bc_s_shide');
       
     el('.cs_close').onclick = function() {
@@ -356,7 +356,7 @@
         break;
       }
       // contains title id, check 3
-      if (chk == 3 && (arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1 || arr[i].url.indexOf(wp) != -1)) {
+      if (chk == 3 && title_id != '' && (arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1 || arr[i].url.indexOf(wp) != -1)) {
         id_chk = true;
         bc_showComic(arr[i], 'contains');
         break;
@@ -433,7 +433,7 @@
     // html
     b_txt += '<div class="bc_bg bc_hidden"></div>';
     b_txt += '<div class="bmark_db bc_s_shide bc_shide flex_wrap f_bottom">';
-    if (is_mobile) b_txt += '<div class="f_grow"></div>';
+    if (is_mobile) b_txt += '<div class="f_grow"></div>'; //only if "is_edit = true"
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
     b_txt += '<input class="bc_id _bc bc_100" type="text" placeholder="ID">';
