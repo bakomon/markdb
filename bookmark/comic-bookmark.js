@@ -291,7 +291,7 @@
       el('.bc_comic .cm_list').innerHTML += s_txt;
     } else {
       el('.bc_comic').innerHTML = '<ul class="cm_list">'+ s_txt +'</ul>';
-      el('.bc_comic .cm_list').style.height = 'calc(100vh - '+ (el('.bc_menu').offsetHeight + el('.bc_search').offsetHeight  + 60) +'px)';
+      el('.bc_comic .cm_list').style.maxHeight = 'calc(100vh - '+ (el('.bc_menu').offsetHeight + el('.bc_search').offsetHeight  + 60) +'px)';
     }
     
     /*if (data.type != '') {
