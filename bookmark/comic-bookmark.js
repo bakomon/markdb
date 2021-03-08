@@ -244,8 +244,8 @@
     
     el('.bc_result').innerHTML = s_txt;
     el('.bc_result').classList.remove('bc_hidden');
-    el('.bc_result .cs_list').style.height = 'calc(100vh - '+ (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight  + 90) +'px)';
     el('.bmark_db').classList.remove('bc_s_shide');
+    el('.bc_result .cs_list').style.height = 'calc(100vh - '+ (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight  + 90) +'px)';
       
     el('.cs_close').onclick = function() {
       is_search = false;
