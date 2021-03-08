@@ -244,7 +244,7 @@
     
     el('.bc_result').innerHTML = s_txt;
     el('.bc_result').classList.remove('bc_hidden');
-    el('.bc_result ul').style.height = 'calc(100vh - '+ (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight  + 90) +'px)';
+    el('.bc_result .cs_list').style.height = 'calc(100vh - '+ (el('.bc_tr1').offsetHeight + el('.cs_text').offsetHeight  + 90) +'px)';
     el('.bmark_db').classList.remove('bc_s_shide');
       
     el('.cs_close').onclick = function() {
@@ -271,7 +271,7 @@
   
   function bc_showHtml(data, note) {
     var chk = data.host.search(not_support) != -1 || wh.indexOf(data.host) != -1;
-    var s_txt = '<ul>';
+    var s_txt = '';
     s_txt += '<li class="_cm';
     if (data.similar != '' && note) s_txt += ' cm_similar';
     if (data.read != '') s_txt += ' bc_url_read';
@@ -286,12 +286,11 @@
     s_txt += '<button class="cm_delete _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
     s_txt += '</div>';
     s_txt += '</li>';
-    s_txt += '</ul>';
     
     if (note) {
-      el('.bc_comic').innerHTML += s_txt;
+      el('.bc_comic .cm_list').innerHTML += s_txt;
     } else {
-      el('.bc_comic').innerHTML = s_txt;
+      el('.bc_comic').innerHTML = '<ul class="cm_list">'+ s_txt +'</ul>';
     }
     if (data.type != '') {
       //if (!localStorage.getItem(data.id)) localStorage.setItem(data.id, 'is_'+ data.type);
@@ -427,7 +426,7 @@
     var b_txt = '';
     // css control already in css tools
     // css bookmark
-    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark ::-webkit-input-placeholder{color:#757575;}._bmark ::placeholder{color:#757575;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db .bc_f_edit{overflow-y:auto;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bmark ._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;text-transform:initial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc.fp_content{margin:auto;}.bc_text{padding:4px 8px;margin:4px;}._bmark .bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}._bmark .bc_active{background:#238636;border-color:#238636;}._bmark .bc_danger{background:#ea4335;border-color:#ea4335;}._bmark input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}._bmark input._bc:hover{border-color:#3e3949;}.bc_comic .cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{height:100%;overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}._bmark .bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.bc_s_shide .bc_result,.bc_hidden{display:none;}</style>';
+    b_txt += '<style>.bc_100{width:100%;}.bc_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark ::-webkit-input-placeholder{color:#757575;}._bmark ::placeholder{color:#757575;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.bc_shide{left:-350px;}.bmark_db .bc_f_edit{overflow-y:auto;}.bmark_db ul{padding:0;margin:0;}.bc_line:not(.cm_similar){margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}._bmark ._bc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;text-transform:initial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bc.fp_content{margin:auto;}.bc_text{padding:4px 8px;margin:4px;}._bmark .bc_selected,._bmark button:not(.bc_no_hover):hover{background:#4267b2;border-color:#4267b2;}._bmark .bc_active{background:#238636;border-color:#238636;}._bmark .bc_danger{background:#ea4335;border-color:#ea4335;}._bmark input._bc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}._bmark input._bc:hover{border-color:#3e3949;}.bmark_db:not(.bc_s_shide) .bc_comic .cm_list{max-height:40vh;overflow-y:auto;}.bc_comic .cm_main{background:#4267b2;padding:8px 10px;border:0;}.bc_comic .cm_similar{margin-top:10px;padding-top:10px;border-top:1px solid #333;}.bc_result .cs_list{overflow-y:auto;}.bc_result li,.bc_comic li{border-width:1px;}._bmark .bc_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.bc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db.bc_s_shide .bc_result,.bc_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.bc_mobile .bmark_db{width:80%;flex-direction:column;}.bc_mobile .bmark_db.bc_shide{left:-80%;}._bmark.bc_mobile ._bc{font-size:16px;}._bmark.bc_mobile .bc_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
