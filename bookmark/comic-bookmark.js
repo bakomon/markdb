@@ -30,9 +30,9 @@
     parent.appendChild(js_new);
   }
   
-    // Local time with timezone ISO standart https://stackoverflow.com/a/17415677/7598333
+  // Local time with timezone ISO standart https://stackoverflow.com/a/17415677/7598333
   function toISOLocal(d) {
-    d = d || new Date();
+    d = typeof d === 'string' || typeof d === 'number' ? new Date(d) : d ? d : new Date();
     var tzo = -d.getTimezoneOffset(),
       dif = tzo >= 0 ? '+' : '-',
       pad = function(num) {
