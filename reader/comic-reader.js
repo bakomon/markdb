@@ -889,8 +889,8 @@
   }
   // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net
   if (document.body.classList.contains('ads_newtab')) {
-  	removeElem(el('iframe[style*="display: none"]'), 'all');
-  	removeElem(el('iframe[style*="opacity: 0"]'), 'all');
+    removeElem(el('iframe[style*="display: none"]'), 'all');
+    removeElem(el('iframe[style*="opacity: 0"]'), 'all');
     // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
     var windowOpenBackup = window.open;
     window.open = function(url, name, features) {
