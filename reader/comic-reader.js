@@ -38,14 +38,14 @@
   }
   
   function removeElem(elem, num) {
-    if (!elem) {
-      console.error('function removeElem(), elem = '+ elem);
+    var elmn = typeof elem === 'string' ? document.querySelectorAll(elem) : elem;
+    if (!elmn) {
+      console.error('function removeElem(), elem = '+ elmn);
       return;
     }
-    var elmn = typeof elem == 'string' ? document.querySelectorAll(elem) : elem;
     elmn = num ? (num == 'all' ? elmn : elmn[num]) : (typeof elem == 'string' ? elmn[0] : elmn);
     
-    if (num == 'all') {
+    if (typeof elem === 'string' && num == 'all') {
       for (var i = 0; i < elmn.length; i++) {
         elmn[i].parentNode.removeChild(elmn[i]);
       }
@@ -890,8 +890,8 @@
   // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net
   if (document.body.classList.contains('ads_newtab')) {
     window.onload = function() {
-      removeElem(el('iframe[style*="display: none"]'), 'all');
-      removeElem(el('iframe[style*="opacity: 0"]'), 'all');
+      removeElem('iframe[style*="display: none"]', 'all');
+      removeElem('iframe[style*="opacity: 0"]', 'all');
     };
     
     // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
