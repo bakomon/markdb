@@ -302,11 +302,12 @@
     note:
     - .pager-cnt .pull-right = my Manga Reader CMS
     - .btn-sm i[class*="right"] = new CMS "scans"
+    - i[rel="next"] = ads_newtab
     */
-    var next_chap =  el('.mangayu\\.com a>i[class*="arrow-right"]') || el('.manhuaid\\.com a[class*="float-left"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]');
+    var next_chap =  el('.mangayu\\.com a>i[class*="arrow-right"]') || el('.manhuaid\\.com a[class*="float-left"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
     if (next_chap) {
       next_chap = document.body.className.search(/new_cms|mangadropout|mangayu/) != -1 ? next_chap.parentNode : next_chap;
-      var next_url = next_chap.href;
+      var next_url = /*document.body.classList.contains('ads_newtab') ? next_chap.dataset.href :*/ next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
       el('.rc_next').classList.remove('rc_hidden');
       if (isMobile) el('.rc_next2').classList.remove('rc_hidden');
@@ -336,7 +337,7 @@
         el('.rc_zoom .rc_less').click(); //"shift & down" zoom -
       } else if (e.keyCode == 39) { //arrow right
         if (next_chap) {
-          if (wh.search(/mangadex|softkomik/) != -1) {
+          if (wh.search(/mangadex|softkomik/) != -1 /*|| document.body.classList.contains('ads_newtab')*/) {
             wl.href = el('.rc_next button').dataset.href;
           } else {
             next_chap.click();
@@ -530,6 +531,9 @@
         removeElem(el('.ctop .nextprev [rel="next"]'));
         removeElem(el('.cbot .nextprev [rel="next"]'));
         if (el('.readingnav .nextprev [rel="next"]')) removeElem(el('.readingnav .nextprev [rel="next"]'));
+      /*} else if (document.body.classList.contains('ads_newtab')) {
+        el('.ctop .nextprev [rel="next"]').dataset.href = data.nextUrl;
+        el('.cbot .nextprev [rel="next"]').dataset.href = data.nextUrl;*/
       } else {
         el('.ctop .nextprev [rel="next"]').href = data.nextUrl;
         el('.cbot .nextprev [rel="next"]').href = data.nextUrl;
