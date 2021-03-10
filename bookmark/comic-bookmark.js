@@ -340,7 +340,7 @@
     chk = chk ? (chk+1) : 1;
     var id_chk = false;
     var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
-    var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read)\s/i, '').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s$/, ''); //old ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
+    var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read)\s/i, '').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s$/, '').replace(/\|/g, ''); //old ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
     var title_rgx = new RegExp(title_id, 'i');
     
     for (var i = 0; i < arr.length; i++) {
@@ -359,6 +359,7 @@
       // contains title id, check 3
       if (chk == 3 && title_id != '' && (arr[i].id.replace(/\-/g, ' ').search(title_rgx) != -1 || arr[i].title.search(title_rgx) != -1 || arr[i].alternative.search(title_rgx) != -1 || arr[i].url.indexOf(wp) != -1)) {
         id_chk = true;
+        console.log('title_rgx: '+ title_rgx);
         bc_showComic(arr[i], 'contains');
         break;
       }
