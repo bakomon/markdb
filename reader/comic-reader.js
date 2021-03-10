@@ -848,7 +848,7 @@
   if (wh.search(/mangaku|komikru|comicfx|mgkomik/) != -1) document.body.classList.add('_rightclick');
   if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('new_tab');
   if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
-  if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|asurascans/) != -1) document.body.classList.add('new_themesia');
+  if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|ngomik|asurascans/) != -1) document.body.classList.add('new_themesia');
   
   document.body.classList.add(wh.replace(/(w{3}|m)\./, ''));
   removeAADB(); //remove anti adblock notify mangacanblog
@@ -857,7 +857,7 @@
   if (wh.indexOf('webtoons') != -1) {
     el('#wrap').classList.add('no-css');
   }
-  if (wh.search(/komikcast|masterkomik/) != -1) {
+  if (wh.search(/komikcast/) != -1) {
     // https://codepen.io/crmolloy/pen/YqdagV
     var windowOpenBackup = window.open;
     window.open = function(url, name, features) {
