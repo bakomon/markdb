@@ -302,12 +302,11 @@
     note:
     - .pager-cnt .pull-right = my Manga Reader CMS
     - .btn-sm i[class*="right"] = new CMS "scans"
-    - i[rel="next"] = new_tab
     */
-    var next_chap =  el('.mangayu\\.com a>i[class*="arrow-right"]') || el('.manhuaid\\.com a[class*="float-left"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
+    var next_chap =  el('.mangayu\\.com a>i[class*="arrow-right"]') || el('.manhuaid\\.com a[class*="float-left"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]');
     if (next_chap) {
       next_chap = document.body.className.search(/new_cms|mangadropout|mangayu/) != -1 ? next_chap.parentNode : next_chap;
-      var next_url = document.body.classList.contains('new_tab') ? next_chap.dataset.href : next_chap.href;
+      var next_url = next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
       el('.rc_next').classList.remove('rc_hidden');
       if (isMobile) el('.rc_next2').classList.remove('rc_hidden');
@@ -337,7 +336,7 @@
         el('.rc_zoom .rc_less').click(); //"shift & down" zoom -
       } else if (e.keyCode == 39) { //arrow right
         if (next_chap) {
-          if (wh.search(/mangadex|softkomik/) != -1 || document.body.classList.contains('new_tab')) {
+          if (wh.search(/mangadex|softkomik/) != -1) {
             wl.href = el('.rc_next button').dataset.href;
           } else {
             next_chap.click();
@@ -531,9 +530,6 @@
         removeElem(el('.ctop .nextprev [rel="next"]'));
         removeElem(el('.cbot .nextprev [rel="next"]'));
         if (el('.readingnav .nextprev [rel="next"]')) removeElem(el('.readingnav .nextprev [rel="next"]'));
-      } else if (document.body.classList.contains('new_tab')) {
-        el('.ctop .nextprev [rel="next"]').dataset.href = data.nextUrl;
-        el('.cbot .nextprev [rel="next"]').dataset.href = data.nextUrl;
       } else {
         el('.ctop .nextprev [rel="next"]').href = data.nextUrl;
         el('.cbot .nextprev [rel="next"]').href = data.nextUrl;
@@ -846,7 +842,7 @@
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
   
   if (wh.search(/mangaku|komikru|comicfx|mgkomik/) != -1) document.body.classList.add('_rightclick');
-  if (wh.search(/westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('new_tab');
+  if (wh.search(/komikcast|westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('new_tab');
   if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
   if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|ngomik|asurascans/) != -1) document.body.classList.add('new_themesia');
   
@@ -857,13 +853,34 @@
   if (wh.indexOf('webtoons') != -1) {
     el('#wrap').classList.add('no-css');
   }
-  if (wh.search(/komikcast/) != -1) {
+  // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net
+  if (document.body.classList.contains('ads_newtab')) {
     // https://codepen.io/crmolloy/pen/YqdagV
     var windowOpenBackup = window.open;
     window.open = function(url, name, features) {
       console.log('window.open caught!');
       window.open = windowOpenBackup;
     };
+    /*var el_a = el('a', 'all');
+    for (var i = 0; i < el_a.length; i++) {
+      var new_a = copyAttribute(el_a[i], 'i');
+      new_a.classList.add('link-mod');
+      new_a.style.cssText = 'font-style:normal;cursor:pointer;';
+      new_a.innerHTML = el_a[i].innerHTML;
+      el_a[i].parentNode.insertBefore(new_a, el_a[i]);
+      el_a[i].parentNode.removeChild(el_a[i]);
+    }
+    el('i[data-href]', 'all').forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        //e.preventDefault();
+        //window.open(item.dataset.href);
+        wl.href = item.dataset.href;
+      });
+      // right click
+      item.addEventListener('contextmenu', function(e) {
+        window.open(item.dataset.href);
+      });
+    });*/
   }
   if (wh.indexOf('softkomik') != -1) {
     var soft_chk = setInterval(function() {
@@ -890,29 +907,6 @@
     window.addEventListener('contextmenu', function(e) {
       e.stopPropagation();
     }, true);
-  }
-  if (document.body.classList.contains('new_tab')) {
-    // skip syndication.exdynsrv.com || jomtingi.net
-    var el_a = el('a', 'all');
-    for (var i = 0; i < el_a.length; i++) {
-      var new_a = copyAttribute(el_a[i], 'i');
-      new_a.classList.add('link-mod');
-      new_a.style.cssText = 'font-style:normal;cursor:pointer;';
-      new_a.innerHTML = el_a[i].innerHTML;
-      el_a[i].parentNode.insertBefore(new_a, el_a[i]);
-      el_a[i].parentNode.removeChild(el_a[i]);
-    }
-    el('i[data-href]', 'all').forEach(function(item) {
-      item.addEventListener('click', function(e) {
-        //e.preventDefault();
-        //window.open(item.dataset.href);
-        wl.href = item.dataset.href;
-      });
-      // right click
-      item.addEventListener('contextmenu', function(e) {
-        window.open(item.dataset.href);
-      });
-    });
   }
   
   // Dark mode
