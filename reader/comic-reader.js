@@ -842,7 +842,7 @@
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
   
   if (wh.search(/mangaku|komikru|comicfx|mgkomik/) != -1) document.body.classList.add('_rightclick');
-  if (wh.search(/komikcast|westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('new_tab');
+  if (wh.search(/komikcast|westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('ads_newtab');
   if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
   if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|ngomik|asurascans/) != -1) document.body.classList.add('new_themesia');
   
@@ -1006,6 +1006,7 @@
     if (localStorage.getItem('bookmark')) localStorage.removeItem('bookmark');
     if (localStorage.getItem('history')) localStorage.removeItem('history');
     if (localStorage.getItem('bm_history')) localStorage.removeItem('bm_history');
+    if (localStorage.getItem('ts_history')) localStorage.removeItem('ts_history');
     indexedDB.open('ts_series_history').onsuccess = function() { indexedDB.deleteDatabase('ts_series_history') };
   }
 })();
