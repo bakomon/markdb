@@ -38,6 +38,10 @@
   }
   
   function removeElem(elem, num) {
+    if (!elem) {
+      console.error('function removeElem(), elem = '+ elem);
+      return;
+    }
     var elmn = typeof elem == 'string' ? document.querySelectorAll(elem) : elem;
     elmn = num ? (num == 'all' ? elmn : elmn[num]) : (typeof elem == 'string' ? elmn[0] : elmn);
     
@@ -857,35 +861,6 @@
   if (wh.indexOf('webtoons') != -1) {
     el('#wrap').classList.add('no-css');
   }
-  // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net
-  if (document.body.classList.contains('ads_newtab')) {
-    // https://codepen.io/crmolloy/pen/YqdagV
-    var windowOpenBackup = window.open;
-    window.open = function(url, name, features) {
-      console.log('window.open caught!');
-      window.open = windowOpenBackup;
-    };
-    /*var el_a = el('a', 'all');
-    for (var i = 0; i < el_a.length; i++) {
-      var new_a = copyAttribute(el_a[i], 'i');
-      new_a.classList.add('link-mod');
-      new_a.style.cssText = 'font-style:normal;cursor:pointer;';
-      new_a.innerHTML = el_a[i].innerHTML;
-      el_a[i].parentNode.insertBefore(new_a, el_a[i]);
-      el_a[i].parentNode.removeChild(el_a[i]);
-    }
-    el('i[data-href]', 'all').forEach(function(item) {
-      item.addEventListener('click', function(e) {
-        //e.preventDefault();
-        //window.open(item.dataset.href);
-        wl.href = item.dataset.href;
-      });
-      // right click
-      item.addEventListener('contextmenu', function(e) {
-        window.open(item.dataset.href);
-      });
-    });*/
-  }
   if (wh.indexOf('softkomik') != -1) {
     var soft_chk = setInterval(function() {
       if (el('.container .relatif .bg-content')) {
@@ -911,6 +886,37 @@
     window.addEventListener('contextmenu', function(e) {
       e.stopPropagation();
     }, true);
+  }
+  // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net
+  if (document.body.classList.contains('ads_newtab')) {
+  	removeElem(el('iframe[style*="display: none"]'), 'all');
+  	removeElem(el('iframe[style*="opacity: 0"]'), 'all');
+    // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
+    var windowOpenBackup = window.open;
+    window.open = function(url, name, features) {
+      console.log('window.open caught!');
+      window.open = windowOpenBackup;
+    };
+    /*var el_a = el('a', 'all');
+    for (var i = 0; i < el_a.length; i++) {
+      var new_a = copyAttribute(el_a[i], 'i');
+      new_a.classList.add('link-mod');
+      new_a.style.cssText = 'font-style:normal;cursor:pointer;';
+      new_a.innerHTML = el_a[i].innerHTML;
+      el_a[i].parentNode.insertBefore(new_a, el_a[i]);
+      el_a[i].parentNode.removeChild(el_a[i]);
+    }
+    el('i[data-href]', 'all').forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        //e.preventDefault();
+        //window.open(item.dataset.href);
+        wl.href = item.dataset.href;
+      });
+      // right click
+      item.addEventListener('contextmenu', function(e) {
+        window.open(item.dataset.href);
+      });
+    });*/
   }
   
   // Dark mode
