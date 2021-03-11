@@ -40,13 +40,13 @@
   // Remove element https://codepen.io/sekedus/pen/ZEYRyeY
   function removeElem(elem, num) {
     var elmn = typeof elem === 'string' ? document.querySelectorAll(elem) : elem;
-    if (!elmn) {
-      console.error('function removeElem(), elem = '+ elmn);
+    if (!elmn || elmn && !elmn.length) {
+      console.error('function removeElem(), elem = '+ elem);
       return;
     }
     elmn = num ? (num == 'all' ? elmn : elmn[num]) : (typeof elem == 'string' ? elmn[0] : elmn);
     
-    if (elmn.length && num == 'all') {
+    if (elmn.length || num == 'all') {
       for (var i = 0; i < elmn.length; i++) {
         elmn[i].parentElement.removeChild(elmn[i]);
       }
