@@ -37,6 +37,7 @@
     parent.appendChild(js_new);
   }
   
+  // Remove element https://codepen.io/sekedus/pen/ZEYRyeY
   function removeElem(elem, num) {
     var elmn = typeof elem === 'string' ? document.querySelectorAll(elem) : elem;
     if (!elmn) {
