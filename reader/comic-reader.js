@@ -140,9 +140,7 @@
       el('#chapter_select option[value="'+ chNum +'"]').selected = true;
       chNav = el('#chapter_select').options;
       chUrl = el('#reader_text a').href;
-      removeElem('#next');
-      removeElem('#nextbot');
-      removeElem('#page_select');
+      removeElem('#next, #nextbot, #page_select', 'all');
     }
     
     nextChk = wh.search(/merakiscans|mangapark/) != -1 ? 'nextElementSibling' : 'previousElementSibling';
@@ -888,8 +886,7 @@
   // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net
   if (document.body.classList.contains('ads_newtab')) {
     window.onload = function() {
-      removeElem('iframe[style*="display: none"]', 'all');
-      removeElem('iframe[style*="opacity: 0"]', 'all');
+      removeElem('iframe[style*="display: none"], iframe[style*="opacity: 0"]', 'all');
     };
     
     // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
