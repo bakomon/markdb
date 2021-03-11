@@ -845,7 +845,7 @@
   //var chapter_w_rgx = /chapter(\/|\-)|\-bahasa|\-indonesia|ch\-|(\-|\/)\d+|(\-|\/)ep\d+|(chap|episode)\_|\/c\d+/;
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
   
-  if (wh.search(/mangaku|komikru|comicfx|mgkomik/) != -1) document.body.classList.add('_rightclick');
+  if (wh.search(/mangaku|komikru|comicfx|mgkomik|softkomik/) != -1) document.body.classList.add('_rightclick');
   if (wh.search(/komikcast|westmanga|komikindo.web.id|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('ads_newtab');
   if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
   if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|ngomik|asurascans/) != -1) document.body.classList.add('new_themesia');
@@ -1005,10 +1005,10 @@
     }
   }
   
-  if ((wp.search(chapter_w_rgx) != -1 || wl.search.search(chapter_w_rgx) != -1 || el('title').innerHTML.search(chapter_t_rgx) != -1) && !isComic) {
-    titleId = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read)\s/i, '').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s$/, '').replace(/\|/g, '').replace(/[^\s\w]/g, '').replace(/\s+/g, '-').toLowerCase();
+  if ((wp.search(chapter_w_rgx) != -1 || wl.search.search(chapter_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(chapter_t_rgx) != -1)) && !isComic) {
+    titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read)\s/i, '').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s$/, '').replace(/\|/g, '').replace(/[^\s\w]/g, '').replace(/\s+/g, '-').toLowerCase();
     wpId = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
-    zoomID = wh.search(/webtoons/i) != -1 ? wpId : titleId;
+    zoomID = wh.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
     console.log('page: chapter');
     checkAll();
     
