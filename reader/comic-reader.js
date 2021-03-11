@@ -38,15 +38,15 @@
   }
   
   // Remove element https://codepen.io/sekedus/pen/ZEYRyeY
-  function removeElem(elem, num) {
+  function removeElem(elem, index) {
     var elmn = typeof elem === 'string' ? document.querySelectorAll(elem) : elem;
     if (!elmn || elmn && !elmn.length) {
       console.error('function removeElem(), elem = '+ elem);
       return;
     }
-    elmn = num ? (num == 'all' ? elmn : elmn[num]) : (typeof elem == 'string' ? elmn[0] : elmn);
+    elmn = index ? (index == 'all' ? elmn : elmn[index]) : (typeof elem == 'string' ? elmn[0] : elmn);
     
-    if (elmn.length || num == 'all') {
+    if (elmn.length || index == 'all') {
       for (var i = 0; i < elmn.length; i++) {
         elmn[i].parentElement.removeChild(elmn[i]);
       }
