@@ -45,12 +45,12 @@
     }
     elmn = num ? (num == 'all' ? elmn : elmn[num]) : (typeof elem == 'string' ? elmn[0] : elmn);
     
-    if (typeof elem === 'string' && num == 'all') {
+    if (elmn.length && num == 'all') {
       for (var i = 0; i < elmn.length; i++) {
-        elmn[i].parentNode.removeChild(elmn[i]);
+        elmn[i].parentElement.removeChild(elmn[i]);
       }
     } else {
-      elmn.parentNode.removeChild(elmn);
+      elmn.parentElement.removeChild(elmn);
     }
   }
   
@@ -81,7 +81,7 @@
   
   function reloadComment(id) {
     var par_dsqs = el('#disqus_thread').parentNode;
-    par_dsqs.removeChild(el('#disqus_thread'));
+    removeElem('#disqus_thread');
     
     var disqus_load = document.createElement('div');
     disqus_load.innerHTML = '<div style="text-align:center;"><button id="disqus_trigger" style="border:0;padding:5px 10px;font-size:20px;cursor:pointer;">Post a Comment</button></div>';
@@ -466,7 +466,7 @@
     if (wh.search(/katakomik|animesc-kun|readcmic/) != -1) {
       var e_post = wh.indexOf('animesc-kun') != -1 ? el('#post-wrapper') : el('#main-wrapper');
       e_post.style.width = '100%';
-      el('#sidebar-wrapper').parentNode.removeChild(el('#sidebar-wrapper'));
+      removeElem('#sidebar-wrapper');
     } else if (wh.indexOf('mangadex') != -1 && !isMobile) {
       imgArea.parentNode.style.cssText = 'padding-right: 20vw !important;';
     }
@@ -532,9 +532,7 @@
     if (document.body.classList.contains('new_themesia')) {
       localStorage.setItem('tsms_readingmode', 'full');
       if (data.nextUrl == '') {
-        removeElem(el('.ctop .nextprev [rel="next"]'));
-        removeElem(el('.cbot .nextprev [rel="next"]'));
-        if (el('.readingnav .nextprev [rel="next"]')) removeElem(el('.readingnav .nextprev [rel="next"]'));
+        removeElem('.nextprev [rel="next"]', 'all');
       /*} else if (document.body.classList.contains('ads_newtab')) {
         el('.ctop .nextprev [rel="next"]').dataset.href = data.nextUrl;
         el('.cbot .nextprev [rel="next"]').dataset.href = data.nextUrl;*/
@@ -543,14 +541,14 @@
         el('.cbot .nextprev [rel="next"]').href = data.nextUrl;
       }
     } else if (wh.indexOf('mangadex') != -1) {
-      main.removeChild(el('.reader-images', main));
-      main.removeChild(el('.reader-page-bar', main));
+      removeElem(el('.reader-images', main));
+      removeElem(el('.reader-page-bar', main));
       el('#content').dataset.renderer = 'long-strip';
     } else if (document.body.classList.contains('new_cms')) {
       main.innerHTML = '';
       main.removeAttribute('id');
     } else if (wh.indexOf('merakiscans') != -1) {
-      main.removeChild(el('#content', main));
+      removeElem(el('#content', main));
       el('#toHome').style.cssText = 'height:0;overflow:hidden;';
       el('#toTop').style.cssText = 'height:0;overflow:hidden;';
     } else if (wh.indexOf('softkomik') != -1) {
@@ -581,7 +579,7 @@
       new_content.id = 'content-mod';
       new_content.innerHTML = '<div id="readerarea"></div><a href="#">next</a>';
       content.parentNode.insertBefore(new_content, content);
-      content.parentNode.removeChild(el('#__next'));
+      removeElem('#__next');
       var eId = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[1];
       var eCh = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[2];
       getData('//api.softkomik.online/api/baca-chapter/'+ eId +'&'+ eCh);
