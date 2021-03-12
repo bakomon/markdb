@@ -40,13 +40,19 @@
   // Remove element https://codepen.io/sekedus/pen/ZEYRyeY
   function removeElem(elem, index) {
     var elmn = typeof elem === 'string' ? document.querySelectorAll(elem) : elem;
-    if (!elmn || elmn && !elmn.length) {
-      console.error('function removeElem(), elem = '+ elem);
+    if (!elmn || (elmn && elmn.length == 0)) {
+      console.error('ERROR: removeElem(), elem = ', elem);
       return;
     }
-    elmn = index ? (index == 'all' ? elmn : elmn[index]) : (typeof elem == 'string' ? elmn[0] : elmn);
+    // if match 1 element & have specific index
+    if (elmn && !elmn.length && index) {
+      console.error('ERROR: use querySelectorAll() for specific index');
+      return;
+    }
     
-    if (elmn.length || index == 'all') {
+    elmn = index ? (index == 'all' ? elmn : elmn[index]) : (typeof elem == 'string' || elmn.length ? elmn[0] : elmn);
+    
+    if (elmn.length && index == 'all') {
       for (var i = 0; i < elmn.length; i++) {
         elmn[i].parentElement.removeChild(elmn[i]);
       }
@@ -851,7 +857,7 @@
   if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
   if (wh.search(/komikindo.web.id|sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|ngomik|asurascans/) != -1) document.body.classList.add('new_themesia');
   
-  document.body.classList.add(wh.replace(/(w{3}|m)\./, ''));
+  document.body.classList.add(wh.replace(/(w{3}|web|m(obile)?)\./, ''));
   removeAADB(); //remove anti adblock notify mangacanblog
   
   // custom
@@ -863,7 +869,8 @@
       if (el('.container .relatif .bg-content')) {
         clearInterval(soft_chk);
         el('a', 'all').forEach(function(item) {
-          item.addEventListener('click', function() {
+          item.addEventListener('click', function(e) {
+            e.stopPropagation();
             wl.href = item.href;
           });
         });
