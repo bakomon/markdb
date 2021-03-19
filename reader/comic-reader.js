@@ -933,8 +933,8 @@
     localStorage.setItem('theme-mode', 'dark');
     document.body.classList.add('darkmode', 'dark');
     document.body.classList.remove('lightmode');
-  } else if (el('.theme.switchmode')) {
-    // theme eastheme.com
+  } else if (el('.theme.switchmode') || el('#quickswitcher')) {
+    // theme eastheme.com || komikcast.com
     localStorage.setItem('theme-mode', 'darkmode');
     document.body.classList.add('darkmode');
     document.body.classList.remove('lightmode');
