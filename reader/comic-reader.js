@@ -374,10 +374,11 @@
         '2','.read-container',
         '3','#readerareaimg',
         '4','.reader-area',
-        '5','.viewer-cnt #all',
-        '6','#Gambar_komik',
-        '7','#viewer',
-        '8','[id^="Blog"] .post-body',
+        '5','.main-reading-area',
+        '6','.viewer-cnt #all',
+        '7','#Gambar_komik',
+        '8','#viewer',
+        '9','[id^="Blog"] .post-body',
         'webtoons.com','.viewer_lst .viewer_img',
         'mangaindo.web.id','.entry-content',
         'mangacanblog.com','#imgholder',
@@ -389,12 +390,12 @@
         'bacakomik.co','#chimg-auh',
         'rawdevart.com','#img-container'
       ];
-      var area_s = el(st[1]) || el(st[3]) || el(st[5]) || el(st[7]) || el(st[9]) || el(st[11]) || el(st[13]) || el(st[15]) || el(st[17]);
+      var area_s = el(st[1]) || el(st[3]) || el(st[5]) || el(st[7]) || el(st[9]) || el(st[11]) || el(st[13]) || el(st[15]) || el(st[17]) || el(st[19]);
       var s_length = st.length;
       if (s_length % 2 == 1) {
         s_length--
       }
-      for (var j = 16; j < s_length; j += 2) {
+      for (var j = 18; j < s_length; j += 2) {
         if (wh.indexOf(st[j]) != -1) {
           imgArea = el(st[j + 1]);
           break;
