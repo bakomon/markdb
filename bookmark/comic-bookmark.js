@@ -622,7 +622,7 @@
   var chapter_t_rgx = /\s(ch\.?(ap(ter)?)?|ep\.?(isode)?)(\s?\d+|\s)/i; //chek for <title>
   var chapter_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i; //check for window.location
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
-  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|komikindo.web.id|mangaindo.web.id|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
+  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|komikindo.web.id|mangaindo.web.id|comicfx|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
   
