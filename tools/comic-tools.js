@@ -127,7 +127,7 @@ function comic_tools() {
   var wh = wl.hostname;
   var wp = wl.pathname;
   var is_login = true;
-  var host_rgx = /(oploverz|webtoons|mangaku|mangaindo|komikstation|komikcast|westmanga|mangakita|mangashiro|mangacanblog|maid|ngomik|mangakyo|kiryuu|komikav|komiku|manhwa-san|matakomik|komikid|kombatch|mangceh|sektekomik|manhuaid|pojokmanga|sheamanga|klikmanga|bacakomik|mangayu|klankomik|boosei|comicfx|yuumanga|wordhero|gurukomik|masterkomik|kaisarkomik|softkomik|katakomik|mgkomik|kumamanga|komikru|komikindo|komiknesia|mangakane|tenseiscans|komikempus|kurutonime|nekomik|mangapark|mangadex|mangabat|zeroscans|readmanhua|readmng|hatigarmscan[sz]|funmanga|bato|leviatanscans|merakiscans|mangarawr|toonily|mangasushi|reaperscans|asurascans|secretscans|rawdevart|azoramanga|yuumanga|animesc-kun|readcmic|mangapaus|ninkomik)\.((blogspot|wordpress)\.)?((co|my|web)(m|\.id)?|net|org|me|in|tv|id|to|jp|info|xyz|pro|site)\/?(.*)/i;
+  var host_rgx = /(oploverz|webtoons|mangaku|mangaindo|komikstation|komikcast|westmanga|mangakita|mangashiro|mangacanblog|maid|ngomik|mangakyo|kiryuu|komikav|komiku|manhwa-san|matakomik|komikid|kombatch|mangceh|sektekomik|manhuaid|pojokmanga|sheamanga|klikmanga|bacakomik|mangayu|klankomik|boosei|comicfx|yuumanga|wordhero|gurukomik|masterkomik|kaisarkomik|softkomik|katakomik|mgkomik|kumamanga|komikru|komikindo|komiknesia|mangakane|tenseiscans|komikempus|kurutonime|nekomik|manhwaindo|mangapark|mangadex|mangabat|zeroscans|readmanhua|readmng|hatigarmscan[sz]|funmanga|bato|leviatanscans|merakiscans|mangarawr|toonily|mangasushi|reaperscans|asurascans|secretscans|rawdevart|azoramanga|yuumanga|animesc-kun|readcmic|mangapaus|ninkomik)\.((blogspot|wordpress)\.)?((co|my|web)(m|\.id)?|net|org|me|in|tv|id|to|jp|info|xyz|pro|site)\/?(.*)/i;
   
   if (wh.search(host_rgx) != -1 && wp.indexOf('wp-content') == -1) {
       /* css control */
@@ -140,7 +140,7 @@ function comic_tools() {
     s_elem.innerHTML = s_str;
     document.body.appendChild(s_elem);
     
-    var tools_interval = 'manual|4/13/2021, 6:32:07 AM';
+    var tools_interval = 'manual|4/21/2021, 9:41:50 PM';
     ls_saveLocal('https://bakomon.github.io/page/bookmark/comic-bookmark.js', 'comic_tools_bookmark', 'js', tools_interval);
     ls_saveLocal('https://bakomon.github.io/page/reader/comic-reader.js', 'comic_tools_reader', 'js', tools_interval);
     if (localStorage.getItem('comic_tools_js')) localStorage.removeItem('comic_tools_js');
