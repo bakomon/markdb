@@ -1031,7 +1031,7 @@
     'mangabat.com','.row-content-chapter'
   ];
   if (isComic && isMobile) {
-    var ch_area = el(st[1]) || el(st[3]) || el(st[5]) || el(st[7]);
+    var ch_area = el(ch_list[1]) || el(ch_list[3]) || el(ch_list[5]) || el(ch_list[7]);
     var ch_length = ch_list.length;
     if (ch_length % 2 == 1) {
       ch_length--
