@@ -380,7 +380,7 @@
         '8','#viewer',
         '9','[id^="Blog"] .post-body',
         'webtoons.com','.viewer_lst .viewer_img',
-        'mangaindo.web.id','.entry-content',
+        'mangacdn.my.id','.entry-content',
         'mangacanblog.com','#imgholder',
         'komikfoxy.xyz','#gallery-1',
         'mangabat.com','.container-chapter-reader',
@@ -1009,6 +1009,36 @@
       if (wp != '/' && data_list[j].url.indexOf(wp) != -1) {
         console.log('project page: '+ data_list[j].url);
         isComic = true;
+        break;
+      }
+    }
+  }
+  
+  var ch_list = [
+    '0','#chapterlist',
+    '1','#manga-chapters-holder .page-content-listing',
+    '2','#--box-list',
+    '3','.series-chapterlist',
+    'komikcast.com','.komik_info-chapters',
+    'comicfx.net','.chaplist',
+    'mangaku.pro','#content-b',
+    'komikstation.com','.bxcl .releases',
+    'manhuaid.com','.tb-custom-scrollbar',
+    'komiku.id','#Daftar_Chapter tbody',
+    'bacakomik.co','#chapter_list',
+    'mangacdn.my.id','.lcp_catlist li',
+    'webtoons.com','#_episodeList li',
+    'mangabat.com','.row-content-chapter'
+  ];
+  if (isComic && isMobile) {
+    var ch_area = el(st[1]) || el(st[3]) || el(st[5]) || el(st[7]);
+    var ch_length = ch_list.length;
+    if (ch_length % 2 == 1) {
+      ch_length--
+    }
+    for (var k = 6; k < ch_length; k += 2) {
+      if (wh.indexOf(ch_list[k]) != -1 && el(ch_list[k + 1])) {
+        el(ch_list[k + 1]).parentNode.scrollIntoView();
         break;
       }
     }
