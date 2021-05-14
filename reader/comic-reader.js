@@ -1040,6 +1040,8 @@
       if (wh.indexOf(ch_list[k]) != -1 && el(ch_list[k + 1])) {
         el(ch_list[k + 1]).parentNode.scrollIntoView();
         break;
+      } else {
+        if (ch_area) ch_area.parentNode.scrollIntoView();
       }
     }
   }
