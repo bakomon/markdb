@@ -1031,19 +1031,21 @@
     'mangabat.com','.row-content-chapter'
   ];
   if (isComic && isMobile) {
-    var ch_area = el(ch_list[1]) || el(ch_list[3]) || el(ch_list[5]) || el(ch_list[7]);
+    var list_area, ch_area = el(ch_list[1]) || el(ch_list[3]) || el(ch_list[5]) || el(ch_list[7]);
     var ch_length = ch_list.length;
     if (ch_length % 2 == 1) {
       ch_length--
     }
     for (var k = 6; k < ch_length; k += 2) {
       if (wh.indexOf(ch_list[k]) != -1 && el(ch_list[k + 1])) {
-        el(ch_list[k + 1]).parentNode.scrollIntoView();
+        list_area = el(ch_list[k + 1]);
         break;
       } else {
-        if (ch_area) ch_area.parentNode.scrollIntoView();
+        if (ch_area) list_area = ch_area;
       }
     }
+    console.log(list_area);
+    list_area.parentNode.scrollIntoView();
   }
   
   if ((wp.search(chapter_w_rgx) != -1 || wl.search.search(chapter_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(chapter_t_rgx) != -1)) && !isComic) {
