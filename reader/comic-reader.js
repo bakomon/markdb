@@ -1041,11 +1041,10 @@
         list_area = el(ch_list[k + 1]);
         break;
       } else {
-        if (ch_area) list_area = ch_area;
+        list_area = ch_area;
       }
     }
-    console.log(list_area);
-    list_area.parentNode.scrollIntoView();
+    if (list_area) list_area.parentNode.scrollIntoView();
   }
   
   if ((wp.search(chapter_w_rgx) != -1 || wl.search.search(chapter_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(chapter_t_rgx) != -1)) && !isComic) {
