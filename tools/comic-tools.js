@@ -141,7 +141,7 @@ function comic_tools() {
     document.body.appendChild(s_elem);
     
     var tools_interval = 'manual|5/15/2021, 8:15:21 AM';
-    if (!el('h1 [data-translate="checking_browser"]')) ls_saveLocal('https://bakomon.github.io/page/bookmark/comic-bookmark.js', 'comic_tools_bookmark', 'js', tools_interval);
+    if (!el('h1 [data-translate="checking_browser"]') || !el('h1 .cf-error-type')) ls_saveLocal('https://bakomon.github.io/page/bookmark/comic-bookmark.js', 'comic_tools_bookmark', 'js', tools_interval);
     ls_saveLocal('https://bakomon.github.io/page/reader/comic-reader.js', 'comic_tools_reader', 'js', tools_interval);
     if (localStorage.getItem('comic_tools_js')) localStorage.removeItem('comic_tools_js');
     
