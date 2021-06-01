@@ -127,7 +127,7 @@ function comic_tools() {
   var wh = wl.hostname;
   var wp = wl.pathname;
   var is_login = true;
-  var host_rgx = /(oploverz|webtoons|mangaku|mangaindo|komikstation|komikcast|westmanga|mangakita|mangashiro|mangacanblog|maid|ngomik|mangakyo|kiryuu|komikav|komiku|manhwa-san|matakomik|komikid|kombatch|mangceh|sektekomik|manhuaid|pojokmanga|sheamanga|klikmanga|bacakomik|mangayu|klankomik|boosei|comicfx|yuumanga|wordhero|gurukomik|masterkomik|kaisarkomik|softkomik|katakomik|mgkomik|kumamanga|komikru|komikindo|komiknesia|mangakane|tenseiscans|komikempus|kurutonime|nekomik|manhwaindo|wrt|wib|mangacdn|mangapark|mangadex|mangabat|zeroscans|readmanhua|readmng|hatigarmscan[sz]|funmanga|bato|leviatanscans|merakiscans|mangarawr|toonily|mangasushi|reaperscans|asurascans|secretscans|rawdevart|azoramanga|yuumanga|animesc-kun|readcmic|mangapaus|ninkomik)\.((blogspot|wordpress)\.)?((co|my|web)(m|\.id)?|net|org|me|in|tv|id|to|jp|info|xyz|pro|site)\/?(.*)/i;
+  var host_rgx = /(oploverz|webtoons|mangaku|mangaindo|komikstation|komikcast|westmanga|mangakita|mangashiro|mangacanblog|maid|ngomik|mangakyo|kiryuu|komikav|komiku|manhwa-san|matakomik|komikid|kombatch|mangceh|sektekomik|manhuaid|pojokmanga|sheamanga|klikmanga|bacakomik|mangayu|klankomik|boosei|comicfx|yuumanga|wordhero|gurukomik|masterkomik|kaisarkomik|softkomik|katakomik|mgkomik|kumamanga|komikru|komikindo|komiknesia|mangakane|tenseiscans|komikempus|kurutonime|nekomik|manhwaindo|wrt|mangacdn|wib|gabutscans|mangapark|mangadex|mangabat|zeroscans|readmanhua|readmng|hatigarmscan[sz]|funmanga|bato|leviatanscans|merakiscans|mangarawr|toonily|mangasushi|reaperscans|asurascans|secretscans|rawdevart|azoramanga|yuumanga|animesc-kun|readcmic|mangapaus|ninkomik)\.((blogspot|wordpress)\.)?((co|my|web)(m|\.id)?|net|org|me|in|tv|id|to|jp|info|xyz|pro|site)\/?(.*)/i;
   
   if (wh.search(host_rgx) != -1 && wp.indexOf('wp-content') == -1) {
       /* css control */
@@ -141,7 +141,7 @@ function comic_tools() {
     document.body.appendChild(s_elem);
     
     var tools_interval = 'manual|5/15/2021, 8:15:21 AM';
-    if (!el('h1 [data-translate="checking_browser"]') || !el('h1 .cf-error-type')) ls_saveLocal('https://bakomon.github.io/page/bookmark/comic-bookmark.js', 'comic_tools_bookmark', 'js', tools_interval);
+    if (!el('h1 [data-translate="checking_browser"]') || !el('h1 .cf-error-type') || !el('meta[name="captcha-bypass]')) ls_saveLocal('https://bakomon.github.io/page/bookmark/comic-bookmark.js', 'comic_tools_bookmark', 'js', tools_interval);
     ls_saveLocal('https://bakomon.github.io/page/reader/comic-reader.js', 'comic_tools_reader', 'js', tools_interval);
     if (localStorage.getItem('comic_tools_js')) localStorage.removeItem('comic_tools_js');
     
