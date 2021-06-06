@@ -408,7 +408,7 @@
     }
     if (prnt && imgs) imgArea = prnt;
     if (el('img[src=""]', imgArea)) removeElem(el('img[src=""]', imgArea)); //komikcast
-    imgList = prnt && imgs ? imgs.split(',') : el('img', imgArea, 'all');
+    imgList = prnt && imgs ? imgs.split('|') : el('img', imgArea, 'all');
     if (!imgList) {return}
     console.log('imgList.length: '+ imgList.length);
     
@@ -531,7 +531,7 @@
         data_src = data[i];
       }
       img_api += data_src;
-      if (i < total.length-1) img_api += ',';
+      if (i < total.length-1) img_api += '|';
     }
     
     // change, remove element
