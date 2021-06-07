@@ -102,6 +102,11 @@ function comic_tools() {
     if (data_local) {
       data_local = JSON.parse(data_local);
       if (data_local.update && data_local.data) {
+        if (data_local.data == '0') {
+          localStorage.removeItem(id);
+          alert(`!! ERROR: ${id} data is "0" !!\n\nTry to check github XHR on ${window.location.hostname} in AdBlock filter.`);
+          return;
+        }
         var date_chk = ls_interval.search(/manual\|/i) != -1 ? new Date(ls_interval.split('|')[1]) : new Date();
         date_chk = date_chk.getTime() <= Date.parse(data_local.update); /* check time interval */
         if (date_chk || ls_interval == 'permanent') {
@@ -140,7 +145,7 @@ function comic_tools() {
     s_elem.innerHTML = s_str;
     document.body.appendChild(s_elem);
     
-    var tools_interval = 'manual|5/15/2021, 8:15:21 AM';
+    var tools_interval = 'manual|6/6/2021, 5:55:59 PM';
     var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); //cloudflare
     var is_cf = chk_cf ? true : false;
     if (!is_cf) ls_saveLocal('https://bakomon.github.io/page/bookmark/comic-bookmark.js', 'comic_tools_bookmark', 'js', tools_interval);
@@ -159,8 +164,6 @@ function comic_tools() {
       }
     }, 100);*/
   }
-  
-  console.log('%cMade with \ud83d\udc96 & \ud83d\ude4c by Sekedus %chttp://bit.ly/sekedus','color:#ea8502;font:26px/1.5 monospace;','color:#333;font:26px/1.5 monospace;text-decoration:none;');
 }
   
 /* Detect mobile device https://stackoverflow.com/a/11381730/7598333 */
