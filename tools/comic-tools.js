@@ -104,7 +104,7 @@ function comic_tools() {
       if (data_local.update && data_local.data) {
         if (data_local.data == '0') {
           localStorage.removeItem(id);
-          alert(`!! ERROR: ${id} data is "0" !!\n\nTry to check github XHR on ${window.location.hostname} in AdBlock filter.`);
+          alert(`!! ERROR: ${id} data is "${data_local.data}" !!\n\nTry to check github XHR on ${window.location.hostname} in AdBlock filter.`);
           return;
         }
         var date_chk = ls_interval.search(/manual\|/i) != -1 ? new Date(ls_interval.split('|')[1]) : new Date();
