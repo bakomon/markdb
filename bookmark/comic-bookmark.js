@@ -211,7 +211,7 @@
         alert('cover image is empty');
         return false;
       }
-      if (el('.bc_cmdb').value != 'none' && el('.bc_image').value != '') {
+      if (el('.bc_cmdb').value != 'none' && el('.bc_cmdb').value.indexOf('md|') != -1 && el('.bc_image').value != '') {
         alert('delete image, image is included in manga id');
         return false;
       }
