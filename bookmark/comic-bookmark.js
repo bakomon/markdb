@@ -559,7 +559,7 @@
     
     el('.bc_mg_open').onclick = function() {
       var mg_id = el('.bc_cmdb').value;
-      var mg_url = mg_id.indexOf('md|') != -1 '//mangadex.org/title/' : '//mangaupdates.com/series.html?id=';
+      var mg_url = mg_id.indexOf('md|') != -1 ? '//mangadex.org/title/' : '//mangaupdates.com/series.html?id=';
       mg_url = mg_url + mg_id.replace(/^m[du]\|/, '');
       window.open(mg_url);
     };
