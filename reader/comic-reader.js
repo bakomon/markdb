@@ -522,7 +522,8 @@
       if (wh.indexOf('mangadex') != -1) {
         data_src = data.server + data.hash + '/' + data.page_array[i];
       } else if (wh.indexOf('mangapark') != -1) {
-        data_src = data[i].u;
+        data_src = total[i].u;
+        //v3 data_src = imgCdnHost + total[i]; //from web
       } else if (document.body.classList.contains('new_themesia')) {
         data_src = total[i];
       } else if (wh.indexOf('softkomik') != -1) {
@@ -601,8 +602,11 @@
     } else if (wh.indexOf('komiknesia') != -1) { //eastheme
       if (wl.href.indexOf('?read=list') == -1) wl.href = wl.href.replace(/\?read\=paged?/g, '') + '?read=list';
     } else if (wh.indexOf('mangapark') != -1) { //script
-      // window[data]  = from web
-      if (window['_page_sub_c'] != '') {
+      /* //v3
+      localStorage.setItem('read_load', 'f');
+      createImage(imgPathLis); //from web
+      */
+      if (window['_page_sub_c'] != '') { //from web
         wl.href = el('link[rel="canonical"]').href;
       } else {
         createImage(window['_load_pages']); //from web
@@ -1044,7 +1048,9 @@
         list_area = ch_area;
       }
     }
-    if (list_area) list_area.parentNode.scrollIntoView();
+    window.onload = function() {
+      if (list_area) list_area.parentNode.scrollIntoView();
+    };
   }
   
   if ((wp.search(chapter_w_rgx) != -1 || wl.search.search(chapter_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(chapter_t_rgx) != -1)) && !isComic) {
