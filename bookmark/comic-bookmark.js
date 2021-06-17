@@ -148,9 +148,9 @@
     el('.bc_image').value = '';
     el('.bc_last').value = '';
     el('.bc_similar').value = '';
-    el('.bc_mg_search_md').classList.add('bc_hidden');
-    el('.bc_mg_search_mu').classList.add('bc_hidden');
-    el('.bc_mg_open').classList.add('bc_hidden');
+    el('.bc_cm_search_md').classList.add('bc_hidden');
+    el('.bc_cm_search_mu').classList.add('bc_hidden');
+    el('.bc_cm_open').classList.add('bc_hidden');
     el('.bc_date_before').classList.add('bc_hidden');
     setTimeout(function() {
       el('.mn_notif').classList.add('bc_hidden');
@@ -186,12 +186,12 @@
     el('.bc_date_before').setAttribute('data-date', data.update);
     el('.bc_date_before').classList.remove('bc_hidden');
     if (el('.bc_cmdb').value == 'none') {
-      el('.bc_mg_search_md').dataset.href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ') +'#listing';
-      el('.bc_mg_search_mu').dataset.href = '//mangaupdates.com/series.html?search='+ data.id.replace(/\-/g, ' ');
-      el('.bc_mg_search_md').classList.remove('bc_hidden');
-      el('.bc_mg_search_mu').classList.remove('bc_hidden');
+      el('.bc_cm_search_md').dataset.href = '//mangadex.org/search?title='+ data.id.replace(/\-/g, ' ') +'#listing';
+      el('.bc_cm_search_mu').dataset.href = '//mangaupdates.com/series.html?search='+ data.id.replace(/\-/g, ' ');
+      el('.bc_cm_search_md').classList.remove('bc_hidden');
+      el('.bc_cm_search_mu').classList.remove('bc_hidden');
     }
-    if (wh.indexOf('mangadex') == -1 && el('.bc_cmdb').value != '' && el('.bc_cmdb').value != 'none') el('.bc_mg_open').classList.remove('bc_hidden');
+    if (wh.indexOf('mangadex') == -1 && el('.bc_cmdb').value != '' && el('.bc_cmdb').value != 'none') el('.bc_cm_open').classList.remove('bc_hidden');
   }
   
   function bc_formCheck() {
@@ -442,7 +442,7 @@
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
     b_txt += '<input class="bc_id _bc bc_100" type="text" placeholder="ID">';
-    b_txt += '<div class="flex bc_100"><input class="bc_cmdb _bc bc_100" type="text" placeholder="Manga ID"><button class="bc_mg_search_md _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">🔎 MD</button><button class="bc_mg_search_mu _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">🔎 MU</button><button class="bc_mg_open _bc bc_selected bc_hidden">Open</button></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_cmdb _bc bc_100" type="text" placeholder="Manga ID"><button class="bc_cm_search_md _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">🔎 MD</button><button class="bc_cm_search_mu _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">🔎 MU</button><button class="bc_cm_open _bc bc_selected bc_hidden">Open</button></div>';
     b_txt += '<input class="bc_title _bc bc_100" type="text" placeholder="Title">';
     b_txt += '<input class="bc_alt _bc bc_100" type="text" placeholder="Alternative Title">';
     b_txt += '<input class="bc_ch _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
@@ -557,11 +557,11 @@
       bc_mainData('search', el('.bc_search input').value);
     };
     
-    el('.bc_mg_open').onclick = function() {
-      var mg_id = el('.bc_cmdb').value;
-      var mg_url = mg_id.indexOf('md|') != -1 ? '//mangadex.org/title/' : '//mangaupdates.com/series.html?id=';
-      mg_url = mg_url + mg_id.replace(/^m[du]\|/, '');
-      window.open(mg_url);
+    el('.bc_cm_open').onclick = function() {
+      var cm_id = el('.bc_cmdb').value;
+      var cm_url = cm_id.indexOf('md|') != -1 ? '//mangadex.org/title/' : '//mangaupdates.com/series.html?id=';
+      cm_url = cm_url + cm_id.replace(/^m[du]\|/, '');
+      window.open(cm_url);
     };
     
     // klik "Generate" harus pada halaman komik project
@@ -572,14 +572,21 @@
       el('.bc_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(comic_id, '_') : firstCase(comic_id, '-');
       el('.bc_host').value = wh.replace(/(w{3}|m)\./, '');
       el('.bc_url').value = '//'+ wh.replace(/(w{3}|m)\./, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
-      el('.bc_mg_search_md').dataset.href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ') +'#listing';
-      el('.bc_mg_search_mu').dataset.href = '//mangaupdates.com/series.html?search='+ comic_id.replace(/[-_\.]/g, ' ');
-      if (el('.bc_cmdb').value == '' || el('.bc_cmdb').value == 'none') {
-        el('.bc_mg_search_md').classList.remove('bc_hidden');
-        el('.bc_mg_search_mu').classList.remove('bc_hidden');
-      }
-      // for .bc_image = if manga id is mangadex then leave it blank, if none then it must be filled
       el('.bc_last').valueAsDate = local_date;
+      
+      el('.bc_cm_search_md').dataset.href = '//mangadex.org/search?title='+ comic_id.replace(/[-_\.]/g, ' ') +'#listing';
+      el('.bc_cm_search_mu').dataset.href = '//mangaupdates.com/series.html?search='+ comic_id.replace(/[-_\.]/g, ' ');
+      if (el('.bc_cmdb').value == '' || el('.bc_cmdb').value == 'none') {
+        el('.bc_cm_search_md').classList.remove('bc_hidden');
+        el('.bc_cm_search_mu').classList.remove('bc_hidden');
+      }
+      
+      //if manga id is mangadex then leave it blank, if none then it must be filled
+      var cm_cover = el('.seriestucontent img') || el('.animefull .bigcontent img') || el('.komikinfo .bigcontent img') || el('.profile-manga .summary_image img') || el('.series .series-thumb img') || el('#Informasi .ims img') || el('.komik_info-content-thumbnail img') || el('meta[property="og:image"]') || false;
+      if (cm_cover) {
+        var cover_tag = cm_cover.tagName == 'IMG' ? cm_cover.src : el('meta[property="og:image"]').getAttribute('content');
+        el('.bc_image').value = cover_tag.replace(/i\d+\.wp\.com\//, '');
+      }
       
       /* Mangadex image format, example: 
       - https://mangadex.org/images/manga/58050.jpg
