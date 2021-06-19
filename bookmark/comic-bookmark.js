@@ -582,7 +582,7 @@
       }
       
       //if manga id is mangadex then leave it blank, if none then it must be filled
-      var cm_cover = el('.seriestucontent img') || el('.animefull .bigcontent img') || el('.komikinfo .bigcontent img') || el('.profile-manga .summary_image img') || el('.series .series-thumb img') || el('#Informasi .ims img') || el('.komik_info-content-thumbnail img') || el('meta[property="og:image"]') || false;
+      var cm_cover = el('.seriestucontent img') || el('.animefull .bigcontent img') || el('.komikinfo .bigcontent img') || el('.profile-manga .summary_image img') || el('.series .series-thumb img') || el('#Informasi .ims img') || el('.komik_info-content-thumbnail img') || el('.info-left img') || el('meta[property="og:image"]') || false;
       if (cm_cover) {
         var cover_tag = cm_cover.tagName == 'IMG' ? cm_cover.src : el('meta[property="og:image"]').getAttribute('content');
         el('.bc_image').value = cover_tag.replace(/i\d+\.wp\.com\//, '');
