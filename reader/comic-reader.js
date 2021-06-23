@@ -663,7 +663,8 @@
       var ths_chk = setInterval(function() {
         if (getDataImage(ts_rgx)) {
           clearInterval(ths_chk);
-          createImage(JSON.parse(getDataImage(ts_rgx).match(/(\{[^\;]+)\)\;/)[1]));
+          var ts_data = JSON.parse(getDataImage(ts_rgx).match(/(\{[^\;]+)\)\;/)[1]);
+          ts_data.sources[0].images.length == 0 ? alert('!! NO CHAPTER !!') : createImage(ts_data);
         }
       }, 100);
     } else if (wh.search(/katakomik|readcmic/) != -1) { //Show nextprev
