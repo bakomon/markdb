@@ -446,24 +446,24 @@
     b_txt += '<div class="bc_data bc_100 bc_hidden">';
     b_txt += '<div class="bc_form bc_line flex_wrap bc_hidden">';
     b_txt += '<input class="bc_id _bc bc_100" type="text" placeholder="ID">';
-    b_txt += '<div class="flex bc_100"><input class="bc_cmdb _bc bc_100" type="text" placeholder="Manga ID"><button class="bc_cm_search_md _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">🔎 MD</button><button class="bc_cm_search_mu _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">🔎 MU</button><button class="bc_cm_open _bc bc_selected bc_hidden">Open</button></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_cmdb _bc f_grow" type="text" placeholder="Manga ID"><button class="bc_cm_search_md _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">🔎 MD</button><button class="bc_cm_search_mu _bc bc_selected bc_hidden" onclick="window.open(this.dataset.href)">🔎 MU</button><button class="bc_cm_open _bc bc_selected bc_hidden">Open</button></div>';
     b_txt += '<input class="bc_title _bc bc_100" type="text" placeholder="Title">';
     b_txt += '<input class="bc_alt _bc bc_100" type="text" placeholder="Alternative Title">';
     b_txt += '<input class="bc_ch _bc bc_100" type="text" placeholder="Chapter" onclick="this.select()">';
     b_txt += '<input class="bc_note _bc bc_100" type="text" placeholder="Note">';
     b_txt += '<select class="bc_type _bc bc_100" required><option value="" selected disabled hidden>Type</option><option value="manga">manga</option><option value="manhwa">manhwa</option><option value="manhua">manhua</option></select>';
     b_txt += '<input class="bc_host _bc bc_100" type="text" placeholder="hostname">';
-    b_txt += '<div class="flex bc_100"><input class="bc_url _bc bc_100" type="text" placeholder="URL"><button class="bc_url_open _bc bc_selected bc_hidden">🔗 Open</button></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_url _bc f_grow" type="text" placeholder="URL"><button class="bc_url_open _bc bc_selected bc_hidden">🔗 Open</button></div>';
     b_txt += '<input class="bc_read _bc bc_100" type="text" placeholder="Link to read (if web to read is different)">';
-    b_txt += '<div class="flex bc_100"><input class="bc_image _bc bc_100" type="text" placeholder="Cover image"><button class="bc_img_open _bc bc_selected bc_hidden">🖼️ Open</button></div>';
-    b_txt += '<div class="flex bc_100"><input class="bc_last _bc bc_100" type="date" title="Last Update"><button class="bc_date_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_image _bc f_grow" type="text" placeholder="Cover image"><button class="bc_img_open _bc bc_selected bc_hidden">🖼️ Open</button></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_last _bc f_grow" type="date" title="Last Update"><button class="bc_date_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
     b_txt += '<input class="bc_similar _bc bc_100" type="text" placeholder="Similar">';
     b_txt += '</div>';// .bc_form
     b_txt += '<div class="bc_form_btn bc_100 flex bc_hidden"><button class="bc_gen _bc'+ (wp != '/' && wp.search(/\/(\?s=|search\?)/) == -1 ? '' : ' bc_hidden') +'">Generate</button><span class="f_grow"></span><button class="bc_close _bc">Close</button><button class="bc_set _bc bc_active bc_no_hover bc_hidden">Set</button><button class="bc_update _bc bc_active bc_no_hover bc_hidden">Update</button></div>';
     b_txt += '<div class="bc_result bc_line bc_hidden"></div>';
     b_txt += '<div class="bc_tr1">';
     b_txt += '<div class="bc_comic bc_line bc_hidden"></div>';
-    b_txt += '<div class="bc_search bc_line flex"><input class="_bc bc_100" type="text" placeholder="Search..."><button class="_bc">GO</button></div>';
+    b_txt += '<div class="bc_search bc_line flex"><input class="_bc f_grow" type="text" placeholder="Search..."><button class="_bc">GO</button></div>';
     b_txt += '<div class="bc_menu flex"><button class="bc_add _bc">Add</button><button class="bc_out _bc">Logout</button><span class="f_grow"></span><span class="bc_total _bc bc_active bc_hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
     b_txt += '</div>';// .bc_data
