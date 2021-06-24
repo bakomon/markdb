@@ -459,9 +459,9 @@
     b_txt += '<input class="bc_note _bc bc_100" type="text" placeholder="Note">';
     b_txt += '<select class="bc_type _bc bc_100" required><option value="" selected disabled hidden>Type</option><option value="manga">manga</option><option value="manhwa">manhwa</option><option value="manhua">manhua</option></select>';
     b_txt += '<input class="bc_host _bc bc_100" type="text" placeholder="hostname">';
-    b_txt += '<div class="flex bc_100"><input class="bc_url _bc f_grow" type="text" placeholder="URL"><button class="bc_url_open _bc bc_selected bc_hidden">&#128279; Open</button></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_url _bc bc_100" type="text" placeholder="URL"><button class="bc_url_open _bc flex f_middle bc_selected bc_hidden"><span>&#128279;</span> Open</button></div>';
     b_txt += '<input class="bc_read _bc bc_100" type="text" placeholder="Link to read (if web to read is different)">';
-    b_txt += '<div class="flex bc_100"><input class="bc_image _bc f_grow" type="text" placeholder="Cover image"><button class="bc_img_open _bc bc_selected bc_hidden">&#128444;️ Open</button></div>';
+    b_txt += '<div class="flex bc_100"><input class="bc_image _bc bc_100" type="text" placeholder="Cover image"><button class="bc_img_open _bc flex f_middle bc_selected bc_hidden"><span>&#128444;</span>️ Open</button></div>';
     b_txt += '<div class="flex bc_100"><input class="bc_last _bc f_grow" type="date" title="Last Update"><button class="bc_date_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
     b_txt += '<input class="bc_similar _bc bc_100" type="text" placeholder="Similar comic ID">';
     b_txt += '</div>';// .bc_form
