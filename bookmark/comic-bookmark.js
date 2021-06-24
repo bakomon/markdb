@@ -151,6 +151,7 @@
     el('.bc_cm_search_md').classList.add('bc_hidden');
     el('.bc_cm_search_mu').classList.add('bc_hidden');
     el('.bc_cm_open').classList.add('bc_hidden');
+    el('.bc_img_open').classList.add('bc_hidden');
     el('.bc_date_before').classList.add('bc_hidden');
     setTimeout(function() {
       el('.mn_notif').classList.add('bc_hidden');
@@ -192,6 +193,7 @@
       el('.bc_cm_search_mu').classList.remove('bc_hidden');
     }
     if (wh.indexOf('mangadex') == -1 && el('.bc_cmdb').value != '' && el('.bc_cmdb').value != 'none') el('.bc_cm_open').classList.remove('bc_hidden');
+    if (data.image != '') el('.bc_img_open').classList.remove('bc_hidden');
   }
   
   function bc_formCheck() {
@@ -451,7 +453,7 @@
     b_txt += '<input class="bc_host _bc bc_100" type="text" placeholder="hostname">';
     b_txt += '<input class="bc_url _bc bc_100" type="text" placeholder="URL">';
     b_txt += '<input class="bc_read _bc bc_100" type="text" placeholder="Link to read (if web to read is different)">';
-    b_txt += '<input class="bc_image _bc bc_100" type="text" placeholder="Cover image">';
+    b_txt += '<div class="flex bc_100"><input class="bc_image _bc bc_100" type="text" placeholder="Cover image"><button class="bc_img_open _bc bc_selected bc_hidden">Open</button></div>';
     b_txt += '<div class="flex bc_100"><input class="bc_last _bc bc_100" type="date" title="Last Update"><button class="bc_date_before _bc bc_selected bc_hidden" onclick="document.querySelector(\'.bc_last\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
     b_txt += '<input class="bc_similar _bc bc_100" type="text" placeholder="Similar">';
     b_txt += '</div>';// .bc_form
@@ -562,6 +564,10 @@
       var cm_url = cm_id.indexOf('md|') != -1 ? '//mangadex.org/title/' : '//mangaupdates.com/series.html?id=';
       cm_url = cm_url + cm_id.replace(/^m[du]\|/, '');
       window.open(cm_url);
+    };
+    
+    el('.bc_img_open').onclick = function() {
+      window.open(el('.bc_image').value);
     };
     
     // klik "Generate" harus pada halaman komik project
