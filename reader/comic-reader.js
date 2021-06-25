@@ -873,7 +873,7 @@
   //var chapter_w_rgx = /chapter(\/|\-)|\-bahasa|\-indonesia|ch\-|(\-|\/)\d+|(\-|\/)ep\d+|(chap|episode)\_|\/c\d+/;
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
   
-  if (wh.search(/mangaku|komikru|comicfx|mgkomik|softkomik/) != -1) document.body.classList.add('_rightclick');
+  if (wh.search(/mangaku|komikru|comicfx|mgkomik|softkomik|maid.my.id/) != -1) document.body.classList.add('_rightclick');
   if (wh.search(/komikcast|westmanga|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('ads_newtab');
   if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
   if (wh.search(/sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|ngomik|asurascans|gabutscans|manhwaindo|komikindo/) != -1) document.body.classList.add('new_themesia');
@@ -911,6 +911,11 @@
     window.addEventListener('contextmenu', function(e) {
       e.stopPropagation();
     }, true);
+    
+    // override js function "disable selection" by https://wordpress.org/plugins/wp-content-copy-protector/
+    function wccp_free_iscontenteditable() {
+      return true;
+    }
   }
   // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net
   if (document.body.classList.contains('ads_newtab')) {
