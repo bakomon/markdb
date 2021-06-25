@@ -913,7 +913,7 @@
     }, true);
     
     // override js function "disable selection" by https://wordpress.org/plugins/wp-content-copy-protector/
-    function wccp_free_iscontenteditable() {
+    var wccp_free_iscontenteditable = function() {
       return true;
     }
   }
