@@ -213,17 +213,17 @@
       return false;
     }
     if (el('.bc_cmdb').value == '') {
-      alert('manga id is empty or fill with "none"');
+      alert('comic id is empty or fill with "none"');
       return false;
     } else {
       if (el('.bc_cmdb').value == 'none' && el('.bc_image').value == '') {
         alert('cover image is empty');
         return false;
       }
-      if (el('.bc_cmdb').value != 'none' && el('.bc_cmdb').value.indexOf('md|') != -1 && el('.bc_image').value != '') {
-        alert('delete image, image is included in manga id');
+      /*if (el('.bc_cmdb').value != 'none' && el('.bc_cmdb').value.indexOf('md|') != -1 && el('.bc_image').value != '') {
+        alert('delete image, image is included in comic id'); //mangadex
         return false;
-      }
+      }*/
     }
     return true;
   }
@@ -599,7 +599,7 @@
         el('.bc_cm_search_mu').classList.remove('bc_hidden');
       }
       
-      //if manga id is mangadex then leave it blank, if none then it must be filled
+      //if comic id is mangadex then leave it blank, if none then it must be filled
       var cm_cover = el('.seriestucontent img') || el('.animefull .bigcontent img') || el('.komikinfo .bigcontent img') || el('.profile-manga .summary_image img') || el('.series .series-thumb img') || el('#Informasi .ims img') || el('.komik_info-content-thumbnail img') || el('.info-left img') || el('meta[property="og:image"]') || false;
       if (cm_cover) {
         var cover_tag = cm_cover.tagName == 'IMG' ? cm_cover.src : el('meta[property="og:image"]').getAttribute('content');
