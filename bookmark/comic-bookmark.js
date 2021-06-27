@@ -469,7 +469,7 @@
     b_txt += '<div class="bc_result bc_line bc_hidden"></div>';
     b_txt += '<div class="bc_tr1">';
     b_txt += '<div class="bc_comic bc_line bc_hidden"></div>';
-    b_txt += '<div class="bc_search bc_line flex"><input class="_bc f_grow" type="text" placeholder="Search..."><button class="_bc">GO</button></div>';
+    b_txt += '<div class="bc_search bc_line flex"><input class="_bc bc_100" type="text" placeholder="Search..."><button class="_bc">GO</button></div>';
     b_txt += '<div class="bc_menu flex"><button class="bc_add _bc">Add</button><button class="bc_out _bc">Logout</button><span class="f_grow"></span><span class="bc_total _bc bc_active bc_hidden"></span></div>';
     b_txt += '</div>';// .bc_tr1
     b_txt += '</div>';// .bc_data
