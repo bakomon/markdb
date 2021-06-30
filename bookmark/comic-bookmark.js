@@ -296,6 +296,7 @@
     if (data.read != '') s_txt += '<button class="_bc bc_selected'+ (chk ? '' : ' bc_hidden') +'" onclick="window.open(\''+ data.read +'\')" title="'+ data.read +'">Read</button>';
     s_txt += '<button class="cm_edit _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
+    s_txt += '<span class="cm_site bc_text'+ (chk ? ' bc_hidden' : '') +'">'+ data.host +'</span>';
     s_txt += '</div>';
     s_txt += '</li>';
     
@@ -412,7 +413,7 @@
       arr_data = bc_genData(snapshot.val());
       bc_genList(arr_data);
       console.log('comic bookmark: '+ arr_data.length);
-      el('.bc_total').innerHTML = 'Total: <b>'+ arr_data.length +'<b>';
+      el('.bc_total').innerHTML = 'Total: <b>'+ arr_data.length +'</b>';
       el('.bc_total').classList.remove('bc_hidden');
       
       if (wp != '/' && wp.search(/\/(\?s=|search\?)/) == -1) bc_checkComic(arr_data); //check if comic data exist and show bookmark
@@ -661,7 +662,7 @@
   var chapter_t_rgx = /\s(ch\.?(ap(ter)?)?|ep\.?(isode)?)(\s?\d+|\s)/i; //chek for <title>
   var chapter_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i; //check for window.location
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
-  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|komikindo.web.id|mangaindo.web.id|comicfx|sektekomik|readmng|(zero|hatigarm|reaper|secret)scan[sz]/;
+  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|mangacdn.my.id|comicfx|sektekomik|komikru|mangashiro|komikindo.web.id|readmng|bato.to|(zero|hatigarm|reaper|secret)scan[sz]/;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
   
