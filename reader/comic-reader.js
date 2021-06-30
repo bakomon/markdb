@@ -876,7 +876,7 @@
   if (wh.search(/mangaku|komikru|comicfx|mgkomik|softkomik|maid.my.id/) != -1) document.body.classList.add('_rightclick');
   if (wh.search(/komikcast|westmanga|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('ads_newtab');
   if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
-  if (wh.search(/sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|ngomik|asurascans|gabutscans|manhwaindo|komikindo/) != -1) document.body.classList.add('new_themesia');
+  if (wh.search(/sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|ngomik|asurascans|gabutscans|manhwaindo|komikindo|daveyscans|wrt.my.id|kombatch/) != -1) document.body.classList.add('new_themesia');
   
   document.body.classList.add(wh.replace(/(w{3}|web|m(obile)?)\./, ''));
   removeAADB(); //remove anti adblock notify mangacanblog
