@@ -296,7 +296,7 @@
     if (data.read != '') s_txt += '<button class="_bc bc_selected'+ (chk ? '' : ' bc_hidden') +'" onclick="window.open(\''+ data.read +'\')" title="'+ data.read +'">Read</button>';
     s_txt += '<button class="cm_edit _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
-    s_txt += '<span class="cm_site bc_text'+ (chk ? ' bc_hidden' : '') +'">'+ data.host +'</span>';
+    s_txt += '<span class="cm_site bc_text'+ (chk ? ' bc_hidden' : '') +'" onclick="window.open(\''+ data.url +'\')">'+ data.host +'</span>';
     s_txt += '</div>';
     s_txt += '</li>';
     
