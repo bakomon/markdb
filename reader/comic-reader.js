@@ -984,6 +984,9 @@
     el('head').appendChild(mgdx_css);
   } else if (wh.indexOf('mangayu') != -1) {
     localStorage.setItem('theme', 'dark');
+  } else if (wh.indexOf('wib.my.id') != -1) {
+    localStorage.setItem('dark', 'true');
+    document.documentElement.classList.add('dark');
   }
   
   // Disqus
@@ -1041,6 +1044,8 @@
     }
   }
   
+  
+  // scroll to chapter list
   var ch_list = [
     '0','#chapterlist',
     '1','#manga-chapters-holder .page-content-listing',
