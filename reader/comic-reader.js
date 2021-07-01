@@ -648,8 +648,8 @@
     } else if (wh.search(/readmanhua|ninjascans|klikmanga|mangasushi/) != -1) { //Madara theme
       if (wl.href.indexOf('?style=list') == -1) wl.href = wl.href.replace(/\?style\=paged?/g, '') + '?style=list';
     } else if (wh.search(/komikid.com|comicfx/) != -1) { //my Manga Reader CMS
-      el('#all').style.display = 'block';
-      el('#ppp').style.display = 'none';
+      if (el('#all')) el('#all').style.display = 'block';
+      if (el('#ppp')) el('#ppp').style.display = 'none';
       if (el('.pager-cnt .pull-right')) el('.pull-right a').href = next_chapter; //from web
     } else if (document.body.classList.contains('new_cms')) { //new cms
       var eShow = setInterval(function() {
