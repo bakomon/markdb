@@ -575,7 +575,6 @@
       }
     } else if (wh.indexOf('mangayu') != -1) {
       el('.m-scroll-chapter').classList.remove('sticky');
-    }
     } else if (wh.search(/komikid.com|comicfx/) != -1) {
       var my_next = wh.indexOf('comicfx') != -1 ? el('.ch-nav .ch-next') : el('.pager-cnt .pull-right');
       if (window['next_chapter'] != '') {
