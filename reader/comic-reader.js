@@ -316,7 +316,7 @@
     - i[rel="next"] = ads_newtab
     */
     var next_chap =  el('.manhuaid\\.com a[class*="float-left"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
-    if (next_chap) {
+    if (next_chap && next_chap.disabled != true) {
       next_chap = document.body.className.search(/new_cms|mangadropout/) != -1 ? next_chap.parentNode : next_chap;
       var next_url = /*document.body.classList.contains('ads_newtab') ? next_chap.dataset.href :*/ next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
