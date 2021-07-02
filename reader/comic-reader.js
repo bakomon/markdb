@@ -518,6 +518,9 @@
     } else if (wh.indexOf('mangayu') != -1) {
       csl = el('#mangaReading');
       total = data.images;
+    } else if (wh.search(/komikid.com|comicfx/) != -1) {
+      csl = el('#viewer-cnt');
+      total = data;
     }
     var main = typeof csl == 'string' ? el(csl) : csl;
     var img_api = '';
@@ -533,6 +536,8 @@
         data_src = total[i];
       } else if (wh.indexOf('softkomik') != -1) {
         data_src = '//img.softkomik.online/'+ total[i].url_gambar;
+      } else if (wh.search(/komikid.com|comicfx/) != -1) {
+        data_src = total[i].page_image;
       } else {
         data_src = data[i];
       }
@@ -648,9 +653,13 @@
     } else if (wh.search(/readmanhua|ninjascans|klikmanga|mangasushi/) != -1) { //Madara theme
       if (wl.href.indexOf('?style=list') == -1) wl.href = wl.href.replace(/\?style\=paged?/g, '') + '?style=list';
     } else if (wh.search(/komikid.com|comicfx/) != -1) { //my Manga Reader CMS
-      if (el('#all')) el('#all').style.display = 'block';
-      if (el('#ppp')) el('#ppp').style.display = 'none';
-      if (el('.pager-cnt .pull-right')) el('.pull-right a').href = next_chapter; //from web
+      //if (el('#all')) el('#all').style.display = 'block';
+      //if (el('#ppp')) el('#ppp').style.display = 'none';
+      createImage(window['pages']); //from web
+      if (window['next_chapter'] != '') {
+        if (el('.pager-cnt .pull-right')) el('.pull-right a').href = window['next_chapter']; //from web
+        if (wh.indexOf('comicfx') != -1 && el('.ch-nav .ch-next')) el('.ch-nav .ch-next').href = window['next_chapter']; //from web
+      }
     } else if (document.body.classList.contains('new_cms')) { //new cms
       var eShow = setInterval(function() {
         if (window['chapterPages']) {
@@ -660,9 +669,9 @@
       }, 100);
     } else if (document.body.classList.contains('new_themesia')) { //Themesia new
       var ts_rgx = /ts_reader\.run/;
-      var ths_chk = setInterval(function() {
+      var ts_chk = setInterval(function() {
         if (getDataImage(ts_rgx)) {
-          clearInterval(ths_chk);
+          clearInterval(ts_chk);
           var ts_data = JSON.parse(getDataImage(ts_rgx).match(/(\{[^\;]+)\)\;/)[1]);
           ts_data.sources[0].images.length == 0 ? alert('!! NO CHAPTER !!') : createImage(ts_data);
         }
