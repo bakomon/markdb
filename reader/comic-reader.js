@@ -316,7 +316,7 @@
     - i[rel="next"] = ads_newtab
     */
     var next_chap =  el('.manhuaid\\.com a[class*="float-left"]') || el('.readmng\\.com a[class*="next_page"]') || el('.funmanga\\.com #chapter-next-link') || el('.m\\.mangabat\\.com .navi-change-chapter-btn-next') || el('.bato\\.to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
-    if (next_chap && next_chap.disabled != true) {
+    if (next_chap) {
       next_chap = document.body.className.search(/new_cms|mangadropout/) != -1 ? next_chap.parentNode : next_chap;
       var next_url = /*document.body.classList.contains('ads_newtab') ? next_chap.dataset.href :*/ next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
@@ -576,6 +576,14 @@
     } else if (wh.indexOf('mangayu') != -1) {
       el('.m-scroll-chapter').classList.remove('sticky');
     }
+    } else if (wh.search(/komikid.com|comicfx/) != -1) {
+      var my_next = wh.indexOf('comicfx') != -1 ? el('.ch-nav .ch-next') : el('.pager-cnt .pull-right');
+      if (window['next_chapter'] != '') {
+        if (my_next) my_next.href = window['next_chapter']; //from web
+      } else {
+        if (my_next) removeElem(my_next);
+      }
+    }
     
     startImage(main, img_api);
   }
@@ -656,10 +664,6 @@
       //if (el('#all')) el('#all').style.display = 'block';
       //if (el('#ppp')) el('#ppp').style.display = 'none';
       createImage(window['pages']); //from web
-      if (window['next_chapter'] != '') {
-        if (el('.pager-cnt .pull-right')) el('.pull-right a').href = window['next_chapter']; //from web
-        if (wh.indexOf('comicfx') != -1 && el('.ch-nav .ch-next')) el('.ch-nav .ch-next').href = window['next_chapter']; //from web
-      }
     } else if (document.body.classList.contains('new_cms')) { //new cms
       var eShow = setInterval(function() {
         if (window['chapterPages']) {
