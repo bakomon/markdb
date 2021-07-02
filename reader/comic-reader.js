@@ -518,7 +518,7 @@
     } else if (wh.indexOf('mangayu') != -1) {
       csl = el('#mangaReading');
       total = data.images;
-    } else if (wh.search(/komikid.com|comicfx/) != -1) {
+    } else if (document.body.classList.contains('reader_cms')) {
       csl = el('.viewer-cnt');
       total = data;
     }
@@ -536,7 +536,7 @@
         data_src = total[i];
       } else if (wh.indexOf('softkomik') != -1) {
         data_src = '//img.softkomik.online/'+ total[i].url_gambar;
-      } else if (wh.search(/komikid.com|comicfx/) != -1) {
+      } else if (document.body.classList.contains('reader_cms')) {
         data_src = total[i].page_image;
       } else {
         data_src = data[i];
@@ -575,12 +575,12 @@
       }
     } else if (wh.indexOf('mangayu') != -1) {
       el('.m-scroll-chapter').classList.remove('sticky');
-    } else if (wh.search(/komikid.com|comicfx/) != -1) {
+    } else if (document.body.classList.contains('reader_cms')) {
       var my_next = wh.indexOf('comicfx') != -1 ? el('.ch-nav .ch-next') : el('.pager-cnt .pull-right');
       if (window['next_chapter'] != '') {
         if (my_next) my_next.href = window['next_chapter']; //from web
       } else {
-        if (my_next) removeElem(my_next);
+        if (my_next) removeElem(my_next, 'all');
       }
     }
     
@@ -659,7 +659,7 @@
       if (wh.indexOf('funmanga') != -1) el('.chapter-read').appendChild(el('.prev-next-post'));
     } else if (wh.search(/readmanhua|ninjascans|klikmanga|mangasushi/) != -1) { //Madara theme
       if (wl.href.indexOf('?style=list') == -1) wl.href = wl.href.replace(/\?style\=paged?/g, '') + '?style=list';
-    } else if (wh.search(/komikid.com|comicfx/) != -1) { //my Manga Reader CMS
+    } else if (document.body.classList.contains('reader_cms')) { //my Manga Reader CMS
       //if (el('#all')) el('#all').style.display = 'block';
       //if (el('#ppp')) el('#ppp').style.display = 'none';
       createImage(window['pages']); //from web
@@ -888,6 +888,7 @@
   if (wh.search(/mangaku|komikru|comicfx|mgkomik|softkomik|maid.my.id/) != -1) document.body.classList.add('_rightclick');
   if (wh.search(/komikcast|westmanga|komikstation|sheamanga|klikmanga|masterkomik/) != -1) document.body.classList.add('ads_newtab');
   if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
+  if (wh.search(/komikid.com|comicfx/) != -1) document.body.classList.add('reader_cms');
   if (wh.search(/sektekomik|kiryuu|komikav|sheamanga|gurukomik|masterkomik|kaisarkomik|boosei|komikru|westmanga|mangakita|klankomik|wordhero|ngomik|asurascans|gabutscans|manhwaindo|komikindo|daveyscans|wrt.my.id|kombatch/) != -1) document.body.classList.add('new_themesia');
   
   document.body.classList.add(wh.replace(/(w{3}|web|m(obile)?)\./, ''));
