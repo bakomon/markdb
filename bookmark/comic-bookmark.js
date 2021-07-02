@@ -354,7 +354,7 @@
     var id_chk = false;
     var comic_id = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
     var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read)\s/i, '').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s$/, '').replace(/\|/g, ''); //old ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
-    var title_rgx = new RegExp(title_id.replace(/\?/g, '\\?'), 'i');
+    var title_rgx = new RegExp(title_id.replace(/(\?|\(|\))/g, '\\$1'), 'i');
     
     for (var i = 0; i < arr.length; i++) {
       // mangadex
@@ -662,7 +662,7 @@
   var chapter_t_rgx = /\s(ch\.?(ap(ter)?)?|ep\.?(isode)?)(\s?\d+|\s)/i; //chek for <title>
   var chapter_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i; //check for window.location
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
-  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|mangacdn.my.id|comicfx|sektekomik|komikru|mangashiro|komikindo.web.id|matakomik|readmng|bato.to|(zero|hatigarm|reaper|secret)scan[sz]/;
+  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|mangacdn.my.id|comicfx|sektekomik|komikru|mangashiro|komikindo.web.id|readmng|bato.to|(zero|hatigarm|reaper|secret)scan[sz]/;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
   
