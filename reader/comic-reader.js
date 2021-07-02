@@ -841,7 +841,7 @@
       */
     }
     
-    if (document.body.className.search(/new_cms|new_themesia|mangadex|mangaku|kyuroku|merakiscans|mangapark|softkomik/) == -1) { startImage(); }
+    if (document.body.className.search(/new_cms|reader_cms|new_themesia|mangadex|mangaku|kyuroku|merakiscans|mangapark|softkomik/) == -1) { startImage(); }
   }
   
   function removeAADB() {
