@@ -519,7 +519,7 @@
       csl = el('#mangaReading');
       total = data.images;
     } else if (wh.search(/komikid.com|comicfx/) != -1) {
-      csl = el('#viewer-cnt');
+      csl = el('.viewer-cnt');
       total = data;
     }
     var main = typeof csl == 'string' ? el(csl) : csl;
