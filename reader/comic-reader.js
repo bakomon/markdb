@@ -576,11 +576,11 @@
     } else if (wh.indexOf('mangayu') != -1) {
       el('.m-scroll-chapter').classList.remove('sticky');
     } else if (document.body.classList.contains('reader_cms')) {
-      var my_next = wh.indexOf('comicfx') != -1 ? el('.ch-nav .ch-next') : el('.pager-cnt .pull-right');
+      var my_next = wh.indexOf('comicfx') != -1 ? el('.ch-nav a.ch-next') : el('.pager-cnt .pull-right a');
       if (window['next_chapter'] != '') {
         if (my_next) my_next.href = window['next_chapter']; //from web
       } else {
-        if (my_next) removeElem(my_next, 'all');
+        if (my_next) removeElem('.ch-nav a.ch-next', 'all');
       }
     }
     
