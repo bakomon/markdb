@@ -291,12 +291,12 @@
     s_txt += '<div class="_bc bc_100"'+ (!note && wh.indexOf(data.host) != -1 && el('title').innerHTML.search(chapter_t_rgx) == -1 ? '' : ' onclick="window.open(\''+ data.url +'\')"') +' title="'+ data.url +'">'+ data.title;
     if (data.alternative != '') s_txt += ' | '+ data.alternative;
     s_txt += '</div>';
-    s_txt += '<div class="flex bc_100" data-id="'+ data.id +'">';
+    s_txt += '<div class="flex_wrap bc_100" data-id="'+ data.id +'">';
     s_txt += '<span class="cm_ch _bc line_text'+ (chk ? ' bc_100' : ' bc_50') +'">'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'</span>';
     if (data.read != '') s_txt += '<button class="_bc bc_selected'+ (chk ? '' : ' bc_hidden') +'" onclick="window.open(\''+ data.read +'\')" title="'+ data.read +'">Read</button>';
     s_txt += '<button class="cm_edit _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
-    s_txt += '<span class="cm_site bc_text'+ (chk ? ' bc_hidden' : '') +'" onclick="window.open(\''+ data.url +'\')">'+ data.host +'</span>';
+    s_txt += '<span class="cm_site bc_text'+ (wh.indexOf(data.host) != -1 ? ' bc_hidden' : (data.host.search(not_support) != -1 ? ' bc_100 t_center' : '')) +'" onclick="window.open(\''+ data.url +'\')">'+ data.host +'</span>';
     s_txt += '</div>';
     s_txt += '</li>';
     
@@ -662,7 +662,7 @@
   var chapter_t_rgx = /\s(ch\.?(ap(ter)?)?|ep\.?(isode)?)(\s?\d+|\s)/i; //chek for <title>
   var chapter_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isode)?)(\/|\-|\_|\d+)/i; //check for window.location
   var id_w_rgx = /\/(?:(?:baca-)?(?:komik|manga|read|[a-z]{2}\/[^\/]+|(?:title|series|comics?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; //id from window.location
-  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|mangacdn.my.id|comicfx|sektekomik|komikru|mangashiro|komikindo.web.id|readmng|bato.to|(zero|hatigarm|reaper|secret)scan[sz]/;
+  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|mangacdn.my.id|comicfx|sektekomik|komikru|mangashiro|komikindo.web.id|neumanga|readmng|bato.to|(zero|hatigarm|reaper|secret)scan[sz]/;
   
   addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js');
   
