@@ -292,7 +292,7 @@
     if (data.alternative != '') s_txt += ' | '+ data.alternative;
     s_txt += '</div>';
     s_txt += '<div class="flex_wrap bc_100" data-id="'+ data.id +'">';
-    s_txt += '<span class="cm_ch _bc line_text'+ (chk ? ' bc_100' : ' bc_50') +'">'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'</span>';
+    s_txt += '<span class="cm_ch _bc line_text'+ (chk ? ' f_grow' : ' bc_50') +'">'+ data.chapter + (data.note ? ' ('+ data.note +')' : '') +'</span>';
     if (data.read != '') s_txt += '<button class="_bc bc_selected'+ (chk ? '' : ' bc_hidden') +'" onclick="window.open(\''+ data.read +'\')" title="'+ data.read +'">Read</button>';
     s_txt += '<button class="cm_edit _bc'+ (chk ? '' : ' bc_hidden') +'">Edit</button>';
     s_txt += '<button class="cm_delete _bc'+ (chk ? '' : ' bc_hidden') +'" title="Delete">X</button>';
