@@ -7,36 +7,6 @@
     return xy;
   }
   
-  // Simple querySelector https://codepen.io/pen/oKYOEK
-  function el(e,l,m) {
-    var elem, parent = l != 'all' && (l || l === null) ? l : document;
-    if (parent === null) {
-      elem = parent;
-      console.error('selector: '+ e +' => parent: '+ parent);
-    } else {
-      elem = (m || l == 'all') ? parent.querySelectorAll(e) : parent.querySelector(e);
-    }
-    return elem;
-  }  
-  
-  // Add script to head https://codepen.io/sekedus/pen/QWKYpVR
-  function addScript(n,o,t,e,s) {
-    // data, id, info, boolean, parent
-    var js_async = e === true || t === true || o === true;
-    var js_new = document.createElement('script');
-    if (o && typeof o === 'string' && o.indexOf('#') != -1) js_new.id = o.replace(/#/, '');
-    js_new.async = js_async;
-    if (t == 'in' || o == 'in') {
-      js_new.type = 'text/javascript';
-      js_new.innerHTML = n;
-    } else {
-      js_new.src = n;
-    }
-    var parent = s || e || t || o;
-    parent = parent && parent.tagName ? parent : document.querySelector('head');
-    parent.appendChild(js_new);
-  }
-  
   // Remove element https://codepen.io/sekedus/pen/ZEYRyeY
   function removeElem(elem, index) {
     var elmn = typeof elem === 'string' ? document.querySelectorAll(elem) : elem;
@@ -876,7 +846,8 @@
   var loadImage = false; //all images loaded
   var isPause = false; //pause images from loading
   var isComic = false;
-  var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from comic tools
+  //var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from database tools
+  var isMobile = isMobile(); //from database tools
   var imgSize = ''; //image size
   var checkPoint, imgArea, imgList, cdnName, titleId, wpId, zoomID;
   
