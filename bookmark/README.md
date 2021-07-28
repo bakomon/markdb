@@ -1,3 +1,3 @@
-# Comic Bookmark
+# MyDB Bookmark
 
-See >> [Comic Reader](https://github.com/bakomon/page/tree/master/reader)
+See >> [MyDB Tools](https://github.com/bakomon/page/tree/master/tools)
