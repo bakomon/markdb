@@ -268,14 +268,16 @@ function mydb_tools() {
       }
       
       genCSS();
-      if (mydb_type == 'comic') ls_saveLocal('https://bakomon.github.io/page/reader/comic-reader.js', 'mydb_tools_'+ mydb_type +'_reader', 'js', tools_interval);
+      if (mydb_type == 'comic') ls_saveLocal('https://cdn.statically.io/gh/bakomon/page@master/reader/comic-reader.js', 'mydb_tools_'+ mydb_type +'_reader', 'js', tools_interval);
       
       var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); /* cloudflare */
       var is_cf = chk_cf ? true : false;
       if (!is_cf && !mydb_read) {
         if (!mydb_firebase) loadFirebase();
-        ls_saveLocal('https://bakomon.github.io/page/bookmark/mydb-bookmark.js', 'mydb_tools_bookmark', 'js', tools_interval);
+        ls_saveLocal('https://cdn.statically.io/gh/bakomon/page@master/bookmark/mydb-bookmark.js', 'mydb_tools_bookmark', 'js', tools_interval);
       }
+      
+      /* alternative replace "https://cdn.statically.io" with "https://cdn.jsdelivr.net" */
     }
   }
   
