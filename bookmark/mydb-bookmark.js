@@ -83,7 +83,7 @@
         if (is_index) db_startIndex('remove');
         if (mydb_select == 'source') {
           mydb_change = true;
-          genSource();
+          genSource('change');
         }
       })
       .catch(function(error) {
@@ -111,7 +111,7 @@
       }
       
       if (g_obj[i] == 'host') g_val = getHostname(g_val);
-      if (g_obj[i].search(/project|url|read/i) != -1) g_val = '//'+ g_val.replace(/^https?:\/\//, '').replace(w3_rgx, '');
+      if (g_obj[i].search(/project|url|read/i) != -1) g_val = '//'+ g_val.replace(/^(https?:)?\/\//, '').replace(w3_rgx, '');
       if (g_obj[i] == 'update') g_val = new Date(g_val).getTime();
       if (g_obj[i].search(/project|icon|title|alternative|url|read|image|update/) == -1) g_val = g_val.toLowerCase();
       
@@ -135,7 +135,7 @@
         if (is_index) db_startIndex('update');
         if (mydb_select == 'source') {
           mydb_change = true;
-          genSource();
+          genSource('change');
         }
       }
     });
@@ -153,7 +153,7 @@
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('set');
         if (mydb_select == 'source') {
           mydb_change = true;
-          genSource();
+          genSource('change');
           el('.db_notif span').innerHTML = 'Done';
           db_resetForm();
         }
@@ -621,13 +621,14 @@
     if (el('.bm_index')) {
       el('.db_isearch input').setAttribute('placeholder', 'Search ('+ mydb_type +')...');
       el('.db_inote').classList.remove('db_100', 't_center');
-      el('.db_ifilter').classList.remove('db_hidden');
+      if (mydb_select == 'list') el('.db_ifilter').classList.remove('db_hidden');
       el('.db_icatalog').className = 'db_icatalog db_100 db_i'+ mydb_select;
       el('.db_idata').classList.add('db_hidden');
       el('.db_iloading').classList.remove('db_hidden');
       el('.bm_index').classList.remove('db_hidden');
     } else {
       db_indexHtml();
+      index_sort = 'title';
       nav_elem = el('.db_pagination');
       
       el('.db_iclose').onclick = function() {
