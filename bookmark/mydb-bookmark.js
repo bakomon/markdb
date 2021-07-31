@@ -74,8 +74,8 @@
   }
   
   function db_deleteData(path) {
-    el('.mn_notif span').innerHTML = 'Loading..';
-    el('.mn_notif').classList.remove('db_hidden');
+    el('.db_notif span').innerHTML = 'Loading..';
+    el('.db_notif').classList.remove('db_hidden');
     
     firebase.database().ref(path).remove()
       .then(function() {
@@ -87,7 +87,7 @@
         }
       })
       .catch(function(error) {
-        el('.mn_notif span').innerHTML = 'Error!!';
+        el('.db_notif span').innerHTML = 'Error!!';
       });
   }
   
@@ -127,9 +127,9 @@
     firebase.database().ref(db_pathId(true)).update(db_genData('update'), (error) => {
       if (error) {
         console.log(error);
-        el('.mn_notif span').innerHTML = 'Error!!';
-        el('.mn_notif span').classList.add('db_danger');
-        setTimeout(function() { el('.mn_notif').classList.add('db_hidden'); }, 1500);
+        el('.db_notif span').innerHTML = 'Error!!';
+        el('.db_notif span').classList.add('db_danger');
+        setTimeout(function() { el('.db_notif').classList.add('db_hidden'); }, 1500);
       } else {
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('update');
         if (is_index) db_startIndex('update');
@@ -146,15 +146,15 @@
     firebase.database().ref(db_pathId(true)).set(db_genData('set'), (error) => {
       if (error) {
         console.log(error);
-        el('.mn_notif span').innerHTML = 'Error!!';
-        el('.mn_notif span').classList.add('db_danger');
-        setTimeout(function() { el('.mn_notif').classList.add('db_hidden'); }, 1500);
+        el('.db_notif span').innerHTML = 'Error!!';
+        el('.db_notif span').classList.add('db_danger');
+        setTimeout(function() { el('.db_notif').classList.add('db_hidden'); }, 1500);
       } else {
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('set');
         if (mydb_select == 'source') {
           mydb_change = true;
           genSource();
-          el('.mn_notif span').innerHTML = 'Done';
+          el('.db_notif span').innerHTML = 'Done';
           db_resetForm();
         }
       }
@@ -164,9 +164,9 @@
   function db_resetForm() {
     el('.db_form').innerHTML = '';
     setTimeout(function() {
-      el('.mn_notif').classList.add('db_hidden');
-      el('.mn_notif span').innerHTML = '';
-      el('.mn_notif span').classList.remove('db_danger');
+      el('.db_notif').classList.add('db_hidden');
+      el('.db_notif span').innerHTML = '';
+      el('.db_notif span').classList.remove('db_danger');
     }, 500);
   }
   
@@ -547,7 +547,7 @@
       index_arr = genObject(snapshot.val());
       
       if (is_form) {
-        el('.mn_notif span').innerHTML = 'Done';
+        el('.db_notif span').innerHTML = 'Done';
         db_resetForm();
         is_form = false;
         el('.db_form').classList.add('db_hidden');
@@ -860,7 +860,7 @@
       if (wp != '/' && wp.search(/\/(\?s=|search\?)/) == -1) db_checkDB(main_arr);
       
       if (note != 'start') {
-        el('.mn_notif span').innerHTML = 'Done';
+        el('.db_notif span').innerHTML = 'Done';
         db_resetForm();
         is_form = false;
         el('.db_form').classList.add('db_hidden');
@@ -914,7 +914,7 @@
     b_txt += '<div class="flex"><button class="db_in _db">Login</button><span class="lg_notif _db db_selected db_hidden"></span></div>';
     b_txt += '</div>';// .db_login
     b_txt += '<div class="db_toggle _db db_100 flex f_center">&#9733;</div>';
-    b_txt += '<div class="mn_notif flex flex_perfect db_hidden" style="position:absolute;"><span class="_db fp_content"></span></div>';// .bmark_db
+    b_txt += '<div class="db_notif flex flex_perfect" style="position:absolute;"><span class="_db fp_content">Loading...</span></div>';
     b_txt += '</div>';// .bmark_db
     
     var b_html = document.createElement('div');
@@ -933,6 +933,7 @@
         mydb_login = true;
         db_mainData('start'); //Start firebase data
         el('.db_login').classList.add('db_hidden');
+        el('.db_notif').classList.add('db_hidden');
         el('.db_data').classList.remove('db_hidden');
       } else {
         mydb_login = false;
@@ -1035,8 +1036,8 @@
       if (el('.db_search input').value == '') return;
       is_search = true;
       document.activeElement.blur();
-      el('.mn_notif span').innerHTML = 'Loading..';
-      el('.mn_notif').classList.remove('db_hidden');
+      el('.db_notif span').innerHTML = 'Loading..';
+      el('.db_notif').classList.remove('db_hidden');
       db_mainData('search', el('.db_search input').value);
     };
     
@@ -1101,17 +1102,17 @@
     
     el('.db_form_btn .db_set').onclick = function() {
       if (!db_formCheck()) return;
-      el('.mn_notif span').innerHTML = 'Loading..';
-      el('.mn_notif').classList.remove('db_hidden','db_danger');
+      el('.db_notif span').innerHTML = 'Loading..';
+      el('.db_notif').classList.remove('db_hidden');
       db_checkData(db_pathId(true)).then(function(res) {
         if (!res) {
           db_setData();
         } else {
-          el('.mn_notif span').innerHTML = (mydb_select == 'source' ? mydb_select : mydb_type) +' already exist';
-          el('.mn_notif span').classList.add('db_danger');
+          el('.db_notif span').innerHTML = (mydb_select == 'source' ? mydb_select : mydb_type) +' already exist';
+          el('.db_notif span').classList.add('db_danger');
           setTimeout(function() {
-            el('.mn_notif').classList.add('db_hidden');
-            el('.mn_notif span').classList.remove('db_danger');
+            el('.db_notif').classList.add('db_hidden');
+            el('.db_notif span').classList.remove('db_danger');
           }, 1500);
         }
       });
@@ -1119,8 +1120,8 @@
     
     el('.db_form_btn .db_btn_update').onclick = function() {
       if (!db_formCheck()) return;
-      el('.mn_notif span').innerHTML = 'Loading..';
-      el('.mn_notif').classList.remove('db_hidden');
+      el('.db_notif span').innerHTML = 'Loading..';
+      el('.db_notif').classList.remove('db_hidden');
       db_updateData();
     };
   }
