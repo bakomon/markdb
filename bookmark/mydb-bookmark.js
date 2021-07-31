@@ -69,7 +69,7 @@
   
   function db_checkData(path) {
     return firebase.database().ref(path).once('value').then(function(snapshot) {
-        return snapshot.exists() ? true : false;
+      return snapshot.exists() ? true : false;
     });
   }
   
@@ -79,9 +79,12 @@
     
     firebase.database().ref(path).remove()
       .then(function() {
-        if (mydb_select == 'source') localStorage.setItem('mydb_source_check', 'false');
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('remove');
         if (is_index) db_startIndex('remove');
+        if (mydb_select == 'source') {
+          mydb_change = true;
+          genSource();
+        }
       })
       .catch(function(error) {
         el('.mn_notif span').innerHTML = 'Error!!';
@@ -131,7 +134,7 @@
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('update');
         if (is_index) db_startIndex('update');
         if (mydb_select == 'source') {
-          source_change = true;
+          mydb_change = true;
           genSource();
         }
       }
@@ -149,7 +152,7 @@
       } else {
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('set');
         if (mydb_select == 'source') {
-          source_change = true;
+          mydb_change = true;
           genSource();
           el('.mn_notif span').innerHTML = 'Done';
           db_resetForm();
@@ -175,7 +178,7 @@
     if (el('.db_bm_menu [type="radio"]:checked')) el('.db_bm_menu [type="radio"]:checked').checked = false;
   }
   
-  function db_sourceCheck(data, prop, note) {
+  function db_supportCheck(data, prop, note) {
     data = data.replace(/\./g, '-');
     return mydb_source[mydb_type][data][prop].indexOf(note) != -1;
   }
@@ -724,7 +727,7 @@
   }
   
   function db_showHtml(data, note) {
-    var not_support = db_sourceCheck(data.host, 'status', 'discontinued') || db_sourceCheck(data.host, 'tag', 'not_support');
+    var not_support = db_supportCheck(data.host, 'status', 'discontinued') || db_supportCheck(data.host, 'tag', 'not_support');
     var chk = not_support || wh.indexOf(data.host) != -1;
     var s_txt = '';
     s_txt += '<li class="_bm';
