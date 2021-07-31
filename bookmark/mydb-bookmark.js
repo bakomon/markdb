@@ -852,8 +852,8 @@
       main_data = snapshot.val();
       main_arr = genObject(snapshot.val());
       db_genList(main_arr);
-      console.log(`${mydb_type} bookmark: `+ main_arr.length);
-      el('.db_total').innerHTML = `${mydb_type}: <b>`+ main_arr.length +'</b>';
+      console.log(`${mydb_type} bookmark: `+ (main_arr.length-1));
+      el('.db_total').innerHTML = `${mydb_type}: <b>`+ (main_arr.length-1) +'</b>';
       el('.db_total').classList.remove('db_hidden');
       
       // check if data exist and show bookmark
