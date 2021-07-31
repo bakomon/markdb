@@ -552,7 +552,7 @@
       index_data = snapshot.val();
       index_arr = genObject(snapshot.val());
       
-      if (is_form) {
+      if (note != 'start') {
         el('.db_notif span').innerHTML = 'Done';
         db_resetForm('remove');
       }
