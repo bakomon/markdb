@@ -155,13 +155,19 @@
           mydb_change = true;
           genSource('change');
           el('.db_notif span').innerHTML = 'Done';
-          db_resetForm();
+          db_resetForm('remove');
         }
       }
     });
   }
   
-  function db_resetForm() {
+  function db_resetForm(note) {
+    if (note == 'remove') {
+      is_form = false;
+      el('.db_form').classList.add('db_hidden');
+      el('.db_form_btn').classList.add('db_hidden');
+      el('.db_tr1').classList.remove('db_hidden');
+    }
     el('.db_form').innerHTML = '';
     setTimeout(function() {
       el('.db_notif').classList.add('db_hidden');
@@ -548,11 +554,7 @@
       
       if (is_form) {
         el('.db_notif span').innerHTML = 'Done';
-        db_resetForm();
-        is_form = false;
-        el('.db_form').classList.add('db_hidden');
-        el('.db_form_btn').classList.add('db_hidden');
-        el('.db_tr1').classList.remove('db_hidden');
+        db_resetForm('remove');
       }
       
       // sorting data
@@ -858,11 +860,7 @@
       
       if (note != 'start') {
         el('.db_notif span').innerHTML = 'Done';
-        db_resetForm();
-        is_form = false;
-        el('.db_form').classList.add('db_hidden');
-        el('.db_form_btn').classList.add('db_hidden');
-        el('.db_tr1').classList.remove('db_hidden');
+        db_resetForm('remove');
       }
       
       // search
@@ -1088,12 +1086,8 @@
     };
     
     el('.db_form_btn .db_btn_close').onclick = function() {
-      db_resetForm();
-      is_form = false;
-      el('.db_form').classList.add('db_hidden');
-      el('.db_form_btn').classList.add('db_hidden');
+      db_resetForm('remove');
       if (is_search) el('.bmark_db').classList.remove('db_s_shide');
-      el('.db_tr1').classList.remove('db_hidden');
       if (is_index) el('.bm_index').classList.remove('db_hidden');
     };
     
