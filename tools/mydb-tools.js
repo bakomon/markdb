@@ -51,7 +51,7 @@ const crossStorage = {
   load: function() {
     var iframe = document.createElement('iframe');
     iframe.id = 'db-frame';
-    //iframe.style.cssText = 'height:0;width:0;border:none;';
+    iframe.style.cssText = 'height:0;width:0;border:none;';
     document.body.appendChild(iframe);
     iframe.src = cross_frame;
     
@@ -332,7 +332,6 @@ function mydb_tools() {
   }
   
   function callScript(note) {
-    console.log(note);
     if (mydb_type && note != 'error') {
       mydb_type_bkp = mydb_type;
       localStorage.setItem('mydb_support', 'true');
