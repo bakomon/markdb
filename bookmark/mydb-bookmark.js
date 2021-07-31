@@ -111,7 +111,7 @@
       }
       
       if (g_obj[i] == 'host') g_val = getHostname(g_val);
-      if (g_obj[i] == 'url') g_val = '//'+ g_val.replace(/^https?:\/\//, '').replace(w3_rgx, '');
+      if (g_obj[i].search(/projecturl|read/i) != -1) g_val = '//'+ g_val.replace(/^https?:\/\//, '').replace(w3_rgx, '');
       if (g_obj[i] == 'update') g_val = new Date(g_val).getTime();
       if (g_obj[i].search(/project|icon|title|alternative|url|read|image|update/) == -1) g_val = g_val.toLowerCase();
       
@@ -495,7 +495,7 @@
         i_txt += '<li class="db_ipost flex_wrap">';
         i_txt += '<div class="flex f_middle db_100">';
         i_txt += '<div class="db_icon"><img src="'+ data[i].icon +'"/></div>';
-        i_txt += '<div class="db_ihost"><a href="'+ data[i].host +'" target="_blank">'+ data[i].host +'</a></div>';
+        i_txt += '<div class="db_ihost"><a href="//'+ data[i].host +'" target="_blank">'+ data[i].host +'</a></div>';
         i_txt += '</div>';
         i_txt += '<div class="db_idetail db_100">';
         i_txt += '<div class="db_istatus">Status: <span class="db_text">'+ data[i].status +'</span></div>';
