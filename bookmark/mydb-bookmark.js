@@ -864,13 +864,13 @@
       el('.db_total').innerHTML = `${mydb_type}: <b>`+ main_arr.length +'</b>';
       el('.db_total').classList.remove('db_hidden');
       
-      if (note == 'set' && mydb_type == mydb_type_bkp) el('.db_menu .db_menu_shide').click();
-      if (wp != '/' && wp.search(/\/(\?s=|search\?)/) == -1) db_checkDB(main_arr //check if data exist and show bookmark
-      
       if (note != 'start') {
         el('.db_notif span').innerHTML = 'Done';
         db_resetForm('remove');
       }
+      
+      if (note == 'set' && mydb_type == mydb_type_bkp) el('.db_menu .db_menu_shide').click();
+      if (wp != '/' && wp.search(/\/(\?s=|search\?)/) == -1) db_checkDB(main_arr //check if data exist and show bookmark
       
       // search
       query = note != 'start' && is_search ? el('.db_search input').value : query; //if data updated and "is_search = true" then show search
