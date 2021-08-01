@@ -12,7 +12,7 @@ const el = function(e,l,m) {
 
 /* Add script to head https://codepen.io/sekedus/pen/QWKYpVR */
 const addScript = function(n,o,t,e,s) {
-  // if a <script> tag failed to load https://stackoverflow.com/a/44325793/7598333
+  /* if a <script> tag failed to load https://stackoverflow.com/a/44325793/7598333 */
   return new Promise(function (resolve, reject) {
     /* data, id, info, boolean, parent */
     var js_async = e === true || t === true || o === true;
@@ -351,7 +351,7 @@ function mydb_tools() {
       var is_cf = chk_cf ? true : false;
       if (!is_cf && !mydb_read) {
         if (!mydb_firebase) loadFirebase();
-        ls_saveLocal('https://cdn.statically.io/gh/bakomon/page/42ec8424/bookmark/mydb-bookmark.js', 'mydb_tools_bookmark', 'js', local_interval);
+        ls_saveLocal('https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js', 'mydb_tools_bookmark', 'js', local_interval);
       }
       /* 
       - alternative replace "https://cdn.statically.io" with "https://cdn.jsdelivr.net"
@@ -359,6 +359,16 @@ function mydb_tools() {
         - https://purge.jsdelivr.net/npm/YOUR_PACKAGE@VERSION/foo/bar
         - https://purge.jsdelivr.net/gh/YOUR_PACKAGE@VERSION/foo/bar
       */
+      
+      /* always update source */
+      crossStorage.get('mydb_source_data', function(res){
+        if (res.search(/error|null/) != -1) {
+          mydb_change = true;
+          genSource('change');
+        } else {
+          localStorage.setItem('mydb_source_data', res);
+        }
+      });
     } else {
       if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
       localStorage.setItem('mydb_support', 'false');
@@ -399,7 +409,7 @@ function mydb_tools() {
   if (document.head.innerHTML == '' || localStorage.getItem('mydb_support') == 'false') return;
   
   /* START - check project via localStorage */
-  crossStorage.load(); //init
+  crossStorage.load(); /* init */
   if (localStorage.getItem('mydb_source_data')) {
     sourceCheck('local', localStorage.getItem('mydb_source_data'));
   } else {
@@ -424,9 +434,9 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|8/1/2021, 1:40:27 PM';
+var local_interval = 'manual|8/2/2021, 1:00:58 AM';
 /* ============================================================ */
-var w3_rgx = /\s?^(w{3}|web|m(obile)?)\./i;
+var w3_rgx = /\s?(w{3}|m(obile)?)\./i;
 var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/i; /* check id from <title> */
 var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
 var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
