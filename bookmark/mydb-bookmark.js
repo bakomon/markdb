@@ -4,7 +4,7 @@
   
   function getHostname(url) {
     var w3_rgx = /^(w{3}|web|m(obile)?)\./i;
-    url = 'http://'+ url.replace(/^https?:\/\//, '');
+    url = url.replace(/(https?:)?\/\//, 'http://');
     url = new URL(url).hostname.replace(w3_rgx, '')/*.replace(/\.(blogspot|wordpress)(.*)/i, '')*/;
     return url;
   }
@@ -111,7 +111,7 @@
       }
       
       if (g_obj[i] == 'host') g_val = getHostname(g_val);
-      if (g_obj[i].search(/domain|project|url|read/i) != -1) g_val = g_val.replace(/^https?:\/\//g, '//').replace(w3_rgx, '');
+      if (g_obj[i].search(/domain|project|url|read/i) != -1) g_val = g_val.replace(/https?:\/\//g, '//').replace(w3_rgx, '');
       if (mydb_select == 'source' && g_obj[i] == 'domain') g_val = g_val.replace(/\//g, '');
       if (g_obj[i] == 'update') g_val = new Date(g_val).getTime();
       if (g_obj[i].search(/project|icon|title|alternative|url|read|image|update/) == -1) g_val = g_val.toLowerCase();
