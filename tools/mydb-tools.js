@@ -337,7 +337,7 @@ function mydb_tools() {
       localStorage.setItem('mydb_support', 'true');
       
       /* add class to body from source: status, tag, theme */
-      var s_data = mydb_source[mydb_type][mydb_host];
+      var s_data = mydb_source[mydb_type][mydb_host.replace(/\./g, '-')];
       var s_class = s_data['status'] +','+ s_data['tag'] +','+ s_data['theme'];
       s_class = s_class.replace(/,+/, ',').replace(/,$/, '').split(',');
       for (var i = 0; i < s_class.length; i++) {
@@ -351,7 +351,7 @@ function mydb_tools() {
       var is_cf = chk_cf ? true : false;
       if (!is_cf && !mydb_read) {
         if (!mydb_firebase) loadFirebase();
-        ls_saveLocal('https://cdn.statically.io/gh/bakomon/page/739b1d30/bookmark/mydb-bookmark.js', 'mydb_tools_bookmark', 'js', local_interval);
+        ls_saveLocal('https://cdn.statically.io/gh/bakomon/page/42ec8424/bookmark/mydb-bookmark.js', 'mydb_tools_bookmark', 'js', local_interval);
       }
       /* 
       - alternative replace "https://cdn.statically.io" with "https://cdn.jsdelivr.net"
@@ -365,18 +365,23 @@ function mydb_tools() {
     }
   }
   
+  function typeCheck(prop) {
+    var data = mydb_source[prop];
+    for (var site in data) {
+      if (data[site]['host'].indexOf(mydb_host) != -1 || data[site]['domain'].indexOf(mydb_host) != -1) {
+        mydb_host = data[site]['host'];
+        return prop;
+      }
+    }
+    return false;
+  }
+  
   function sourceCheck(note, data) {
     mydb_source = data;
     if (mydb_source && mydb_source.search(/null|error/i) == -1) {
       if (note == 'cross') localStorage.setItem('mydb_source_data', mydb_source);
       mydb_source = JSON.parse(mydb_source);
-      if (mydb_source['anime'][mydb_host]) {
-        mydb_type = 'anime';
-      } else if (mydb_source['comic'][mydb_host]) {
-        mydb_type = 'comic';
-      } else if (mydb_source['novel'][mydb_host]) {
-        mydb_type = 'novel';
-      }
+      mydb_type = typeCheck('anime') || typeCheck('comic') || typeCheck('novel');
       callScript('source');
     } else {
       mydb_change = true;
@@ -388,8 +393,8 @@ function mydb_tools() {
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
-  mydb_host = wh.replace(w3_rgx, '').replace(/\./g, '-');
-  document.body.classList.add(mydb_host);
+  mydb_host = wh.replace(w3_rgx, '');
+  document.body.classList.add(mydb_host.replace(/\./g, '-'));
   
   if (document.head.innerHTML == '' || localStorage.getItem('mydb_support') == 'false') return;
   
@@ -419,9 +424,9 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|7/31/2021, 9:48:14 PM';
+var local_interval = 'manual|8/1/2021, 1:40:27 PM';
 /* ============================================================ */
-var w3_rgx = /^(w{3}|web|m(obile)?)\./i;
+var w3_rgx = /\s?^(w{3}|web|m(obile)?)\./i;
 var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/i; /* check id from <title> */
 var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
 var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
