@@ -510,7 +510,7 @@
         i_txt += '<div class="db_istatus">Status: <span class="db_text">'+ data[i].status +'</span></div>';
         if (data[i].theme != '') i_txt += '<div class="db_itheme">Theme: <span class="db_text">'+ data[i].theme +'</span></div>';
         if (data[i].tag != '') i_txt += '<div class="db_itag">Tag: <span class="db_text">'+ data[i].tag +'</span></div>';
-        i_txt += '<div class="db_ibtn flex" data-id="'+ data[i].host.replace(/\./g, '-') +'">';
+        i_txt += '<div class="db_ibtn flex" data-id="'+ i_host.replace(/\./g, '-') +'">';
         if (data[i].project != '') i_txt += '<span class="db_iproject _db"><a href="'+ data[i].project +'" target="_blank">Project</a></span>';
         i_txt += '<span class="db_iedit _db" data-id="source">Edit</span>';
         i_txt += '<span class="db_idelete _db">X</span>';
@@ -1046,13 +1046,13 @@
     
     // klik "Generate" harus pada halaman komik project
     el('.db_form_btn .db_btn_gen').onclick = function() {
-      el('.db_host').value = wh.replace(w3_rgx, '');
+      el('.db_host').value = mydb_host;
       if (mydb_select == 'list') {
         var bmark_id = wp.match(id_w_rgx)[1].replace(/-(bahasa|sub(title)?)-indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/\.html?$/i, '').toLowerCase();
         el('.db_id').value = bmark_id;
         if (wp.search(/\/(title|anime|novel|series)\/\d+\//) != -1) el('.db_bmdb').value = wp.match(/\/(title|anime|novel|series)\/([^\/]+)/)[1];
         el('.db_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(bmark_id, '_') : firstCase(bmark_id, '-');
-        el('.db_url').value = '//'+ wh.replace(w3_rgx, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
+        el('.db_url').value = '//'+ mydb_host + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
         el('.db_update').valueAsDate = local_date;
         
         if (mydb_type == 'comic') {
@@ -1135,7 +1135,7 @@
   var is_index = false;
   var is_isearch = false;
   var is_mobile = isMobile(); //from database tools
-  var nav_max = 3; // result = nav_max + 2
+  var nav_max = 3; // result always: nav_max + 2 = 5
   var index_max = 12;
   var local_date = new Date(toISOLocal().split('T')[0]);
   
