@@ -510,7 +510,7 @@
         i_txt += '<div class="db_istatus">Status: <span class="db_text">'+ data[i].status +'</span></div>';
         if (data[i].theme != '') i_txt += '<div class="db_itheme">Theme: <span class="db_text">'+ data[i].theme +'</span></div>';
         if (data[i].tag != '') i_txt += '<div class="db_itag">Tag: <span class="db_text">'+ data[i].tag +'</span></div>';
-        i_txt += '<div class="db_ibtn flex" data-id="'+ i_host.replace(/\./g, '-') +'">';
+        i_txt += '<div class="db_ibtn flex" data-id="'+ data[i].host.replace(/\./g, '-') +'">';
         if (data[i].project != '') i_txt += '<span class="db_iproject _db"><a href="'+ data[i].project +'" target="_blank">Project</a></span>';
         i_txt += '<span class="db_iedit _db" data-id="source">Edit</span>';
         i_txt += '<span class="db_idelete _db">X</span>';
@@ -581,7 +581,8 @@
       }
       
       db_indexChange(nav_current); //generate catalog & pagination
-      el('.db_imenu .db_inote').innerHTML = is_isearch ? ('Search Result <span class="_db db_active"><b>'+ index_arr.length +'</b></span>') : ((mydb_select == 'source' ? 'Source' : 'All') +' ('+ mydb_type +')');
+      el('.db_imenu .db_inote').innerHTML = is_isearch ? ('Search Result <span class="_db db_active"><b>'+ index_arr.length +'</b></span>') : 
+      ((mydb_select == 'source' ? 'Source' : 'All') +' '+ mydb_type +' ('+ index_arr.length +')');
       if (mydb_select == 'source') {
         el('.db_inote').classList.add('db_100', 't_center');
         el('.db_ifilter').classList.add('db_hidden');
@@ -859,8 +860,8 @@
       main_data = snapshot.val();
       main_arr = genObject(snapshot.val());
       db_genList(main_arr);
-      console.log(`${mydb_type} bookmark: `+ (main_arr.length-1));
-      el('.db_total').innerHTML = `${mydb_type}: <b>`+ (main_arr.length-1) +'</b>';
+      console.log(`${mydb_type} bookmark: `+ main_arr.length);
+      el('.db_total').innerHTML = `${mydb_type}: <b>`+ main_arr.length +'</b>';
       el('.db_total').classList.remove('db_hidden');
       
       // check if data exist and show bookmark
