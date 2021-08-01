@@ -4,7 +4,7 @@
   
   function getHostname(url) {
     var w3_rgx = /^(w{3}|web|m(obile)?)\./i;
-    url = url.replace(/(https?:)?\/\//, 'http://');
+    url = 'http://'+ url.replace(/(https?:)?\/\//, '');
     url = new URL(url).hostname.replace(w3_rgx, '')/*.replace(/\.(blogspot|wordpress)(.*)/i, '')*/;
     return url;
   }
