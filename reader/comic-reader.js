@@ -362,7 +362,8 @@
         'manhuaid.com','.row.mb-4 .col-md-12',
         'komiku.id','#Baca_Komik',
         'bacakomik.co','#chimg-auh',
-        'rawdevart.com','#img-container'
+        'rawdevart.com','#img-container',
+        'nyanfm.com','.elementor-widget-image-carousel'
       ];
       var area_s = el(st[1]) || el(st[3]) || el(st[5]) || el(st[7]) || el(st[9]) || el(st[11]) || el(st[13]) || el(st[15]) || el(st[17]) || el(st[19]);
       var s_length = st.length;
