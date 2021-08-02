@@ -733,7 +733,7 @@
     var source = mydb_source[mydb_type];
     for (var site in source) {
       if (source[site]['host'].indexOf(data) != -1 || source[site]['domain'].indexOf(data) != -1) {
-        return source[site]['host'][name].indexOf(value) != -1;
+        return source[site][name].indexOf(value) != -1;
       }
     }
     return false;
