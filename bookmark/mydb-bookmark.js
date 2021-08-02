@@ -68,7 +68,7 @@
   }
   
   function db_checkData(path) {
-    return firebase.app(mydb_app).database().ref(path).once('value').then(function(snapshot) {
+    return firebase.app(fbase_app).database().ref(path).once('value').then(function(snapshot) {
       return snapshot.exists() ? true : false;
     });
   }
@@ -77,7 +77,7 @@
     el('.db_notif span').innerHTML = 'Loading..';
     el('.db_notif').classList.remove('db_hidden');
     
-    firebase.app(mydb_app).database().ref(path).remove()
+    firebase.app(fbase_app).database().ref(path).remove()
       .then(function() {
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('remove');
         if (is_index) db_startIndex('remove');
@@ -125,7 +125,7 @@
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
   function db_updateData() {
-    firebase.app(mydb_app).database().ref(db_pathId(true)).update(db_genData('update'), (error) => {
+    firebase.app(fbase_app).database().ref(db_pathId(true)).update(db_genData('update'), (error) => {
       if (error) {
         console.log(error);
         el('.db_notif span').innerHTML = 'Error!!';
@@ -144,7 +144,7 @@
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
   function db_setData() {
-    firebase.app(mydb_app).database().ref(db_pathId(true)).set(db_genData('set'), (error) => {
+    firebase.app(fbase_app).database().ref(db_pathId(true)).set(db_genData('set'), (error) => {
       if (error) {
         console.log(error);
         el('.db_notif span').innerHTML = 'Error!!';
@@ -551,7 +551,7 @@
   }
   
   function db_indexData(note, param) {
-    firebase.app(mydb_app).database().ref(db_pathId()).once('value', function(snapshot) {
+    firebase.app(fbase_app).database().ref(db_pathId()).once('value', function(snapshot) {
       index_data = snapshot.val();
       index_arr = genArray(snapshot.val());
       
@@ -866,7 +866,7 @@
   }
   
   function db_mainData(note, query) {
-    firebase.app(mydb_app).database().ref(`bookmark/${mydb_type}`).once('value', function(snapshot) {
+    firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}`).once('value', function(snapshot) {
       main_data = snapshot.val();
       main_arr = genArray(snapshot.val());
       db_genList(main_arr);
@@ -945,7 +945,7 @@
     bookmarkHtml();
     
     // Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102
-    firebase.app(mydb_app).auth().onAuthStateChanged(function(user) {
+    firebase.app(fbase_app).auth().onAuthStateChanged(function(user) {
       if (user) { //User is signed in.
         mydb_login = true;
         db_mainData('start'); //Start firebase data
@@ -993,7 +993,7 @@
       el('.lg_notif').innerHTML = 'Loading..';
       el('.lg_notif').classList.remove('db_hidden');
       
-      firebase.app(mydb_app).auth().signInWithEmailAndPassword(userEmail, userPass).then((user) => {
+      firebase.app(fbase_app).auth().signInWithEmailAndPassword(userEmail, userPass).then((user) => {
         el('.lg_notif').classList.add('db_hidden');
       }).catch(function(error) {
         var errorCode = error.code;
@@ -1003,7 +1003,7 @@
     };
     
     el('.db_bm_menu .db_out').onclick = function() {
-      firebase.app(mydb_app).auth().signOut();
+      firebase.app(fbase_app).auth().signOut();
     };
     
     el('.db_menu .db_menu_shide').onclick = function() {
