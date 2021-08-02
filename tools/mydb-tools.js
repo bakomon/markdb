@@ -113,7 +113,7 @@ const crossStorage = {
     cross_chk = setTimeout(function() {
       console.error(`!!Error crossStorage: can\'t get "${key}" data from iframe.`);
       callback('error');
-    }, 5000);
+    }, 6000);
   }
 };
 
@@ -255,7 +255,7 @@ function mydb_tools() {
   genSource = function(note) {
     if (!mydb_change) return;
     mydb_change = false;
-    firebase.app(mydb_app).database().ref('bookmark/source').once('value', function(snapshot) {
+    firebase.app(fbase_app).database().ref('bookmark/source').once('value', function(snapshot) {
       /*var data = snapshot.val();*/
       /*var s_txt = '{"anime":'+ genObject(genArray(data.anime)) +',"comic":'+ genObject(genArray(data.comic)) +',"novel":'+ genObject(genArray(data.novel)) +'}';*/
       var s_txt = JSON.stringify(snapshot.val());
@@ -267,7 +267,7 @@ function mydb_tools() {
   
   function checkLogin() {
     /* Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102 */
-    firebase.app(mydb_app).auth().onAuthStateChanged(function(user) {
+    firebase.app(fbase_app).auth().onAuthStateChanged(function(user) {
       mydb_login = user ? true : false;
     });
     
@@ -275,7 +275,7 @@ function mydb_tools() {
       genSource('login');
     } else {
       /* auto login firebase */
-      firebase.app(mydb_app).auth().signInWithEmailAndPassword(login_email, login_pass).then((user) => {
+      firebase.app(fbase_app).auth().signInWithEmailAndPassword(login_email, login_pass).then((user) => {
         genSource('auth');
       }).catch(function(error) {
         var errorCode = error.code;
@@ -286,21 +286,6 @@ function mydb_tools() {
   }
   
   function loadFirebase() {
-    /* 
-      Initialize new app with different name https://stackoverflow.com/a/37603526/7598333
-      Firebase configuration for Firebase JS SDK v7.20.0 and later, measurementId is optional
-    */
-    var mydb_config = {
-      apiKey: "AIzaSyBma6cWOGzwSE4sv8SsSewIbCjTPhm7qi0",
-      authDomain: "bakomon99.firebaseapp.com",
-      databaseURL: "https://bakomon99.firebaseio.com",
-      projectId: "bakomon99",
-      storageBucket: "bakomon99.appspot.com",
-      messagingSenderId: "894358128479",
-      appId: "1:894358128479:web:6fbf2d52cf76da755918ea",
-      measurementId: "G-Z4YQS31CXM"
-    };
-    
     if (typeof firebase == 'undefined') {
       addScript('https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js')
         .catch(() => {
@@ -318,7 +303,8 @@ function mydb_tools() {
       if (typeof firebase !== 'undefined') {
         clearInterval(db_chk);
         mydb_firebase = true;
-        firebase.initializeApp(mydb_config, mydb_app);
+        /* Initialize new app with different name https://stackoverflow.com/a/37603526/7598333 */
+        firebase.initializeApp(fbase_config, fbase_app);
         if (typeof firebase.database == 'undefined') addScript('https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js');
         var db2_chk = setInterval(function() {
           if (typeof firebase.database !== 'undefined') {
@@ -350,13 +336,32 @@ function mydb_tools() {
       }
       
       genCSS();
-      if (mydb_type == 'comic') ls_saveLocal('https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js', 'mydb_tools_'+ mydb_type +'_reader', 'js', local_interval);
+      if (mydb_type == 'comic') ls_saveLocal(js_comic_reader, 'mydb_tools_'+ mydb_type +'_reader', 'js', local_interval);
       
       var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); /* cloudflare */
       var is_cf = chk_cf ? true : false;
       if (!is_cf && !mydb_read) {
         if (!mydb_firebase) loadFirebase();
-        ls_saveLocal('https://cdn.statically.io/gh/bakomon/page/387af16b/bookmark/mydb-bookmark.js', 'mydb_tools_bookmark', 'js', local_interval);
+        ls_saveLocal(js_bookmark, 'mydb_tools_bookmark', 'js', local_interval);
+        
+        /* for live test
+        var bm_chk = setInterval(function() {
+          if (typeof comic_bm !== 'undefined') {
+            clearInterval(bm_chk);
+            comic_bm();
+          }
+        });
+        */
+        
+        /* always update source */
+        crossStorage.get('mydb_source_data', function(res){
+          if (res.search(/error|null/) != -1) {
+            mydb_change = true;
+            genSource('change');
+          } else {
+            localStorage.setItem('mydb_source_data', res);
+          }
+        });
       }
       /* 
       - alternative replace "https://cdn.statically.io" with "https://cdn.jsdelivr.net"
@@ -364,16 +369,6 @@ function mydb_tools() {
         - https://purge.jsdelivr.net/npm/YOUR_PACKAGE@VERSION/foo/bar
         - https://purge.jsdelivr.net/gh/YOUR_PACKAGE@VERSION/foo/bar
       */
-      
-      /* always update source */
-      crossStorage.get('mydb_source_data', function(res){
-        if (res.search(/error|null/) != -1) {
-          mydb_change = true;
-          genSource('change');
-        } else {
-          localStorage.setItem('mydb_source_data', res);
-        }
-      });
     } else {
       if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
       localStorage.setItem('mydb_support', 'false');
@@ -408,7 +403,7 @@ function mydb_tools() {
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
-  var w_host = wh.replace(w3_rgx, '');
+  var w_host = wh.replace(wh_rgx, '');
   
   if (document.head.innerHTML == '' || localStorage.getItem('mydb_support') == 'false') return;
   
@@ -422,10 +417,22 @@ function mydb_tools() {
 }
 
 
+/* ============================================================ */
 var genSource; /* global variables */
+var fbase_app = 'bakomon';
+/* Firebase configuration for Firebase JS SDK v7.20.0 and later, measurementId is optional */
+var fbase_config = {
+  apiKey: "AIzaSyBma6cWOGzwSE4sv8SsSewIbCjTPhm7qi0",
+  authDomain: "bakomon99.firebaseapp.com",
+  databaseURL: "https://bakomon99.firebaseio.com",
+  projectId: "bakomon99",
+  storageBucket: "bakomon99.appspot.com",
+  messagingSenderId: "894358128479",
+  appId: "1:894358128479:web:6fbf2d52cf76da755918ea",
+  measurementId: "G-Z4YQS31CXM"
+};
 /* ============================================================ */
 var mydb_source, mydb_type, mydb_type_bkp, mydb_select;
-var mydb_app = 'bakomon';
 var mydb_login = false;
 var mydb_firebase = false;
 var mydb_read = false;
@@ -439,9 +446,11 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|8/2/2021, 3:21:27 PM';
+var local_interval = 'manual|8/3/2021, 12:09:19 AM';
+var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
+var js_bookmark = 'https://cdn.statically.io/gh/bakomon/page/1d7163e2/bookmark/mydb-bookmark.js';
 /* ============================================================ */
-var w3_rgx = /\s?(w{3}|m(obile)?)\./i;
+var wh_rgx = /^(w{3}|web|m(obile)?)\./i;
 var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/i; /* check id from <title> */
 var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
 var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
