@@ -111,7 +111,7 @@
       }
       
       if (g_arr[i] == 'host') g_val = getHostname(g_val);
-      if (g_arr[i].search(/domain|project|url|read/i) != -1) g_val = g_val.replace(/https?:\/\//g, '//').replace(w3_rgx, '');
+      if (g_arr[i].search(/domain|project|url|read/i) != -1) g_val = g_val.replace(/^(https?:)?(\/\/)?((w{3}|m(obile)?)\.)?/g, '//');
       if (mydb_select == 'source' && g_arr[i] == 'domain') g_val = g_val.replace(/\//g, '');
       if (g_arr[i] == 'update') g_val = new Date(g_val).getTime();
       if (g_arr[i].search(/project|icon|title|alternative|url|read|image|update/) == -1) g_val = g_val.toLowerCase();
