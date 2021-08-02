@@ -3,9 +3,9 @@
 //function comic_bm() {
   
   function getHostname(url) {
-    var w3_rgx = /^(w{3}|web|m(obile)?)\./i;
+    var wh_rgx = /^(w{3}|web|m(obile)?)\./i;
     url = 'http://'+ url.replace(/(https?:)?\/\//, '');
-    url = new URL(url).hostname.replace(w3_rgx, '')/*.replace(/\.(blogspot|wordpress)(.*)/i, '')*/;
+    url = new URL(url).hostname.replace(wh_rgx, '')/*.replace(/\.(blogspot|wordpress)(.*)/i, '')*/;
     return url;
   }
   
@@ -111,7 +111,7 @@
       }
       
       if (g_arr[i] == 'host') g_val = getHostname(g_val);
-      if (g_arr[i].search(/domain|project|url|read/i) != -1) g_val = g_val.replace(/^(https?:)?(\/\/)?((w{3}|m(obile)?)\.)?/g, '//');
+      if (g_arr[i].search(/domain|project|url|read/i) != -1) g_val = g_val.replace(/^(https?:)?\/\//g, '//').replace(/\/\/((w{3}|m(obile)?)\.)?/g, '//');
       if (mydb_select == 'source' && g_arr[i] == 'domain') g_val = g_val.replace(/\//g, '');
       if (g_arr[i] == 'update') g_val = new Date(g_val).getTime();
       if (g_arr[i].search(/project|icon|title|alternative|url|read|image|update/) == -1) g_val = g_val.toLowerCase();
@@ -1060,13 +1060,13 @@
     
     // klik "Generate" harus pada halaman komik project
     el('.db_form_btn .db_btn_gen').onclick = function() {
-      el('.db_host').value = wh.replace(w3_rgx, '');
+      el('.db_host').value = wh.replace(wh_rgx, '');
       if (mydb_select == 'list') {
         var bmark_id = wp.match(id_w_rgx)[1].replace(/-(bahasa|sub(title)?)-indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/\.html?$/i, '').toLowerCase();
         el('.db_id').value = bmark_id;
         if (wp.search(/\/(title|anime|novel|series)\/\d+\//) != -1) el('.db_bmdb').value = wp.match(/\/(title|anime|novel|series)\/([^\/]+)/)[1];
         el('.db_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(bmark_id, '_') : firstCase(bmark_id, '-');
-        el('.db_url').value = '//'+ wh.replace(w3_rgx, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
+        el('.db_url').value = '//'+ wh.replace(wh_rgx, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
         el('.db_update').valueAsDate = local_date;
         
         if (mydb_type == 'comic') {
