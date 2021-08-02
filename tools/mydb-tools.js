@@ -89,6 +89,7 @@ const crossStorage = {
   write: function(key, data) {
     cross_callbacks[key].forEach(function(callback) {
       callback(data);
+      cross_callbacks[key].splice(callback, 1); //remove value from array after callback
     });
   },
   set: function(key, data) {
@@ -217,7 +218,7 @@ function ls_saveLocal(url, id, type, interval) {
 
 /* ============================================================ */
 
-const genObject = function(json) {
+const genArray = function(json) {
   var arr = [];
   for (var key in json) {
     if (key == 'check') continue;
@@ -241,7 +242,7 @@ function mydb_tools() {
     document.body.appendChild(s_elem);
   }
   
-  function genJson(data) {
+  function genObject(data) {
     var my_txt = '[';
     for (var i = 0; i < data.length; i++) {
       my_txt += '{"source":'+ JSON.stringify(data[i]) +'}';
@@ -254,9 +255,9 @@ function mydb_tools() {
   genSource = function(note) {
     if (!mydb_change) return;
     mydb_change = false;
-    firebase.database().ref('bookmark/source').once('value', function(snapshot) {
+    firebase.app(mydb_app).database().ref('bookmark/source').once('value', function(snapshot) {
       /*var data = snapshot.val();*/
-      /*var s_txt = '{"anime":'+ genJson(genObject(data.anime)) +',"comic":'+ genJson(genObject(data.comic)) +',"novel":'+ genJson(genObject(data.novel)) +'}';*/
+      /*var s_txt = '{"anime":'+ genObject(genArray(data.anime)) +',"comic":'+ genObject(genArray(data.comic)) +',"novel":'+ genObject(genArray(data.novel)) +'}';*/
       var s_txt = JSON.stringify(snapshot.val());
       localStorage.setItem('mydb_source_data', s_txt);
       crossStorage.set('mydb_source_data', s_txt);
@@ -266,7 +267,7 @@ function mydb_tools() {
   
   function checkLogin() {
     /* Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102 */
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.app(mydb_app).auth().onAuthStateChanged(function(user) {
       mydb_login = user ? true : false;
     });
     
@@ -274,7 +275,7 @@ function mydb_tools() {
       genSource('login');
     } else {
       /* auto login firebase */
-      firebase.auth().signInWithEmailAndPassword(login_email, login_pass).then((user) => {
+      firebase.app(mydb_app).auth().signInWithEmailAndPassword(login_email, login_pass).then((user) => {
         genSource('auth');
       }).catch(function(error) {
         var errorCode = error.code;
@@ -285,9 +286,11 @@ function mydb_tools() {
   }
   
   function loadFirebase() {
-    /* Firebase configuration */
-    /* For Firebase JS SDK v7.20.0 and later, measurementId is optional */
-    var firebaseConfig = {
+    /* 
+      Initialize new app with different name https://stackoverflow.com/a/37603526/7598333
+      Firebase configuration for Firebase JS SDK v7.20.0 and later, measurementId is optional
+    */
+    var mydb_config = {
       apiKey: "AIzaSyBma6cWOGzwSE4sv8SsSewIbCjTPhm7qi0",
       authDomain: "bakomon99.firebaseapp.com",
       databaseURL: "https://bakomon99.firebaseio.com",
@@ -298,30 +301,32 @@ function mydb_tools() {
       measurementId: "G-Z4YQS31CXM"
     };
     
-    addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-app.js')
-      .catch(() => {
-        /* only use catch() :
-        - https://stackoverflow.com/a/36213268/7598333
-        - https://javascript.info/promise-basics#catch
-        */
-        clearInterval(db_chk);
-        console.error('!!Error: can\'t load firebase.');
-        callScript('error');
-      });
+    if (typeof firebase == 'undefined') {
+      addScript('https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js')
+        .catch(() => {
+          /* only use catch() :
+          - https://stackoverflow.com/a/36213268/7598333
+          - https://javascript.info/promise-basics#catch
+          */
+          clearInterval(db_chk);
+          console.error('!!Error: can\'t load firebase.');
+          callScript('error');
+        });
+    }
     
     var db_chk = setInterval(function() {
       if (typeof firebase !== 'undefined') {
         clearInterval(db_chk);
-        firebase.initializeApp(firebaseConfig);
-        addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-database.js');
+        mydb_firebase = true;
+        firebase.initializeApp(mydb_config, mydb_app);
+        if (typeof firebase.database == 'undefined') addScript('https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js');
         var db2_chk = setInterval(function() {
           if (typeof firebase.database !== 'undefined') {
             clearInterval(db2_chk);
-            addScript('https://www.gstatic.com/firebasejs/8.2.3/firebase-auth.js');
+            if (typeof firebase.auth == 'undefined') addScript('https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js');
             var db3_chk = setInterval(function() {
               if (typeof firebase.auth !== 'undefined') {
                 clearInterval(db3_chk);
-                mydb_firebase = true;
                 checkLogin();
               }
             }, 100);
@@ -337,9 +342,9 @@ function mydb_tools() {
       localStorage.setItem('mydb_support', 'true');
       
       /* add class to body from source: status, tag, theme */
-      var s_data = mydb_source[mydb_type][mydb_host.replace(/\./g, '-')];
+      var s_data = mydb_source[mydb_type][w_host];
       var s_class = s_data['status'] +','+ s_data['tag'] +','+ s_data['theme'];
-      s_class = s_class.replace(/,+/, ',').replace(/,$/, '').split(',');
+      s_class = w_host +','+ s_class.replace(/,+/, ',').replace(/,$/, '').split(',');
       for (var i = 0; i < s_class.length; i++) {
         document.body.classList.add(s_class[i]);
       }
@@ -351,7 +356,7 @@ function mydb_tools() {
       var is_cf = chk_cf ? true : false;
       if (!is_cf && !mydb_read) {
         if (!mydb_firebase) loadFirebase();
-        ls_saveLocal('https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js', 'mydb_tools_bookmark', 'js', local_interval);
+        ls_saveLocal('https://cdn.statically.io/gh/bakomon/page/387af16b/bookmark/mydb-bookmark.js', 'mydb_tools_bookmark', 'js', local_interval);
       }
       /* 
       - alternative replace "https://cdn.statically.io" with "https://cdn.jsdelivr.net"
@@ -378,8 +383,8 @@ function mydb_tools() {
   function typeCheck(prop) {
     var data = mydb_source[prop];
     for (var site in data) {
-      if (data[site]['host'].indexOf(mydb_host) != -1 || data[site]['domain'].indexOf(mydb_host) != -1) {
-        mydb_host = data[site]['host'];
+      if (data[site]['host'].indexOf(w_host) != -1 || data[site]['domain'].indexOf(w_host) != -1) {
+        w_host = data[site]['host'].replace(/\./g, '-');
         return prop;
       }
     }
@@ -403,8 +408,7 @@ function mydb_tools() {
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
-  mydb_host = wh.replace(w3_rgx, '');
-  document.body.classList.add(mydb_host.replace(/\./g, '-'));
+  var w_host = wh.replace(w3_rgx, '');
   
   if (document.head.innerHTML == '' || localStorage.getItem('mydb_support') == 'false') return;
   
@@ -420,7 +424,8 @@ function mydb_tools() {
 
 var genSource; /* global variables */
 /* ============================================================ */
-var mydb_host, mydb_source, mydb_type, mydb_type_bkp, mydb_select;
+var mydb_source, mydb_type, mydb_type_bkp, mydb_select;
+var mydb_app = 'bakomon';
 var mydb_login = false;
 var mydb_firebase = false;
 var mydb_read = false;
@@ -434,7 +439,7 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|8/2/2021, 1:00:58 AM';
+var local_interval = 'manual|8/2/2021, 3:21:27 PM';
 /* ============================================================ */
 var w3_rgx = /\s?(w{3}|m(obile)?)\./i;
 var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/i; /* check id from <title> */
