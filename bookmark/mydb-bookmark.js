@@ -92,32 +92,32 @@
   }
   
   function db_genData(note) {
-    var g_val, g_obj = mydb_select == 'source' ? ['host','domain','status','theme','tag','project','icon'] : ['id','bmdb','title','alternative','number','note','type','host','url','read','image','update','similar'];
+    var g_val, g_arr = mydb_select == 'source' ? ['host','domain','status','theme','tag','project','icon'] : ['id','bmdb','title','alternative','number','note','type','host','url','read','image','update','similar'];
     var g_txt = '{';
-    for (var i = 0; i < g_obj.length; i++) {
-      if (note == 'update' && g_obj[i] == 'id') continue;
-      if (mydb_type.search(/novel|anime/) != -1 && g_obj[i] == 'read') continue;
-      if (mydb_type == 'anime' && g_obj[i] == 'type') continue;
+    for (var i = 0; i < g_arr.length; i++) {
+      if (note == 'update' && g_arr[i] == 'id') continue;
+      if (mydb_type.search(/novel|anime/) != -1 && g_arr[i] == 'read') continue;
+      if (mydb_type == 'anime' && g_arr[i] == 'type') continue;
       
-      if (mydb_select == 'source' && g_obj[i] == 'tag') {
+      if (mydb_select == 'source' && g_arr[i] == 'tag') {
         var s_txt = '';
-        var sdata = el('.db_'+ g_obj[i] +' input', 'all');
+        var sdata = el('.db_'+ g_arr[i] +' input', 'all');
         for (var j = 0; j < sdata.length; j++) {
           if (sdata[j].checked == true) s_txt += sdata[j].value +',';
         }
         g_val = s_txt.replace(/,$/, '');
       } else {
-        g_val = el('.db_form .db_'+ g_obj[i]).value;
+        g_val = el('.db_form .db_'+ g_arr[i]).value;
       }
       
-      if (g_obj[i] == 'host') g_val = getHostname(g_val);
-      if (g_obj[i].search(/domain|project|url|read/i) != -1) g_val = g_val.replace(/https?:\/\//g, '//').replace(w3_rgx, '');
-      if (mydb_select == 'source' && g_obj[i] == 'domain') g_val = g_val.replace(/\//g, '');
-      if (g_obj[i] == 'update') g_val = new Date(g_val).getTime();
-      if (g_obj[i].search(/project|icon|title|alternative|url|read|image|update/) == -1) g_val = g_val.toLowerCase();
+      if (g_arr[i] == 'host') g_val = getHostname(g_val);
+      if (g_arr[i].search(/domain|project|url|read/i) != -1) g_val = g_val.replace(/https?:\/\//g, '//').replace(w3_rgx, '');
+      if (mydb_select == 'source' && g_arr[i] == 'domain') g_val = g_val.replace(/\//g, '');
+      if (g_arr[i] == 'update') g_val = new Date(g_val).getTime();
+      if (g_arr[i].search(/project|icon|title|alternative|url|read|image|update/) == -1) g_val = g_val.toLowerCase();
       
-      g_txt += '"'+ g_obj[i] +'":'+ (g_obj[i] == 'update' ? g_val : '"'+ g_val +'"');
-      if (i < g_obj.length-1) g_txt += ',';
+      g_txt += '"'+ g_arr[i] +'":'+ (g_arr[i] == 'update' ? g_val : '"'+ g_val +'"');
+      if (i < g_arr.length-1) g_txt += ',';
     }
     g_txt += '}';
     return JSON.parse(g_txt);
@@ -553,7 +553,7 @@
   function db_indexData(note, param) {
     firebase.database().ref(db_pathId()).once('value', function(snapshot) {
       index_data = snapshot.val();
-      index_arr = genObject(snapshot.val());
+      index_arr = genArray(snapshot.val());
       
       if (note != 'start') {
         el('.db_notif span').innerHTML = 'Done';
@@ -570,11 +570,11 @@
       if (is_isearch) {
         var query = note != 'start' && is_isearch ? el('.db_isearch input').value : param; //if data updated and "is_isearch = true" then show search
         var s_rgx = new RegExp(query, 'ig');
-        var s_obj = mydb_select == 'source' ? ['host','domain','status','theme','tag'] : ['id','bmdb','title','alternative','number','note','type','host'];
+        var s_arr = mydb_select == 'source' ? ['host','domain','status','theme','tag'] : ['id','bmdb','title','alternative','number','note','type','host'];
         index_arr = index_arr.filter(function(item) {
-          for (var i = 0; i < s_obj.length; i++) {
-            if (s_obj[i] == 'type' && !item['type']) continue;
-            if (item[s_obj[i]].search(s_rgx) != -1) return true;
+          for (var i = 0; i < s_arr.length; i++) {
+            if (s_arr[i] == 'type' && !item['type']) continue;
+            if (item[s_arr[i]].search(s_rgx) != -1) return true;
           }
         });
         el('.db_imenu').classList.remove('db_hidden');
@@ -729,9 +729,14 @@
     });
   }
   
-  function db_supportCheck(data, prop, note) {
-    data = data.replace(/\./g, '-');
-    return mydb_source[mydb_type][data][prop].indexOf(note) != -1;
+  function db_supportCheck(data, name, value) {
+    var source = mydb_source[mydb_type];
+    for (var site in source) {
+      if (source[site]['host'].indexOf(data) != -1 || source[site]['domain'].indexOf(data) != -1) {
+        return source[site]['host'][name].indexOf(value) != -1;
+      }
+    }
+    return false;
   }
   
   function db_showHtml(data, note) {
@@ -858,7 +863,7 @@
   function db_mainData(note, query) {
     firebase.database().ref(`bookmark/${mydb_type}`).once('value', function(snapshot) {
       main_data = snapshot.val();
-      main_arr = genObject(snapshot.val());
+      main_arr = genArray(snapshot.val());
       db_genList(main_arr);
       console.log(`${mydb_type} bookmark: `+ main_arr.length);
       el('.db_total').innerHTML = `${mydb_type}: <b>`+ main_arr.length +'</b>';
