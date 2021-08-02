@@ -366,7 +366,7 @@
     var data = db_settings[mydb_type];
     
     if (is_form == 'edit' && mydb_select.indexOf('project') == -1) f_txt += '<div class="db_cover db_100 t_center db_hidden"><img src=""></div>';
-    f_txt += '<div class="db_text db_100">Position:&#160;&#160;<b>'+ mydb_type +'</b>&#160;&#160;>&#160;&#160;<b>'+ mydb_select +'</b>&#160;&#160;>&#160;&#160;<span class="db_border"><b>'+ is_form +'</b></span></div>';
+    f_txt += '<div class="db_text db_100">&#10095;&#10095;&#160;&#160;&#160;<b>'+ mydb_type +'</b>&#160;&#160;>&#160;&#160;<b>'+ mydb_select +'</b>&#160;&#160;>&#160;&#160;<span class="db_border"><b>'+ is_form +'</b></span></div>';
     for (var name in data[mydb_select]) {
       f_txt += db_formGen(name, data[mydb_select][name]);
     }
@@ -908,13 +908,16 @@
     b_txt += '</div>';// .db_td1
     b_txt += '<div class="db_menu2 db_line flex_wrap db_hidden">';
     b_txt += '<div class="db_td2 db_100 db_hidden">';
-    b_txt += '<div class="db_menu_selected db_text db_100">Position:&#160;&#160;<b><span></span></b></div>';
+    b_txt += '<div class="db_menu_selected db_text db_100">&#10095;&#10095;&#160;&#160;&#160;<b><span></span></b></div>';
     b_txt += '<div class="flex db_100 db_space" data-id="list"><button class="db_index db_list _db f_grow t_center">List (<span></span>)</button><button class="db_new _db">New &#43;</button></div>';
     b_txt += '<div class="flex db_100 db_space" data-id="source"><button class="db_index db_source _db f_grow t_center">Source (project)</button><button class="db_new _db">New &#43;</button></div>';
     b_txt += '</div>';// .db_td2
-    b_txt += '<div class="db_bm_menu db_btn_radio flex db_100"><input type="radio" id="comic" name="bookmark" value="comic"><label class="_db db_comic" for="comic">Comic</label><input type="radio" id="novel" name="bookmark" value="novel"><label class="_db db_novel" for="novel">Novel</label><input type="radio" id="anime" name="bookmark" value="anime"><label class="_db db_anime" for="anime">Anime</label></div>';
+    b_txt += '<div class="db_bm_menu flex db_100">';
+    b_txt += '<div class="db_btn_radio flex"><input type="radio" id="comic" name="bookmark" value="comic"><label class="_db db_comic" for="comic">Comic</label><input type="radio" id="novel" name="bookmark" value="novel"><label class="_db db_novel" for="novel">Novel</label><input type="radio" id="anime" name="bookmark" value="anime"><label class="_db db_anime" for="anime">Anime</label></div>';
+    b_txt += '<span class="f_grow"></span><button class="db_out _db">Logout</button>';
+    b_txt += '</div>';// .db_bm_menu
     b_txt += '</div>';// .db_menu2
-    b_txt += '<div class="db_menu flex"><button class="db_menu_shide _db">Menu</button><span class="f_grow"></span><button class="db_out _db">Logout</button><span class="db_total _db db_active db_hidden"></span></div>';
+    b_txt += '<div class="db_menu flex"><button class="db_menu_shide _db">Menu</button><span class="f_grow"></span><span class="db_total _db db_active db_hidden"></span></div>';
     b_txt += '</div>';// .db_tr1
     b_txt += '</div>';// .db_data
     b_txt += '<div class="db_login flex_wrap db_hidden">';
@@ -994,7 +997,7 @@
       });
     };
     
-    el('.db_menu .db_out').onclick = function() {
+    el('.db_bm_menu .db_out').onclick = function() {
       firebase.app(mydb_app).auth().signOut();
     };
     
