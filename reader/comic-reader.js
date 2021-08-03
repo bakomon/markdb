@@ -151,7 +151,7 @@
     var r_txt = '';
     // css control & main already in css tools
     // css reader
-    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:160px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-150px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.rc_hidden{display:none;}</style>';
+    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:160px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-160px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.rc_hidden{display:none;}</style>';
     r_txt += '<style>.scrollToTop,[title*="Back To Top"],.back-to-top,.go-to-top,.btn-top{display:none !important;}</style>'; //css hidden
     r_txt += '<style>.rc_mobile ._rc{font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}.rc_mobile .rc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.rc_mobile .rc_tr2{left:-81px;}.rc_mobile .reader_db:not(.rc_shide) .rc_tr2{left:-40px;}.rc_mobile .reader_db.rc_shide .rc_next button{position:fixed;top:0;bottom:0;left:0;margin:0;max-width:20%;background:0 0;color:transparent;border:0;}</style>'; //css mobile
     // html
@@ -260,6 +260,7 @@
     });
     
     el('.rc_stop').onclick = function() {
+      console.log('clicked');
       window.stop();
       this.classList.add('rc_hidden');
       el('.rc_reload').classList.remove('rc_hidden');
@@ -330,10 +331,10 @@
     };
     
     // after html and js _reader loaded then auto click to stop page
-    if (el('.rc_reload').classList.contains('rc_hidden') && wh.search(/webtoons|mangadex/) == -1) el('.rc_stop').click();
+    if (el('.rc_reload').classList.contains('rc_hidden') && wh.indexOf('mangadex') == -1 && !autoLike) el('.rc_stop').click();
   }
   
-  function startImage(prnt, imgs) {
+  function startImage(note, prnt, imgs) {
     var cp = document.createElement('div');
     cp.id = 'check-point';
     cp.style.cssText = 'z-index:2;color:transparent;position:fixed;bottom:-400px;';
@@ -379,9 +380,10 @@
         }
       }
       console.log('imgArea: '+ document.body.contains(imgArea));
-      if (!imgArea) return;
     }
     if (prnt && imgs) imgArea = prnt;
+    if (!imgArea) return;
+    
     if (el('img[src=""]', imgArea)) removeElem(el('img[src=""]', imgArea)); //komikcast
     imgList = prnt && imgs ? imgs.split('|') : el('img', imgArea, 'all');
     if (!imgList) {return}
@@ -433,7 +435,7 @@
     var reader_mod = document.createElement('div');
     reader_mod.style.cssText = 'width:100%;';
     reader_mod.innerHTML = reader_html;
-    if (prnt && imgs && document.body.className.search(/new_cms|themesia|mangapark/) == -1) {
+    if (prnt && imgs && document.body.className.search(/new_cms|themesia|mangapark|webtoons/) == -1) {
       imgArea.appendChild(reader_mod);
     } else {
       imgArea.parentNode.insertBefore(reader_mod, imgArea);
@@ -455,6 +457,7 @@
     /*//webtoons auto like
     window.addEventListener('load', function() {
       if (wh.indexOf('webtoons') != -1) {
+        autoLike = true;
         el('#likeItButton').scrollIntoView();
         var e_like = setInterval(function() {
           if (el('#footer_favorites.on')) {
@@ -506,7 +509,7 @@
       if (wh.indexOf('mangadex') != -1) {
         data_src = data.server + data.hash + '/' + data.page_array[i];
       } else if (wh.indexOf('webtoons') != -1) {
-        data_src = data.url;
+        data_src = total[i].url;
       } else if (wh.indexOf('mangapark') != -1) {
         data_src = total[i].u;
         //v3 data_src = imgCdnHost + total[i]; //from web
@@ -539,6 +542,9 @@
       removeElem(el('.reader-images', main));
       removeElem(el('.reader-page-bar', main));
       el('#content').dataset.renderer = 'long-strip';
+    } else if (wh.indexOf('webtoons') != -1) {
+      el('.viewer_footer').style.cssText = 'position:absolute;top:0;';
+      el('.viewer_footer').parentNode.style.cssText = 'position:relative;';
     } else if (document.body.classList.contains('new_cms')) {
       main.innerHTML = '';
       main.removeAttribute('id');
@@ -562,7 +568,7 @@
       }
     }
     
-    startImage(main, img_api);
+    startImage('api', main, img_api);
   }
   
   function getDataImage(key) {
@@ -695,7 +701,7 @@
       createImage(imgMS);
     }
     
-    if (document.body.className.search(/new_cms|reader_cms|themesia|mangadex|kyuroku|merakiscans|mangapark|softkomik/) == -1 || (wh.indexOf('webtoons') != -1 && isMobile)) { startImage(); }
+    if (document.body.className.search(/new_cms|reader_cms|themesia|mangadex|kyuroku|merakiscans|mangapark|softkomik|webtoons/) == -1 || (wh.indexOf('webtoons') != -1 && !isMobile)) { startImage('check'); }
   }
   
   function disqusMod() {
@@ -882,6 +888,7 @@
   var isPause = false; //pause images from loading
   var isProject = false;
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from database tools
+  var autoLike = false;
   var imgSize = ''; //image size
   var checkPoint, imgArea, imgList, cdnName, titleId, wpId, zoomID;
   
@@ -934,7 +941,7 @@
       }
     }
     window.onload = function() {
-      if (list_area) list_area.parentNode.scrollIntoView();
+      if (list_area) setTimeout(function() { list_area.parentNode.scrollIntoView(); }, 1000);
     };
     
     // style for link visited
