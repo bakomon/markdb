@@ -10,154 +10,172 @@ body::-webkit-scrollbar-thumb {
 }
 
 html, body, article {
-    background: #151515 !important;
-    -webkit-user-select: text;
-    user-select: text;
+  background: #151515 !important;
+  -webkit-user-select: text;
+  user-select: text;
 }
 body {
-    overflow: auto !important;
+  overflow: auto !important;
 }
 .mangainfo li a:visited, .komikinfo li a:visited, .animeinfo li a:visited, .animeinfo .episodelist a:visited, .wp-manga-chapter a:visited, .bixbox li a:visited, .bxcl li a:visited, #scans a:visited h3, #latestchapters .updates a:visited, #list .chapter a:visited, .chapter-container .chapter-row a:visited, .elementor-icon-list-item a:visited, .epxs a:visited, .chapter-item a:visited, .fixyear a:visited, .fixyear a:visited .year .ytps a:visited, .chli .cli a:visited, .Manga_Chapter a:visited .viewind {
-    color: #d7382d !important;
+  color: #d7382d !important;
 }
 #reader-mod, #wrap:not(.no-css) p:not([class="logo"]) {
-    background: #151515;
-    max-width: 750px !important;
-    min-width: inherit;
-    height: auto !important;
-    margin: 0 auto !important;
-    display: block;
-    float: none !important;
+  background: #151515;
+  max-width: 750px !important;
+  min-width: inherit;
+  height: auto !important;
+  margin: 0 auto !important;
+  display: block;
+  float: none !important;
 }
 #reader-mod img, #wrap:not(.no-css) p:not([class="logo"]) img {
-    width: auto;
-    max-width: 100% !important;
-    /*max-width: 700px !important;*/
-    height: auto;
-    position: initial !important;
-    display: block;
-    margin: 0 auto;
+  width: auto;
+  max-width: 100% !important;
+  /*max-width: 700px !important;*/
+  height: auto;
+  position: initial !important;
+  display: block;
+  margin: 0 auto;
 }
 #content .carousel, .darex .carousel, .vezone .carousel {
-    height: auto;
-    max-height: 100%;
+  height: auto;
+  max-height: 100%;
 }
 #content .carousel-cell, .darex .carousel-cell, .vezone .carousel-cell {
-    float: left;
-    position: relative;
+  float: left;
+  position: relative;
 }
 #content .carousel-cell img, .darex .carousel-cell img, .vezone .carousel-cell img {
-    height: 100%;
+  height: 100%;
 }
 /*#menu:not(ul):before, #main-menu:before {
-    z-index: 2147483648 !important;
-    background: #151515 !important;
-    display: block !important;
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    content: '';
+  z-index: 2147483648 !important;
+  background: #151515 !important;
+  display: block !important;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
 }
 #menu, #menu .center, #menu ul, #main-menu, #main-menu .center, #main-menu ul, #nav, .navbar, #toolbar, #main, #popular-anime, #wrap:not(.no-css), #omv, #sidebar, #content, #venkonten, #all, #menu-desz, #outer-wrapper, .hdcs, .ltshome, .rdmanga, .postbody, .infobox, .terbaru, #pusat, #content-wrapper {
-    z-index: 2147483649 !important;
-    display: block !important;
-    position: relative;
+  z-index: 2147483649 !important;
+  display: block !important;
+  position: relative;
 }*/
 #menu li, #main-menu li {
-    float: none;
-    display: inline-block;
+  float: none;
+  display: inline-block;
 }
 .episode-table tr td[width="100"] {
-    width: 100%;
+  width: 100%;
 }
 body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
-    max-height: none;
-    overflow: initial;
+  max-height: none;
+  overflow: initial;
 }
 /* madara theme */
 .text-ui-light .site-header .c-sub-header-nav, .text-ui-light [class*="c-sidebar c-top"], .text-ui-light .profile-manga {
-    background: #151515 !important;
-    border-color: #3e3949 !important;
+  background: #151515 !important;
+  border-color: #3e3949 !important;
 }
 /* komikgo.com */
 .chapter-type-manga .c-blog-post .entry-content .entry-content_wrap .reading-content::before {
-    position: relative;
+  position: relative;
 }
 /* manhwa-san.xyz | katakomik.site */
 .manhwa-san-xyz #outer-wrapper, .katakomik-site #outer-wrapper, .katakomik-site .header-header {
-    background: #151515 !important;
+  background: #151515 !important;
 }
 .manhwa-san-xyz .blog-post.item-post h1.post-title {
-    color: #999;
+  color: #999;
 }
 .manhwa-san-xyz .alphanx, .katakomik-site .naviarea1 .awnavi1, .funmanga-com .prev-next-post {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 /* mangaku.pro */
 .mangaku-pro .owl-carousel {
-    display: block;
+  display: block;
 }
 /* manhuaid.com */
 .manhuaid-com#darkbody {
-    background: #151515 !important;
+  background: #151515 !important;
 }
 .manhuaid-com img[alt^="Aplikasi"] {
-    display: none;
+  display: none;
 }
 /* mangayu.com */
 .mangayu-com .swal2-container {
-    display: none;
+  display: none;
 }
 /* readcmic.blogspot.com */
 .readcmic-blogspot-com #outer-wrapper {
-    background: #151515 !important;
+  background: #151515 !important;
 }
 /* komikcast.com */
 .is-mobile .komikcast-com .list-update_items-wrapper {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 .is-mobile .komikcast-com .list-update_item {
-    flex: initial;
-    max-width: 100%;
-    width: 50%;
+  flex: initial;
+  max-width: 100%;
+  width: 50%;
+}
+/* nyanfm.com */
+.nyanfm-com.elementor-kit-12 {
+  --e-global-color-48d087d: #eee;
+  --e-global-color-14c8a14: #b8b8b8;
+  --e-global-color-eb4b41d: #151515;
+}
+.nyanfm-com .container, .nyanfm-com .elementor-section {
+  background-color: #151515 !important;
+}
+.nyanfm-com .elementor-column-wrap {
+  background: transparent !important;
+}
+.nyanfm-com .elementor-heading-title, .nyanfm-com .bdt-navbar-nav > li > a {
+  color: #eee !important;
+}
+.nyanfm-com .elementor-button {
+  color: #222;
 }
 /* webtoons.com */
 .webtoons-com img {
-    opacity: 0.9 !important;
+  opacity: 0.9 !important;
 }
 .webtoons-com #wrap a, .webtoons-com #wrap p, #wrap .main_hotnew h2, #wrap .title_area h2, #wrap .grade_num {
-    color: #838383 !important;
+  color: #838383 !important;
 }
 #wrap #header, #wrap .snb_wrap, #wrap #container.bg, #wrap .detail_body .detail_lst, #wrap .detail_body .detail_install_app, #wrap .detail_body .detail_lst li, #wrap .detail_body .aside.detail, #wrap .detail_body .detail_paywall, #wrap .main_daily_wrap, #wrap .daily_tab_wrap, #wrap .main_hotnew_wrap, #wrap .main_genre_wrap, #wrap .main_challenge, #wrap .lst_type1 li, #wrap #footer, #wrap .notice_area, #wrap .foot_app, #wrap .discover_lst li, #wrap .ranking_tab, #wrap .ranking_tab li, #wrap .lst_type1, #wrap .daily_head, #wrap .daily_card_item, #wrap .daily_card, #wrap .daily_card li, #wrap #cbox_module, #wrap .u_cbox .u_cbox_comment_box, #wrap .u_cbox a {
-    background-color: #151515 !important;
-    border-color: #000 !important;
-    color: #838383 !important;
+  background-color: #151515 !important;
+  border-color: #000 !important;
+  color: #838383 !important;
 }
 #wrap .card_item .card_back, #wrap .daily_tab li.on .btn_daily, #wrap .main_challenge .title_area .btnarea a, #wrap .snb li.on a, #wrap .ranking_tab li.on a, #wrap .daily_section.on, #wrap .episode_area {
-    background-color: #2f2f2f !important;
-    color: #838383 !important;
+  background-color: #2f2f2f !important;
+  color: #838383 !important;
 }
 
 
 /* display none */
 #footer2, noscript, #ftads, .kln:not(.blox), .kln.mlb, .c-sub-header-nav.sticky, .restrictcontainer, [class*="komik_info-alert"], .adult-content #adult_modal, .adult-content .modal-backdrop, html body [class*="iklan"], html body [rel="noopener"]:not([target="_blank"]), html body [style="z-index:2147483647;"], html body [style="background:rgb(221,221,221); z-index:9999999; opacity:1; visibility:visible;"], html body a[rel="nofollow norefferer noopener"], html body [style="z-index:999999; background:rgba(0,0,0,0.8); display:block;"], html body [style="position:fixed; top:0px; bottom:0px; left:0px; right:0px; z-index:2147483647; background:black; opacity:0.01; height:637px; width:1366px;"], center a[href*="mangatoon"], #navkanan[class*="scroll"], #bottom-banner-ads, footer.perapih.chf, #Notifikasi {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
 .hidden-items {
-    position: fixed;
-    top: -9999px;
-    left: -9999px;
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
 }
 
 /* exception */
 .judulseries .iklan {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
