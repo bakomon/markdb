@@ -353,7 +353,7 @@
         '7','#Gambar_komik',
         '8','#viewer',
         '9','[id^="Blog"] .post-body',
-        'webtoons.com','.viewer_lst .viewer_img',
+        'webtoons.com','.viewer_img',
         'mangacdn.my.id','.entry-content',
         'mangacanblog.com','#imgholder',
         'komikfoxy.xyz','#gallery-1',
