@@ -353,7 +353,7 @@
         '7','#Gambar_komik',
         '8','#viewer',
         '9','[id^="Blog"] .post-body',
-        'webtoons.com','.viewer_img',
+        'webtoons.com','#_imageList',
         'mangacdn.my.id','.entry-content',
         'mangacanblog.com','#imgholder',
         'komikfoxy.xyz','#gallery-1',
@@ -473,6 +473,9 @@
     if (wh.indexOf('mangadex') != -1) {
       csl = '#content .reader-main';
       total = data.page_array;
+    } else if (wh.indexOf('webtoons') != -1) {
+      csl = '#_viewer';
+      total = data;
     } else if (document.body.classList.contains('themesia')) {
       csl = el('#readerarea');
       total = data.sources[0].images;
@@ -502,6 +505,8 @@
       var data_src = '';
       if (wh.indexOf('mangadex') != -1) {
         data_src = data.server + data.hash + '/' + data.page_array[i];
+      } else if (wh.indexOf('webtoons') != -1) {
+        data_src = data.url;
       } else if (wh.indexOf('mangapark') != -1) {
         data_src = total[i].u;
         //v3 data_src = imgCdnHost + total[i]; //from web
@@ -584,16 +589,8 @@
       eReader.addEventListener('click', function(e) {
         wl.href = e.target.parentNode.href;
       });
-    } else if (wh.indexOf('softkomik') != -1) { //api
-      var content = el('#__next');
-      var new_content = document.createElement('div');
-      new_content.id = 'content-mod';
-      new_content.innerHTML = '<div id="readerarea"></div><a href="#">next</a>';
-      content.parentNode.insertBefore(new_content, content);
-      removeElem('#__next');
-      var eId = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[1];
-      var eCh = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[2];
-      getData('//api.softkomik.online/api/baca-chapter/'+ eId +'&'+ eCh);
+    } else if (wh.indexOf('webtoons') != -1 && isMobile) { //api
+      getData(imageList); //from web
     } else if (wh.indexOf('komiku.id') != -1) { //click
       document.body.classList.add('click');
       el('.main').id = 'main-mod';
@@ -611,6 +608,16 @@
       }, 100);
     } else if (wh.indexOf('komiknesia') != -1) { //eastheme
       if (wl.href.indexOf('?read=list') == -1) wl.href = wl.href.replace(/\?read\=paged?/g, '') + '?read=list';
+    } else if (wh.indexOf('softkomik') != -1) { //api
+      var content = el('#__next');
+      var new_content = document.createElement('div');
+      new_content.id = 'content-mod';
+      new_content.innerHTML = '<div id="readerarea"></div><a href="#">next</a>';
+      content.parentNode.insertBefore(new_content, content);
+      removeElem('#__next');
+      var eId = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[1];
+      var eCh = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[2];
+      getData('//api.softkomik.online/api/baca-chapter/'+ eId +'&'+ eCh);
     } else if (wh.indexOf('mangapark') != -1) { //script
       /* //v3
       localStorage.setItem('read_load', 'f');
@@ -688,7 +695,7 @@
       createImage(imgMS);
     }
     
-    if (document.body.className.search(/new_cms|reader_cms|themesia|mangadex|kyuroku|merakiscans|mangapark|softkomik/) == -1) { startImage(); }
+    if (document.body.className.search(/new_cms|reader_cms|themesia|mangadex|kyuroku|merakiscans|mangapark|softkomik/) == -1 || (wh.indexOf('webtoons') != -1 && isMobile)) { startImage(); }
   }
   
   function disqusMod() {
