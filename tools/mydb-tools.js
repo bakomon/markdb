@@ -351,7 +351,13 @@ function mydb_tools() {
       var is_cf = chk_cf ? true : false;
       if (!is_cf && !mydb_read) {
         if (!mydb_firebase) loadFirebase();
-        ls_saveLocal(js_bookmark, 'mydb_tools_bookmark', 'js', local_interval);
+        
+        var db_chapterk = setInterval(function() {
+          if (typeof firebase !== 'undefined' && typeof firebase.database !== 'undefined' && typeof firebase.auth !== 'undefined') {
+            clearInterval(db_chapterk);
+            ls_saveLocal(js_bookmark, 'mydb_tools_bookmark', 'js', local_interval);
+          }
+        }, 100);
         
         /* live test bookmark 
         var bm_chk = setInterval(function() {
@@ -361,16 +367,6 @@ function mydb_tools() {
           }
         });
         */
-        
-        /* always update source */
-        crossStorage.get('mydb_source_data', function(res){
-          if (res.search(/error|null/) != -1) {
-            mydb_change = true;
-            genSource('change');
-          } else {
-            localStorage.setItem('mydb_source_data', res);
-          }
-        });
       }
       /* 
       - alternative replace "https://cdn.statically.io" with "https://cdn.jsdelivr.net"
@@ -456,9 +452,9 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|8/3/2021, 11:36:02 AM';
-var js_comic_reader = 'https://cdn.statically.io/gh/bakomon/page/416f19bd/reader/comic-reader.js';
-var js_bookmark = 'https://cdn.statically.io/gh/bakomon/page/1d7163e2/bookmark/mydb-bookmark.js';
+var local_interval = 'manual|8/3/2021, 3:40:00 PM';
+var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
+var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js';
 /* ============================================================ */
 var wh_rgx = /^(w{3}|web|m(obile)?)\./i;
 var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/i; /* check id from <title> */
