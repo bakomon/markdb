@@ -590,7 +590,7 @@
         wl.href = e.target.parentNode.href;
       });
     } else if (wh.indexOf('webtoons') != -1 && isMobile) { //api
-      getData(imageList); //from web
+      createImage(imageList); //from web
     } else if (wh.indexOf('komiku.id') != -1) { //click
       document.body.classList.add('click');
       el('.main').id = 'main-mod';
