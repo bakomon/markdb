@@ -1159,6 +1159,16 @@
     if (typeof firebase !== 'undefined' && typeof firebase.database !== 'undefined' && typeof firebase.auth !== 'undefined') {
       clearInterval(db_chapterk);
       db_startBookmark();
+      
+      /* always update source */
+      crossStorage.get('mydb_source_data', function(res){
+        if (res.search(/error|null/) != -1) {
+          mydb_change = true;
+          genSource('change');
+        } else {
+          localStorage.setItem('mydb_source_data', res);
+        }
+      });
     }
   }, 100);
 })();
