@@ -287,9 +287,9 @@
     - .btn-sm i[class*="right"] = new CMS "scans"
     - i[rel="next"] = ads_newtab
     */
-    var next_chap =  el('.manhuaid-com a[class*="float-left"]') || el('.readmng-com a[class*="next_page"]') || el('.funmanga-com #chapter-next-link') || el('.mangabat-com .navi-change-chapter-btn-next') || el('.bato-to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
+    var next_chap =  el('.manhuaid-com a[class*="float-left"]') || el('.nyanfm-com .fa-angle-right') || el('.funmanga-com #chapter-next-link')|| el('.readmng-com a[class*="next_page"]') || el('.funmanga-com #chapter-next-link') || el('.mangabat-com .navi-change-chapter-btn-next') || el('.bato-to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
     if (next_chap) {
-      next_chap = document.body.className.search(/new_cms|mangadropout/) != -1 ? next_chap.parentNode : next_chap;
+      next_chap = document.body.className.search(/new_cms|mangadropout|nyanfm/) != -1 ? next_chap.parentNode : next_chap;
       var next_url = /*document.body.classList.contains('ads_newtab') ? next_chap.dataset.href :*/ next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
       el('.rc_next').classList.remove('rc_hidden');
@@ -357,13 +357,13 @@
         'mangacdn.my.id','.entry-content',
         'mangacanblog.com','#imgholder',
         'komikfoxy.xyz','#gallery-1',
-        'mangabat.com','.container-chapter-reader',
         'mangadropout.net','#displayNoAds .col-md-12.text-center',
         'manhuaid.com','.row.mb-4 .col-md-12',
         'komiku.id','#Baca_Komik',
         'bacakomik.co','#chimg-auh',
-        'rawdevart.com','#img-container',
-        'nyanfm.com','.elementor-widget-image-carousel'
+        'nyanfm.com','.elementor-widget-image-carousel',
+        'mangabat.com','.container-chapter-reader',
+        'rawdevart.com','#img-container'
       ];
       var area_s = el(st[1]) || el(st[3]) || el(st[5]) || el(st[7]) || el(st[9]) || el(st[11]) || el(st[13]) || el(st[15]) || el(st[17]) || el(st[19]);
       var s_length = st.length;
