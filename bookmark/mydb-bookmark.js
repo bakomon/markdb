@@ -904,7 +904,7 @@
     b_txt += '<div class="bmark_db db_s_shide db_shide flex_wrap f_bottom">';
     b_txt += '<div class="db_data db_100 db_hidden">';
     b_txt += '<div class="db_form flex_wrap db_hidden"></div>';
-    b_txt += '<div class="db_form_btn flex db_line_top db_hidden"><button class="db_btn_gen _db">Generate</button><span class="f_grow"></span><button class="db_btn_close _db">Close</button><button class="db_set _db db_active db_no_hover db_hidden">Set</button><button class="db_btn_update _db db_active db_no_hover db_hidden">Update</button></div>';
+    b_txt += '<div class="db_form_btn flex db_line_top db_hidden"><button class="db_btn_gen _db">Generate</button><span class="f_grow"></span><button class="db_btn_close _db db_danger">Close</button><button class="db_set _db db_active db_no_hover db_hidden">Set</button><button class="db_btn_update _db db_active db_no_hover db_hidden">Update</button></div>';
     b_txt += '<div class="db_result db_line db_hidden"></div>';
     b_txt += '<div class="db_tr1">';
     b_txt += '<div class="db_td1">';
@@ -919,7 +919,7 @@
     b_txt += '</div>';// .db_td2
     b_txt += '<div class="db_bm_menu flex db_100">';
     b_txt += '<div class="db_btn_radio flex"><input type="radio" id="comic" name="bookmark" value="comic"><label class="_db db_comic" for="comic">Comic</label><input type="radio" id="novel" name="bookmark" value="novel"><label class="_db db_novel" for="novel">Novel</label><input type="radio" id="anime" name="bookmark" value="anime"><label class="_db db_anime" for="anime">Anime</label></div>';
-    b_txt += '<span class="f_grow"></span><button class="db_out _db">Logout</button>';
+    b_txt += '<span class="f_grow"></span><button class="db_out _db">&#10006;</button>';
     b_txt += '</div>';// .db_bm_menu
     b_txt += '</div>';// .db_menu2
     b_txt += '<div class="db_menu flex"><button class="db_menu_shide _db">Menu</button><span class="f_grow"></span><span class="db_total _db db_active db_hidden"></span></div>';
@@ -1003,15 +1003,17 @@
     };
     
     el('.db_bm_menu .db_out').onclick = function() {
-      firebase.app(fbase_app).auth().signOut();
+      if (confirm('Are you sure you want to log out?')) {
+        firebase.app(fbase_app).auth().signOut();
+      }
     };
     
     el('.db_menu .db_menu_shide').onclick = function() {
       db_resetMenu();
-      this.classList.toggle('db_selected');
-      if (this.classList.contains('db_selected')) mydb_type = mydb_type_bkp;
+      this.classList.toggle('db_danger');
+      if (this.classList.contains('db_danger')) mydb_type = mydb_type_bkp;
       el('.db_menu2').classList.toggle('db_hidden');
-      el('.db_bm_menu input[value="'+ mydb_type +'"]').checked = true;
+      //el('.db_bm_menu input[value="'+ mydb_type +'"]').checked = true;
       el('.db_td1').classList.toggle('db_hidden');
       if (is_search) el('.db_result').classList.toggle('db_hidden');
     };
