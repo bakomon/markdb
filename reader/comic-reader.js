@@ -260,7 +260,6 @@
     });
     
     el('.rc_stop').onclick = function() {
-      console.log('clicked');
       window.stop();
       this.classList.add('rc_hidden');
       el('.rc_reload').classList.remove('rc_hidden');
