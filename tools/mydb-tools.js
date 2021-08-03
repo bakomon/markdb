@@ -113,7 +113,7 @@ const crossStorage = {
     cross_chk = setTimeout(function() {
       console.error(`!!Error crossStorage: can\'t get "${key}" data from iframe.`);
       callback('error');
-    }, 6000);
+    }, 8000);
   }
 };
 
@@ -233,7 +233,7 @@ function mydb_tools() {
     var s_str = '.cbr_mod *,.cbr_mod *:before,.cbr_mod *:after{outline:0;-webkit-box-sizing:border-box;box-sizing:border-box;}.line_text{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}.flex{display:-webkit-flex;display:flex;}.flex_wrap{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;}.flex_perfect{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);}/* Perfect Centering: parent */.flex_perfect .fp_content{margin:auto;}/* Perfect Centering: content */.f_top{-webkit-align-items:flex-start;align-items:flex-start;-webkit-align-content:flex-start;align-content:flex-start;}.f_middle{-webkit-align-items:center;align-items:center;-webkit-align-content:center;align-content:center;}.f_bottom{-webkit-align-items:flex-end;align-items:flex-end;-webkit-align-content:flex-end;align-content:flex-end;}.f_center{-webkit-justify-content:center;justify-content:center;}.f_left{-webkit-justify-content:flex-start;justify-content:flex-start;}.f_right{-webkit-justify-content:flex-end;justify-content:flex-end;}.f_grow{-webkit-flex-grow:1;flex-grow:1;}.f_between{-webkit-justify-content:space-between;justify-content:space-between;}.t_center{text-align:center;}.t_left{text-align:left;}.t_right{text-align:right;}.t_justify{text-align:justify;}[disabled]{cursor:no-drop !important;}.line_clamp{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}';
     
     /* css main */
-    s_str += '/* Custom Scrollbar */body::-webkit-scrollbar{width:15px;}body::-webkit-scrollbar-track{background:#312f40;}body::-webkit-scrollbar-thumb{background:#151515;}html, body, article{background:#151515 !important;-webkit-user-select:text;user-select:text;}body{overflow:auto !important;}.mangainfo li a:visited,.komikinfo li a:visited,.animeinfo li a:visited,.animeinfo .episodelist a:visited,.wp-manga-chapter a:visited,.bixbox li a:visited,.bxcl li a:visited,#scans a:visited h3,#latestchapters .updates a:visited,#list .chapter a:visited,.chapter-container .chapter-row a:visited,.elementor-icon-list-item a:visited,.epxs a:visited,.chapter-item a:visited,.fixyear a:visited,.fixyear a:visited .year .ytps a:visited,.chli .cli a:visited,.Manga_Chapter a:visited .viewind{color:#d7382d !important;}#reader-mod,#wrap:not(.no-css) p:not([class="logo"]){background:#151515;max-width:750px !important;min-width:inherit;height:auto !important;margin:0 auto !important;display:block;float:none !important;}#reader-mod img,#wrap:not(.no-css) p:not([class="logo"]) img{width:auto;max-width:100% !important;/*max-width:700px !important;*/    height:auto;position:initial !important;display:block;margin:0 auto;}#content .carousel,.darex .carousel,.vezone .carousel{height:auto;max-height:100%;}#content .carousel-cell,.darex .carousel-cell,.vezone .carousel-cell{float:left;position:relative;}#content .carousel-cell img,.darex .carousel-cell img,.vezone .carousel-cell img{height:100%;}#menu li,#main-menu li{float:none;display:inline-block;}.episode-table tr td[width="100"]{width:100%;}body.manga-page .main-col .listing-chapters_wrap ul.version-chap{max-height:none;overflow:initial;}/* madara theme */.text-ui-light .site-header .c-sub-header-nav,.text-ui-light [class*="c-sidebar c-top"],.text-ui-light .profile-manga{background:#151515 !important;border-color:#3e3949 !important;}/* komikgo.com */.chapter-type-manga .c-blog-post .entry-content .entry-content_wrap .reading-content::before{position:relative;}/* manhwa-san.xyz | katakomik.site */.manhwa-san-xyz #outer-wrapper,.katakomik-site #outer-wrapper,.katakomik-site .header-header{background:#151515 !important;}.manhwa-san-xyz .blog-post.item-post h1.post-title{color:#999;}.manhwa-san-xyz .alphanx,.katakomik-site .naviarea1 .awnavi1,.funmanga-com .prev-next-post{display:flex;justify-content:space-between;}/* mangaku.pro */.mangaku-pro .owl-carousel{display:block;}/* manhuaid.com */.manhuaid-com#darkbody{background:#151515 !important;}.manhuaid-com img[alt^="Aplikasi"]{display:none;}/* mangayu.com */.mangayu-com .swal2-container{display:none;}/* readcmic.blogspot.com */.readcmic-blogspot-com #outer-wrapper{background:#151515 !important;}/* komikcast.com */.is-mobile .komikcast-com .list-update_items-wrapper{display:flex;flex-wrap:wrap;}.is-mobile .komikcast-com .list-update_item{flex:initial;max-width:100%;width:50%;}/* webtoons.com */.webtoons-com img{opacity:0.9 !important;}.webtoons-com #wrap a,.webtoons-com #wrap p,#wrap .main_hotnew h2,#wrap .title_area h2,#wrap .grade_num{color:#838383 !important;}#wrap #header,#wrap .snb_wrap,#wrap #container.bg,#wrap .detail_body .detail_lst,#wrap .detail_body .detail_install_app,#wrap .detail_body .detail_lst li,#wrap .detail_body .aside.detail,#wrap .detail_body .detail_paywall,#wrap .main_daily_wrap,#wrap .daily_tab_wrap,#wrap .main_hotnew_wrap,#wrap .main_genre_wrap,#wrap .main_challenge,#wrap .lst_type1 li,#wrap #footer,#wrap .notice_area,#wrap .foot_app,#wrap .discover_lst li,#wrap .ranking_tab,#wrap .ranking_tab li,#wrap .lst_type1,#wrap .daily_head,#wrap .daily_card_item,#wrap .daily_card,#wrap .daily_card li,#wrap #cbox_module,#wrap .u_cbox .u_cbox_comment_box,#wrap .u_cbox a{background-color:#151515 !important;border-color:#000 !important;color:#838383 !important;}#wrap .card_item .card_back,#wrap .daily_tab li.on .btn_daily,#wrap .main_challenge .title_area .btnarea a,#wrap .snb li.on a,#wrap .ranking_tab li.on a,#wrap .daily_section.on,#wrap .episode_area{background-color:#2f2f2f !important;color:#838383 !important;}/* display none */#footer2, noscript,#ftads,.kln:not(.blox),.kln.mlb,.c-sub-header-nav.sticky,.restrictcontainer, [class*="komik_info-alert"],.adult-content #adult_modal,.adult-content .modal-backdrop, html body [class*="iklan"], html body [rel="noopener"]:not([target="_blank"]), html body [style="z-index:2147483647;"], html body [style="background:rgb(221,221,221); z-index:9999999; opacity:1; visibility:visible;"], html body a[rel="nofollow norefferer noopener"], html body [style="z-index:999999; background:rgba(0,0,0,0.8); display:block;"], html body [style="position:fixed; top:0px; bottom:0px; left:0px; right:0px; z-index:2147483647; background:black; opacity:0.01; height:637px; width:1366px;"], center a[href*="mangatoon"],#navkanan[class*="scroll"],#bottom-banner-ads, footer.perapih.chf,#Notifikasi{display:none !important;visibility:hidden !important;opacity:0 !important;}.hidden-items{position:fixed;top:-9999px;left:-9999px;}/* exception */.judulseries .iklan{display:block !important;visibility:visible !important;opacity:1 !important;}';
+    s_str += '/* Custom Scrollbar */body::-webkit-scrollbar{width:15px;}body::-webkit-scrollbar-track{background:#312f40;}body::-webkit-scrollbar-thumb{background:#151515;}html, body, article{background:#151515 !important;-webkit-user-select:text;user-select:text;}body{overflow:auto !important;}.mangainfo li a:visited,.komikinfo li a:visited,.animeinfo li a:visited,.animeinfo .episodelist a:visited,.wp-manga-chapter a:visited,.bixbox li a:visited,.bxcl li a:visited,#scans a:visited h3,#latestchapters .updates a:visited,#list .chapter a:visited,.chapter-container .chapter-row a:visited,.elementor-icon-list-item a:visited,.epxs a:visited,.chapter-item a:visited,.fixyear a:visited,.fixyear a:visited .year .ytps a:visited,.chli .cli a:visited,.Manga_Chapter a:visited .viewind{color:#d7382d !important;}#reader-mod,#wrap:not(.no-css) p:not([class="logo"]){background:#151515;max-width:750px !important;min-width:inherit;height:auto !important;margin:0 auto !important;display:block;float:none !important;}#reader-mod img,#wrap:not(.no-css) p:not([class="logo"]) img{width:auto;max-width:100% !important;/*max-width:700px !important;*/  height:auto;position:initial !important;display:block;margin:0 auto;}#content .carousel,.darex .carousel,.vezone .carousel{height:auto;max-height:100%;}#content .carousel-cell,.darex .carousel-cell,.vezone .carousel-cell{float:left;position:relative;}#content .carousel-cell img,.darex .carousel-cell img,.vezone .carousel-cell img{height:100%;}#menu li,#main-menu li{float:none;display:inline-block;}.episode-table tr td[width="100"]{width:100%;}body.manga-page .main-col .listing-chapters_wrap ul.version-chap{max-height:none;overflow:initial;}/* madara theme */.text-ui-light .site-header .c-sub-header-nav,.text-ui-light [class*="c-sidebar c-top"],.text-ui-light .profile-manga{background:#151515 !important;border-color:#3e3949 !important;}/* komikgo.com */.chapter-type-manga .c-blog-post .entry-content .entry-content_wrap .reading-content::before{position:relative;}/* manhwa-san.xyz | katakomik.site */.manhwa-san-xyz #outer-wrapper,.katakomik-site #outer-wrapper,.katakomik-site .header-header{background:#151515 !important;}.manhwa-san-xyz .blog-post.item-post h1.post-title{color:#999;}.manhwa-san-xyz .alphanx,.katakomik-site .naviarea1 .awnavi1,.funmanga-com .prev-next-post{display:flex;justify-content:space-between;}/* mangaku.pro */.mangaku-pro .owl-carousel{display:block;}/* manhuaid.com */.manhuaid-com#darkbody{background:#151515 !important;}.manhuaid-com img[alt^="Aplikasi"]{display:none;}/* mangayu.com */.mangayu-com .swal2-container{display:none;}/* readcmic.blogspot.com */.readcmic-blogspot-com #outer-wrapper{background:#151515 !important;}/* komikcast.com */.is-mobile .komikcast-com .list-update_items-wrapper{display:flex;flex-wrap:wrap;}.is-mobile .komikcast-com .list-update_item{flex:initial;max-width:100%;width:50%;}/* nyanfm.com */.nyanfm-com.elementor-kit-12{--e-global-color-48d087d:#eee;--e-global-color-14c8a14:#b8b8b8;--e-global-color-eb4b41d:#151515;}.nyanfm-com .container,.nyanfm-com .elementor-section{background-color:#151515 !important;}.nyanfm-com .elementor-column-wrap{background:transparent !important;}.nyanfm-com .elementor-heading-title,.nyanfm-com .bdt-navbar-nav > li > a{color:#eee !important;}.nyanfm-com .elementor-button{color:#222;}/* webtoons.com */.webtoons-com img{opacity:0.9 !important;}.webtoons-com #wrap a,.webtoons-com #wrap p,#wrap .main_hotnew h2,#wrap .title_area h2,#wrap .grade_num{color:#838383 !important;}#wrap #header,#wrap .snb_wrap,#wrap #container.bg,#wrap .detail_body .detail_lst,#wrap .detail_body .detail_install_app,#wrap .detail_body .detail_lst li,#wrap .detail_body .aside.detail,#wrap .detail_body .detail_paywall,#wrap .main_daily_wrap,#wrap .daily_tab_wrap,#wrap .main_hotnew_wrap,#wrap .main_genre_wrap,#wrap .main_challenge,#wrap .lst_type1 li,#wrap #footer,#wrap .notice_area,#wrap .foot_app,#wrap .discover_lst li,#wrap .ranking_tab,#wrap .ranking_tab li,#wrap .lst_type1,#wrap .daily_head,#wrap .daily_card_item,#wrap .daily_card,#wrap .daily_card li,#wrap #cbox_module,#wrap .u_cbox .u_cbox_comment_box,#wrap .u_cbox a,.is-mobile #wrap .lst_item,.is-mobile #wrap .challenge_list,.is-mobile #wrap .main_notice,.is-mobile #wrap .detail_white li,.is-mobile #wrap .detail_white .num{background-color:#151515 !important;border-color:#000 !important;color:#838383 !important;}#wrap .card_item .card_back,#wrap .daily_tab li.on .btn_daily,#wrap .main_challenge .title_area .btnarea a,#wrap .snb li.on a,#wrap .ranking_tab li.on a,#wrap .daily_section.on,#wrap .episode_area{background-color:#2f2f2f !important;color:#838383 !important;}.is-mobile #wrap header{background-color:#f5f5f5;}/* display none */#footer2, noscript,#ftads,.kln:not(.blox),.kln.mlb,.c-sub-header-nav.sticky,.restrictcontainer, [class*="komik_info-alert"],.adult-content #adult_modal,.adult-content .modal-backdrop, html body [class*="iklan"], html body [rel="noopener"]:not([target="_blank"]), html body [style="z-index:2147483647;"], html body [style="background:rgb(221,221,221); z-index:9999999; opacity:1; visibility:visible;"], html body a[rel="nofollow norefferer noopener"], html body [style="z-index:999999; background:rgba(0,0,0,0.8); display:block;"], html body [style="position:fixed; top:0px; bottom:0px; left:0px; right:0px; z-index:2147483647; background:black; opacity:0.01; height:637px; width:1366px;"], center a[href*="mangatoon"],#navkanan[class*="scroll"],#bottom-banner-ads, footer.perapih.chf,#Notifikasi,.is-mobile .webtoons-com #_appDownloadPopup,.is-mobile .webtoons-com #toolbarEpisodeListArea,.is-mobile .webtoons-com #loadingDiv{display:none !important;visibility:hidden !important;opacity:0 !important;}.hidden-items{position:fixed;top:-9999px;left:-9999px;}/* exception */.judulseries .iklan{display:block !important;visibility:visible !important;opacity:1 !important;}';
     
     var s_elem = document.createElement('style');
     s_elem.type = 'text/css';
@@ -287,6 +287,7 @@ function mydb_tools() {
   
   function loadFirebase() {
     if (typeof firebase == 'undefined') {
+      mydb_firebase = true;
       addScript('https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js')
         .catch(() => {
           /* only use catch() :
@@ -302,7 +303,6 @@ function mydb_tools() {
     var db_chk = setInterval(function() {
       if (typeof firebase !== 'undefined') {
         clearInterval(db_chk);
-        mydb_firebase = true;
         /* Initialize new app with different name https://stackoverflow.com/a/37603526/7598333 */
         firebase.initializeApp(fbase_config, fbase_app);
         if (typeof firebase.database == 'undefined') addScript('https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js');
@@ -330,13 +330,22 @@ function mydb_tools() {
       /* add class to body from source: status, tag, theme */
       var s_data = mydb_source[mydb_type][w_host];
       var s_class = s_data['status'] +','+ s_data['tag'] +','+ s_data['theme'];
-      s_class = w_host +','+ s_class.replace(/,+/, ',').replace(/,$/, '').split(',');
+      s_class = s_class.replace(/,+/, ',').replace(/,$/, '');
+      s_class = s_class.split(',');
       for (var i = 0; i < s_class.length; i++) {
         document.body.classList.add(s_class[i]);
       }
       
       genCSS();
       if (mydb_type == 'comic') ls_saveLocal(js_comic_reader, 'mydb_tools_'+ mydb_type +'_reader', 'js', local_interval);
+      /* live test comic 
+      var cr_chk = setInterval(function() {
+        if (typeof comic_cr !== 'undefined') {
+          clearInterval(cr_chk);
+          comic_cr();
+        }
+      });
+      */
       
       var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); /* cloudflare */
       var is_cf = chk_cf ? true : false;
@@ -344,7 +353,7 @@ function mydb_tools() {
         if (!mydb_firebase) loadFirebase();
         ls_saveLocal(js_bookmark, 'mydb_tools_bookmark', 'js', local_interval);
         
-        /* for live test
+        /* live test bookmark 
         var bm_chk = setInterval(function() {
           if (typeof comic_bm !== 'undefined') {
             clearInterval(bm_chk);
@@ -404,6 +413,7 @@ function mydb_tools() {
   var wh = wl.hostname;
   var wp = wl.pathname;
   var w_host = wh.replace(wh_rgx, '');
+  document.body.classList.add(w_host.replace(/\./g, '-'));
   
   if (document.head.innerHTML == '' || localStorage.getItem('mydb_support') == 'false') return;
   
@@ -446,8 +456,8 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|8/3/2021, 12:09:19 AM';
-var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
+var local_interval = 'manual|8/3/2021, 11:36:02 AM';
+var js_comic_reader = 'https://cdn.statically.io/gh/bakomon/page/416f19bd/reader/comic-reader.js';
 var js_bookmark = 'https://cdn.statically.io/gh/bakomon/page/1d7163e2/bookmark/mydb-bookmark.js';
 /* ============================================================ */
 var wh_rgx = /^(w{3}|web|m(obile)?)\./i;
