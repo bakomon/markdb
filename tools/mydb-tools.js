@@ -466,8 +466,8 @@ var cross_origin = 'coreaz';
 var cross_url = 'https://bakomon.blogspot.com';
 var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
-var login_email = '\x72\x65\x40\x64\x2e\x65\x72';
-var login_pass = '\x72\x65\x61\x64\x65\x72\x31\x32\x33';
+var login_email = '';
+var login_pass = '';
 var local_interval = 'manual|8/5/2021, 5:56:17 AM';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js';
