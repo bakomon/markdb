@@ -135,7 +135,7 @@
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData(type);
         if (type == 'update' && is_index) db_startIndex(type);
         if (mydb_select == 'source') {
-          changeSource('update');
+          changeSource();
           if (type == 'set') {
             el('.db_notif span').innerHTML = 'Done';
             db_resetForm('remove');
@@ -534,7 +534,7 @@
   }
   
   function db_indexData(note, param) {
-    firebase.app(fbase_app).database().ref(db_pathId()).once('value', function(snapshot) {
+    firebase.app(fbase_app).database().ref(db_pathId()).once('value').then(function(snapshot) {
       index_data = snapshot.val();
       index_arr = genArray(snapshot.val());
       
@@ -849,7 +849,7 @@
   }
   
   function db_mainData(note, query) {
-    firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}`).once('value', function(snapshot) {
+    firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}`).once('value').then(function(snapshot) {
       main_data = snapshot.val();
       main_arr = genArray(snapshot.val());
       db_genList(main_arr);
@@ -1144,7 +1144,18 @@
     if (typeof firebase !== 'undefined' && typeof firebase.database !== 'undefined' && typeof firebase.auth !== 'undefined') {
       clearInterval(db_check);
       db_startBookmark();
-      changeSource('once', mydb_source['update']); //always update source
+      
+      /* always check & update source */
+      crossStorage.get('mydb_source_data', function(res){
+        mydb_change = true;
+        if (res.search(/error|null/) != -1) {
+          genSource('change');
+        } else {
+          localStorage.setItem('mydb_source_data', res);
+          mydb_source = JSON.parse(res);
+          genSource('check');
+        }
+      });
     }
   }, 100);
 })();
