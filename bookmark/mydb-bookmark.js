@@ -81,10 +81,7 @@
       .then(function() {
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('remove');
         if (is_index) db_startIndex('remove');
-        if (mydb_select == 'source') {
-          mydb_change = true;
-          genSource('change');
-        }
+        if (mydb_select == 'source') changeSource();
       })
       .catch(function(error) {
         el('.db_notif span').innerHTML = 'Error!!';
@@ -863,7 +860,7 @@
       }
       
       if (note == 'set' && mydb_type == mydb_type_bkp) el('.db_menu .db_menu_shide').click();
-      if (wp != '/' && wp.search(/\/(\?s=|search\?)/) == -1) db_checkDB(main_arr); //check if data exist and show bookmark
+      if (wp.search(/^\/(id\/)?$/) == -1 && wp.search(/\/(\?s=|search\?)/) == -1) db_checkDB(main_arr); //check if data exist and show bookmark
       
       // search
       query = note != 'start' && is_search ? el('.db_search input').value : query; //if data updated and "is_search = true" then show search
