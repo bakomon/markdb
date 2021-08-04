@@ -124,39 +124,22 @@
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
-  function db_updateData() {
-    firebase.app(fbase_app).database().ref(db_pathId(true)).update(db_genData('update'), (error) => {
+  function db_changeData(type) {
+    firebase.app(fbase_app).database().ref(db_pathId(true))[type](db_genData(type), (error) => {
       if (error) {
         console.log(error);
         el('.db_notif span').innerHTML = 'Error!!';
         el('.db_notif span').classList.add('db_danger');
         setTimeout(function() { el('.db_notif').classList.add('db_hidden'); }, 1500);
       } else {
-        if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('update');
-        if (is_index) db_startIndex('update');
+        if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData(type);
+        if (type == 'update' && is_index) db_startIndex(type);
         if (mydb_select == 'source') {
-          mydb_change = true;
-          genSource('change');
-        }
-      }
-    });
-  }
-  
-  // Firebase update vs set https://stackoverflow.com/a/38924648
-  function db_setData() {
-    firebase.app(fbase_app).database().ref(db_pathId(true)).set(db_genData('set'), (error) => {
-      if (error) {
-        console.log(error);
-        el('.db_notif span').innerHTML = 'Error!!';
-        el('.db_notif span').classList.add('db_danger');
-        setTimeout(function() { el('.db_notif').classList.add('db_hidden'); }, 1500);
-      } else {
-        if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('set');
-        if (mydb_select == 'source') {
-          mydb_change = true;
-          genSource('change');
-          el('.db_notif span').innerHTML = 'Done';
-          db_resetForm('remove');
+          checkSource('update');
+          if (type == 'set') {
+            el('.db_notif span').innerHTML = 'Done';
+            db_resetForm('remove');
+          }
         }
       }
     });
@@ -1121,7 +1104,7 @@
       el('.db_notif').classList.remove('db_hidden');
       db_checkData(db_pathId(true)).then(function(res) {
         if (!res) {
-          db_setData();
+          db_changeData('set');
         } else {
           el('.db_notif span').innerHTML = (mydb_select == 'source' ? mydb_select : mydb_type) +' already exist';
           el('.db_notif span').classList.add('db_danger');
@@ -1137,7 +1120,7 @@
       if (!db_formCheck()) return;
       el('.db_notif span').innerHTML = 'Loading..';
       el('.db_notif').classList.remove('db_hidden');
-      db_updateData();
+      db_changeData('update');
     };
   }
   
@@ -1161,16 +1144,7 @@
     if (typeof firebase !== 'undefined' && typeof firebase.database !== 'undefined' && typeof firebase.auth !== 'undefined') {
       clearInterval(db_chapterk);
       db_startBookmark();
-      
-      /* always update source */
-      crossStorage.get('mydb_source_data', function(res){
-        if (res.search(/error|null/) != -1) {
-          mydb_change = true;
-          genSource('change');
-        } else {
-          localStorage.setItem('mydb_source_data', res);
-        }
-      });
+      checkSource('once'); //always check & update source
     }
   }, 100);
 })();
