@@ -118,7 +118,7 @@ const crossStorage = {
 };
 
 /* loadXMLDoc (XMLHttpRequest) https://codepen.io/sekedus/pen/vYGYBNP */
-const loadXMLDoc = function(url, callback, info) {
+const ls_loadXMLDoc = function(url, callback, info) {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState == XMLHttpRequest.DONE) {
@@ -203,16 +203,16 @@ function ls_saveLocal(url, id, type, interval) {
       } else {
         console.log('ls_data: false time');
         localStorage.removeItem(id);
-        loadXMLDoc(url, function(res){ ls_getData(res, id, type, 'change_time', ls_update); });
+        ls_loadXMLDoc(url, function(res){ ls_getData(res, id, type, 'change_time', ls_update); });
       }
     } else {
       console.log('ls_data: false undefined');
       localStorage.removeItem(id);
-      loadXMLDoc(url, function(res){ ls_getData(res, id, type, 'undefined', ls_update); });
+      ls_loadXMLDoc(url, function(res){ ls_getData(res, id, type, 'undefined', ls_update); });
     }
   } else {
     console.log('ls_data: false');
-    loadXMLDoc(url, function(res){ ls_getData(res, id, type, 'not_found', ls_update); });
+    ls_loadXMLDoc(url, function(res){ ls_getData(res, id, type, 'not_found', ls_update); });
   }
 }
 
@@ -466,9 +466,9 @@ var cross_origin = 'coreaz';
 var cross_url = 'https://bakomon.blogspot.com';
 var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
-var login_email = '';
-var login_pass = '';
-var local_interval = 'manual|8/4/2021, 9:09:59 PM';
+var login_email = '\x72\x65\x40\x64\x2e\x65\x72';
+var login_pass = '\x72\x65\x61\x64\x65\x72\x31\x32\x33';
+var local_interval = 'manual|8/5/2021, 5:56:17 AM';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js';
 /* ============================================================ */
