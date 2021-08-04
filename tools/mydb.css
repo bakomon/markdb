@@ -11,6 +11,7 @@ body::-webkit-scrollbar-thumb {
 
 html, body, article {
   background: #151515 !important;
+  color: #b8b8b8;
   -webkit-user-select: text;
   user-select: text;
 }
@@ -134,14 +135,24 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
 .nyanfm-com .container, .nyanfm-com .elementor-section {
   background-color: #151515 !important;
 }
+.nyanfm-com .bdt-navbar-dropdown.bdt-open, .nyanfm-com .bdt-post-block-tag-wrap span {
+  background-color: #222 !important;
+}
 .nyanfm-com .elementor-column-wrap {
   background: transparent !important;
 }
-.nyanfm-com .elementor-heading-title, .nyanfm-com .bdt-navbar-nav > li > a {
+.nyanfm-com .elementor-heading-title, .nyanfm-com .bdt-navbar-nav > li > a, .nyanfm-com .bdt-social-share-text {
   color: #eee !important;
 }
 .nyanfm-com .elementor-button {
   color: #222;
+}
+.nyanfm-com .elementor-alert {
+  border: 0;
+}
+.nyanfm-com .elementor-alert-title, .nyanfm-com .elementor-alert-description {
+  color: #333 !important;
+  text-shadow: none !important;
 }
 /* webtoons.com */
 .webtoons-com img {
