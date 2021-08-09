@@ -80,7 +80,7 @@
     var imgs = '';
     if ((getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) && !img.classList.contains('rc_loaded')) || note != undefined) {
       imgs = img.dataset.readImg;
-      if (loadCDN) imgs = imgs.replace(/(?:i\d+|cdn)\.(wp|statically)\.(?:com|io)\//g, '');
+      if (loadCDN) imgs = imgs.replace(/(?:i\d+|cdn)\.(wp|statically)\.(?:com|io)\/(?:img\/([^\.]+\/)?)?/, '').replace(/\/[fhwq]=[^\/]+/, '');
       if (imgs.search(/(pending\-load|cdn\.statically\.io)/) != -1) {
         imgs = imgs.replace(/\?(.*)/g, ''); //remove location.search ?=
       } else if (loadSize) {
