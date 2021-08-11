@@ -80,7 +80,7 @@
     var imgs = '';
     if ((getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) && !img.classList.contains('rc_loaded')) || note != undefined) {
       imgs = img.dataset.readImg;
-      if (loadCDN) imgs = imgs.replace(/(?:i\d+|cdn)\.(wp|statically)\.(?:com|io)\/(?:img\/([^\.]+\/)?)?/, '').replace(/\/[fhwq]=[^\/]+/, '');
+      if (loadCDN) imgs = imgs.replace(cdnRgx, '').replace(/\/[fhwq]=[^\/]+/, '');
       if (imgs.search(/(pending\-load|cdn\.statically\.io)/) != -1) {
         imgs = imgs.replace(/\?(.*)/g, ''); //remove location.search ?=
       } else if (loadSize) {
@@ -414,9 +414,9 @@
       }
       imgLink = imgLink.replace(/^\s/, '').replace(/\s$/, '');
       
-      if (imgLink.search(/(?:i\d+|cdn)\.(wp|statically)\.(?:com|io)\//) != -1) {
+      if (imgLink.search(cdnRgx) != -1) {
         chcdn = true;
-        cdnName = imgLink.match(/(?:i\d+|cdn)\.(wp|statically)\.(?:com|io)\//)[1];
+        cdnName = imgLink.match(cdnRgx)[1];
       }
       
       if (imgLink.search(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+)[^\n]+/) != -1) {
@@ -889,6 +889,7 @@
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from database tools
   var autoLike = false;
   var imgSize = ''; //image size
+  var cdnRgx = /(?:i\d+|cdn|img)\.(wp|statically)\.(?:com|io)\/(?:img\/([^\.]+\/)?)?/;
   var checkPoint, imgArea, imgList, cdnName, titleId, wpId, zoomID;
   
   removeAADB(); //remove anti adblock notify mangacanblog
