@@ -889,7 +889,7 @@
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from database tools
   var autoLike = false;
   var imgSize = ''; //image size
-  var cdnRgx = /(?:i\d+|cdn|img)\.(wp|statically)\.(?:com|io)\/(?:img\/([^\.]+\/)?)?/;
+  var cdnRgx = /(?:i\d+|cdn|img)\.(wp|statically)\.(?:com|io)\/(?:img\/(?:[^\.]+\/)?)?/;
   var checkPoint, imgArea, imgList, cdnName, titleId, wpId, zoomID;
   
   removeAADB(); //remove anti adblock notify mangacanblog
