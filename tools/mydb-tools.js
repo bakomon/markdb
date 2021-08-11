@@ -93,7 +93,7 @@ const crossStorage = {
     });
   },
   set: function(key, data) {
-    /* save data in subdomain localStorage */
+    /* save data to subdomain localStorage */
     data = JSON.stringify(data);
     var l_obj = '{"method":"set","key":"'+ key +'","origin":"'+ cross_origin +'","data":'+ data +'}';
     crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
@@ -108,6 +108,11 @@ const crossStorage = {
     var l_obj = '{"method":"get","key":"'+ key +'","origin":"'+ cross_origin +'"}';
     crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
     crossStorage.check(key, function(res){callback(res)});
+  },
+  remove: function(key) {
+    /* remove data from subdomain localStorage */
+    var l_obj = '{"method":"remove","key":"'+ key +'","origin":"'+ cross_origin +'"}';
+    crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
   },
   check: function(key, callback) {
     cross_chk = setTimeout(function() {
@@ -468,7 +473,7 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|8/5/2021, 5:56:17 AM';
+var local_interval = 'manual|8/11/2021, 5:37:37 PM';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js';
 /* ============================================================ */
