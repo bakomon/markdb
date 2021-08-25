@@ -728,7 +728,7 @@
     if ('read' in data && data.read != '') s_txt += ' db_url_read';
     s_txt += ' flex_wrap">';
     s_txt += '<div class="_db db_100"'+ (!note && wh.indexOf(data.host) != -1 && el('title').innerHTML.search(number_t_rgx) == -1 ? '' : ' onclick="window.open(\''+ data.url +'\')"') +' title="'+ data.url +'">';
-    if (note != 'db_startData') {
+    if (note.indexOf('db_startData') == -1) {
       s_txt += data.title;
       if (data.alternative != '') s_txt += ' | '+ data.alternative;
     } else {
@@ -736,7 +736,7 @@
     }
     s_txt += '</div>';
     s_txt += '<div class="db_100 '+ (chk ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
-    if (note != 'db_startData') {
+    if (note.indexOf('db_startData') == -1) {
       s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
       if ('read' in data && data.read != '') s_txt += '<button class="_db db_selected'+ (chk ? '' : ' db_hidden') +'" onclick="window.open(\''+ data.read +'\')" title="'+ data.read +'">Read</button>';
       s_txt += '<button class="bm_edit _db'+ (chk ? '' : ' db_hidden') +'" data-id="list">Edit</button>';
@@ -762,23 +762,18 @@
   
   function db_showData(data, note) {
     is_exist = true;
+    var smlr_note = 'similar';
     db_showHtml(data);
     console.log(`${mydb_type} data from: ${note}`);
     el('.db_bm_show').classList.remove('db_hidden');
     
-    if (localStorage.getItem(`mydb_${mydb_type}_list`)) {
-      main_arr = JSON.parse(main_list);
-      console.log(`${mydb_type} bookmark: `+ main_arr.length);
-      el('.db_total').innerHTML = `${mydb_type}: <b>`+ main_arr.length +'</b>';
-      el('.db_total').classList.remove('db_hidden');
+    if (note.indexOf('db_startData') != -1) {
+      if (!main_data) main_data = {};
+      main_data[data.id] = data;
+      smlr_note = note;
     }
     
     if (data.similar != '') {
-      var smlr_note = 'similar';
-      if (note.indexOf('db_startData') != -1 && !main_data) {
-        main_data = {};
-        smlr_note = 'db_startData';
-      }
       var smlr_list = [];
       if (data.similar.indexOf(',') == -1) {
         smlr_list.push(data.similar);
@@ -865,6 +860,7 @@
     }
     list_txt += ']';
     localStorage.setItem(`mydb_${mydb_type}_list`, list_txt);
+    crossStorage.set(`mydb_${mydb_type}_list`, list_txt);
   }
   
   function db_mainData(note, query) {
@@ -872,6 +868,7 @@
       main_data = snapshot.val();
       main_arr = genArray(snapshot.val());
       db_genList(main_arr);
+      if (note == 'get') return;
       
       if (note != 'start') {
         el('.db_notif span').innerHTML = 'Done';
@@ -907,6 +904,22 @@
     if (chk == 1) {
       child = 'id';
       id = id.url;
+      
+      /* always check & update main_arr */
+      crossStorage.get(`mydb_${mydb_type}_list`, function(res) {
+        if (res.search(/error|null/) != -1) {
+          db_mainData('get');
+        } else {
+          localStorage.setItem(`mydb_${mydb_type}_list`, res);
+        }
+      });
+      
+      if (localStorage.getItem(`mydb_${mydb_type}_list`)) {
+        main_arr = JSON.parse(main_list);
+        console.log(`${mydb_type} bookmark: `+ main_arr.length);
+        el('.db_total').innerHTML = `${mydb_type}: <b>`+ main_arr.length +'</b>';
+        el('.db_total').classList.remove('db_hidden');
+      }
     }
     if (chk == 2) {
       child = 'title';
@@ -1206,7 +1219,7 @@
       db_startBookmark();
       
       /* always check & update source */
-      crossStorage.get('mydb_source_data', function(res){
+      crossStorage.get('mydb_source_data', function(res) {
         mydb_change = true;
         if (res.search(/error|null/) != -1) {
           genSource('change');
