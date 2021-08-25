@@ -766,13 +766,18 @@
     console.log(`${mydb_type} data from: ${note}`);
     el('.db_bm_show').classList.remove('db_hidden');
     
+    if (localStorage.getItem(`mydb_${mydb_type}_list`)) {
+      main_arr = JSON.parse(main_list);
+      console.log(`${mydb_type} bookmark: `+ main_arr.length);
+      el('.db_total').innerHTML = `${mydb_type}: <b>`+ main_arr.length +'</b>';
+      el('.db_total').classList.remove('db_hidden');
+    }
+    
     if (data.similar != '') {
       var smlr_note = 'similar';
       if (note.indexOf('db_startData') != -1 && !main_data) {
         main_data = {};
         smlr_note = 'db_startData';
-        var main_list = localStorage.getItem('mydb_comic_list');
-        if (main_list) main_arr = JSON.parse(main_list);
       }
       var smlr_list = [];
       if (data.similar.indexOf(',') == -1) {
@@ -867,9 +872,6 @@
       main_data = snapshot.val();
       main_arr = genArray(snapshot.val());
       db_genList(main_arr);
-      console.log(`${mydb_type} bookmark: `+ main_arr.length);
-      el('.db_total').innerHTML = `${mydb_type}: <b>`+ main_arr.length +'</b>';
-      el('.db_total').classList.remove('db_hidden');
       
       if (note != 'start') {
         el('.db_notif span').innerHTML = 'Done';
