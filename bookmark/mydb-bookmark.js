@@ -907,7 +907,7 @@
       
       /* always check & update main_arr */
       crossStorage.get(`mydb_${mydb_type}_list`, function(res) {
-        if (res.search(/error|null/) != -1) {
+        if (res == null || res == 'error') {
           db_mainData('get');
         } else {
           localStorage.setItem(`mydb_${mydb_type}_list`, res);
@@ -1221,7 +1221,7 @@
       /* always check & update source */
       crossStorage.get('mydb_source_data', function(res) {
         mydb_change = true;
-        if (res.search(/error|null/) != -1) {
+        if (res == null || res == 'error') {
           genSource('change');
         } else {
           localStorage.setItem('mydb_source_data', res);
