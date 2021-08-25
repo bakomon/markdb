@@ -724,23 +724,30 @@
     var not_support = db_supportCheck(data.host, 'status', 'discontinued') || db_supportCheck(data.host, 'tag', 'not_support');
     var chk = not_support || wh.indexOf(data.host) != -1;
     var s_txt = '';
-    s_txt += '<li class="_bm';
-    if (data.similar != '' && note) s_txt += ' bm_similar db_line_top';
+    s_txt += '<li class="_bm '+ (note ? 'db_line_top' : 'bm_main');
     if ('read' in data && data.read != '') s_txt += ' db_url_read';
-    s_txt += ' flex_wrap'+ (data.similar != '' && (main_data[data.similar] || data.similar.indexOf(',') != -1) && !note ? ' bm_main' : '') +'">';
-    s_txt += '<div class="_db db_100"'+ (!note && wh.indexOf(data.host) != -1 && el('title').innerHTML.search(number_t_rgx) == -1 ? '' : ' onclick="window.open(\''+ data.url +'\')"') +' title="'+ data.url +'">'+ data.title;
-    if (data.alternative != '') s_txt += ' | '+ data.alternative;
+    s_txt += ' flex_wrap">';
+    s_txt += '<div class="_db db_100"'+ (!note && wh.indexOf(data.host) != -1 && el('title').innerHTML.search(number_t_rgx) == -1 ? '' : ' onclick="window.open(\''+ data.url +'\')"') +' title="'+ data.url +'">';
+    if (note != 'db_startData') {
+      s_txt += data.title;
+      if (data.alternative != '') s_txt += ' | '+ data.alternative;
+    } else {
+      s_txt += firstCase(data.id, '-');
+    }
     s_txt += '</div>';
     s_txt += '<div class="db_100 '+ (chk ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
-    s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
-    if ('read' in data && data.read != '') s_txt += '<button class="_db db_selected'+ (chk ? '' : ' db_hidden') +'" onclick="window.open(\''+ data.read +'\')" title="'+ data.read +'">Read</button>';
-    s_txt += '<button class="bm_edit _db'+ (chk ? '' : ' db_hidden') +'" data-id="list">Edit</button>';
-    s_txt += '<button class="bm_delete _db'+ (chk ? '' : ' db_hidden') +'" title="Delete">X</button>';
+    if (note != 'db_startData') {
+      s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
+      if ('read' in data && data.read != '') s_txt += '<button class="_db db_selected'+ (chk ? '' : ' db_hidden') +'" onclick="window.open(\''+ data.read +'\')" title="'+ data.read +'">Read</button>';
+      s_txt += '<button class="bm_edit _db'+ (chk ? '' : ' db_hidden') +'" data-id="list">Edit</button>';
+      s_txt += '<button class="bm_delete _db'+ (chk ? '' : ' db_hidden') +'" title="Delete">X</button>';
+    }
     s_txt += '<span class="bm_site db_text'+ (wh.indexOf(data.host) != -1 ? ' db_hidden' : (not_support ? ' db_100 t_center' : '')) +'" onclick="window.open(\''+ data.url +'\')">'+ data.host +'</span>';
     s_txt += '</div>';
     s_txt += '</li>';
     
     if (note) {
+      el('.db_bm_show .bm_list').classList.add('bm_similar');
       el('.db_bm_show .bm_list').innerHTML += s_txt;
     } else {
       el('.db_bm_show').innerHTML = '<ul class="bm_list">'+ s_txt +'</ul>';
@@ -756,17 +763,26 @@
   function db_showData(data, note) {
     is_exist = true;
     db_showHtml(data);
-    console.log(`check ${mydb_type}: ${note}`);
+    console.log(`${mydb_type} data from: ${note}`);
     el('.db_bm_show').classList.remove('db_hidden');
     
     if (data.similar != '') {
-      if (data.similar.indexOf(',') != -1) {
-        var smlr_list = data.similar.replace(/\s+/g, '').split(',');
-        for (var j = 0; j < smlr_list.length; j++) {
-          if (main_data[smlr_list[j]]) db_showHtml(main_data[smlr_list[j]], 'similar');
-        }
+      var smlr_note = 'similar';
+      if (note.indexOf('db_startData') != -1 && !main_data) {
+        main_data = {};
+        smlr_note = 'db_startData';
+        var main_list = localStorage.getItem('mydb_comic_list');
+        if (main_list) main_arr = JSON.parse(main_list);
+      }
+      var smlr_list = [];
+      if (data.similar.indexOf(',') == -1) {
+        smlr_list.push(data.similar);
       } else {
-        if (main_data[data.similar]) db_showHtml(main_data[data.similar], 'similar');
+        smlr_list = data.similar.replace(/\s+/g, '').split(',');
+      }
+      for (var j = 0; j < smlr_list.length; j++) {
+        var smlr = main_arr.filter(item => (item.id == smlr_list[j]));
+        if (smlr.length > 0) db_showHtml(smlr[0], smlr_note);
       }
     }
     
@@ -794,13 +810,13 @@
   function db_checkDB(arr, chk) {
     chk = chk ? (chk+1) : 1;
     var id_chk = false;
-    var url_id = wp.match(id_w_rgx)[1].replace(/-(bahasa|sub(title)?)-indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/\.html?$/i, '').toLowerCase();
-    var title_id = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read|novel|anime|download)\s/i, '').replace(number_t_rgx, ' ').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s+$/, '').replace(/\|/g, ''); //old ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
+    var url_id = db_getId().url;
+    var title_id = db_getId().title;
     var title_rgx = new RegExp(title_id.replace(/(\?|\(|\))/g, '\\$1'), 'i');
     
     for (var i = 0; i < arr.length; i++) {
-      /*// mangadex, check 1
-      if (mydb_type == 'comic' && wp.indexOf('/title/'+ arr[i].bmdb +'/') != -1) {
+      // mangadex, check 1
+      /*if (mydb_type == 'comic' && wp.indexOf('/title/'+ arr[i].bmdb +'/') != -1) {
         id_chk = true;
         db_showData(arr[i], 'mangadex');
         break;
@@ -839,7 +855,7 @@
   function db_genList(data) {
     var list_txt = '[';
     for (var i = 0; i < data.length; i++) {
-      list_txt += '{"url":"'+ data[i].url +'"}';
+      list_txt += '{"id":"'+ data[i].id +'","host":"'+ data[i].host +'","url":"'+ data[i].url +'"}';
       if (i < data.length-1) list_txt += ',';
     }
     list_txt += ']';
@@ -861,7 +877,7 @@
       }
       
       if (note == 'set' && mydb_type == mydb_type_bkp) el('.db_menu .db_menu_shide').click();
-      if (wp.search(/^\/(id\/)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) db_checkDB(main_arr); //check if data exist and show bookmark
+      if (wp.search(/^\/((id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) db_checkDB(main_arr); //check if data exist and show bookmark
       
       // search
       query = note != 'start' && is_search ? el('.db_search input').value : query; //if data updated and "is_search = true" then show search
@@ -873,11 +889,55 @@
     });
   }
   
+  function db_getId() {
+    var url = wp.match(id_w_rgx)[1].replace(/-(bahasa|sub(title)?)-indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/\.html?$/i, '').toLowerCase();
+    var title = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read|novel|anime|download)\s/i, '').replace(number_t_rgx, ' ').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s+$/, '').replace(/\|/g, ''); //old ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
+    var id = '{"url":"'+ url +'","title":"'+ title +'"}';
+    return JSON.parse(id);
+  }
+  
+  function db_startData(chk) {
+    chk = chk ? (chk+1) : 1;
+    if (wp.search(/^\/((id|en)\/?)?$/) != -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return;
+    var child, order;
+    var id = db_getId();
+    
+    if (chk == 1) {
+      child = 'id';
+      id = id.url;
+    }
+    if (chk == 2) {
+      child = 'title';
+      id = id.title;
+    }
+    if (chk == 3) {
+      child = 'alternative';
+      id = id.title;
+    }
+    
+    var ref = firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}`).orderByChild(child);
+    var dataRef = chk == 1 ? ref.equalTo(id) : ref.startAt(id).endAt(id+'\uf8ff');
+    
+    dataRef.once('value').then(function(snapshot) {
+      var data = snapshot.val();
+      if (!data && chk < 3) {
+        db_startData(chk);
+      } else {
+        if (data) {
+          data = genArray(data)[0];
+          db_showData(data, 'db_startData '+ child);
+        } else {
+          db_mainData('start');
+        }
+      }
+    });
+  }
+  
   function bookmarkHtml() {
     var b_txt = '';
     // css control already in database tools
     // css bookmark
-    b_txt += '<style>.db_100{width:100%;}.db_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark ::-webkit-input-placeholder{color:#757575;}._bmark ::placeholder{color:#757575;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;/*flex-direction:column;*/background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.db_shide{left:-350px;}._bmark ._db{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;text-transform:initial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bmark ._db[disabled]{color:#555;border-color:#252428;}.db_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.db_line_top{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.db_space{margin:10px 0;}._db.fp_content{margin:auto;}.db_text{padding:4px 8px;margin:4px;color:#ddd;}.db_btn_radio input[type="radio"]{display:none;}.db_btn_radio input[type="radio"]+label:before{content:none;}.db_btn_radio input[type="radio"]:checked+label,._bmark .db_selected,._bmark:not(.db_mobile) button:not(.db_no_hover):hover{background:#4267b2;border-color:#4267b2;}._bmark .db_active{background:#238636;border-color:#238636;}._bmark .db_danger{background:#d7382d;border-color:#d7382d;}.db_border{padding:1px 6px;border:1px solid #ddd;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}._bmark ul{padding:0;margin:0;list-style:none;}._bmark input[type="text"]{display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}._bmark input[type="text"]:hover{border-color:#3e3949;}._bmark label [type="radio"],._bmark label [type="checkbox"]{display:initial;margin:-2px 6px 0 0;vertical-align:middle;}.bmark_db:not(.db_s_shide) .db_bm_show .bm_list{max-height:25vh !important;}.db_bm_show .bm_main{margin:5px;border:4px solid #4267b2;}.db_bm_show .bm_main .bm_edit{background:#4267b2;border:0;}.db_bm_show .bm_list,.db_result .bs_list{overflow-y:auto;}.db_result li,.db_bm_show li{border-width:1px;}._bmark .db_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.db_bg,.bm_index{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.db_cover img{max-width:100px;}.db_radio label,.db_cbox label{display:inline-block;margin:5px 10px 5px 0;}._bmark .db_disabled{color:#555;border-color:#252428;cursor:not-allowed;}.bmark_db.db_s_shide .db_result,.db_hidden{display:none;}</style>';
+    b_txt += '<style>.db_100{width:100%;}.db_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark ::-webkit-input-placeholder{color:#757575;}._bmark ::placeholder{color:#757575;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;/*flex-direction:column;*/background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.db_shide{left:-350px;}._bmark ._db{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;text-transform:initial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bmark ._db[disabled]{color:#555;border-color:#252428;}.db_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.db_line_top{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.db_space{margin:10px 0;}._db.fp_content{margin:auto;}.db_text{padding:4px 8px;margin:4px;color:#ddd;}.db_btn_radio input[type="radio"]{display:none;}.db_btn_radio input[type="radio"]+label:before{content:none;}.db_btn_radio input[type="radio"]:checked+label,._bmark .db_selected,._bmark:not(.db_mobile) button:not(.db_no_hover):hover{background:#4267b2;border-color:#4267b2;}._bmark .db_active{background:#238636;border-color:#238636;}._bmark .db_danger{background:#d7382d;border-color:#d7382d;}.db_border{padding:1px 6px;border:1px solid #ddd;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}._bmark ul{padding:0;margin:0;list-style:none;}._bmark input[type="text"]{display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}._bmark input[type="text"]:hover{border-color:#3e3949;}._bmark label [type="radio"],._bmark label [type="checkbox"]{display:initial;margin:-2px 6px 0 0;vertical-align:middle;}.bmark_db:not(.db_s_shide) .db_bm_show .bm_list{max-height:25vh !important;}.db_bm_show .bm_similar .bm_main{margin:5px;border:4px solid #4267b2;}.db_bm_show .bm_similar .bm_main .bm_edit{background:#4267b2;border:0;}.db_bm_show .bm_list,.db_result .bs_list{overflow-y:auto;}.db_result li,.db_bm_show li{border-width:1px;}._bmark .db_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.db_bg,.bm_index{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.db_cover img{max-width:100px;}.db_radio label,.db_cbox label{display:inline-block;margin:5px 10px 5px 0;}._bmark .db_disabled{color:#555;border-color:#252428;cursor:not-allowed;}.bmark_db.db_s_shide .db_result,.db_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.db_mobile .bmark_db{width:80%;}.db_mobile .bmark_db.db_shide{left:-80%;}.db_mobile._bmark ._db{font-size:16px;}.db_mobile._bmark .db_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
@@ -929,7 +989,7 @@
     firebase.app(fbase_app).auth().onAuthStateChanged(function(user) {
       if (user) { //User is signed in.
         mydb_login = true;
-        db_mainData('start'); //Start firebase data
+        db_startData(); //Start firebase data
         el('.db_login').classList.add('db_hidden');
         el('.db_notif').classList.add('db_hidden');
         el('.db_data').classList.remove('db_hidden');
@@ -1054,7 +1114,7 @@
         
         if (mydb_type == 'comic') {
           var id_search = bmark_id.replace(/[-_\.]/g, ' ');
-          el('.db_bmdb_mangadex').dataset.href = '//mangadex.org/titles/?q='+ id_search;
+          el('.db_bmdb_mangadex').dataset.href = '//mangadex.org/titles?q='+ id_search;
           el('.db_bmdb_mangaupdates').dataset.href = '//mangaupdates.com/series.html?search='+ id_search;
         } else if (mydb_type == 'novel') {
           el('.db_bmdb_mangaupdates').dataset.href = '//mangaupdates.com/series.html?search='+ id_search;
