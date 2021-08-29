@@ -376,7 +376,7 @@ function mydb_tools() {
       
       var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); /* cloudflare */
       var is_cf = chk_cf ? true : false;
-      if (!is_cf && !mydb_read) {
+      if (!is_cf && !mydb_read && !live_test_comic_r) {
         if (!mydb_firebase) loadFirebase();
         if (live_test_bookmark) {
           var bm_chk = setInterval(function() {
@@ -392,6 +392,7 @@ function mydb_tools() {
     } else {
       if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
       localStorage.setItem('mydb_support', 'false');
+      console.log('mydb_support: false');
     }
   }
   
@@ -467,7 +468,7 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|8/29/2021, 6:15:00 PM';
+var local_interval = 'manual|8/30/2021, 7:46:11 AM';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js';
 var live_test_bookmark = false;
@@ -475,8 +476,8 @@ var live_test_comic_r = false;
 /* 
 - use "https://cdn.statically.io" or "https://cdn.jsdelivr.net"
 - jsdelivr purge cache: 
-  - https://purge.jsdelivr.net/npm/YOUR_PACKAGE@VERSION/foo/bar
   - https://purge.jsdelivr.net/gh/YOUR_PACKAGE@VERSION/foo/bar
+  - https://purge.jsdelivr.net/npm/YOUR_PACKAGE@VERSION/foo/bar
 */
 /* ============================================================ */
 var wh_rgx = /^(w{3}|web|m(obile)?|read)\./i;
