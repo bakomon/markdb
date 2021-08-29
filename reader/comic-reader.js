@@ -352,7 +352,7 @@
         '6','.viewer-cnt #all',
         '7','#Gambar_komik',
         '8','#viewer',
-        '9','#Viewer-module',
+        '9','label[for="Viewer-module"]',
         '10','[id^="Blog"] .post-body',
         'webtoons.com','#_imageList',
         'mangacdn.my.id','.entry-content',
