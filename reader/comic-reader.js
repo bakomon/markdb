@@ -1,6 +1,6 @@
 // COMIC READER
 (function() {
-//function comic_cr() {
+function comic_cr() {
 
   // Position (X,Y) element https://stackoverflow.com/a/28222246
   function getOffset(el, p) {
@@ -768,7 +768,7 @@
       el('nav').classList.remove('bg-success', 'fixed-top');
     } else if (document.body.classList.contains('emissionhex')) {
       localStorage.setItem('mode', 'darkmode');
-      el('#mainContent').classList.add('dark-mode');
+      el('#modeSwitch').classList.add('dark-mode');
     } else if (wh.indexOf('mangadex') != -1) {
       var mgdx_css = document.createElement('link');
       mgdx_css.href = '//mangadex.org/scripts/css/Dark-Slate.css';
