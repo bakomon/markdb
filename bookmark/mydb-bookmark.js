@@ -774,12 +774,7 @@
     }
     
     if (data.similar != '') {
-      var smlr_list = [];
-      if (data.similar.indexOf(',') == -1) {
-        smlr_list.push(data.similar);
-      } else {
-        smlr_list = data.similar.replace(/\s+/g, '').split(',');
-      }
+      var smlr_list = data.similar.replace(/\s+/g, '').split(',');
       for (var j = 0; j < smlr_list.length; j++) {
         var smlr = main_arr.filter(item => (item.id == smlr_list[j]));
         if (smlr.length > 0) db_showHtml(smlr[0], smlr_note);
