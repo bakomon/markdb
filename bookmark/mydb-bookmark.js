@@ -1,6 +1,6 @@
 // DATABASE BOOKMARK
 (function() {
-//function comic_bm() {
+function comic_bm() {
   
   function getHostname(url) {
     var wh_rgx = /^(w{3}|web|m(obile)?|read)\./i;
@@ -892,7 +892,6 @@
   
   function db_startData(chk) {
     chk = chk ? (chk+1) : 1;
-    if (wp.search(/^\/((m|id|en)\/?)?$/) != -1 || wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return;
     var child, order;
     var id = db_getId();
     
@@ -925,6 +924,8 @@
       child = 'alternative';
       id = id.title;
     }
+    
+    if (wp.search(/^\/((m|id|en)\/?)?$/) != -1 || wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return;
     
     var ref = firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}`).orderByChild(child);
     var dataRef = chk == 1 ? ref.equalTo(id) : ref.startAt(id).endAt(id+'\uf8ff');
