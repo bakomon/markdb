@@ -871,7 +871,7 @@
       }
       
       if (note == 'set' && mydb_type == mydb_type_bkp) el('.db_menu .db_menu_shide').click();
-      if (wp.search(/^\/((id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) db_checkDB(main_arr); //check if data exist and show bookmark
+      if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) db_checkDB(main_arr); //check if data exist and show bookmark
       
       // search
       query = note != 'start' && is_search ? el('.db_search input').value : query; //if data updated and "is_search = true" then show search
@@ -892,7 +892,7 @@
   
   function db_startData(chk) {
     chk = chk ? (chk+1) : 1;
-    if (wp.search(/^\/((id|en)\/?)?$/) != -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return;
+    if (wp.search(/^\/((m|id|en)\/?)?$/) != -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return;
     var child, order;
     var id = db_getId();
     
