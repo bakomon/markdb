@@ -160,7 +160,7 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
   color: #eee !important;
 }
 .mangabat-com #panel-story-info-description {
-  max-height: none;
+  max-height: none !important;
 }
 /* webtoons.com */
 .webtoons-com img {
