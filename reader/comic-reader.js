@@ -352,7 +352,8 @@
         '6','.viewer-cnt #all',
         '7','#Gambar_komik',
         '8','#viewer',
-        '9','[id^="Blog"] .post-body',
+        '9','#Viewer-module',
+        '10','[id^="Blog"] .post-body',
         'webtoons.com','#_imageList',
         'mangacdn.my.id','.entry-content',
         'mangacanblog.com','#imgholder',
@@ -365,12 +366,12 @@
         'mangabat.com','.container-chapter-reader',
         'rawdevart.com','#img-container'
       ];
-      var area_s = el(st[1]) || el(st[3]) || el(st[5]) || el(st[7]) || el(st[9]) || el(st[11]) || el(st[13]) || el(st[15]) || el(st[17]) || el(st[19]);
+      var area_s = el(st[1]) || el(st[3]) || el(st[5]) || el(st[7]) || el(st[9]) || el(st[11]) || el(st[13]) || el(st[15]) || el(st[17]) || el(st[19] || el(st[21]);
       var s_length = st.length;
       if (s_length % 2 == 1) {
         s_length--
       }
-      for (var j = 18; j < s_length; j += 2) {
+      for (var j = 20; j < s_length; j += 2) {
         if (wh.indexOf(st[j]) != -1) {
           imgArea = el(st[j + 1]);
           break;
@@ -394,7 +395,7 @@
       //if (imgList[j].src && imgList[j].src == wl.href) continue;
       if (prnt && imgs) {
         imgLink = imgList[j];
-      } else if (imgList[j].getAttribute('original')) { //manhwa-san.com
+      } else if (imgList[j].getAttribute('original')) {
         imgLink = imgList[j].getAttribute('original');
       } else if (wh.indexOf('komiku.id') != -1) { //komiku.id
         imgLink = imgList[j].dataset.src ? imgList[j].dataset.src : imgList[j].src;
@@ -765,7 +766,7 @@
       el('.isdark').setAttribute('id', 'darkmode');
       el('nav').classList.add('bg-dark');
       el('nav').classList.remove('bg-success', 'fixed-top');
-    } else if (wh.indexOf('manhwa-san') != -1) {
+    } else if (document.body.classList.contains('emissionhex')) {
       localStorage.setItem('mode', 'darkmode');
       el('#mainContent').classList.add('dark-mode');
     } else if (wh.indexOf('mangadex') != -1) {
