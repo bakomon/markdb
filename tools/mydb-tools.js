@@ -389,13 +389,6 @@ function mydb_tools() {
           ls_saveLocal(js_bookmark, 'mydb_tools_bookmark', 'js', local_interval);
         }
       }
-      
-      /* 
-      - alternative replace "https://cdn.statically.io" with "https://cdn.jsdelivr.net"
-      - jsdelivr purge cache: 
-        - https://purge.jsdelivr.net/npm/YOUR_PACKAGE@VERSION/foo/bar
-        - https://purge.jsdelivr.net/gh/YOUR_PACKAGE@VERSION/foo/bar
-      */
     } else {
       if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
       localStorage.setItem('mydb_support', 'false');
@@ -474,11 +467,17 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|8/29/2021, 5:14:39 PM';
+var local_interval = 'manual|8/29/2021, 6:15:00 PM';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js';
 var live_test_bookmark = false;
 var live_test_comic_r = false;
+/* 
+- use "https://cdn.statically.io" or "https://cdn.jsdelivr.net"
+- jsdelivr purge cache: 
+  - https://purge.jsdelivr.net/npm/YOUR_PACKAGE@VERSION/foo/bar
+  - https://purge.jsdelivr.net/gh/YOUR_PACKAGE@VERSION/foo/bar
+*/
 /* ============================================================ */
 var wh_rgx = /^(w{3}|web|m(obile)?|read)\./i;
 var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/i; /* check id from <title> */
