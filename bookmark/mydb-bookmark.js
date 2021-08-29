@@ -3,7 +3,7 @@
 //function comic_bm() {
   
   function getHostname(url) {
-    var wh_rgx = /^(w{3}|web|m(obile)?)\./i;
+    var wh_rgx = /^(w{3}|web|m(obile)?|read)\./i;
     url = 'http://'+ url.replace(/(https?:)?\/\//, '');
     url = new URL(url).hostname.replace(wh_rgx, '')/*.replace(/\.(blogspot|wordpress)(.*)/i, '')*/;
     return url;
