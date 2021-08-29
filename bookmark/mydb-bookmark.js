@@ -1,6 +1,6 @@
 // DATABASE BOOKMARK
 (function() {
-function comic_bm() {
+//function comic_bm() {
   
   function getHostname(url) {
     var wh_rgx = /^(w{3}|web|m(obile)?|read)\./i;
