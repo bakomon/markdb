@@ -1,6 +1,6 @@
 // COMIC READER
 (function() {
-function comic_cr() {
+//function comic_cr() {
 
   // Position (X,Y) element https://stackoverflow.com/a/28222246
   function getOffset(el, p) {
