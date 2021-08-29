@@ -892,13 +892,7 @@
   
   function db_startData(chk) {
     chk = chk ? (chk+1) : 1;
-    var child, order;
-    var id = db_getId();
-    
     if (chk == 1) {
-      child = 'id';
-      id = id.url;
-      
       /* always check & update main_arr */
       crossStorage.get(`mydb_${mydb_type}_list`, function(res) {
         if (res == null || res == 'error') {
@@ -916,6 +910,15 @@
         el('.db_total').classList.remove('db_hidden');
       }
     }
+    if (wp.search(/^\/((m|id|en)\/?)?$/) != -1 || wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return;
+    
+    var child, order;
+    var id = db_getId();
+    
+    if (chk == 1) {
+      child = 'id';
+      id = id.url;
+    }
     if (chk == 2) {
       child = 'title';
       id = id.title;
@@ -924,8 +927,6 @@
       child = 'alternative';
       id = id.title;
     }
-    
-    if (wp.search(/^\/((m|id|en)\/?)?$/) != -1 || wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return;
     
     var ref = firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}`).orderByChild(child);
     var dataRef = chk == 1 ? ref.equalTo(id) : ref.startAt(id).endAt(id+'\uf8ff');
