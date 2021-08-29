@@ -892,7 +892,7 @@
   
   function db_startData(chk) {
     chk = chk ? (chk+1) : 1;
-    if (wp.search(/^\/((m|id|en)\/?)?$/) != -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return;
+    if (wp.search(/^\/((m|id|en)\/?)?$/) != -1 || wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return;
     var child, order;
     var id = db_getId();
     
