@@ -107,7 +107,7 @@
         g_val = el('.db_form .db_'+ g_arr[i]).value;
       }
       
-      if (g_arr[i].search(/title|alternative/) != -1) g_val = g_val.replace(/"/g, '\\$1');
+      if (g_arr[i].search(/title|alternative/) != -1) g_val = g_val.replace(/(")/g, '\\$1');
       if (g_arr[i] == 'host') g_val = getHostname(g_val);
       if (g_arr[i].search(/domain|project|url|read/) != -1) g_val = g_val.replace(/^(https?:)?\/\//g, '//').replace(/\/\/((w{3}|m(obile)?)\.)?/g, '//');
       if (mydb_select == 'source' && g_arr[i] == 'domain') g_val = g_val.replace(/\//g, '');
@@ -808,6 +808,7 @@
     var url_id = db_getId().url;
     var title_id = db_getId().title;
     var title_rgx = new RegExp(title_id.replace(/(\?|\(|\))/g, '\\$1'), 'i');
+    console.log('title_rgx: '+ title_rgx);
     
     for (var i = 0; i < arr.length; i++) {
       // mangadex, check 1
