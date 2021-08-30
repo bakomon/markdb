@@ -727,7 +727,7 @@
     s_txt += '<li class="_bm '+ (note ? 'db_line_top' : 'bm_main');
     if ('read' in data && data.read != '') s_txt += ' db_url_read';
     s_txt += ' flex_wrap">';
-    s_txt += '<div class="_db db_100"'+ (!note && wh.indexOf(data.host) != -1 && el('title').innerHTML.search(number_t_rgx) == -1 ? '' : ' onclick="window.open(\''+ data.url +'\')"') +' title="'+ data.url +'">';
+    s_txt += '<div class="_db db_100"'+ (data.url.indexOf(wp) != -1 || (!note && wh.indexOf(data.host) != -1 && el('title').innerHTML.search(number_t_rgx) == -1) ? '' : ' onclick="window.open(\''+ data.url +'\')"') +' title="'+ data.url +'">';
     if (note != 'db_startData') {
       s_txt += data.title;
       if (data.alternative != '') s_txt += ' | '+ data.alternative;
