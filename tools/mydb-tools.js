@@ -468,7 +468,7 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|8/30/2021, 7:46:11 AM';
+var local_interval = 'manual|8/31/2021, 5:28:31 PM';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js';
 var live_test_bookmark = false;
@@ -478,6 +478,7 @@ var live_test_comic_r = false;
 - jsdelivr purge cache: 
   - https://purge.jsdelivr.net/gh/YOUR_PACKAGE@VERSION/foo/bar
   - https://purge.jsdelivr.net/npm/YOUR_PACKAGE@VERSION/foo/bar
+  - https://gitcdn.herokuapp.com/cdn/USER/YOUR_PACKAGE/LATEST_COMMIT/foo/bar
 */
 /* ============================================================ */
 var wh_rgx = /^(w{3}|web|m(obile)?|read)\./i;
