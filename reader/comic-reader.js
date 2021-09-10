@@ -1,7 +1,5 @@
 // COMIC READER
-(function() {
-//function comic_cr() {
-
+function mydb_comic_reader() {
   // Position (X,Y) element https://stackoverflow.com/a/28222246
   function getOffset(el, p) {
     const rect = el.getBoundingClientRect();
@@ -970,4 +968,7 @@
     if (localStorage.getItem('ts_history')) localStorage.removeItem('ts_history');
     indexedDB.open('ts_series_history').onsuccess = function() { indexedDB.deleteDatabase('ts_series_history') };
   }
-})();
+}
+
+var cr_live_test = false;
+if (!cr_live_test) mydb_comic_reader();
