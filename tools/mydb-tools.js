@@ -470,9 +470,9 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|9/11/2021, 1:46:56 AM';
-var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
-var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js';
+var local_interval = 'manual|9/11/2021, 1:53:25 AM';
+var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
+var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var live_test_bookmark = false;
 var live_test_comic_r = false;
 /* 
