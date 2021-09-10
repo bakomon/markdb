@@ -5,7 +5,7 @@ A simple tool to bookmark your comics, novels, and anime in Firebase.
 Works on all PC & Mobile devices, using a browser that supports custom scripts.
 
 ### PC :
-- Chrome: [`User JavaScript and CSS`](https://chrome.google.com/webstore/detail/nbhcbdghjpllgmfilhnhkllmkecfmpld)
+- Chrome: [`User JavaScript and CSS`](https://chrome.google.com/webstore/detail/nbhcbdghjpllgmfilhnhkllmkecfmpld){:target="_blank" rel="noopener"}
 
 ### Android:
 - [`Via Browser`](https://play.google.com/store/apps/details?id=mark.via.gp&hl=en)
