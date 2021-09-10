@@ -367,9 +367,9 @@ function mydb_tools() {
       
       if (live_test_comic_r) {
         var cr_chk = setInterval(function() {
-          if (typeof comic_cr !== 'undefined') {
+          if (typeof mydb_comic_reader !== 'undefined') {
             clearInterval(cr_chk);
-            comic_cr();
+            mydb_comic_reader();
           }
         });
       } else {
@@ -382,9 +382,9 @@ function mydb_tools() {
         if (!mydb_firebase) loadFirebase();
         if (live_test_bookmark) {
           var bm_chk = setInterval(function() {
-            if (typeof comic_bm !== 'undefined') {
+            if (typeof mydb_bookmark !== 'undefined') {
               clearInterval(bm_chk);
-              comic_bm();
+              mydb_bookmark();
             }
           });
         } else {
@@ -470,7 +470,7 @@ var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|9/8/2021, 7:01:15 AM';
+var local_interval = 'manual|9/11/2021, 1:46:56 AM';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/reader/comic-reader.js';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/page@master/bookmark/mydb-bookmark.js';
 var live_test_bookmark = false;
