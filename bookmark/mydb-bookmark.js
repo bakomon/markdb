@@ -203,7 +203,7 @@ function mydb_bookmark() {
   function db_formEdit(note, data) {
     is_form = 'edit';
     el('.db_form_btn').classList.remove('db_hidden'); //always above db_formSelect()
-    db_formSelect();
+    db_formSelect('edit');
     el('.db_form').classList.remove('db_hidden');
     el('.db_form_btn .db_set').classList.add('db_hidden');
     el('.db_form_btn .db_btn_update').classList.remove('db_hidden');
@@ -277,7 +277,7 @@ function mydb_bookmark() {
     }
   }
   
-  function db_formGen(name, data, parent) {
+  function db_formGen(note, name, data, parent) {
     var f_txt = '';
     var f_att = '';
     name = name.replace(/^\d+_/, '');
@@ -299,7 +299,7 @@ function mydb_bookmark() {
         f_txt += '</select>';
         break;
       case 'button':
-        f_txt += '<button class="_db db_selected db_hidden db_'+ f_cls +'"'+ f_att +'>'+ f_val +'</button>';
+        f_txt += '<button class="_db db_selected'+ (parent ? ' db_hidden' : '') +' db_'+ f_cls +'"'+ f_att +'>'+ f_val +'</button>';
         break;
       case 'radio':
         if ('option' in data) {
@@ -336,7 +336,7 @@ function mydb_bookmark() {
     
     if ('next' in data) {
       for (var name2 in data['next']) {
-        f_txt += db_formGen(name2, data['next'][name2], name);
+        f_txt += db_formGen(note, name2, data['next'][name2], name);
       }
       f_txt = '<div class="flex db_100">'+ f_txt +'</div>';
     }
@@ -344,14 +344,14 @@ function mydb_bookmark() {
     return f_txt;
   }
   
-  function db_formSelect() {
+  function db_formSelect(note) {
     var f_txt = '';
     var data = db_settings[mydb_type];
     
     if (is_form == 'edit' && mydb_select.indexOf('project') == -1) f_txt += '<div class="db_cover db_100 t_center db_hidden"><img src=""></div>';
     f_txt += '<div class="db_text db_100">&#10095;&#10095;&#160;&#160;&#160;<b>'+ mydb_type +'</b>&#160;&#160;>&#160;&#160;<b>'+ mydb_select +'</b>&#160;&#160;>&#160;&#160;<span class="db_border"><b>'+ is_form +'</b></span></div>';
     for (var name in data[mydb_select]) {
-      f_txt += db_formGen(name, data[mydb_select][name]);
+      f_txt += db_formGen(note, name, data[mydb_select][name]);
     }
     el('.db_form').innerHTML = '<div class="f_grow"></div><div class="flex_wrap">'+ f_txt +'</div>';
     el('.db_form').style.cssText = 'flex-direction:column;overflow-y:auto;height:calc(100vh - '+ (el('.db_form_btn').offsetHeight + 31) +'px);';
@@ -949,7 +949,7 @@ function mydb_bookmark() {
     var b_txt = '';
     // css control already in database tools
     // css bookmark
-    b_txt += '<style>.db_100{width:100%;}.db_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark ::-webkit-input-placeholder{color:#757575;}._bmark ::placeholder{color:#757575;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;/*flex-direction:column;*/background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.db_shide{left:-350px;}._bmark ._db{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;text-transform:initial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bmark ._db[disabled]{color:#555;border-color:#252428;}.db_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.db_line_top{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.db_space{margin:10px 0;}._db.fp_content{margin:auto;}.db_text{padding:4px 8px;margin:4px;color:#ddd;}.db_btn_radio input[type="radio"]{display:none;}.db_btn_radio input[type="radio"]+label:before{content:none;}.db_btn_radio input[type="radio"]:checked+label,._bmark .db_selected,._bmark:not(.db_mobile) button:not(.db_no_hover):hover{background:#4267b2;border-color:#4267b2;}._bmark .db_active{background:#238636;border-color:#238636;}._bmark .db_danger{background:#d7382d;border-color:#d7382d;}.db_border{padding:1px 6px;border:1px solid #ddd;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}._bmark ul{padding:0;margin:0;list-style:none;}._bmark input[type="text"]{display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}._bmark input[type="text"]:hover{border-color:#3e3949;}._bmark label [type="radio"],._bmark label [type="checkbox"]{display:initial;margin:-2px 6px 0 0;vertical-align:middle;}.bmark_db:not(.db_s_shide) .db_bm_show .bm_list{max-height:25vh !important;}.db_bm_show .bm_similar .bm_main{margin:5px;border:4px solid #4267b2;}.db_bm_show .bm_similar .bm_main .bm_edit{background:#4267b2;border:0;}.db_bm_show .bm_list,.db_result .bs_list{overflow-y:auto;}.db_result li,.db_bm_show li{border-width:1px;}._bmark .db_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.db_bg,.bm_index{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.db_cover img{max-width:100px;}.db_radio label,.db_cbox label{display:inline-block;margin:5px 10px 5px 0;}._bmark .db_disabled{color:#555;border-color:#252428;cursor:not-allowed;}.bmark_db.db_s_shide .db_result,.db_hidden{display:none;}</style>';
+    b_txt += '<style>.db_100{width:100%;}.db_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark ::-webkit-input-placeholder{color:#757575;}._bmark ::placeholder{color:#757575;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;/*flex-direction:column;*/background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.db_shide{left:-350px;}._bmark ._db{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;text-transform:initial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bmark ._db[disabled]{color:#555;border-color:#252428;}._bmark .db_next{padding:2px 4px;background:transparent;}.db_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.db_line_top{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.db_space{margin:10px 0;}._db.fp_content{margin:auto;}.db_text{padding:4px 8px;margin:4px;color:#ddd;}.db_btn_radio input[type="radio"]{display:none;}.db_btn_radio input[type="radio"]+label:before{content:none;}.db_btn_radio input[type="radio"]:checked+label,._bmark .db_selected,._bmark:not(.db_mobile) button:not(.db_no_hover):hover{background:#4267b2;border-color:#4267b2;}._bmark .db_active{background:#238636;border-color:#238636;}._bmark .db_danger{background:#d7382d;border-color:#d7382d;}.db_border{padding:1px 6px;border:1px solid #ddd;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}._bmark ul{padding:0;margin:0;list-style:none;}._bmark input[type="text"]{display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}._bmark input[type="text"]:hover{border-color:#3e3949;}._bmark label [type="radio"],._bmark label [type="checkbox"]{display:initial;margin:-2px 6px 0 0;vertical-align:middle;}.bmark_db:not(.db_s_shide) .db_bm_show .bm_list{max-height:25vh !important;}.db_bm_show .bm_similar .bm_main{margin:5px;border:4px solid #4267b2;}.db_bm_show .bm_similar .bm_main .bm_edit{background:#4267b2;border:0;}.db_bm_show .bm_list,.db_result .bs_list{overflow-y:auto;}.db_result li,.db_bm_show li{border-width:1px;}._bmark .db_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.db_bg,.bm_index{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.db_cover img{max-width:100px;}.db_radio label,.db_cbox label{display:inline-block;margin:5px 10px 5px 0;}._bmark .db_disabled{color:#555;border-color:#252428;cursor:not-allowed;}.bmark_db.db_s_shide .db_result,.db_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.db_mobile .bmark_db{width:80%;}.db_mobile .bmark_db.db_shide{left:-80%;}.db_mobile._bmark ._db{font-size:16px;}.db_mobile._bmark .db_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}</style>';
     // html
@@ -1100,7 +1100,7 @@ function mydb_bookmark() {
         db_resetForm();
         is_form = 'new';
         el('.db_form_btn').classList.remove('db_hidden'); //always above db_formSelect()
-        db_formSelect();
+        db_formSelect('new');
         el('.db_form').classList.remove('db_hidden');
         el('.db_form_btn .db_set').classList.remove('db_hidden');
         el('.db_form_btn .db_btn_update').classList.add('db_hidden');
@@ -1122,23 +1122,25 @@ function mydb_bookmark() {
     el('.db_form_btn .db_btn_gen').onclick = function() {
       el('.db_host').value = wh.replace(wh_rgx, '');
       if (mydb_select == 'list') {
-        var bmark_id = wp.match(id_w_rgx)[1].replace(/-(bahasa|sub(title)?)-indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/\.html?$/i, '').toLowerCase();
-        el('.db_id').value = bmark_id;
-        if (wp.search(/\/(title|anime|novel|series)\/\d+\//) != -1) el('.db_bmdb').value = wp.match(/\/(title|anime|novel|series)\/([^\/]+)/)[1];
-        el('.db_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(bmark_id, '_') : firstCase(bmark_id, '-');
-        el('.db_url').value = '//'+ wh.replace(wh_rgx, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
-        el('.db_update').valueAsDate = local_date;
-        
-        if (mydb_type == 'comic') {
-          var id_search = bmark_id.replace(/[-_\.]/g, ' ');
-          el('.db_bmdb_mangadex').dataset.href = '//mangadex.org/titles?q='+ id_search;
-          el('.db_bmdb_mangaupdates').dataset.href = '//mangaupdates.com/series.html?search='+ id_search;
-        } else if (mydb_type == 'novel') {
-          el('.db_bmdb_mangaupdates').dataset.href = '//mangaupdates.com/series.html?search='+ id_search;
-        } else {
-          el('.db_bmdb_myanimelist').dataset.href = '//myanimelist.net/anime.php?cat=anime&q='+ id_search;
-          el('.db_bmdb_anilist').dataset.href = '//anilist.co/search/anime?search='+ id_search;
-          el('.db_bmdb_anidb').dataset.href = '//anidb.net/anime/?view=grid&adb.search='+ id_search;
+        if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) {
+          var bmark_id = wp.match(id_w_rgx)[1].replace(/-(bahasa|sub(title)?)-indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/\.html?$/i, '').toLowerCase();
+          el('.db_id').value = bmark_id;
+          if (wp.search(/\/(title|anime|novel|series)\/\d+\//) != -1) el('.db_bmdb').value = wp.match(/\/(title|anime|novel|series)\/([^\/]+)/)[1];
+          el('.db_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(bmark_id, '_') : firstCase(bmark_id, '-');
+          el('.db_url').value = '//'+ wh.replace(wh_rgx, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
+          el('.db_update').valueAsDate = local_date;
+          
+          if (mydb_type == 'comic') {
+            var id_search = bmark_id.replace(/[-_\.]/g, ' ');
+            el('.db_bmdb_mangadex').dataset.href = '//mangadex.org/titles?q='+ id_search;
+            el('.db_bmdb_mangaupdates').dataset.href = '//mangaupdates.com/series.html?search='+ id_search;
+          } else if (mydb_type == 'novel') {
+            el('.db_bmdb_mangaupdates').dataset.href = '//mangaupdates.com/series.html?search='+ id_search;
+          } else {
+            el('.db_bmdb_myanimelist').dataset.href = '//myanimelist.net/anime.php?cat=anime&q='+ id_search;
+            el('.db_bmdb_anilist').dataset.href = '//anilist.co/search/anime?search='+ id_search;
+            el('.db_bmdb_anidb').dataset.href = '//anidb.net/anime/?view=grid&adb.search='+ id_search;
+          }
         }
         if (el('.db_bmdb').value == '' || el('.db_bmdb').value == 'none') {
           el('.db_bmdb_none').classList.remove('db_hidden');
@@ -1149,6 +1151,7 @@ function mydb_bookmark() {
           } else if (mydb_type == 'novel') {
             el('.db_bmdb_mangaupdates').classList.remove('db_hidden');
           } else {
+            el('.db_bmdb').parentElement.className = el('.db_bmdb').parentElement.className.replace(/flex\s/, '_db db_next flex_wrap f_right ');
             el('.db_bmdb_myanimelist').classList.remove('db_hidden');
             el('.db_bmdb_anilist').classList.remove('db_hidden');
             el('.db_bmdb_anidb').classList.remove('db_hidden');
