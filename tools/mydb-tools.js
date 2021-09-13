@@ -392,7 +392,7 @@ function mydb_tools() {
         }
       }
     } else {
-      window['mydb_error'] = {"mydb_type":"'+ mydb_type +'","note":"'+ note +'"};
+      mydb_error = {"mydb_type":'"'+ mydb_type +'"',"note":'"'+ note +'"'};
       if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
       localStorage.setItem('mydb_support', 'false');
       console.log('mydb_support: false');
@@ -462,6 +462,7 @@ var mydb_login = false;
 var mydb_firebase = false;
 var mydb_read = false;
 var mydb_change = false;
+var mydb_error = {};
 /* ============================================================ */
 var cross_window, cross_chk;
 var cross_callbacks = {};
