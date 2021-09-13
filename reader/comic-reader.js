@@ -541,6 +541,7 @@ function mydb_comic_reader() {
       removeElem(el('.reader-page-bar', main));
       el('#content').dataset.renderer = 'long-strip';
     } else if (wh.indexOf('webtoons') != -1) {
+      document.body.classList.remove('fixed');
       el('.viewer_footer').style.cssText = 'position:absolute;top:0;';
       el('.viewer_footer').parentNode.style.cssText = 'position:relative;';
     } else if (document.body.classList.contains('new_cms')) {
