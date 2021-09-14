@@ -448,6 +448,15 @@ function mydb_tools() {
 }
 
 
+/*
+var host_rgx = /(oploverz|webtoons|mangaku|mangaindo|komikstation|komikcast|westmanga|mangakita|mangashiro|mangacanblog|maid|ngomik|mangakyo|kiryuu|komikav|komiku|manhwa-san|matakomik|komikid|kombatch|mangceh|sektekomik|manhuaid|pojokmanga|sheamanga|klikmanga|bacakomik|mangayu|klankomik|boosei|comicfx|yuumanga|wordhero|gurukomik|masterkomik|kaisarkomik|softkomik|katakomik|mgkomik|kumamanga|komikru|komikindo|komiknesia|mangakane|tenseiscans|komikempus|kurutonime|nekomik|manhwaindo|wrt|mangacdn|wib|gabutscans|daveyscans|jscanla|nyanfm|mangapark|mangadex|mangabat|zeroscans|readmanhua|readmng|hatigarmscan[sz]|funmanga|bato|leviatanscans|merakiscans|mangarawr|toonily|mangasushi|reaperscans|asurascans|secretscans|rawdevart|azoramanga|animesc-kun|readcmic|mangapaus|ninkomik)\.((blogspot|wordpress)\.)?((co|my|web)(m|\.id)?|net|org|me|in|tv|id|to|jp|bz|pw|nl|info|xyz|pro|site)\/?(.*)/i;
+  
+var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|mangacdn.my.id|comicfx|sektekomik|readmng|bato.to|(zero|hatigarm|reaper|secret)scan[sz]/;
+  
+if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
+*/
+
+
 /* ============================================================ */
 var fbase_app = 'bakomon';
 /* Firebase configuration for Firebase JS SDK v7.20.0 and later, measurementId is optional */
@@ -474,9 +483,14 @@ var cross_origin = 'coreaz';
 var cross_url = 'https://bakomon.blogspot.com';
 var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
+var wh_rgx = /^(w{3}|web|m(obile)?|read)\./i;
+var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/i; /* check id from <title> */
+var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
+var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
+/* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|9/14/2021, 7:37:57 PM';
+var local_interval = 'manual|9/14/2021, 11:52:35 PM';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var live_test_bookmark = false;
@@ -488,24 +502,11 @@ var live_test_comic_r = false;
   - https://purge.jsdelivr.net/npm/YOUR_PACKAGE@VERSION/foo/bar
   - https://gitcdn.herokuapp.com/cdn/USER/YOUR_PACKAGE/LATEST_COMMIT/foo/bar
 */
-/* ============================================================ */
-var wh_rgx = /^(w{3}|web|m(obile)?|read)\./i;
-var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/i; /* check id from <title> */
-var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
-var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
 
 if (localStorage.getItem('comic_tools_bookmark')) localStorage.removeItem('comic_tools_bookmark');
 if (localStorage.getItem('comic_tools_reader')) localStorage.removeItem('comic_tools_reader');
 if (localStorage.getItem('comic_tools_list')) localStorage.removeItem('comic_tools_list');
 if (localStorage.getItem('mydb_source_check')) localStorage.removeItem('mydb_source_check');
-
-  /*
-  var host_rgx = /(oploverz|webtoons|mangaku|mangaindo|komikstation|komikcast|westmanga|mangakita|mangashiro|mangacanblog|maid|ngomik|mangakyo|kiryuu|komikav|komiku|manhwa-san|matakomik|komikid|kombatch|mangceh|sektekomik|manhuaid|pojokmanga|sheamanga|klikmanga|bacakomik|mangayu|klankomik|boosei|comicfx|yuumanga|wordhero|gurukomik|masterkomik|kaisarkomik|softkomik|katakomik|mgkomik|kumamanga|komikru|komikindo|komiknesia|mangakane|tenseiscans|komikempus|kurutonime|nekomik|manhwaindo|wrt|mangacdn|wib|gabutscans|daveyscans|jscanla|nyanfm|mangapark|mangadex|mangabat|zeroscans|readmanhua|readmng|hatigarmscan[sz]|funmanga|bato|leviatanscans|merakiscans|mangarawr|toonily|mangasushi|reaperscans|asurascans|secretscans|rawdevart|azoramanga|animesc-kun|readcmic|mangapaus|ninkomik)\.((blogspot|wordpress)\.)?((co|my|web)(m|\.id)?|net|org|me|in|tv|id|to|jp|bz|pw|info|xyz|pro|site)\/?(.*)/i;
-  
-  var not_support = /mangaku|mangacanblog|mangayu|klankomik|softkomik|bacakomik.co|mangacdn.my.id|comicfx|sektekomik|readmng|bato.to|(zero|hatigarm|reaper|secret)scan[sz]/;
-  
-  if (wh.search(/leviatanscans|zeroscans|reaperscans|secretscans|hatigarmscan[sz]/) != -1) document.body.classList.add('new_cms');
-  */
 
 if (typeof el !== 'undefined') {
   localStorage.setItem('mydb_support', 'false');
