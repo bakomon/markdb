@@ -426,7 +426,7 @@ function mydb_comic_reader() {
         imgSize = imgSize == 0 || imgSize > 800 ? 's'+ imgSize : 's1600';
       }
       
-      reader_html += '<div onclick="var img'+ (j+1) +'=this.querySelector(\'img\');window.open(img'+ (j+1) +'.src?img'+ (j+1) +'.src:img'+ (j+1) +'.dataset.readImg)"><img style="min-height:750px;" data-read-img="'+ imgLink +'" title="'+ (j+1) +' - '+ imgLink +'"></div>';
+      reader_html += '<div onclick="var img'+ (j+1) +'=this.querySelector(\'img\');window.open(img'+ (j+1) +'.src?img'+ (j+1) +'.src:img'+ (j+1) +'.dataset.readImg)" title="'+ (j+1) +' - '+ imgLink +'"><img style="min-height:750px;" data-read-img="'+ imgLink +'" alt="'+ (j+1) +'"></div>';
     }
     reader_html += '</div>';
     
