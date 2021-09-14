@@ -975,5 +975,4 @@ function mydb_comic_reader() {
   }
 }
 
-var cr_live_test = false;
-if (!cr_live_test) mydb_comic_reader();
+if (!live_test_comic_r) mydb_comic_reader();
