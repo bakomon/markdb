@@ -965,6 +965,7 @@ function mydb_comic_reader() {
     console.log('page: chapter');
     checkAll();
     
+    if (localStorage.getItem('visited-chapters')) localStorage.removeItem('visited-chapters');
     if (localStorage.getItem('bookmark')) localStorage.removeItem('bookmark');
     if (localStorage.getItem('history')) localStorage.removeItem('history');
     if (localStorage.getItem('bm_history')) localStorage.removeItem('bm_history');
