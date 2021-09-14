@@ -164,7 +164,7 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
   max-height: none !important;
 }
 /* webtoons.com */
-.webtoons-com img {
+.webtoons-com:not(.read-mode) img {
   opacity: 0.9 !important;
 }
 .webtoons-com #wrap a, .webtoons-com #wrap p, #wrap .main_hotnew h2, #wrap .title_area h2, #wrap .grade_num {
