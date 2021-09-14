@@ -970,6 +970,8 @@ function mydb_comic_reader() {
     if (localStorage.getItem('bm_history')) localStorage.removeItem('bm_history');
     if (localStorage.getItem('ts_history')) localStorage.removeItem('ts_history');
     indexedDB.open('ts_series_history').onsuccess = function() { indexedDB.deleteDatabase('ts_series_history') };
+  } else {
+    mydb_read = false;
   }
 }
 
