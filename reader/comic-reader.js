@@ -443,6 +443,7 @@ function mydb_comic_reader() {
     
     scrollImage(el('#reader-mod img', 'all'));
     createBtn(el('#reader-mod img', 'all'));
+    document.body.classList.remove('read-mode');
     
     if (wh.search(/katakomik|animesc-kun|readcmic/) != -1) {
       var e_post = wh.indexOf('animesc-kun') != -1 ? el('#post-wrapper') : el('#main-wrapper');
@@ -450,6 +451,8 @@ function mydb_comic_reader() {
       removeElem('#sidebar-wrapper');
     } else if (wh.indexOf('mangadex') != -1 && !isMobile) {
       imgArea.parentNode.style.cssText = 'padding-right: 20vw !important;';
+    } else if (wh.indexOf('webtoons') != -1) {
+      document.body.classList.remove('fixed');
     }
     
     /*//webtoons auto like
@@ -541,7 +544,6 @@ function mydb_comic_reader() {
       removeElem(el('.reader-page-bar', main));
       el('#content').dataset.renderer = 'long-strip';
     } else if (wh.indexOf('webtoons') != -1) {
-      document.body.classList.remove('fixed');
       el('.viewer_footer').style.cssText = 'position:absolute;top:0;';
       el('.viewer_footer').parentNode.style.cssText = 'position:relative;';
     } else if (document.body.classList.contains('new_cms')) {
