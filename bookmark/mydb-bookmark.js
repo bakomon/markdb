@@ -1240,5 +1240,4 @@ function mydb_bookmark() {
   }, 100);
 }
 
-var bm_live_test = false;
-if (!bm_live_test) mydb_bookmark();
+if (!live_test_bookmark) mydb_bookmark();
