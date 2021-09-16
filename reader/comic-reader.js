@@ -961,7 +961,7 @@ function mydb_comic_reader() {
   if ((wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(number_t_rgx) != -1)) && !isProject) {
     titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read)\s/i, '').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s$/, '').replace(/\|/g, '').replace(/[^\s\w]/g, '').replace(/\s+/g, '-').toLowerCase();
     wpId = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
-    zoomID = crData ? crData.type : wh.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
+    zoomID = crData ? ('mydb_'+ crData.type) : wh.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
     mydb_read = true;
     console.log('page: chapter');
     checkAll();
