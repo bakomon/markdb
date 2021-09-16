@@ -759,7 +759,7 @@ function mydb_bookmark() {
     db_showHtml(data);
     el('.db_bm_show').classList.remove('db_hidden');
     console.log(`${mydb_type} data from: ${note}`);
-    if ('type' in data) localStorage.setItem(getId('reader'), data.type);
+    if ('type' in data && !is_mobile) localStorage.setItem(getId('reader'), data.type);
     
     if (note.indexOf('db_startData') != -1) {
       if (!main_data) main_data = {};
