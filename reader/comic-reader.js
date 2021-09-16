@@ -915,27 +915,26 @@ function mydb_comic_reader() {
   // scroll to chapter list
   var ch_list = [
     '0','#chapterlist',
-    '1','#manga-chapters-holder',
-    '2','#--box-list',
-    '3','.series-chapterlist',
+    '1','#chapter_list',
+    '2','#manga-chapters-holder',
+    '3','#--box-list',
+    '4','.series-chapterlist',
     'komikcast.com','.komik_info-chapters',
     'comicfx.net','.chaplist',
-    'mangaku.','#content-b',
-    'komikstation.com','.bxcl .releases',
+    'komikstation.com','.bxcl',
     'manhuaid.com','.tb-custom-scrollbar',
-    'komiku.id','#Daftar_Chapter tbody',
-    'bacakomik.co','#chapter_list',
-    'mangacdn.my.id','.lcp_catlist li',
-    'webtoons.com','#_episodeList li',
+    'komiku.id','#Daftar_Chapter',
+    'mangacdn.my.id','.lcp_catlist',
+    'webtoons.com','#_episodeList',
     'mangabat.com','.row-content-chapter'
   ];
   if (isMobile) {
-    var list_area, ch_area = el(ch_list[1]) || el(ch_list[3]) || el(ch_list[5]) || el(ch_list[7]);
+    var list_area, ch_area = el(ch_list[1]) || el(ch_list[3]) || el(ch_list[5]) || el(ch_list[7]) || el(ch_list[9]);
     var ch_length = ch_list.length;
     if (ch_length % 2 == 1) {
       ch_length--
     }
-    for (var i = 6; i < ch_length; i += 2) {
+    for (var i = 8; i < ch_length; i += 2) {
       if (wh.indexOf(ch_list[i]) != -1 && el(ch_list[i + 1])) {
         list_area = el(ch_list[i + 1]);
         break;
@@ -946,25 +945,29 @@ function mydb_comic_reader() {
     window.onload = function() {
       if (list_area) {
         var half_screen = Math.floor(window.screen.height / 2);
-        //list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
-        //list_area.scrollIntoView();
+        /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
+        list_area.scrollIntoView();*/
         window.scroll(0, (getOffset(list_area, 'top') - half_screen));
+        
+        var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
+        if (el(a_latest, list_area)) {
+          var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.]\d)?)/;
+          var l_last = document.createElement('div');
+          l_last.style.cssText = 'position:fixed;top:50%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:4px 8px;font-size:16px;border:1px solid #3e3949;';
+          l_last.innerHTML = el(a_latest, list_area).textContent.match(a_rgx)[1];
+          document.body.appendChild(l_last);
+        }
       }
     };
     
     // style for link visited
-    var l_style = '';
     var l_visited = '';
     for (var j = 1; j < ch_length; j += 2) {
-      l_style += '.is-mobile '+ ch_list[j] +' li:first-child a';
       l_visited += ch_list[j] +' a:visited';
-      if (j < ch_length-1) {
-        l_style += ',';
-        l_visited += ',';
-      }
+      if (j < ch_length-1) l_visited += ',';
     }
     var l_elem = document.createElement('style');
-    l_elem.innerHTML = l_style +'{display:inline-block;width:100%;text-align:right;}'+ l_visited +'{color:red !important;}';
+    l_elem.innerHTML = l_visited +'{color:red !important;}';
     document.body.appendChild(l_elem);
   }
   
