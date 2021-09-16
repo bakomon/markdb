@@ -57,7 +57,7 @@ function mydb_comic_reader() {
   }
   
   function reloadComment(id) {
-    var par_dsqs = el('#disqus_thread').parentNode;
+    var par_dsqs = el('#disqus_thread').parentElement;
     removeElem('#disqus_thread');
     
     var disqus_load = document.createElement('div');
@@ -272,7 +272,7 @@ function mydb_comic_reader() {
     el('.rc_bottom').onclick = function() {
       var cmt_el = el('#disqus_trigger') || el('.webtoons-com .comment_area');
       if (cmt_el) {
-        cmt_el.parentNode.scrollIntoView();
+        cmt_el.parentElement.scrollIntoView();
       } else {
         //document.body.scrollIntoView(false);
         window.scrollTo(0, imgArea.scrollHeight);
@@ -287,7 +287,7 @@ function mydb_comic_reader() {
     */
     var next_chap =  el('.manhuaid-com a[class*="float-left"]') || el('.nyanfm-com .fa-angle-right') || el('.funmanga-com #chapter-next-link')|| el('.readmng-com a[class*="next_page"]') || el('.funmanga-com #chapter-next-link') || el('.mangabat-com .navi-change-chapter-btn-next') || el('.bato-to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
     if (next_chap) {
-      next_chap = document.body.className.search(/new_cms|mangadropout|nyanfm/) != -1 ? next_chap.parentNode : next_chap;
+      next_chap = document.body.className.search(/new_cms|mangadropout|nyanfm/) != -1 ? next_chap.parentElement : next_chap;
       var next_url = /*document.body.classList.contains('ads_newtab') ? next_chap.dataset.href :*/ next_chap.href;
       el('.rc_next button').setAttribute('data-href', next_url);
       el('.rc_next').classList.remove('rc_hidden');
@@ -436,7 +436,7 @@ function mydb_comic_reader() {
     if (prnt && imgs && document.body.className.search(/new_cms|themesia|mangapark|webtoons/) == -1) {
       imgArea.appendChild(reader_mod);
     } else {
-      imgArea.parentNode.insertBefore(reader_mod, imgArea);
+      imgArea.parentElement.insertBefore(reader_mod, imgArea);
       removeElem(imgArea);
     }
     imgArea = el('#reader-mod');
@@ -450,7 +450,7 @@ function mydb_comic_reader() {
       e_post.style.width = '100%';
       removeElem('#sidebar-wrapper');
     } else if (wh.indexOf('mangadex') != -1 && !isMobile) {
-      imgArea.parentNode.style.cssText = 'padding-right: 20vw !important;';
+      imgArea.parentElement.style.cssText = 'padding-right: 20vw !important;';
     } else if (wh.indexOf('webtoons') != -1) {
       document.body.classList.remove('fixed');
     }
@@ -545,7 +545,7 @@ function mydb_comic_reader() {
       el('#content').dataset.renderer = 'long-strip';
     } else if (wh.indexOf('webtoons') != -1) {
       el('.viewer_footer').style.cssText = 'position:absolute;top:0;';
-      el('.viewer_footer').parentNode.style.cssText = 'position:relative;';
+      el('.viewer_footer').parentElement.style.cssText = 'position:relative;';
     } else if (document.body.classList.contains('new_cms')) {
       main.innerHTML = '';
       main.removeAttribute('id');
@@ -594,7 +594,7 @@ function mydb_comic_reader() {
       getData('//mangadex.org/api/?type=chapter&id='+ eId);
       var eReader = el('.reader-controls-chapters');
       eReader.addEventListener('click', function(e) {
-        wl.href = e.target.parentNode.href;
+        wl.href = e.target.parentElement.href;
       });
     } else if (wh.indexOf('webtoons') != -1 && isMobile) { //api
       createImage(imageList); //from web
@@ -620,7 +620,7 @@ function mydb_comic_reader() {
       var new_content = document.createElement('div');
       new_content.id = 'content-mod';
       new_content.innerHTML = '<div id="readerarea"></div><a href="#">next</a>';
-      content.parentNode.insertBefore(new_content, content);
+      content.parentElement.insertBefore(new_content, content);
       removeElem('#__next');
       var eId = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[1];
       var eCh = wl.pathname.match(/([^\/]+)\/chapter\/(\d+)/)[2];
@@ -641,7 +641,7 @@ function mydb_comic_reader() {
       var eAll = el('select [label="Load pages"] option[value="a"]');
       if (eAll.selected == false) wl.href = wl.href.replace(/(\/chapter\/)(.*)/g, '$1'+ chapterId); //from web
     } else if (wh.search(/readmng|funmanga/) != -1) { //replace
-      el('.img-responsive').parentNode.id = 'readerarea';
+      el('.img-responsive').parentElement.id = 'readerarea';
       if (wp.indexOf('all-pages') == -1) wl.href = wl.href.replace(/(\/\d+)\/\d(.*)/g, '$1') + '/all-pages';
       if (wh.indexOf('funmanga') != -1) el('.chapter-read').appendChild(el('.prev-next-post'));
     } else if (wh.search(/readmanhua|ninjascans|klikmanga|mangasushi/) != -1) { //Madara theme
@@ -671,7 +671,7 @@ function mydb_comic_reader() {
       el('.post-footer').insertBefore(nextprev, el('.post-footer').children[0]);
     } else if (wh.indexOf('mangaindo') != -1) { //Show nextprev
       var nextprev = el('#post-nav');
-      el('.readinfo').parentNode.insertBefore(nextprev, el('.readinfo'));
+      el('.readinfo').parentElement.insertBefore(nextprev, el('.readinfo'));
     } else if (wh.indexOf('mangadropout') != -1) {
       var mwp = wp.match(/collection[^\d]*\/\d+\/([^\/]*)/)[1];
       var mid = el('#displayNoAds');
@@ -804,7 +804,7 @@ function mydb_comic_reader() {
       var list_manga = el('.page-item-detail.manga', 'all');
       for (var i = 0; i < list_manga.length; i++) {
         if (el('[id^="manga-item-"] .adult', list_manga[i])) {
-          list_manga[i].parentNode.style.display = 'none';
+          list_manga[i].parentElement.style.display = 'none';
         }
       }
     }
@@ -838,8 +838,8 @@ function mydb_comic_reader() {
         new_a.classList.add('link-mod');
         new_a.style.cssText = 'font-style:normal;cursor:pointer;';
         new_a.innerHTML = el_a[i].innerHTML;
-        el_a[i].parentNode.insertBefore(new_a, el_a[i]);
-        el_a[i].parentNode.removeChild(el_a[i]);
+        el_a[i].parentElement.insertBefore(new_a, el_a[i]);
+        el_a[i].parentElement.removeChild(el_a[i]);
       }
       el('i[data-href]', 'all').forEach(function(item) {
         item.addEventListener('click', function(e) {
@@ -859,11 +859,11 @@ function mydb_comic_reader() {
     var adb_id, adb_style = el('style','all');
     for (var i = 0; i < adb_style.length; i++) {
       if (adb_style[i].innerHTML.search(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/) != -1) {
-        adb_style[i].parentNode.removeChild(adb_style[i]);
+        adb_style[i].parentElement.removeChild(adb_style[i]);
         adb_id = adb_style[i].innerHTML.match(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/)[1];
         var adb_chk = setInterval(function() {
           if (el(adb_id)) {
-            el(adb_id).parentNode.removeChild(el(adb_id));
+            el(adb_id).parentElement.removeChild(el(adb_id));
             clearInterval(adb_chk);
             var adb_elem = el('[style*="display"','all');
             for (var j = 0; j < adb_elem.length; j++) {
@@ -915,7 +915,7 @@ function mydb_comic_reader() {
   // scroll to chapter list
   var ch_list = [
     '0','#chapterlist',
-    '1','#manga-chapters-holder .page-content-listing',
+    '1','#manga-chapters-holder',
     '2','#--box-list',
     '3','.series-chapterlist',
     'komikcast.com','.komik_info-chapters',
@@ -929,7 +929,7 @@ function mydb_comic_reader() {
     'webtoons.com','#_episodeList li',
     'mangabat.com','.row-content-chapter'
   ];
-  if (isProject && isMobile) {
+  if (isMobile) {
     var list_area, ch_area = el(ch_list[1]) || el(ch_list[3]) || el(ch_list[5]) || el(ch_list[7]);
     var ch_length = ch_list.length;
     if (ch_length % 2 == 1) {
@@ -944,17 +944,27 @@ function mydb_comic_reader() {
       }
     }
     window.onload = function() {
-      if (list_area) setTimeout(function() { list_area.parentNode.scrollIntoView(); }, 1000);
+      if (list_area) {
+        var half_screen = Math.floor(window.screen.height / 2);
+        //list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
+        //list_area.scrollIntoView();
+        window.scroll(0, (getOffset(list_area, 'top') - half_screen));
+      }
     };
     
     // style for link visited
     var l_style = '';
+    var l_visited = '';
     for (var j = 1; j < ch_length; j += 2) {
-      l_style += ch_list[j] +' a:visited';
-      if (j < ch_length-1) l_style += ',';
+      l_style += ch_list[j] +' a';
+      l_visited += ch_list[j] +' a:visited';
+      if (j < ch_length-1) {
+        l_style += ',';
+        l_visited += ',';
+      }
     }
     var l_elem = document.createElement('style');
-    l_elem.innerHTML = l_style +'{color:red !important;}';
+    l_elem.innerHTML = l_style +'{display:inline-block;width:100%;text-align:right;}'+ l_visited +'{color:red !important;}';
     document.body.appendChild(l_elem);
   }
   
