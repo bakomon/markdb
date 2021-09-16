@@ -751,19 +751,15 @@ function mydb_bookmark() {
       el('.db_bm_show').innerHTML = '<ul class="bm_list">'+ s_txt +'</ul>';
       el('.db_bm_show .bm_list').style.maxHeight = 'calc(100vh - '+ (el('.db_menu').offsetHeight + el('.db_search').offsetHeight  + 60) +'px)';
     }
-    
-    /*if (data.type != '') {
-      if (!localStorage.getItem(data.id)) localStorage.setItem(data.id, 'is_'+ data.type);
-      document.body.classList.add('is-'+ data.type);
-    }*/
   }
   
   function db_showData(data, note) {
     is_exist = true;
     var smlr_note = 'similar';
     db_showHtml(data);
-    console.log(`${mydb_type} data from: ${note}`);
     el('.db_bm_show').classList.remove('db_hidden');
+    console.log(`${mydb_type} data from: ${note}`);
+    if ('type' in data) localStorage.setItem(getId('reader'), data.type);
     
     if (note.indexOf('db_startData') != -1) {
       if (!main_data) main_data = {};
@@ -803,10 +799,10 @@ function mydb_bookmark() {
   function db_checkDB(arr, chk) {
     chk = chk ? (chk+1) : 1;
     var id_chk = false;
-    var url_id = db_getId().url;
-    var title_id = db_getId().title;
+    var url_id = getId('bookmark').url;
+    var title_id = getId('bookmark').title;
     var title_rgx = new RegExp(title_id.replace(/(\?|\(|\)|\.)/g, '\\$1'), 'i');
-    console.log('title_rgx: '+ title_rgx);
+    console.log('chk: '+ chk +', title_rgx: '+ title_rgx);
     
     for (var i = 0; i < arr.length; i++) {
       // mangadex, check 1
@@ -882,13 +878,6 @@ function mydb_bookmark() {
     });
   }
   
-  function db_getId() {
-    var url = wp.match(id_w_rgx)[1].replace(/-(bahasa|sub(title)?)-indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/\.html?$/i, '').toLowerCase();
-    var title = el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read|novel|anime|download)\s/i, '').replace(number_t_rgx, ' ').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s+$/, '').replace(/\|/g, ''); //old ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
-    var id = '{"url":"'+ url +'","title":"'+ title +'"}';
-    return JSON.parse(id);
-  }
-  
   function db_startData(chk) {
     chk = chk ? (chk+1) : 1;
     if (chk == 1) {
@@ -912,7 +901,7 @@ function mydb_bookmark() {
     if (wp.search(/^\/((m|id|en)\/?)?$/) != -1 || wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return;
     
     var child, order;
-    var id = db_getId();
+    var id = getId('bookmark');
     
     if (chk == 1) {
       child = 'id';
