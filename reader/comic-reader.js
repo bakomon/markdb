@@ -920,7 +920,7 @@ function mydb_comic_reader() {
     '3','.series-chapterlist',
     'komikcast.com','.komik_info-chapters',
     'comicfx.net','.chaplist',
-    'mangaku.pro','#content-b',
+    'mangaku.','#content-b',
     'komikstation.com','.bxcl .releases',
     'manhuaid.com','.tb-custom-scrollbar',
     'komiku.id','#Daftar_Chapter tbody',
@@ -956,7 +956,7 @@ function mydb_comic_reader() {
     var l_style = '';
     var l_visited = '';
     for (var j = 1; j < ch_length; j += 2) {
-      l_style += ch_list[j] +' li:first-child a';
+      l_style += '.is-mobile '+ ch_list[j] +' li:first-child a';
       l_visited += ch_list[j] +' a:visited';
       if (j < ch_length-1) {
         l_style += ',';
