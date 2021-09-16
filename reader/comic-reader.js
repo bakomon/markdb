@@ -956,7 +956,7 @@ function mydb_comic_reader() {
     var l_style = '';
     var l_visited = '';
     for (var j = 1; j < ch_length; j += 2) {
-      l_style += ch_list[j] +' a';
+      l_style += ch_list[j] +' li:first-child a';
       l_visited += ch_list[j] +' a:visited';
       if (j < ch_length-1) {
         l_style += ',';
