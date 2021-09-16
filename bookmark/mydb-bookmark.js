@@ -805,7 +805,7 @@ function mydb_bookmark() {
     var id_chk = false;
     var url_id = db_getId().url;
     var title_id = db_getId().title;
-    var title_rgx = new RegExp(title_id.replace(/(\?|\(|\))/g, '\\$1'), 'i');
+    var title_rgx = new RegExp(title_id.replace(/(\?|\(|\)|\.)/g, '\\$1'), 'i');
     console.log('title_rgx: '+ title_rgx);
     
     for (var i = 0; i < arr.length; i++) {
