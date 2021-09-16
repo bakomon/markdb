@@ -98,20 +98,13 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
   display: flex;
   justify-content: space-between;
 }
-/* mangaku.pro */
-.mangaku-pro .owl-carousel {
+/* mangaku.club */
+.mangaku-club .owl-carousel {
   display: block;
 }
 /* manhuaid.com */
 .manhuaid-com#darkbody {
   background: #151515 !important;
-}
-.manhuaid-com img[alt^="Aplikasi"] {
-  display: none;
-}
-/* mangayu.com */
-.mangayu-com .swal2-container {
-  display: none;
 }
 /* readcmic.blogspot.com */
 .readcmic-blogspot-com #outer-wrapper {
@@ -185,7 +178,7 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
 
 
 /* display none */
-#footer2, noscript, #ftads, .kln:not(.blox), .kln.mlb, .c-sub-header-nav.sticky, .restrictcontainer, [class*="komik_info-alert"], .adult-content #adult_modal, .adult-content .modal-backdrop, html body [class*="iklan"], html body [rel="noopener"]:not([target="_blank"]), html body [style="z-index:2147483647;"], html body [style="background:rgb(221,221,221); z-index:9999999; opacity:1; visibility:visible;"], html body a[rel="nofollow norefferer noopener"], html body [style="z-index:999999; background:rgba(0,0,0,0.8); display:block;"], html body [style="position:fixed; top:0px; bottom:0px; left:0px; right:0px; z-index:2147483647; background:black; opacity:0.01; height:637px; width:1366px;"], center a[href*="mangatoon"], #navkanan[class*="scroll"], #bottom-banner-ads, footer.perapih.chf, #Notifikasi, .is-mobile .webtoons-com #_appDownloadPopup, .is-mobile .webtoons-com #toolbarEpisodeListArea, .is-mobile .webtoons-com #loadingDiv, .mangabat-com #panel-description-linear {
+#footer2, noscript, #ftads, .kln:not(.blox), .kln.mlb, .c-sub-header-nav.sticky, .restrictcontainer, [class*="komik_info-alert"], .adult-content #adult_modal, .adult-content .modal-backdrop, html body [class*="iklan"], html body [rel="noopener"]:not([target="_blank"]), html body [style="z-index:2147483647;"], html body [style="background:rgb(221,221,221); z-index:9999999; opacity:1; visibility:visible;"], html body a[rel="nofollow norefferer noopener"], html body [style="z-index:999999; background:rgba(0,0,0,0.8); display:block;"], html body [style="position:fixed; top:0px; bottom:0px; left:0px; right:0px; z-index:2147483647; background:black; opacity:0.01; height:637px; width:1366px;"], center a[href*="mangatoon"], #navkanan[class*="scroll"], #bottom-banner-ads, footer.perapih.chf, #Notifikasi, .manhuaid-com img[alt^="Aplikasi"], .mangayu-com .swal2-container, .is-mobile .webtoons-com #_appDownloadPopup, .is-mobile .webtoons-com #toolbarEpisodeListArea, .is-mobile .webtoons-com #loadingDiv, .mangabat-com #panel-description-linear {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
