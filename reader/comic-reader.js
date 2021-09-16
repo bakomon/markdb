@@ -145,7 +145,7 @@ function mydb_comic_reader() {
   }
   
   function createBtn(img) {
-    var readSize = localStorage.getItem(zoomID) && !isMobile ? localStorage.getItem(zoomID) : imgArea.offsetWidth;
+    var readSize = isMobile ? window.screen.width : localStorage.getItem(zoomID) ? localStorage.getItem(zoomID) : imgArea.offsetWidth;
     var r_txt = '';
     // css control & main already in css tools
     // css reader
