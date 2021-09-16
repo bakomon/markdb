@@ -849,7 +849,7 @@ function mydb_bookmark() {
   function db_genList(data) {
     var list_txt = '[';
     for (var i = 0; i < data.length; i++) {
-      list_txt += '{"id":"'+ data[i].id +'",'+ ('type' in data[i] ? '"type":"'+ data[i].type +'",') +'"host":"'+ data[i].host +'","url":"'+ data[i].url +'"}';
+      list_txt += '{"id":"'+ data[i].id +'",'+ ('type' in data[i] ? '"type":"'+ data[i].type +'",' : '') +'"host":"'+ data[i].host +'","url":"'+ data[i].url +'"}';
       if (i < data.length-1) list_txt += ',';
     }
     list_txt += ']';
