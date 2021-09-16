@@ -146,6 +146,7 @@ function mydb_comic_reader() {
   
   function createBtn(img) {
     var readSize = isMobile ? window.screen.width : localStorage.getItem(zoomID) ? localStorage.getItem(zoomID) : imgArea.offsetWidth;
+    if (crData && !isMobile) readSize = crData.type == 'manga' ? '750' : crData.type == 'manhua' ? '650' : '500';
     var r_txt = '';
     // css control & main already in css tools
     // css reader
@@ -167,7 +168,6 @@ function mydb_comic_reader() {
     r_txt += '<input class="rc_all rc_input _rc" value="all" onclick="this.select()">';
     r_txt += '<button class="rc_pause rc_btn _rc rc_no_hover" title="Pause images from loading">X</button>';
     r_txt += '</div>';// .rc_load
-    //var zoom_size = document.body.classList.contains('is-manga') ? '750' : document.body.classList.contains('is-manhua') ? '650' : '500'; //from database bookmark
     r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ readSize +'"></div>';
     r_txt += '</div>';// .rc_tr1
     r_txt += '<div class="rc_tr2 '+ (isMobile ? ' flex f_bottom' : '') +'">';
@@ -443,7 +443,7 @@ function mydb_comic_reader() {
     
     scrollImage(el('#reader-mod img', 'all'));
     createBtn(el('#reader-mod img', 'all'));
-    document.body.classList.remove('read-mode');
+    document.body.classList.add('read-mode');
     
     if (wh.search(/katakomik|animesc-kun|readcmic/) != -1) {
       var e_post = wh.indexOf('animesc-kun') != -1 ? el('#post-wrapper') : el('#main-wrapper');
@@ -961,7 +961,7 @@ function mydb_comic_reader() {
   if ((wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(number_t_rgx) != -1)) && !isProject) {
     titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s(bahasa\s)?indonesia/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read)\s/i, '').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/\s$/, '').replace(/\|/g, '').replace(/[^\s\w]/g, '').replace(/\s+/g, '-').toLowerCase();
     wpId = wp.match(id_w_rgx)[1].replace(/-bahasa-indonesia(-online-terbaru)?/i, '').replace(/\.html/i, '').toLowerCase();
-    zoomID = crData ? ('mydb_'+ crData.type) : wh.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
+    zoomID = wh.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
     mydb_read = true;
     console.log('page: chapter');
     checkAll();
