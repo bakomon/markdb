@@ -944,7 +944,7 @@ function mydb_comic_reader() {
     }
     window.onload = function() {
       if (list_area) {
-        var half_screen = Math.floor(window.screen.height / 2);
+        var half_screen = Math.floor(window.screen.height / 4);
         list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
         list_area.scrollIntoView();
         //window.scroll(0, (getOffset(list_area, 'top') - half_screen));
