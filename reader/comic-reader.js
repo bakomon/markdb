@@ -944,14 +944,14 @@ function mydb_comic_reader() {
     }
     window.onload = function() {
       if (list_area) {
-        var half_screen = Math.floor(window.screen.height / 2);
+        var half_screen = Math.floor((window.screen.height / 2) + 50);
         /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
         list_area.scrollIntoView();*/
-        window['zza'] = getOffset(list_area, 'top');
-        window['zzb'] = half_screen;
+        window['zza'] = list_area.offsetTop;//967,1970
+        window['zzb'] = half_screen;//370
         alert(zza);
         alert(zzb);
-        window.scroll(0, (getOffset(list_area, 'top') - half_screen));
+        window.scroll(0, (list_area.offsetTop - half_screen));
         
         var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
         if (el(a_latest, list_area)) {
