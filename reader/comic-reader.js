@@ -946,11 +946,12 @@ function mydb_comic_reader() {
       if (list_area) {
         var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
         if (el(a_latest, list_area)) {
-          var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.]\d)?)/;
+          var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.-]\d)?)/;
+          var a_data = document.body.classList.contains('koidezign') ? 'title' : 'textContent';
           var l_last = document.createElement('div');
           l_last.id = 'mydb_latest_chapter';
           l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:10px 15px;font-size:130%;border:1px solid #3e3949;';
-          l_last.innerHTML = el(a_latest, list_area).textContent.match(a_rgx)[1];
+          l_last.innerHTML = el(a_latest, list_area)[a_data].match(a_rgx)[1];
           document.body.appendChild(l_last);
           
           el('#mydb_latest_chapter').onclick = function() {
