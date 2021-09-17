@@ -949,12 +949,12 @@ function mydb_comic_reader() {
           var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.]\d)?)/;
           var l_last = document.createElement('div');
           l_last.id = 'mydb_latest_chapter';
-          l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:10px 15px;font-size:120%;border:1px solid #3e3949;';
+          l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:10px 15px;font-size:130%;border:1px solid #3e3949;';
           l_last.innerHTML = el(a_latest, list_area).textContent.match(a_rgx)[1];
           document.body.appendChild(l_last);
           
           el('#mydb_latest_chapter').onclick = function() {
-            var half_screen = Math.floor((window.screen.height / 2) + 25);
+            var half_screen = Math.floor((window.screen.height / 2) + 30);
             /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
             list_area.scrollIntoView();*/
             window.scroll(0, (getOffset(list_area, 'top') - half_screen));
