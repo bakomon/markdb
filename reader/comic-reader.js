@@ -948,7 +948,7 @@ function mydb_comic_reader() {
         /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
         list_area.scrollIntoView();*/
         window['zza'] = getOffset(list_area, 'top');
-        window['zzb'] = half_screen);
+        window['zzb'] = half_screen;
         alert(zza);
         alert(zzb);
         window.scroll(0, (getOffset(list_area, 'top') - half_screen));
