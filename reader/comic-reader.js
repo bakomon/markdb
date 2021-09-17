@@ -947,8 +947,10 @@ function mydb_comic_reader() {
         var half_screen = Math.floor(window.screen.height / 2);
         /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
         list_area.scrollIntoView();*/
-        alert(getOffset(list_area, 'top'));
-        alert(half_screen);
+        window[zza] = getOffset(list_area, 'top');
+        window[zzb] = half_screen);
+        alert(zza);
+        alert(zzb);
         window.scroll(0, (getOffset(list_area, 'top') - half_screen));
         
         var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
