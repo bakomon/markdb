@@ -944,23 +944,25 @@ function mydb_comic_reader() {
     }
     window.onload = function() {
       if (list_area) {
-        var half_screen = Math.floor((window.screen.height / 2) + 50);
-        /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
-        list_area.scrollIntoView();*/
-        window['zza'] = list_area.offsetTop;//967,1970
-        window['zzb'] = half_screen;//370
-        alert(zza);
-        alert(zzb);
-        window.scroll(0, (list_area.offsetTop - half_screen));
-        
-        var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
-        if (el(a_latest, list_area)) {
-          var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.]\d)?)/;
-          var l_last = document.createElement('div');
-          l_last.style.cssText = 'position:fixed;top:50%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:4px 8px;font-size:16px;border:1px solid #3e3949;';
-          l_last.innerHTML = el(a_latest, list_area).textContent.match(a_rgx)[1];
-          document.body.appendChild(l_last);
-        }
+        setTimeout(function() {
+          var half_screen = Math.floor((window.screen.height / 2) + 50);
+          /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
+          list_area.scrollIntoView();*/
+          window['zza'] = list_area.offsetTop;//967,1970
+          window['zzb'] = half_screen;//370
+          alert(zza);
+          alert(zzb);
+          window.scroll(0, (list_area.offsetTop - half_screen));
+          
+          var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
+          if (el(a_latest, list_area)) {
+            var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.]\d)?)/;
+            var l_last = document.createElement('div');
+            l_last.style.cssText = 'position:fixed;top:50%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:4px 8px;font-size:16px;border:1px solid #3e3949;';
+            l_last.innerHTML = el(a_latest, list_area).textContent.match(a_rgx)[1];
+            document.body.appendChild(l_last);
+          }
+        }, 1000);
       }
     };
     
