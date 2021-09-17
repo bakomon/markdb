@@ -942,30 +942,23 @@ function mydb_comic_reader() {
         list_area = ch_area;
       }
     }
-    function findPos(obj) {
-    var curtop = 0;
-    if (obj.offsetParent) {
-        do {
-            curtop += obj.offsetTop;
-        } while (obj = obj.offsetParent);
-    return [curtop];
-    }
-}
     window.onload = function() {
       if (list_area) {
-        var half_screen = Math.floor((window.screen.height / 2) + 25);
-        /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
-        list_area.scrollIntoView();*/
-        window['zza'] = findPos(list_area);
-        window.scroll(0, (findPos(list_area) - half_screen));
-        
         var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
         if (el(a_latest, list_area)) {
           var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.]\d)?)/;
           var l_last = document.createElement('div');
-          l_last.style.cssText = 'position:fixed;top:50%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:4px 8px;font-size:16px;border:1px solid #3e3949;';
+          l_last.id = 'mydb_latest_chapter';
+          l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:10px 15px;font-size:120%;border:1px solid #3e3949;';
           l_last.innerHTML = el(a_latest, list_area).textContent.match(a_rgx)[1];
           document.body.appendChild(l_last);
+          
+          el('#mydb_latest_chapter').onclick = function() {
+            var half_screen = Math.floor((window.screen.height / 2) + 25);
+            /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
+            list_area.scrollIntoView();*/
+            window.scroll(0, (getOffset(list_area, 'top') - half_screen));
+          };
         }
       }
     };
