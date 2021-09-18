@@ -327,7 +327,7 @@ function mydb_comic_reader() {
       }
     };
     
-    // after html and js _reader loaded then auto click to stop page
+    // auto stop page after html and js _reader loaded
     if (el('.rc_reload').classList.contains('rc_hidden') && wh.indexOf('mangadex') == -1 && !autoLike) el('.rc_stop').click();
   }
   
@@ -749,6 +749,69 @@ function mydb_comic_reader() {
     }, 100);
   }
   
+  function chapterList() {
+    var ch_list = [
+      '0','#chapterlist',
+      '1','#chapter_list',
+      '2','#manga-chapters-holder',
+      '3','#--box-list',
+      '4','.series-chapterlist',
+      'komikcast.com','.komik_info-chapters',
+      'comicfx.net','.chaplist',
+      'komikstation.com','.bxcl',
+      'manhuaid.com','.tb-custom-scrollbar',
+      'komiku.id','#Daftar_Chapter',
+      'mangacdn.my.id','.lcp_catlist',
+      'webtoons.com','#_episodeList',
+      'mangabat.com','.row-content-chapter'
+    ];
+    if (isMobile) {
+      var list_area, ch_area = el(ch_list[1]) || el(ch_list[3]) || el(ch_list[5]) || el(ch_list[7]) || el(ch_list[9]);
+      var ch_length = ch_list.length;
+      if (ch_length % 2 == 1) {
+        ch_length--
+      }
+      for (var i = 8; i < ch_length; i += 2) {
+        if (wh.indexOf(ch_list[i]) != -1 && el(ch_list[i + 1])) {
+          list_area = el(ch_list[i + 1]);
+          break;
+        } else {
+          list_area = ch_area;
+        }
+      }
+      if (list_area) {
+        var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
+        if (el(a_latest, list_area)) {
+          var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.-]\d)?)/;
+          var a_data = document.body.classList.contains('koidezign') ? 'title' : 'textContent';
+          var l_last = document.createElement('div');
+          l_last.id = 'mydb_latest_chapter';
+          l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:10px 15px;font-size:130%;border:1px solid #3e3949;';
+          l_last.innerHTML = el(a_latest, list_area)[a_data].match(a_rgx)[1];
+          document.body.appendChild(l_last);
+          
+          // scroll to chapter list
+          el('#mydb_latest_chapter').onclick = function() {
+            var half_screen = Math.floor((window.screen.height / 2) + 30);
+            /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
+            list_area.scrollIntoView();*/
+            window.scroll(0, (getOffset(list_area, 'top') - half_screen));
+          };
+        }
+      }
+      
+      // style for chapter link visited
+      var l_visited = '';
+      for (var j = 1; j < ch_length; j += 2) {
+        l_visited += ch_list[j] +' a:visited';
+        if (j < ch_length-1) l_visited += ',';
+      }
+      var l_elem = document.createElement('style');
+      l_elem.innerHTML = l_visited +'{color:red !important;}';
+      document.body.appendChild(l_elem);
+    }
+  }
+  
   function webDarkMode() {
     // Dark mode
     if (el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch') || el('.theme.switchmode') || el('#quickswitcher')) {
@@ -894,10 +957,7 @@ function mydb_comic_reader() {
   var cdnRgx = /(?:i\d+|cdn|img)\.(wp|statically)\.(?:com|io)\/(?:img\/(?:[^\.]+\/)?)?/;
   var checkPoint, imgArea, imgList, cdnName, zoomID;
   
-  removeAADB(); //remove anti adblock notify mangacanblog
   customEdit();
-  webDarkMode();
-  disqusMod();
   
   // check if page is comic/project, from database bookmark
   // to avoid mis-detection, eg. blog from blogger.com or wordpress.com
@@ -912,73 +972,12 @@ function mydb_comic_reader() {
     }
   }
   
-  // scroll to chapter list
-  var ch_list = [
-    '0','#chapterlist',
-    '1','#chapter_list',
-    '2','#manga-chapters-holder',
-    '3','#--box-list',
-    '4','.series-chapterlist',
-    'komikcast.com','.komik_info-chapters',
-    'comicfx.net','.chaplist',
-    'komikstation.com','.bxcl',
-    'manhuaid.com','.tb-custom-scrollbar',
-    'komiku.id','#Daftar_Chapter',
-    'mangacdn.my.id','.lcp_catlist',
-    'webtoons.com','#_episodeList',
-    'mangabat.com','.row-content-chapter'
-  ];
-  if (isMobile) {
-    var list_area, ch_area = el(ch_list[1]) || el(ch_list[3]) || el(ch_list[5]) || el(ch_list[7]) || el(ch_list[9]);
-    var ch_length = ch_list.length;
-    if (ch_length % 2 == 1) {
-      ch_length--
-    }
-    for (var i = 8; i < ch_length; i += 2) {
-      if (wh.indexOf(ch_list[i]) != -1 && el(ch_list[i + 1])) {
-        list_area = el(ch_list[i + 1]);
-        break;
-      } else {
-        list_area = ch_area;
-      }
-    }
-    window.onload = function() {
-      if (list_area) {
-        var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
-        if (el(a_latest, list_area)) {
-          var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.-]\d)?)/;
-          var a_data = document.body.classList.contains('koidezign') ? 'title' : 'textContent';
-          var l_last = document.createElement('div');
-          l_last.id = 'mydb_latest_chapter';
-          l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:10px 15px;font-size:130%;border:1px solid #3e3949;';
-          l_last.innerHTML = el(a_latest, list_area)[a_data].match(a_rgx)[1];
-          document.body.appendChild(l_last);
-          
-          el('#mydb_latest_chapter').onclick = function() {
-            var half_screen = Math.floor((window.screen.height / 2) + 30);
-            /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
-            list_area.scrollIntoView();*/
-            window.scroll(0, (getOffset(list_area, 'top') - half_screen));
-          };
-        }
-      }
-    };
-    
-    // style for link visited
-    var l_visited = '';
-    for (var j = 1; j < ch_length; j += 2) {
-      l_visited += ch_list[j] +' a:visited';
-      if (j < ch_length-1) l_visited += ',';
-    }
-    var l_elem = document.createElement('style');
-    l_elem.innerHTML = l_visited +'{color:red !important;}';
-    document.body.appendChild(l_elem);
-  }
-  
+  // Start reader
   if ((wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(number_t_rgx) != -1)) && !isProject) {
     zoomID = getId('reader');
     mydb_read = true;
     console.log('page: chapter');
+    window.onunload = function() { window.scrollTo(0, 0); };
     checkAll();
     
     if (localStorage.getItem('visited-chapters')) localStorage.removeItem('visited-chapters');
@@ -990,6 +989,11 @@ function mydb_comic_reader() {
   } else {
     mydb_read = false;
   }
+  
+  removeAADB(); //remove anti adblock notify mangacanblog
+  webDarkMode();
+  chapterList();
+  disqusMod();
 }
 
 if (!live_test_comic_r) mydb_comic_reader();
