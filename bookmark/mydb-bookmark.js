@@ -500,6 +500,7 @@ function mydb_bookmark() {
     }
     i_txt += '</ul>';
     el('.db_icatalog').innerHTML = i_txt;
+    el('.db_icatalog').scrollTop = 0;
     
     el('.db_icatalog .db_iedit', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
@@ -981,6 +982,7 @@ function mydb_bookmark() {
     b_html.className = '_bmark cbr_mod' + (is_mobile ? ' db_mobile' : '');
     b_html.innerHTML = b_txt;
     document.body.appendChild(b_html);
+    if (el('meta[name="viewport"]')) el('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1');
   }
   
   function db_startBookmark() {
