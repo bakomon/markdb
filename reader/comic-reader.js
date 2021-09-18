@@ -209,19 +209,20 @@ function mydb_comic_reader() {
     
     // Load all images
     el('.rc_load .rc_ld_img').onclick =  function() {
-      if (el('.rc_all').value.search(/all/i) != -1) {
+      if (el('.rc_load .rc_all').value.search(/all/i) != -1) {
         loadImage = true;
         for (var i = 0; i < img.length; i++) {
           startChange(img[i], 'all');
         }
       } else {
-        startChange(img[Number(el('.rc_all').value) - 1], 'single');
+        startChange(img[Number(el('.rc_load .rc_all').value) - 1], 'single');
       }
     };
     
     el('.rc_load .rc_pause').onclick =  function() {
       this.classList.toggle('rc_active');
       el('.rc_ld_img').disabled = isPause ? false : true;
+      el('.rc_load .rc_all').disabled = isPause ? false : true;
       isPause = isPause ? false : true;
     };
     
