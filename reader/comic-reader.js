@@ -185,7 +185,7 @@ function mydb_comic_reader() {
     r_txt += '</div>';// .reader_db
     
     var r_html = document.createElement('div');
-    r_html.style.cssText = 'position:relative;z-index:2147483646;';
+    r_html.style.cssText = 'position:relative;z-index:2147483646;'; //2147483647
     r_html.className = '_reader cbr_mod'+ (isMobile ? ' rc_mobile' : '');
     r_html.innerHTML = r_txt;
     document.body.appendChild(r_html);
@@ -978,7 +978,7 @@ function mydb_comic_reader() {
     zoomID = getId('reader');
     mydb_read = true;
     console.log('page: chapter');
-    window.onunload = function() { window.scrollTo(0, 0); };
+    window.onunload = function() { window.scrollTo(0,0); }; //prevent browsers auto scroll on reload/refresh
     checkAll();
     
     if (localStorage.getItem('visited-chapters')) localStorage.removeItem('visited-chapters');
