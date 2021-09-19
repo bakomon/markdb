@@ -763,10 +763,10 @@ function mydb_bookmark() {
     if ('type' in data && !is_mobile) {
       if (localStorage.getItem('mydb_zoom')) {
         mydb_zoom = JSON.parse(localStorage.getItem('mydb_zoom'));
-        mydb_zoom[getId('reader')] = data.type;
       } else {
-        mydb_zoom = {'"'+ getId('reader') +'"':'"'+ data.type +'"'};
+        mydb_zoom = {};
       }
+      mydb_zoom[getId('reader')] = data.type;
       localStorage.setItem('mydb_zoom', JSON.stringify(mydb_zoom));
       if (localStorage.getItem(getId('reader'))) localStorage.removeItem(getId('reader')); //remove old data
     }
