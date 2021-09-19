@@ -760,13 +760,11 @@ function mydb_bookmark() {
     db_showHtml(data);
     el('.db_bm_show').classList.remove('db_hidden');
     console.log(`${mydb_type} data from: ${note}`);
-    if ('type' in data && !is_mobile) {
-      if (localStorage.getItem('mydb_zoom')) {
-        mydb_zoom = JSON.parse(localStorage.getItem('mydb_zoom'));
-      } else {
-        mydb_zoom = {};
-      }
-      mydb_zoom[getId('reader')] = data.type;
+    
+    // set zoom for comic reader
+    if (mydb_type == 'comic' && 'type' in data && !is_mobile) {
+      mydb_zoom = localStorage.getItem('mydb_zoom') ? JSON.parse(localStorage.getItem('mydb_zoom')) : {};
+      if (getId('reader') in mydb_zoom === false) mydb_zoom[getId('reader')] = data.type;
       localStorage.setItem('mydb_zoom', JSON.stringify(mydb_zoom));
       if (localStorage.getItem(getId('reader'))) localStorage.removeItem(getId('reader')); //remove old data
     }
