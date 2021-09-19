@@ -1034,7 +1034,7 @@ function mydb_bookmark() {
     };
     
     el('.db_toggle').onclick = function() {
-      this.classList.toggle('db_selected');
+      this.classList.toggle('db_danger');
       el('.bmark_db').classList.toggle('db_shide');
       el('.db_bg').classList.toggle('db_hidden');
       if (is_mobile) document.body.style.overflow = el('.bmark_db').classList.contains('db_shide') ? 'initial' : 'hidden';
