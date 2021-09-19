@@ -594,7 +594,7 @@ function mydb_bookmark() {
     b_txt += '<div class="db_iclose flex f_center db_100"><span class="_db db_danger">close</span></div>';
     
     var b_html = document.createElement('div');
-    b_html.style.cssText = 'z-index:2147483647;';
+    b_html.style.cssText = 'z-index:2147483645;'; //2147483647
     b_html.className = '_bmark bm_index cbr_mod' + (is_mobile ? ' db_mobile' : '');
     b_html.innerHTML = b_txt;
     document.body.appendChild(b_html);
@@ -760,7 +760,16 @@ function mydb_bookmark() {
     db_showHtml(data);
     el('.db_bm_show').classList.remove('db_hidden');
     console.log(`${mydb_type} data from: ${note}`);
-    if ('type' in data && !is_mobile) localStorage.setItem(getId('reader'), data.type);
+    if ('type' in data && !is_mobile) {
+      if (localStorage.getItem('mydb_zoom')) {
+        mydb_zoom = JSON.parse(localStorage.getItem('mydb_zoom'));
+        mydb_zoom[getId('reader')] = data.type;
+      } else {
+        mydb_zoom = {'"'+ getId('reader') +'"':'"'+ data.type +'"'};
+      }
+      localStorage.setItem('mydb_zoom', JSON.stringify(mydb_zoom));
+      if (localStorage.getItem(getId('reader'))) localStorage.removeItem(getId('reader')); //remove old data
+    }
     
     if (note.indexOf('db_startData') != -1) {
       if (!main_data) main_data = {};
@@ -978,7 +987,7 @@ function mydb_bookmark() {
     b_txt += '</div>';// .bmark_db
     
     var b_html = document.createElement('div');
-    b_html.style.cssText = 'position:relative;z-index:2147483647;';
+    b_html.style.cssText = 'position:relative;z-index:2147483644;'; //2147483647
     b_html.className = '_bmark cbr_mod' + (is_mobile ? ' db_mobile' : '');
     b_html.innerHTML = b_txt;
     document.body.appendChild(b_html);
