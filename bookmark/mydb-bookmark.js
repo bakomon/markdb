@@ -541,7 +541,7 @@ function mydb_bookmark() {
       }
       
       // sorting data
-      nav_current = note == 'start' ? 1 : nav_current;
+      nav_current = note.search(/(start|search)/) != -1 ? 1 : nav_current;
       index_sort = note.search(/(start|search)/) != -1 ? (mydb_select == 'source' ? 'status' : 'title') : index_sort;
       index_order = index_sort == 'update' ? false : true;
       sortBy(index_arr, index_sort, index_order);
