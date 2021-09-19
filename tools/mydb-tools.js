@@ -236,7 +236,7 @@ function mydb_tools_fnc() {
   getId = function(note) {
     //old = ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
     var id = '';
-    var titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|baca|read|novel|anime|download)\s/i, '').replace(number_t_rgx, ' ').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '');
+    var titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(baca|read|download)\s/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|novel|anime)\s/i, '').replace(number_t_rgx, ' ').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '');
     var wpId = window.location.pathname.match(id_w_rgx)[1].replace(/-((bahasa|sub(title)?)-)?indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/\.html?$/i, '').toLowerCase();
     
     if (note == 'reader') {
