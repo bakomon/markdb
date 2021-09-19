@@ -542,7 +542,7 @@ function mydb_bookmark() {
       
       // sorting data
       nav_current = note == 'start' ? 1 : nav_current;
-      index_sort = note == 'start' ? (mydb_select == 'source' ? 'status' : 'title') : index_sort;
+      index_sort = note.search(/(start|search)/) != -1 ? (mydb_select == 'source' ? 'status' : 'title') : index_sort;
       index_order = index_sort == 'update' ? false : true;
       sortBy(index_arr, index_sort, index_order);
       
@@ -594,7 +594,7 @@ function mydb_bookmark() {
     b_txt += '<div class="db_iclose flex f_center db_100"><span class="_db db_danger">close</span></div>';
     
     var b_html = document.createElement('div');
-    b_html.style.cssText = 'z-index:2147483645;'; //2147483647
+    b_html.style.cssText = 'z-index:2147483646;'; //2147483647
     b_html.className = '_bmark bm_index cbr_mod' + (is_mobile ? ' db_mobile' : '');
     b_html.innerHTML = b_txt;
     document.body.appendChild(b_html);
@@ -651,6 +651,7 @@ function mydb_bookmark() {
       };
     }
     
+    // Start Index
     db_indexData(note);
   }
   
