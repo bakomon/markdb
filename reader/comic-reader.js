@@ -185,7 +185,7 @@ function mydb_comic_reader() {
     r_txt += '</div>';// .reader_db
     
     var r_html = document.createElement('div');
-    r_html.style.cssText = 'position:relative;z-index:2147483646;'; //2147483647
+    r_html.style.cssText = 'position:relative;z-index:2147483644;'; //2147483647
     r_html.className = '_reader cbr_mod'+ (isMobile ? ' rc_mobile' : '');
     r_html.innerHTML = r_txt;
     document.body.appendChild(r_html);
@@ -788,7 +788,7 @@ function mydb_comic_reader() {
           var a_data = document.body.classList.contains('koidezign') ? 'title' : 'textContent';
           var l_last = document.createElement('div');
           l_last.id = 'mydb_latest_chapter';
-          l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483647;background:#252428;color:#ddd;padding:10px 15px;font-size:130%;border:1px solid #3e3949;';
+          l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483645;background:#252428;color:#ddd;padding:10px 15px;font-size:130%;border:1px solid #3e3949;';
           l_last.innerHTML = el(a_latest, list_area)[a_data].match(a_rgx)[1];
           document.body.appendChild(l_last);
           
