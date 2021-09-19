@@ -196,7 +196,7 @@ function mydb_comic_reader() {
     if (wh.search(/mangacanblog|mangayu|merakiscans|mangapark/) != -1) {nextChapter();} //next button
     
     el('.rc_toggle').onclick = function() {
-      this.classList.toggle('rc_selected');
+      this.classList.toggle('db_danger');
       el('.reader_db').classList.toggle('rc_shide');
       if (isMobile) el('.rc_bg').classList.toggle('rc_hidden');
       if (el('.rc_next button').dataset.href) el('.rc_next2').classList.toggle('rc_hidden');
