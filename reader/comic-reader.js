@@ -255,7 +255,7 @@ function mydb_comic_reader() {
         imgArea.style.cssText = 'max-width:'+ load_zm +'px !important;';
         el('.rc_zoom input').value = load_zm;
         mydb_zoom[zoomID] = load_zm;
-        localStorage.setItem('mydb_zoom', mydb_zoom);
+        localStorage.setItem('mydb_zoom', JSON.stringify(mydb_zoom));
       });
     });
     
