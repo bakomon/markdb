@@ -65,9 +65,14 @@ function mydb_bookmark() {
     return path;
   }
   
-  function db_checkData(path) {
-    return firebase.app(fbase_app).database().ref(path).once('value').then(function(snapshot) {
-      return snapshot.exists() ? true : false;
+  function db_checkData(note, path) {
+    var fb_ref = firebase.app(fbase_app).database().ref(path);
+    if (note == 'bmdb') fb_ref = fb_ref.orderByChild('bmdb').equalTo(el('.db_form .db_bmdb').value);
+    return fb_ref.once('value').then(function(snapshot) {
+      // chek 1
+      if (note == 'id') return snapshot.exists() ? true : db_checkData('bmdb', 'bookmark/'+ mydb_type);
+      // check 2
+      if (note == 'bmdb') return snapshot.exists() ? true : false;
     });
   }
   
@@ -914,15 +919,15 @@ function mydb_bookmark() {
     
     if (chk == 1) {
       child = 'id';
-      id = id.url;
+      id = id.url; //from wl.href
     }
     if (chk == 2) {
       child = 'title';
-      id = id.title;
+      id = id.title; //from <title>
     }
     if (chk == 3) {
       child = 'alternative';
-      id = id.title;
+      id = id.title; //from <title>
     }
     
     var ref = firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}`).orderByChild(child);
@@ -1181,7 +1186,7 @@ function mydb_bookmark() {
       if (!db_formCheck()) return;
       el('.db_notif span').innerHTML = 'Loading..';
       el('.db_notif').classList.remove('db_hidden');
-      db_checkData(db_pathId(true)).then(function(res) {
+      db_checkData('id', db_pathId(true)).then(function(res) {
         if (!res) {
           db_changeData('set');
         } else {
