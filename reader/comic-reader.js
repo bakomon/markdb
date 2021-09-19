@@ -145,8 +145,8 @@ function mydb_comic_reader() {
   }
   
   function createBtn(img) {
-    var readSize = isMobile ? window.screen.width : localStorage.getItem(zoomID) ? localStorage.getItem(zoomID) : imgArea.offsetWidth;
-    if (localStorage.getItem(zoomID) && !isMobile) readSize = readSize == 'manga' ? '750' : readSize == 'manhua' ? '650' : readSize == 'manhwa' ? '500' : readSize;
+    var readSize = isMobile ? window.screen.width : zoomID in mydb_zoom ? mydb_zoom[zoomID] : imgArea.offsetWidth;
+    if (zoomID in mydb_zoom && !isMobile) readSize = readSize == 'manga' ? '750' : readSize == 'manhua' ? '650' : readSize == 'manhwa' ? '500' : readSize;
     var r_txt = '';
     // css control & main already in css tools
     // css reader
@@ -254,7 +254,8 @@ function mydb_comic_reader() {
         }
         imgArea.style.cssText = 'max-width:'+ load_zm +'px !important;';
         el('.rc_zoom input').value = load_zm;
-        localStorage.setItem(zoomID, load_zm);
+        mydb_zoom[zoomID] = load_zm;
+        localStorage.setItem('mydb_zoom', mydb_zoom);
       });
     });
     
@@ -975,9 +976,10 @@ function mydb_comic_reader() {
   
   // Start reader
   if ((wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(number_t_rgx) != -1)) && !isProject) {
+    console.log('page: chapter');
     zoomID = getId('reader');
     mydb_read = true;
-    console.log('page: chapter');
+    mydb_zoom = localStorage.getItem('mydb_zoom') ? JSON.parse(localStorage.getItem('mydb_zoom')) : {};
     window.onunload = function() { window.scrollTo(0,0); }; //prevent browsers auto scroll on reload/refresh
     checkAll();
     
