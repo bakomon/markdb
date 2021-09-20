@@ -51,22 +51,6 @@ body {
 #content .carousel-cell img, .darex .carousel-cell img, .vezone .carousel-cell img {
   height: 100%;
 }
-/*#menu:not(ul):before, #main-menu:before {
-  z-index: 2147483648 !important;
-  background: #151515 !important;
-  display: block !important;
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  content: '';
-}
-#menu, #menu .center, #menu ul, #main-menu, #main-menu .center, #main-menu ul, #nav, .navbar, #toolbar, #main, #popular-anime, #wrap:not(.no-css), #omv, #sidebar, #content, #venkonten, #all, #menu-desz, #outer-wrapper, .hdcs, .ltshome, .rdmanga, .postbody, .infobox, .terbaru, #pusat, #content-wrapper {
-  z-index: 2147483649 !important;
-  display: block !important;
-  position: relative;
-}*/
 #menu li, #main-menu li {
   float: none;
   display: inline-block;
@@ -120,10 +104,51 @@ body[class*="mangaku-"] .owl-carousel {
   max-width: 100%;
   width: 50%;
 }
+/* komiku.id */
+.komiku-id img.lazy{
+  opacity: .5;
+}
+.komiku-id a, .komiku-id .logo a span, .komiku-id section h2, .komiku-id .konten > section h3 {
+  color: #ccc !important;
+}
+.komiku-id #header .hd2, .komiku-id #header nav, .komiku-id .konten > section[id], .komiku-id .ls2, .komiku-id .ls4, 
+.komiku-id #Trending .perapih, .komiku-id #Trending .ls123m, .komiku-id #Trending .tr23, 
+.komiku-id #Terbaru .lnn, .komiku-id #Terbaru .ls24, 
+.komiku-id #Komik_Hot .ls2, .komiku-id #Komik_Hot .ls2l, 
+.komiku-id #Genre .ls3, .komiku-id #Genre .ls3 a, .komiku-id #Genre .ls3 h4, 
+.komiku-id #Mirip .mirip1, .komiku-id #Mirip .ls5b h4, 
+.komiku-id section, .komiku-id #Judul, .komiku-id.series #Spoiler .grd, .komiku-id.series #Spoiler h4, .komiku-id #sosmed, .komiku-id #Komentar, 
+.komiku-id #Navbawah, .komiku-id #Footer, .komiku-id.loading {
+  background-color: #222 !important;
+  border-color: #393939 !important;
+  color: #ccc !important;
+}
+.komiku-id nav ul li a, 
+.komiku-id select, .komiku-id #Terbaru .vw, .komiku-id #Berita .brt, .komiku-id #Menu_Tambahan a, .komiku-id #Peringkat .ls7nm, 
+.komiku-id.series #Judul .new1, .komiku-id.series #Informasi table.inftable td:nth-child(1), .komiku-id.series #Informasi ul.genre li, .komiku-id.series .mnu button.tab:not(.curr), .komiku-id.series #Chapter #Daftar_Chapter tbody th, 
+.komiku-id.chapter #Judul table.tbl tr:nth-child(1) td, .komiku-id .pagination a, 
+.komiku-id #rakbuku .rakbuku, .komiku-id .ls2 .nani{
+  background-color: #343434 !important;
+  border-color: #393939 !important;
+  color: #ccc !important;
+  box-shadow: none !important;
+}
+.komiku-id ::-webkit-scrollbar-track {
+  background: #343434 !important;
+}
+.komiku-id ::-webkit-scrollbar-thumb {
+  background: #b8b8b8 !important;
+}
+.komiku-id {
+  
+}
+.komiku-id {
+  
+}
 /* nyanfm.com */
 .nyanfm-com.elementor-kit-12 {
   --e-global-color-48d087d: #eee;
-  --e-global-color-14c8a14: #b8b8b8;
+  --e-global-color-14c8a14: #ccc;
   --e-global-color-eb4b41d: #151515;
 }
 .nyanfm-com .container, .nyanfm-com .elementor-section {
@@ -151,13 +176,13 @@ body[class*="mangaku-"] .owl-carousel {
 /* mangabat.com */
 .mangabat-com .container-header-lineone, .mangabat-com .container-header-lineone a, .mangabat-com .container-silder, .mangabat-com .panel-advanced-search-tool, .mangabat-com .advanced-search-tool-genres-item, .mangabat-com .panel-breadcrumb, .mangabat-com .panel-content-homepage, .mangabat-com .panel-content-homepage a, .mangabat-com .panel-list-story, .mangabat-com .panel-list-story a, .mangabat-com .panel-story-info, .mangabat-com .panel-story-chapter-list, .mangabat-com .panel-story-chapter-list a, .mangabat-com .panel-comment, .mangabat-com .panel-topview, .mangabat-com .panel-topview a, .mangabat-com .panel-newest, .mangabat-com .panel-newest-content, .mangabat-com .panel-category, .mangabat-com .pn-category-row, .mangabat-com .pn-category-row a, .mangabat-com .panel-navigation, .mangabat-com .panel-chapter-comment, .mangabat-com .panel-chapter-info-bot, .mangabat-com .container-footer-content, .mangabat-com .container-footer-content a {
   background-color: #222 !important;
-  color: #eee !important;
+  color: #ccc !important;
 }
 .mangabat-com #panel-story-info-description {
   max-height: none !important;
 }
 /* webtoons.com */
-.webtoons-com:not(.read-mode) img {
+.webtoons-com:not(.read-mode) img, #mainBannerList, .webtoons-com .detail_bg {
   opacity: 0.9 !important;
 }
 .webtoons-com #wrap a, .webtoons-com #wrap p, #wrap .main_hotnew h2, #wrap .title_area h2, #wrap .grade_num {
