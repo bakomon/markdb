@@ -70,7 +70,13 @@ function mydb_bookmark() {
     if (note == 'bmdb') fb_ref = fb_ref.orderByChild('bmdb').equalTo(el('.db_form .db_bmdb').value);
     return fb_ref.once('value').then(function(snapshot) {
       // chek 1
-      if (note == 'id') return snapshot.exists() ? true : db_checkData('bmdb', 'bookmark/'+ mydb_type);
+      if (note == 'id') {
+        if (snapshot.exists()) {
+          return true;
+        } else {
+          return el('.db_form .db_bmdb').value == 'none' ? false : db_checkData('bmdb', 'bookmark/'+ mydb_type);
+        }
+      }
       // check 2
       if (note == 'bmdb') return snapshot.exists() ? true : false;
     });
@@ -599,7 +605,7 @@ function mydb_bookmark() {
     b_txt += '<div class="db_iclose flex f_center db_100"><span class="_db db_danger">close</span></div>';
     
     var b_html = document.createElement('div');
-    b_html.style.cssText = 'z-index:2147483646;'; //2147483647
+    b_html.style.cssText = 'z-index:2147483645;'; //2147483647
     b_html.className = '_bmark bm_index cbr_mod' + (is_mobile ? ' db_mobile' : '');
     b_html.innerHTML = b_txt;
     document.body.appendChild(b_html);
@@ -813,8 +819,8 @@ function mydb_bookmark() {
   function db_checkDB(arr, chk) {
     chk = chk ? (chk+1) : 1;
     var id_chk = false;
-    var url_id = getId('bookmark').url;
-    var title_id = getId('bookmark').title;
+    var url_id = getId('bookmark').url; //from wl.pathname
+    var title_id = getId('bookmark').title; //from <title>
     var title_rgx = new RegExp(title_id.replace(/(\?|\(|\)|\.)/g, '\\$1'), 'i');
     console.log('chk: '+ chk +', title_rgx: '+ title_rgx);
     
@@ -919,7 +925,7 @@ function mydb_bookmark() {
     
     if (chk == 1) {
       child = 'id';
-      id = id.url; //from wl.href
+      id = id.url; //from wl.pathname
     }
     if (chk == 2) {
       child = 'title';
@@ -991,7 +997,7 @@ function mydb_bookmark() {
     b_txt += '</div>';// .bmark_db
     
     var b_html = document.createElement('div');
-    b_html.style.cssText = 'position:relative;z-index:2147483644;'; //2147483647
+    b_html.style.cssText = 'position:relative;z-index:2147483643;'; //2147483647
     b_html.className = '_bmark cbr_mod' + (is_mobile ? ' db_mobile' : '');
     b_html.innerHTML = b_txt;
     document.body.appendChild(b_html);
@@ -1127,7 +1133,7 @@ function mydb_bookmark() {
       el('.db_host').value = wh.replace(wh_rgx, '');
       if (mydb_select == 'list') {
         if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) {
-          var bmark_id = wp.match(id_w_rgx)[1].replace(/-(bahasa|sub(title)?)-indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/\.html?$/i, '').toLowerCase();
+          var bmark_id = getId('bookmark').url; //from wl.pathname
           el('.db_id').value = bmark_id;
           if (wp.search(/\/(title|anime|novel|series)\/\d+\//) != -1) el('.db_bmdb').value = wp.match(/\/(title|anime|novel|series)\/([^\/]+)/)[1];
           el('.db_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(bmark_id, '_') : firstCase(bmark_id, '-');
