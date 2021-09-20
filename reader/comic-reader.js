@@ -602,8 +602,7 @@ function mydb_comic_reader() {
       createImage(imageList); //from web
     } else if (wh.indexOf('komiku.id') != -1) { //click
       document.body.classList.add('click');
-      el('.main').id = 'main-mod';
-      el('.main').classList.remove('main'); //stop infinite scroll
+      el('.main').outerHTML = el('.main').outerHTML; //stop infinite scroll
     } else if (wh.indexOf('mangacanblog') != -1) { //click
       var eAll = el('.pagers a');
       if (eAll.innerHTML.indexOf('Full') != -1) eAll.click();
@@ -987,13 +986,6 @@ function mydb_comic_reader() {
     mydb_zoom = localStorage.getItem('mydb_zoom') ? JSON.parse(localStorage.getItem('mydb_zoom')) : {};
     window.onunload = function() { window.scrollTo(0,0); }; //prevent browsers auto scroll on reload/refresh
     checkAll();
-    
-    if (localStorage.getItem('visited-chapters')) localStorage.removeItem('visited-chapters');
-    if (localStorage.getItem('bookmark')) localStorage.removeItem('bookmark');
-    if (localStorage.getItem('history')) localStorage.removeItem('history');
-    if (localStorage.getItem('bm_history')) localStorage.removeItem('bm_history');
-    if (localStorage.getItem('ts_history')) localStorage.removeItem('ts_history');
-    indexedDB.open('ts_series_history').onsuccess = function() { indexedDB.deleteDatabase('ts_series_history') };
   } else {
     mydb_read = false;
   }
@@ -1002,6 +994,13 @@ function mydb_comic_reader() {
   webDarkMode();
   chapterList();
   disqusMod();
+  
+  if (localStorage.getItem('visited-chapters')) localStorage.removeItem('visited-chapters');
+  if (localStorage.getItem('bookmark')) localStorage.removeItem('bookmark');
+  if (localStorage.getItem('history')) localStorage.removeItem('history');
+  if (localStorage.getItem('bm_history')) localStorage.removeItem('bm_history');
+  if (localStorage.getItem('ts_history')) localStorage.removeItem('ts_history');
+  indexedDB.open('ts_series_history').onsuccess = function() { indexedDB.deleteDatabase('ts_series_history') };
 }
 
 if (!live_test_comic_r) mydb_comic_reader();
