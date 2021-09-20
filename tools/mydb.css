@@ -51,6 +51,22 @@ body {
 #content .carousel-cell img, .darex .carousel-cell img, .vezone .carousel-cell img {
   height: 100%;
 }
+/*#menu:not(ul):before, #main-menu:before {
+  z-index: 2147483648 !important;
+  background: #151515 !important;
+  display: block !important;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
+}
+#menu, #menu .center, #menu ul, #main-menu, #main-menu .center, #main-menu ul, #nav, .navbar, #toolbar, #main, #popular-anime, #wrap:not(.no-css), #omv, #sidebar, #content, #venkonten, #all, #menu-desz, #outer-wrapper, .hdcs, .ltshome, .rdmanga, .postbody, .infobox, .terbaru, #pusat, #content-wrapper {
+  z-index: 2147483649 !important;
+  display: block !important;
+  position: relative;
+}*/
 #menu li, #main-menu li {
   float: none;
   display: inline-block;
@@ -138,12 +154,6 @@ body[class*="mangaku-"] .owl-carousel {
 }
 .komiku-id ::-webkit-scrollbar-thumb {
   background: #b8b8b8 !important;
-}
-.komiku-id {
-  
-}
-.komiku-id {
-  
 }
 /* nyanfm.com */
 .nyanfm-com.elementor-kit-12 {
