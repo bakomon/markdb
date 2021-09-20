@@ -591,6 +591,7 @@ function mydb_comic_reader() {
     //if (el('[rel="tag"]') && el('[rel="tag"]').innerHTML.search(/project/i) != -1) {return}
     
     if (wh.indexOf('mangadex') != -1) { //api
+      /*// old
       el('#content').style.cssText = 'position:initial;';
       var eId = el('meta[name="app"]').dataset.chapterId;
       getData('//mangadex.org/api/?type=chapter&id='+ eId);
@@ -598,6 +599,7 @@ function mydb_comic_reader() {
       eReader.addEventListener('click', function(e) {
         wl.href = e.target.parentElement.href;
       });
+      */
     } else if (wh.indexOf('webtoons') != -1 && isMobile) { //api
       createImage(imageList); //from web
     } else if (wh.indexOf('komiku.id') != -1) { //click
@@ -631,6 +633,7 @@ function mydb_comic_reader() {
       localStorage.setItem('read_load', 'f');
       createImage(imgPathLis); //from web
       */
+      // v2
       if (window['_page_sub_c'] != '') { //from web
         wl.href = el('link[rel="canonical"]').href;
       } else {
