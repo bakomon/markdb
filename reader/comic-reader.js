@@ -185,7 +185,7 @@ function mydb_comic_reader() {
     r_txt += '</div>';// .reader_db
     
     var r_html = document.createElement('div');
-    r_html.style.cssText = 'position:relative;z-index:2147483644;'; //2147483647
+    r_html.style.cssText = 'position:relative;z-index:2147483643;'; //2147483647
     r_html.className = '_reader cbr_mod'+ (isMobile ? ' rc_mobile' : '');
     r_html.innerHTML = r_txt;
     document.body.appendChild(r_html);
@@ -788,7 +788,7 @@ function mydb_comic_reader() {
           var a_data = document.body.classList.contains('koidezign') ? 'title' : 'textContent';
           var l_last = document.createElement('div');
           l_last.id = 'mydb_latest_chapter';
-          l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483645;background:#252428;color:#ddd;padding:10px 15px;font-size:130%;border:1px solid #3e3949;';
+          l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483644;background:#252428;color:#ddd;padding:10px 15px;font-size:130%;border:1px solid #3e3949;';
           l_last.innerHTML = el(a_latest, list_area)[a_data].match(a_rgx)[1];
           document.body.appendChild(l_last);
           
@@ -848,6 +848,28 @@ function mydb_comic_reader() {
     }
   }
   
+  function removeAADB() {
+    var adb_id, adb_style = el('style','all');
+    for (var i = 0; i < adb_style.length; i++) {
+      if (adb_style[i].innerHTML.search(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/) != -1) {
+        adb_style[i].parentElement.removeChild(adb_style[i]);
+        adb_id = adb_style[i].innerHTML.match(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/)[1];
+        var adb_chk = setInterval(function() {
+          if (el(adb_id)) {
+            el(adb_id).parentElement.removeChild(el(adb_id));
+            clearInterval(adb_chk);
+            var adb_elem = el('[style*="display"','all');
+            for (var j = 0; j < adb_elem.length; j++) {
+              if (adb_elem[j].tagName.toLowerCase().search(/meta|link|style|script/) == -1) {
+                adb_elem[j].style.display = null;
+              }
+            }
+          }
+        }, 100);
+      }
+    }
+  }
+  
   function customEdit() {
     if (wh.indexOf('webtoons') != -1) {
       el('#wrap').classList.add('no-css');
@@ -880,8 +902,8 @@ function mydb_comic_reader() {
       }, true);
       
       // override js function "disable selection" by https://wordpress.org/plugins/wp-content-copy-protector/
-      wccp_free_iscontenteditable = function() {
-        return true;
+      if (typeof wccp_free_iscontenteditable !== 'undefined') {
+        wccp_free_iscontenteditable = function() { return true; };
       }
     }
     // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net
@@ -920,26 +942,8 @@ function mydb_comic_reader() {
     }
   }
   
-  function removeAADB() {
-    var adb_id, adb_style = el('style','all');
-    for (var i = 0; i < adb_style.length; i++) {
-      if (adb_style[i].innerHTML.search(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/) != -1) {
-        adb_style[i].parentElement.removeChild(adb_style[i]);
-        adb_id = adb_style[i].innerHTML.match(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/)[1];
-        var adb_chk = setInterval(function() {
-          if (el(adb_id)) {
-            el(adb_id).parentElement.removeChild(el(adb_id));
-            clearInterval(adb_chk);
-            var adb_elem = el('[style*="display"','all');
-            for (var j = 0; j < adb_elem.length; j++) {
-              if (adb_elem[j].tagName.toLowerCase().search(/meta|link|style|script/) == -1) {
-                adb_elem[j].style.display = null;
-              }
-            }
-          }
-        }, 100);
-      }
-    }
+  function blockContent() {
+    
   }
   
   
@@ -959,6 +963,7 @@ function mydb_comic_reader() {
   var cdnRgx = /(?:i\d+|cdn|img)\.(wp|statically)\.(?:com|io)\/(?:img\/(?:[^\.]+\/)?)?/;
   var checkPoint, imgArea, imgList, cdnName, zoomID;
   
+  blockContent();
   customEdit();
   
   // check if page is comic/project, from database bookmark
