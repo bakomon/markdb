@@ -449,7 +449,7 @@ function mydb_bookmark() {
     
     el('.db_inav', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
-        nav_current = Number(this.parentNode.dataset.page);
+        nav_current = Number(this.parentElement.dataset.page);
         db_indexChange(nav_current);
       });
     });
@@ -511,13 +511,13 @@ function mydb_bookmark() {
       item.addEventListener('click', function() {
         mydb_select = item.dataset.id;
         el('.bm_index').classList.add('db_hidden');
-        db_formEdit(mydb_type, index_data[item.parentNode.dataset.id]);
+        db_formEdit(mydb_type, index_data[item.parentElement.dataset.id]);
       });
     });
     
     el('.db_icatalog .db_idelete', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
-        var id = item.parentNode.dataset.id;
+        var id = item.parentElement.dataset.id;
         if (confirm('Are you sure you want to delete >> '+ id +' << ?\nYou can\'t undo this action.')) {
           db_deleteData(db_pathId(true, id));
         }
@@ -701,13 +701,13 @@ function mydb_bookmark() {
     el('.bs_edit', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
         mydb_select = item.dataset.id;
-        db_formEdit('search', main_data[item.parentNode.dataset.id]);
+        db_formEdit('search', main_data[item.parentElement.dataset.id]);
       });
     });
     
     el('.bs_delete', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
-        var id = item.parentNode.dataset.id;
+        var id = item.parentElement.dataset.id;
         if (confirm('Are you sure you want to delete >> '+ id +' << ?\nYou can\'t undo this action.')) {
           db_deleteData(db_pathId(true, id));
         }
@@ -796,13 +796,13 @@ function mydb_bookmark() {
     el('.bm_edit', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
         mydb_select = item.dataset.id;
-        db_formEdit(mydb_type, main_data[item.parentNode.dataset.id]);
+        db_formEdit(mydb_type, main_data[item.parentElement.dataset.id]);
       });
     });
     
     el('.bm_delete', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
-        var id = item.parentNode.dataset.id;
+        var id = item.parentElement.dataset.id;
         if (confirm('Are you sure you want to delete >> '+ id +' << ?\nYou can\'t undo this action.')) {
           db_deleteData(db_pathId(true, id));
         }
@@ -1092,7 +1092,7 @@ function mydb_bookmark() {
     
     el('.db_menu2 .db_index', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
-        mydb_select = item.parentNode.dataset.id;
+        mydb_select = item.parentElement.dataset.id;
         is_index = true;
         db_startIndex('start');
       });
@@ -1100,7 +1100,7 @@ function mydb_bookmark() {
     
     el('.db_menu2 .db_new', 'all').forEach(function(item) {
       item.addEventListener('click', function() {
-        mydb_select = item.parentNode.dataset.id;
+        mydb_select = item.parentElement.dataset.id;
         db_resetForm();
         is_form = 'new';
         el('.db_form_btn').classList.remove('db_hidden'); //always above db_formSelect()
