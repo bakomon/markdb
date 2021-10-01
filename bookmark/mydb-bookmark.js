@@ -67,7 +67,7 @@ function mydb_bookmark() {
   
   function db_checkData(note, path) {
     var fb_ref = firebase.app(fbase_app).database().ref(path);
-    if (note == 'bmdb') fb_ref = fb_ref.orderByChild('bmdb').equalTo(el('.db_form .db_bmdb').value);
+    if (mydb_select == 'list' && note == 'bmdb') fb_ref = fb_ref.orderByChild('bmdb').equalTo(el('.db_form .db_bmdb').value);
     return fb_ref.once('value').then(function(snapshot) {
       if (mydb_select == 'list') {
         // chek 1
