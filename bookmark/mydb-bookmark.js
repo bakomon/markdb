@@ -887,7 +887,7 @@ function mydb_bookmark() {
       
       if (note == 'set' && mydb_type == mydb_type_bkp) el('.db_menu .db_menu_shide').click();
       //if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) db_checkDB(main_arr); //temporary
-      if (wp.search(skip1_rgx) == -1 || wp.search(skip2_rgx) == -1) db_checkDB(main_arr); //check if data exist and show bookmark
+      if (wp != '/' || wp.search(skip1_rgx) == -1 || wp.search(skip2_rgx) == -1) db_checkDB(main_arr); //check if data exist and show bookmark
       
       // search
       query = note != 'start' && is_search ? el('.db_search input').value : query; //if data updated and "is_search = true" then show search
@@ -921,7 +921,7 @@ function mydb_bookmark() {
     }
     
     //if (wp.search(/^\/((m|id|en)\/?)?$/) != -1 || wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) != -1) return; //temporary
-    if (wp.search(skip1_rgx) != -1 || wp.search(skip2_rgx) != -1) return;
+    if (wp == '/' || wp.search(skip1_rgx) != -1 || wp.search(skip2_rgx) != -1) return;
     
     var child, order;
     var id = getId('bookmark');
@@ -1136,7 +1136,7 @@ function mydb_bookmark() {
       el('.db_host').value = wh.replace(wh_rgx, '');
       if (mydb_select == 'list') {
         //if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) { //temporary
-        if (wp.search(skip1_rgx) != -1 || wp.search(skip2_rgx) != -1) {
+        if (wp != '/' || wp.search(skip1_rgx) == -1 || wp.search(skip2_rgx) == -1) {
           var bmark_id = getId('bookmark').url; //from wl.pathname
           el('.db_id').value = bmark_id;
           if (wp.search(/\/(title|anime|novel|series)\/\d+\//) != -1) el('.db_bmdb').value = wp.match(/\/(title|anime|novel|series)\/([^\/]+)/)[1];
