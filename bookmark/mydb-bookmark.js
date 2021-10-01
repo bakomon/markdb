@@ -69,16 +69,20 @@ function mydb_bookmark() {
     var fb_ref = firebase.app(fbase_app).database().ref(path);
     if (note == 'bmdb') fb_ref = fb_ref.orderByChild('bmdb').equalTo(el('.db_form .db_bmdb').value);
     return fb_ref.once('value').then(function(snapshot) {
-      // chek 1
-      if (note == 'id') {
-        if (snapshot.exists()) {
-          return true;
-        } else {
-          return el('.db_form .db_bmdb').value == 'none' ? false : db_checkData('bmdb', 'bookmark/'+ mydb_type);
+      if (mydb_select == 'list') {
+        // chek 1
+        if (note == 'id') {
+          if (snapshot.exists()) {
+            return true;
+          } else {
+            return el('.db_form .db_bmdb').value == 'none' ? false : db_checkData('bmdb', 'bookmark/'+ mydb_type);
+          }
         }
+        // check 2
+        if (note == 'bmdb') return snapshot.exists() ? true : false;
+      } else {
+        return snapshot.exists() ? true : false;
       }
-      // check 2
-      if (note == 'bmdb') return snapshot.exists() ? true : false;
     });
   }
   
