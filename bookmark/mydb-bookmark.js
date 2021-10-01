@@ -187,7 +187,8 @@ function mydb_bookmark() {
       }
     } else {
       if (el('.db_id').value == '' || el('.db_number').value == '') {
-        alert('id or number is empty');
+        var number = mydb_type == 'anime' ? 'episode' : 'chapter';
+        alert(`id or ${number} is empty`);
         return false;
       }
       if (el('.db_type') && el('.db_type').value == '') {
