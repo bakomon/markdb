@@ -1135,6 +1135,7 @@ function mydb_bookmark() {
     el('.db_form_btn .db_btn_gen').onclick = function() {
       el('.db_host').value = wh.replace(wh_rgx, '');
       if (mydb_select == 'list') {
+        el('.db_update').valueAsDate = local_date;
         //if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) { //temporary
         if (wp != '/' && wp.search(skip1_rgx) == -1 && wp.search(skip2_rgx) == -1) {
           var bmark_id = getId('bookmark').url; //from wl.pathname
@@ -1142,7 +1143,6 @@ function mydb_bookmark() {
           if (wp.search(/\/(title|anime|novel|series)\/\d+\//) != -1) el('.db_bmdb').value = wp.match(/\/(title|anime|novel|series)\/([^\/]+)/)[1];
           el('.db_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(bmark_id, '_') : firstCase(bmark_id, '-');
           el('.db_url').value = '//'+ wh.replace(wh_rgx, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
-          el('.db_update').valueAsDate = local_date;
           
           if (mydb_type == 'comic') {
             var id_search = bmark_id.replace(/[-_\.]/g, ' ');
