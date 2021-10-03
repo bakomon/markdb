@@ -227,6 +227,7 @@ function mydb_bookmark() {
     el('.db_tr1').classList.add('db_hidden');
     
     el('.db_host').value = data.host;
+    if (is_mobile) el('.db_host_select').classList.remove('db_hidden');
     if (mydb_select == 'source') {
       el('.db_domain').value = data.domain;
       el('.db_status').value = data.status;
@@ -255,6 +256,7 @@ function mydb_bookmark() {
       el('.db_note').value = data.note;
       if ('type' in data && el('.db_type')) el('.db_type option[value="'+ data.type +'"]').selected = true;
       el('.db_url').value = data.url;
+      if (is_mobile) el('.db_url_select').classList.remove('db_hidden');
       if ('read' in data && el('.db_read')) el('.db_read').value = data.read;
       el('.db_image').value = data.image;
       el('.db_update').valueAsDate = local_date;
@@ -1139,6 +1141,8 @@ function mydb_bookmark() {
     // klik "Generate" harus pada halaman komik project
     el('.db_form_btn .db_btn_gen').onclick = function() {
       el('.db_host').value = wh.replace(wh_rgx, '');
+      if (is_mobile) el('.db_host_select').classList.remove('db_hidden');
+      
       if (mydb_select == 'list') {
         el('.db_update').valueAsDate = local_date;
         //if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) { //temporary
@@ -1148,6 +1152,7 @@ function mydb_bookmark() {
           if (wp.search(/\/(title|anime|novel|series)\/\d+\//) != -1) el('.db_bmdb').value = wp.match(/\/(title|anime|novel|series)\/([^\/]+)/)[1];
           el('.db_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(bmark_id, '_') : firstCase(bmark_id, '-');
           el('.db_url').value = '//'+ wh.replace(wh_rgx, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
+          if (is_mobile) el('.db_url_select').classList.remove('db_hidden');
           
           if (mydb_type == 'comic') {
             var id_search = bmark_id.replace(/[-_\.]/g, ' ');
