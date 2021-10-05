@@ -103,6 +103,12 @@ function mydb_comic_reader() {
           if (img[img.length-1].src) {loadImage = true;}
         }
       }
+      var disqs_top = el('#disqus_thread') || el('#disqus_trigger');
+      if (isMobile && getOffset(checkPoint, 'top') >= (getOffset(disqs_top, 'top') + halfScreen)) {
+        el('.rc_next button').style.background = 'rgba(0,0,0,.5)';
+      } else {
+        el('.rc_next button').style.background = null;
+      }
     };
   }
   
@@ -336,7 +342,7 @@ function mydb_comic_reader() {
   function startImage(note, prnt, imgs) {
     var cp = document.createElement('div');
     cp.id = 'check-point';
-    cp.style.cssText = 'z-index:2;color:transparent;position:fixed;bottom:-400px;';
+    cp.style.cssText = 'position:fixed;bottom:0;z-index:2;color:transparent;';
     cp.innerHTML = '.';
     document.body.appendChild(cp);
     checkPoint = el('#check-point');
@@ -796,10 +802,9 @@ function mydb_comic_reader() {
           
           // scroll to chapter list
           el('#mydb_latest_chapter').onclick = function() {
-            var half_screen = Math.floor((window.screen.height / 2) + 30);
-            /*list_area.style.cssText = 'scroll-margin-top:'+ half_screen +'px';
+            /*list_area.style.cssText = 'scroll-margin-top:'+ halfScreen +'px';
             list_area.scrollIntoView();*/
-            window.scroll(0, (getOffset(list_area, 'top') - half_screen));
+            window.scroll(0, (getOffset(list_area, 'top') - halfScreen));
           };
         }
       }
@@ -962,6 +967,7 @@ function mydb_comic_reader() {
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from database tools
   var autoLike = false;
   var imgSize = ''; //image size
+  var halfScreen = Math.floor((window.screen.height / 2) + 30);
   var cdnRgx = /(?:i\d+|cdn|img)\.(wp|statically)\.(?:com|io)\/(?:img\/(?:[^\.]+\/)?)?/;
   var checkPoint, imgArea, imgList, cdnName, zoomID;
   
