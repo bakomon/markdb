@@ -232,7 +232,6 @@ function mydb_bookmark() {
     el('.db_tr1').classList.add('db_hidden');
     
     el('.db_host').value = data.host;
-    if (is_mobile) el('.db_host_select').classList.remove('db_hidden');
     if (mydb_select == 'source') {
       el('.db_domain').value = data.domain;
       el('.db_status').value = data.status;
@@ -250,6 +249,7 @@ function mydb_bookmark() {
         }
       }
     } else {
+      if (is_mobile) el('.db_host_select').classList.remove('db_hidden');
       el('.db_id').value = data.id;
       el('.db_bmdb').value = data.bmdb;
       el('.db_title').value = data.title;
@@ -1155,9 +1155,9 @@ function mydb_bookmark() {
     // klik "Generate" harus pada halaman komik project
     el('.db_form_btn .db_btn_gen').onclick = function() {
       el('.db_host').value = wh.replace(wh_rgx, '');
-      if (is_mobile) el('.db_host_select').classList.remove('db_hidden');
       
       if (mydb_select == 'list') {
+        if (is_mobile) el('.db_host_select').classList.remove('db_hidden');
         el('.db_update').valueAsDate = local_date;
         //if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) { //temporary
         if (wp != '/' && wp.search(skip1_rgx) == -1 && wp.search(skip2_rgx) == -1) {
