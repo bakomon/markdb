@@ -759,7 +759,7 @@ function mydb_bookmark() {
       s_txt += firstCase(data.id, '-');
     }
     s_txt += '</div>';
-    s_txt += '<div class="db_100 '+ (chk ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
+    s_txt += '<div class="db_100 '+ (not_support ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
     if (note != 'db_startData') {
       s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
       if ('read' in data && data.read != '') s_txt += '<button class="_db db_selected'+ (chk ? '' : ' db_hidden') +'" onclick="window.open(\''+ data.read +'\')" title="'+ data.read +'">Read</button>';
