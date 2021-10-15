@@ -11,12 +11,12 @@ function mydb_comic_reader() {
   function removeElem(elem, index) {
     var elmn = typeof elem === 'string' ? document.querySelectorAll(elem) : elem;
     if (!elmn || (elmn && elmn.length == 0)) {
-      console.error('ERROR: removeElem(), elem = ', elem);
+      console.error('** ERROR: removeElem(), elem = '+ elem);
       return;
     }
     // if match 1 element & have specific index
     if (elmn && !elmn.length && index) {
-      console.error('ERROR: use querySelectorAll() for specific index');
+      console.error('** ERROR: use querySelectorAll() for specific index');
       return;
     }
     
