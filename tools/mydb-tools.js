@@ -512,7 +512,7 @@ var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|lis
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|10/16/2021, 7:07:07 AM';
+var local_interval = 'manual|10/16/2021, 7:38:16 AM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
@@ -531,6 +531,7 @@ if (localStorage.getItem('comic_tools_reader')) localStorage.removeItem('comic_t
 if (localStorage.getItem('comic_tools_list')) localStorage.removeItem('comic_tools_list');
 if (localStorage.getItem('mydb_tools_source')) localStorage.removeItem('mydb_tools_source');
 if (localStorage.getItem('mydb_source_check')) localStorage.removeItem('mydb_source_check');
+if (document.cookie.match(RegExp('(?:^|;\\s*)reader-zoom=([^;]*)'))) document.cookie = 'reader-zoom=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
 if (typeof el !== 'undefined') {
   localStorage.setItem('mydb_support', 'false');
