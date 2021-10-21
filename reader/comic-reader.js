@@ -61,7 +61,8 @@ function mydb_comic_reader() {
     removeElem('#disqus_thread');
     
     var disqus_load = document.createElement('div');
-    disqus_load.innerHTML = '<div style="text-align:center;"><button id="disqus_trigger" style="border:0;padding:5px 10px;font-size:20px;cursor:pointer;">Post a Comment</button></div>';
+    disqus_load.cssText = 'width:100%;text-align:center;';
+    disqus_load.innerHTML = '<button id="disqus_trigger" style="border:0;padding:5px 10px;font-size:20px;cursor:pointer;">Post a Comment</button>';
     par_dsqs.appendChild(disqus_load);
     
     var disqus_new = document.createElement('div');
