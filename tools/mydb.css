@@ -120,40 +120,13 @@ body[class*="mangaku-"] .owl-carousel {
   max-width: 100%;
   width: 50%;
 }
-/* komiku.id */
-.komiku-id img.lazy{
-  opacity: .5;
-}
-.komiku-id a, .komiku-id .logo a span, .komiku-id section h2, .komiku-id .konten > section h3 {
-  color: #ccc !important;
-}
-.komiku-id #header .hd2, .komiku-id #header nav, .komiku-id .konten > section[id], .komiku-id .ls2, .komiku-id .ls4, 
-.komiku-id #Trending .perapih, .komiku-id #Trending .ls123m, .komiku-id #Trending .tr23, 
-.komiku-id #Terbaru .lnn, .komiku-id #Terbaru .ls24, 
-.komiku-id #Komik_Hot .ls2, .komiku-id #Komik_Hot .ls2l, 
-.komiku-id #Genre .ls3, .komiku-id #Genre .ls3 a, .komiku-id #Genre .ls3 h4, 
-.komiku-id #Mirip .mirip1, .komiku-id #Mirip .ls5b h4, 
-.komiku-id section, .komiku-id #Judul, .komiku-id.series #Spoiler .grd, .komiku-id.series #Spoiler h4, .komiku-id #sosmed, .komiku-id #Komentar, 
-.komiku-id #Navbawah, .komiku-id #Footer, .komiku-id.loading {
+/* mangabat.com */
+.mangabat-com .container-header-lineone, .mangabat-com .container-header-lineone a, .mangabat-com .container-silder, .mangabat-com .panel-advanced-search-tool, .mangabat-com .advanced-search-tool-genres-item, .mangabat-com .panel-breadcrumb, .mangabat-com .panel-content-homepage, .mangabat-com .panel-content-homepage a, .mangabat-com .panel-list-story, .mangabat-com .panel-list-story a, .mangabat-com .panel-story-info, .mangabat-com .panel-story-chapter-list, .mangabat-com .panel-story-chapter-list a, .mangabat-com .panel-comment, .mangabat-com .panel-topview, .mangabat-com .panel-topview a, .mangabat-com .panel-newest, .mangabat-com .panel-newest-content, .mangabat-com .panel-category, .mangabat-com .pn-category-row, .mangabat-com .pn-category-row a, .mangabat-com .panel-navigation, .mangabat-com .panel-chapter-comment, .mangabat-com .panel-chapter-info-bot, .mangabat-com .container-footer-content, .mangabat-com .container-footer-content a {
   background-color: #222 !important;
-  border-color: #393939 !important;
   color: #ccc !important;
 }
-.komiku-id nav ul li a, 
-.komiku-id select, .komiku-id #Terbaru .vw, .komiku-id #Berita .brt, .komiku-id #Menu_Tambahan a, .komiku-id #Peringkat .ls7nm, 
-.komiku-id.series #Judul .new1, .komiku-id.series #Informasi table.inftable td:nth-child(1), .komiku-id.series #Informasi ul.genre li, .komiku-id.series .mnu button.tab:not(.curr), .komiku-id.series #Chapter #Daftar_Chapter tbody th, 
-.komiku-id.chapter #Judul table.tbl tr:nth-child(1) td, .komiku-id .pagination a, 
-.komiku-id #rakbuku .rakbuku, .komiku-id .ls2 .nani{
-  background-color: #343434 !important;
-  border-color: #393939 !important;
-  color: #ccc !important;
-  box-shadow: none !important;
-}
-.komiku-id ::-webkit-scrollbar-track {
-  background: #343434 !important;
-}
-.komiku-id ::-webkit-scrollbar-thumb {
-  background: #b8b8b8 !important;
+.mangabat-com #panel-story-info-description {
+  max-height: none !important;
 }
 /* nyanfm.com */
 .nyanfm-com.elementor-kit-12 {
@@ -183,13 +156,44 @@ body[class*="mangaku-"] .owl-carousel {
   color: #333 !important;
   text-shadow: none !important;
 }
-/* mangabat.com */
-.mangabat-com .container-header-lineone, .mangabat-com .container-header-lineone a, .mangabat-com .container-silder, .mangabat-com .panel-advanced-search-tool, .mangabat-com .advanced-search-tool-genres-item, .mangabat-com .panel-breadcrumb, .mangabat-com .panel-content-homepage, .mangabat-com .panel-content-homepage a, .mangabat-com .panel-list-story, .mangabat-com .panel-list-story a, .mangabat-com .panel-story-info, .mangabat-com .panel-story-chapter-list, .mangabat-com .panel-story-chapter-list a, .mangabat-com .panel-comment, .mangabat-com .panel-topview, .mangabat-com .panel-topview a, .mangabat-com .panel-newest, .mangabat-com .panel-newest-content, .mangabat-com .panel-category, .mangabat-com .pn-category-row, .mangabat-com .pn-category-row a, .mangabat-com .panel-navigation, .mangabat-com .panel-chapter-comment, .mangabat-com .panel-chapter-info-bot, .mangabat-com .container-footer-content, .mangabat-com .container-footer-content a {
-  background-color: #222 !important;
+/* komiku.id */
+.komiku-id img.lazy {
+  opacity: .5;
+}
+.komiku-id a, .komiku-id .logo a span, .komiku-id section h2, .komiku-id .konten > section h3, .komiku-id .perapih .daftar h3 {
   color: #ccc !important;
 }
-.mangabat-com #panel-story-info-description {
-  max-height: none !important;
+.komiku-id #header .hd2, .komiku-id #header nav, .komiku-id .konten > section[id], .komiku-id .ls2, .komiku-id .ls4, 
+.komiku-id #Trending .perapih, .komiku-id #Trending .ls123m, .komiku-id #Trending .tr23, 
+.komiku-id #Terbaru .lnn, .komiku-id #Terbaru .ls24, 
+.komiku-id #Komik_Hot .ls2, .komiku-id #Komik_Hot .ls2l, 
+.komiku-id #Genre .ls3, .komiku-id #Genre .ls3 a, .komiku-id #Genre .ls3 h4, 
+.komiku-id #Mirip .mirip1, .komiku-id #Mirip .ls5b h4, 
+.komiku-id section, .komiku-id #Judul, .komiku-id.series #Spoiler .grd, .komiku-id.series #Spoiler h4, .komiku-id #sosmed, .komiku-id #Komentar, 
+.komiku-id #Navbawah, .komiku-id #Footer, .komiku-id.loading {
+  background-color: #222 !important;
+  border-color: #393939 !important;
+  color: #ccc !important;
+  box-shadow: none !important;
+}
+.komiku-id nav ul li a, .komiku-id .perapih .ntah, .komiku-id .perapih .daftar, .komiku-id .loop-nav.pag-nav, 
+.komiku-id select, .komiku-id #Terbaru .vw, .komiku-id #Berita .brt, .komiku-id #Menu_Tambahan a, .komiku-id #Peringkat .ls7nm, 
+.komiku-id.series #Judul .new1, .komiku-id.series #Informasi table.inftable td:nth-child(1), .komiku-id.series #Informasi ul.genre li, .komiku-id.series .mnu button.tab:not(.curr), .komiku-id.series #Chapter #Daftar_Chapter tbody th, 
+.komiku-id.chapter #Judul table.tbl tr:nth-child(1) td, .komiku-id .pagination a, 
+.komiku-id #rakbuku .rakbuku, .komiku-id .ls2 .nani{
+  background-color: #343434 !important;
+  border-color: #393939 !important;
+  color: #ccc !important;
+  box-shadow: none !important;
+}
+.komiku-id .perapih .daftar .new1 a, .komiku-id .loop-nav.pag-nav a, .komiku-id #genr li a {
+  color: #333 !important;
+}
+.komiku-id ::-webkit-scrollbar-track {
+  background: #343434 !important;
+}
+.komiku-id ::-webkit-scrollbar-thumb {
+  background: #b8b8b8 !important;
 }
 /* webtoons.com */
 .webtoons-com:not(.read-mode) img, #mainBannerList, .webtoons-com .detail_bg {
@@ -198,7 +202,7 @@ body[class*="mangaku-"] .owl-carousel {
 .webtoons-com #wrap a, .webtoons-com #wrap p, #wrap .main_hotnew h2, #wrap .title_area h2, #wrap .grade_num {
   color: #838383 !important;
 }
-#wrap #header, #wrap .snb_wrap, #wrap #container.bg, #wrap .detail_body .detail_lst, #wrap .detail_body .detail_install_app, #wrap .detail_body .detail_lst li, #wrap .detail_body .aside.detail, #wrap .detail_body .detail_paywall, #wrap .main_daily_wrap, #wrap .daily_tab_wrap, #wrap .main_hotnew_wrap, #wrap .main_genre_wrap, #wrap .main_challenge, #wrap .lst_type1 li, #wrap #footer, #wrap .notice_area, #wrap .foot_app, #wrap .discover_lst li, #wrap .ranking_tab, #wrap .ranking_tab li, #wrap .lst_type1, #wrap .daily_head, #wrap .daily_card_item, #wrap .daily_card, #wrap .daily_card li, #wrap #cbox_module, #wrap .u_cbox .u_cbox_comment_box, #wrap .u_cbox a, .is-mobile #wrap .lst_item, .is-mobile #wrap .challenge_list, .is-mobile #wrap .main_notice, .is-mobile #wrap .detail_white li, .is-mobile #wrap .detail_white .num {
+#wrap #header, #wrap .main_ad_area, #wrap .snb_wrap, #wrap #container.bg, #wrap .detail_body .detail_lst, #wrap .detail_body .detail_install_app, #wrap .detail_body .detail_lst li, #wrap .detail_body .aside.detail, #wrap .detail_body .detail_paywall, #wrap .main_daily_wrap, #wrap .daily_tab_wrap, #wrap .main_hotnew_wrap, #wrap .main_genre_wrap, #wrap .main_challenge, #wrap .lst_type1 li, #wrap #footer, #wrap .notice_area, #wrap .foot_app, #wrap .discover_lst li, #wrap .ranking_tab, #wrap .ranking_tab li, #wrap .lst_type1, #wrap .daily_head, #wrap .daily_card_item, #wrap .daily_card, #wrap .daily_card li, #wrap #cbox_module, #wrap .u_cbox .u_cbox_comment_box, #wrap .u_cbox a, #wrap footer, .is-mobile #wrap .lst_item, .is-mobile #wrap .challenge_list, .is-mobile #wrap .my_loading_wrap, .is-mobile #wrap .loader_wrap, .is-mobile #wrap .main_notice, .is-mobile #wrap .detail_white li, .is-mobile #wrap .detail_white .num {
   background-color: #151515 !important;
   border-color: #000 !important;
   color: #838383 !important;
@@ -209,6 +213,9 @@ body[class*="mangaku-"] .owl-carousel {
 }
 .is-mobile #wrap header {
   background-color: #f5f5f5;
+}
+.is-mobile .webtoons-com #reader-mod {
+  padding-top: 50px;
 }
 
 
