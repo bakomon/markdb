@@ -334,6 +334,20 @@ function mydb_comic_reader() {
           }
         }
       }
+      
+      // enter to load
+      if (el('.rc_load .rc_all') === document.activeElement && e.keyCode == 13) {
+        el('.rc_load .rc_ld_img').click();
+      }
+      // enter to zoom
+      if (el('.rc_zoom input') === document.activeElement && e.keyCode == 13) {
+        var load_zm = Number(el('.rc_zoom input').value);
+        imgArea.style.cssText = 'max-width:'+ load_zm +'px !important;';
+        el('.rc_zoom input').value = load_zm;
+        mydb_zoom[zoomID] = load_zm;
+        localStorage.setItem('mydb_zoom', JSON.stringify(mydb_zoom));
+      }
+      if (e.keyCode == 13) document.activeElement.blur();
     };
     
     // auto stop page after html and js _reader loaded
@@ -992,6 +1006,7 @@ function mydb_comic_reader() {
   if ((wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(number_t_rgx) != -1)) && !isProject) {
     console.log('page: chapter');
     zoomID = getId('reader');
+    if (localStorage.getItem(zoomID)) localStorage.removeItem(zoomID); //temporary
     mydb_read = true;
     mydb_zoom = localStorage.getItem('mydb_zoom') ? JSON.parse(localStorage.getItem('mydb_zoom')) : {};
     window.onunload = function() { window.scrollTo(0,0); }; //prevent browsers auto scroll on reload/refresh
