@@ -236,7 +236,7 @@ function mydb_tools_fnc() {
   getId = function(note) {
     //old = ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
     var id = '';
-    var titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(baca|read|download)\s/i, '').replace(/(man(ga|hwa|hua)|[kc]omi[kc]|novel|anime)\s/i, '').replace(number_t_rgx, ' ').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '');
+    var titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(baca|read|download)\s/i, '').replace(/\s?(man(ga|hwa|hua)|[kc]omi[kc]|novel|anime)\s?/i, '\x20').replace(number_t_rgx, ' ').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '');
     var wpId = window.location.pathname.match(id_w_rgx)[1].replace(/-((bahasa|sub(title)?)-)?indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/([-_])+/g, '$1').replace(/^[\W]+/, '').replace(/(\.html?|[-_]+)$/i, '').toLowerCase();
     
     if (note == 'reader') {
@@ -512,7 +512,7 @@ var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|lis
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|10/21/2021, 9:21:32 PM';
+var local_interval = 'manual|10/22/2021, 5:44:22 PM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
