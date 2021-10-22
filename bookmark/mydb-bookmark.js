@@ -1094,10 +1094,11 @@ function mydb_bookmark() {
       if (this.classList.contains('db_danger')) {
         mydb_type = mydb_type_bkp;
         this.innerHTML = 'Close';
+        el('.db_menu .db_new_gen').classList.add('db_hidden');
       } else {
         this.innerHTML = 'Menu';
+        el('.db_menu .db_new_gen').classList.remove('db_hidden');
       }
-      el('.db_menu .db_new_gen').toggle('db_hidden');
       el('.db_menu2').classList.toggle('db_hidden');
       //el('.db_bm_menu input[value="'+ mydb_type +'"]').checked = true;
       el('.db_td1').classList.toggle('db_hidden');
@@ -1106,6 +1107,7 @@ function mydb_bookmark() {
     
     el('.db_menu .db_new_gen').onclick = function() {
       el('.db_menu .db_menu_shide').click();
+      el('.db_menu .db_new_gen').classList.add('db_hidden');
       setTimeout(function() { el('.db_bm_menu .db_'+ mydb_type).click(); }, 100);
       setTimeout(function() { el('.db_menu2 [data-id="list"] .db_new').click(); }, 100);
       setTimeout(function() { el('.db_form_btn .db_btn_gen').click(); }, 100);
