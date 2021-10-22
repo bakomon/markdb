@@ -1001,7 +1001,7 @@ function mydb_bookmark() {
     b_txt += '<span class="f_grow"></span><button class="db_out _db">&#10006;</button>';
     b_txt += '</div>';// .db_bm_menu
     b_txt += '</div>';// .db_menu2
-    b_txt += '<div class="db_menu flex"><button class="db_menu_shide _db">Menu</button><button class="db_new_gen _db">+</button><span class="f_grow"></span><span class="db_total _db db_active db_hidden"></span></div>';
+    b_txt += '<div class="db_menu flex"><button class="db_menu_shide _db">Menu</button><button class="db_new_gen _db" title="auto generate '+ mydb_type +' list">+</button><span class="f_grow"></span><span class="db_total _db db_active db_hidden"></span></div>';
     b_txt += '</div>';// .db_tr1
     b_txt += '</div>';// .db_data
     b_txt += '<div class="db_login flex_wrap db_hidden">';
@@ -1097,6 +1097,7 @@ function mydb_bookmark() {
       } else {
         this.innerHTML = 'Menu';
       }
+      el('.db_menu .db_new_gen').toggle('db_hidden');
       el('.db_menu2').classList.toggle('db_hidden');
       //el('.db_bm_menu input[value="'+ mydb_type +'"]').checked = true;
       el('.db_td1').classList.toggle('db_hidden');
