@@ -66,12 +66,12 @@ function mydb_comic_reader() {
     par_dsqs.appendChild(disqus_load);
     
     var disqus_new = document.createElement('div');
-    disqus_new.className = 'disqus-mod';
+    disqus_new.className = 'disqus_mod';
     par_dsqs.appendChild(disqus_new);
     
     el('#disqus_trigger').onclick = function() {
       this.style.display = 'none';
-      el('#disqus-mod').id = 'disqus_thread';
+      el('.disqus_mod').id = 'disqus_thread';
       addScript('//' + id + '.disqus.com/embed.js', true);
     };
   }
@@ -105,11 +105,20 @@ function mydb_comic_reader() {
           if (img[img.length-1].src) {loadImage = true;}
         }
       }
+      
+      // next background (mobile)
       var disqs_top = el('#disqus_thread') || el('#disqus_trigger');
       if (isMobile && getOffset(checkPoint, 'top') >= (getOffset(disqs_top, 'top') + halfScreen)) {
         el('.rc_next button').style.background = 'rgba(0,0,0,.5)';
       } else {
         el('.rc_next button').style.background = null;
+      }
+      
+      // auto show disqus
+      if (el('#disqus_trigger') && el('#disqus_trigger').offsetHeight != '0') {
+        if (getOffset(checkPoint, 'top') >= (getOffset(el('#disqus_trigger'), 'top'))) {
+          el('#disqus_trigger').click();
+        }
       }
     };
   }
