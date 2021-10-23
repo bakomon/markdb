@@ -236,14 +236,14 @@ function mydb_tools_fnc() {
   getId = function(note) {
     //old = ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
     var id = '';
-    var titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(baca|read|download)\s/i, '').replace(/\s?(man(ga|hwa|hua)|[kc]omi[kc]|novel|anime)\s?/i, '\x20').replace(number_t_rgx, ' ').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '');
+    var titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(baca|read|download)\s/i, '').replace(/\s?(man(ga|hwa|hua)|[kc]omi[kc]|novel|anime)\s?/i, '\x20').replace(number_t_rgx, ' ').replace(/[\||\-|\–](?:.(?![\||\-|\–]))+$/, '').replace(/^\s+/g, '');
     var wpId = window.location.pathname.match(id_w_rgx)[1].replace(/-((bahasa|sub(title)?)-)?indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/([-_])+/g, '$1').replace(/^[\W]+/, '').replace(/(\.html?|[-_]+)$/i, '').toLowerCase();
     
     if (note == 'reader') {
       titleId = titleId.replace(/[^\s\w]/g, '').replace(/\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
       id = wh.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
     } else if (note == 'bookmark') {
-      titleId = titleId.replace(/\s+$/g, '').replace(/\|/g, '');
+      titleId = titleId.replace(/\s+$/g, '').replace(/\|/g, '').replace(/[\n'"\&\r\t\b\f]/g, '\\$&'); //JSON.escape
       id = '{"url":"'+ wpId +'","title":"'+ titleId +'"}';
       id = JSON.parse(id);
     }
@@ -512,7 +512,7 @@ var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|lis
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|10/22/2021, 5:44:22 PM';
+var local_interval = 'manual|10/24/2021, 4:47:33 AM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
