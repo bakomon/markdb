@@ -116,7 +116,7 @@ function mydb_comic_reader() {
       
       // auto show disqus
       if (el('#disqus_trigger') && el('#disqus_trigger').offsetHeight != '0') {
-        if (getOffset(checkPoint, 'top') >= (getOffset(el('#disqus_trigger'), 'top'))) {
+        if ((getOffset(checkPoint, 'top') + halfScreen) >= getOffset(el('#disqus_trigger'), 'top')) {
           el('#disqus_trigger').click();
         }
       }
