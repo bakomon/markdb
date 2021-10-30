@@ -243,7 +243,7 @@ function mydb_tools_fnc() {
       titleId = titleId.replace(/[^\s\w]/g, '').replace(/\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
       id = wh.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
     } else if (note == 'bookmark') {
-      titleId = titleId.replace(/\s+$/g, '').replace(/\|/g, '').replace(/[\n'"\&\r\t\b\f]/g, '\\$&'); //JSON.escape
+      titleId = titleId.replace(/\s+$/g, '').replace(/\|/g, '').replace(/[\n"\&\r\t\b\f]/g, '\\$&'); //JSON.escape
       id = '{"url":"'+ wpId +'","title":"'+ titleId +'"}';
       id = JSON.parse(id);
     }
@@ -512,7 +512,7 @@ var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|lis
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|10/24/2021, 4:47:33 AM';
+var local_interval = 'manual|10/30/2021, 5:02:05 PM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
