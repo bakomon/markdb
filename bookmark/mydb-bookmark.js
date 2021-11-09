@@ -107,7 +107,7 @@ function mydb_bookmark() {
   }
   
   function db_genData(note) {
-    var g_val, g_arr = mydb_select == 'source' ? ['host','domain','status','theme','tag','project','icon'] : ['id','bmdb','title','alternative','number','note','type','host','url','read','image','update','similar'];
+    var g_val, g_arr = mydb_select == 'source' ? ['host','domain','status','language','theme','tag','project','icon'] : ['id','bmdb','title','alternative','number','note','type','host','url','read','image','update','similar'];
     var g_txt = '{';
     for (var i = 0; i < g_arr.length; i++) {
       if (note == 'update' && g_arr[i] == 'id') continue;
@@ -187,11 +187,15 @@ function mydb_bookmark() {
   function db_formCheck() {
     if (mydb_select == 'source') {
       if (el('.db_host').value == '') {
-        alert('web hostname is empty');
+        alert('web [hostname] is empty');
         return false;
       }
       if (el('.db_status').value == '') {
-        alert('web status is empty');
+        alert('web [status] is empty');
+        return false;
+      }
+      if (el('.db_language').value == '') {
+        alert('web [language] is empty');
         return false;
       }
     } else {
@@ -235,6 +239,7 @@ function mydb_bookmark() {
     if (mydb_select == 'source') {
       el('.db_domain').value = data.domain;
       el('.db_status').value = data.status;
+      el('.db_language').value = data.language;
       el('.db_theme').value = data.theme;
       el('.db_project').value = data.project;
       el('.db_icon').value = data.icon;
@@ -507,7 +512,7 @@ function mydb_bookmark() {
           i_host = i_host.replace(/\s+/g, '').split('|');
           i_host = i_host[i_host.length-1];
         }
-        i_txt += '<div class="db_ihost"><a href="//'+ i_host +'" target="_blank">'+ i_host +'</a></div>';
+        i_txt += '<div class="db_ihost"><a href="//'+ i_host +'" target="_blank">'+ i_host + (data[i].language != 'id' ? ('&#160;&#160;&#40;'+ data[i].language +'&#41;') : '') +'</a></div>';
         i_txt += '</div>';
         i_txt += '<div class="db_idetail db_100">';
         i_txt += '<div class="db_istatus">Status: <span class="db_text">'+ data[i].status +'</span></div>';
@@ -573,14 +578,34 @@ function mydb_bookmark() {
       // index search
       if (is_isearch) {
         var query = note != 'start' && is_isearch ? el('.db_isearch input').value : param; //if data updated and "is_isearch = true" then show search
-        var s_rgx = new RegExp(escapeRegex(query), 'ig');
-        var s_arr = mydb_select == 'source' ? ['host','domain','status','theme','tag'] : ['id','bmdb','title','alternative','number','note','type','host'];
-        index_arr = index_arr.filter(function(item) {
-          for (var i = 0; i < s_arr.length; i++) {
-            if (s_arr[i] == 'type' && !item['type']) continue;
-            if (item[s_arr[i]].search(s_rgx) != -1) return true;
+        var s_arr, s_rgx;
+        is_iadvanced = query.search(/\w+\:\:/) != -1 ? true : false;
+        
+        if (is_iadvanced) {
+          s_arr = {};
+          var s_filter = query.split('@');
+          for (var i = 0; i < s_filter.length; i++) {
+            var s_operator = s_filter[i].split('::');
+            s_arr[s_operator[0]] = s_operator[1];
           }
-        });
+          // Filter array multiple conditions https://stackoverflow.com/a/31831801/7598333
+          index_arr = index_arr.filter(function(item) {
+            for (var key in s_arr) {
+              s_rgx = new RegExp(escapeRegex(s_arr[key]), 'ig');
+              if (item[key] === undefined || item[key].search(s_rgx) == -1) return false;
+            }
+            return true;
+          });
+        } else {
+          s_rgx = new RegExp(escapeRegex(query), 'ig');
+          s_arr = mydb_select == 'source' ? ['host','domain','status','language','theme','tag'] : ['id','bmdb','title','alternative','number','note','type','host'];
+          index_arr = index_arr.filter(function(item) {
+            for (var i = 0; i < s_arr.length; i++) {
+              if (s_arr[i] == 'type' && !item['type']) continue; //list
+              if (item[s_arr[i]].search(s_rgx) != -1) return true;
+            }
+          });
+        }
         el('.db_imenu').classList.remove('db_hidden');
       }
       
@@ -595,18 +620,22 @@ function mydb_bookmark() {
       }
       el('.db_idata').classList.remove('db_hidden');
       el('.db_iloading').classList.add('db_hidden');
+      el('.db_icatalog').scrollTop = 0; //first
     });
   }
   
   function db_indexHtml() {
     var b_txt = '';
     // css
-    b_txt += '<style>.bm_index{padding:25px;}.db_idata{background:#17151b;padding:10px;}.db_imenu{margin-top:10px;}.db_icatalog{max-height:calc(100vh - 230px);overflow-y:auto;margin:15px 0;}.db_icatalog .db_ipost{padding:10px;}.db_icatalog.db_ilist .db_ipost{width:33.3%;}.db_icatalog.db_isource .db_ipost{width:25%;}.db_ipost .db_icover{width:25%;margin-right:10px;}.db_icover a{height:100%;}.db_iclose{position:fixed;bottom:0;left:0;}.db_image_bg{position:relative;height:115px;}.db_image_bg:before{content:\x27\x27;position:absolute;top:0;left:0;width:100%;height:100%;text-indent:-9999px;background:#252428;}.db_image_bg:after{content:\x27no image\x27;position:absolute;top:0;left:0;color:#ddd;font-size:14px;}.db_pagination .db_count{margin-left:20px;}.db_icon img{height:30px;width:30px;margin-right:10px;padding:5px;background:#ddd;}</style>';
+    b_txt += '<style>.bm_index{padding:25px;}.db_idata{background:#17151b;padding:10px;}.db_idata .db_ihelp_note{padding:10px 15px;cursor:auto;}.db_imenu{margin-top:10px;}.db_icatalog{max-height:calc(100vh - 230px);overflow-y:auto;margin:15px 0;}.db_icatalog .db_ipost{padding:10px;}.db_icatalog.db_ilist .db_ipost{width:33.3%;}.db_icatalog.db_isource .db_ipost{width:25%;}.db_ipost .db_icover{width:25%;margin-right:10px;}.db_icover a{height:100%;}.db_iclose{position:fixed;bottom:0;left:0;}.db_image_bg{position:relative;height:115px;}.db_image_bg:before{content:\x27\x27;position:absolute;top:0;left:0;width:100%;height:100%;text-indent:-9999px;background:#252428;}.db_image_bg:after{content:\x27no image\x27;position:absolute;top:0;left:0;color:#ddd;font-size:14px;}.db_pagination .db_count{margin-left:20px;}.db_icon img{height:30px;width:30px;margin-right:10px;padding:5px;background:#ddd;}</style>';
     // mobile
     b_txt += '<style>.bm_index.db_mobile{padding:0;}.db_mobile .db_icatalog{max-height:calc(100vh - 210px);}.db_mobile .db_icatalog .db_ipost{width:100%;}.db_mobile .db_ipost .db_icover{width:30%;}.db_mobile .db_ifilter .db_text,.db_mobile .db_pagination .db_count{display:none;}</style>';
     // html
     b_txt += '<div class="db_idata flex_wrap db_hidden">';
-    b_txt += '<div class="db_isearch flex db_100"><input class="_db db_100" type="text" placeholder="Search ('+ mydb_type +')..."><button class="_db">Search</button></div>';
+    b_txt += '<div class="db_isearch flex_wrap db_100">';
+    b_txt += '<div class="flex db_100"><input class="_db db_100" type="text" placeholder="Search ('+ mydb_type +')..."><span class="db_ihelp _db">?</span><button class="_db">Search</button></div>';
+    b_txt += '<div class="db_ihelp_note _db db_text flex_wrap db_100 db_hidden">How to use Advanced Search:<br/>In the search box, enter one of the Search operators below.<br/><br/>'+ (mydb_select == 'source' ? 'host, domain, status, language, theme, tag' : 'id, bmdb, title, alternative, number, note, type, host') +'<br/><br/>Examples:<br/>1. Search by host »&#160;&#160;host::mangaku<br/>2. Search for multiple operator with "@" :<br/>language::id@status::discontinued<br/>title::level@type::manhwa@number::belum</div>';
+    b_txt += '</div>';// .db_isearch
     b_txt += '<div class="db_imenu flex db_100">';
     b_txt += '<span class="db_inote db_text"></span><span class="f_grow"></span>';
     b_txt += '<div class="db_ifilter db_btn_radio flex"><span class="db_text">Sort by: </span><input type="radio" id="az" name="sort" value="title" checked><label class="_db" for="az">A-Z</label><input type="radio" id="latest" name="sort" value="update"><label class="_db" for="latest">Latest</label></div>';
@@ -645,13 +674,18 @@ function mydb_bookmark() {
       };
       
       el('.db_isearch button').onclick = function() {
+        el('.db_ihelp_note').classList.add('db_hidden');
         if (el('.db_isearch input').value == '') return;
         is_isearch = true;
         document.activeElement.blur();
         el('.db_imenu').classList.add('db_hidden');
-        el('.db_icatalog').innerHTML = '<div class="db_100 t_center">Loading...</div>';
+        el('.db_icatalog').innerHTML = '<div class="db_100 t_center">Loading..</div>';
         el('.db_pagination').innerHTML = '';
         db_indexData('search', el('.db_isearch input').value);
+      };
+      
+      el('.db_isearch .db_ihelp').onclick = function() {
+        el('.db_ihelp_note').classList.toggle('db_hidden');
       };
       
       el('.db_ifilter input', 'all').forEach(function(item) {
@@ -671,6 +705,7 @@ function mydb_bookmark() {
         is_isearch = false;
         is_index = false;
         el('.db_isearch input').value = '';
+        el('.db_ihelp_note').classList.add('db_hidden');
         el('.bm_index').classList.add('db_hidden');
       };
     }
@@ -1010,7 +1045,7 @@ function mydb_bookmark() {
     b_txt += '<div class="flex"><button class="db_in _db">Login</button><span class="lg_notif _db db_selected db_hidden"></span></div>';
     b_txt += '</div>';// .db_login
     b_txt += '<div class="db_toggle _db db_100 flex f_center">&#9733;</div>';
-    b_txt += '<div class="db_notif flex flex_perfect" style="position:absolute;"><span class="_db fp_content">Loading...</span></div>';
+    b_txt += '<div class="db_notif flex flex_perfect" style="position:absolute;"><span class="_db fp_content">Loading..</span></div>';
     b_txt += '</div>';// .bmark_db
     
     var b_html = document.createElement('div');
@@ -1255,12 +1290,13 @@ function mydb_bookmark() {
   var is_form = false;
   var is_index = false;
   var is_isearch = false;
+  var is_iadvanced = false;
   var is_mobile = isMobile(); //from database tools
   var nav_max = 3; // result always: nav_max + 2 = 5
   var index_max = 12;
   var local_date = new Date(toISOLocal().split('T')[0]);
   
-  var db_settings = {"comic":{"source":{"1_host":{"value":"hostname"},"2_domain":{"value":"alternative domain"},"3_status":{"type":"select","option":"active,discontinued"},"4_theme":{"type":"select","option":"none,themesia,madara,eastheme,koidezign,emissionhex,new_cms,reader_cms"},"5_tag":{"type":"checkbox","option":"ads_newtab,not_support,_rightclick"},"6_project":{"value":"project url"},"7_icon":{"value":"favicon url"}},"list":{"1_id":{},"2_bmdb":{"value":"comic id","next":{"none":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='none'"}},"mangadex":{"type":"button","value":"md","attribute":{"onclick":"this.parentElement.querySelector('input').value='md|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"mangaupdates":{"type":"button","value":"mu","attribute":{"onclick":"this.parentElement.querySelector('input').value='mu|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"open":{"type":"button"}}},"3_title":{"next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"4_alternative":{"value":"alternative title"},"5_number":{"value":"chapter","next":{"default":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='belum'"}},"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value=this.dataset.number"}}}},"6_note":{},"7_type":{"type":"select","option":"manga,manhwa,manhua"},"8_host":{"value":"hostname","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"9_url":{"value":"comic url","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"10_read":{"value":"link to read (if web to read is different)","next":{"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"11_image":{"value":"cover image","next":{"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"12_update":{"type":"date","value":"last update","next":{"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').valueAsDate=new Date(Number(this.dataset.date))"}}}},"13_similar":{"value":"similar comic id"}}},"novel":{"source":{"1_host":{"value":"hostname"},"2_domain":{"value":"alternative domain"},"3_status":{"type":"select","option":"active,discontinued"},"4_theme":{"type":"select","option":"none,themesia,madara,koidezign,yuukithemes"},"5_tag":{"type":"checkbox","option":"ads_newtab,not_support,_rightclick"},"6_project":{"value":"project url"},"7_icon":{"value":"favicon url"}},"list":{"1_id":{},"2_bmdb":{"value":"novel id","next":{"none":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='none'"}},"mangaupdates":{"type":"button","value":"mu","attribute":{"onclick":"this.parentElement.querySelector('input').value='mu|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"open":{"type":"button"}}},"3_title":{"next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"4_alternative":{"value":"alternative title"},"5_number":{"value":"chapter","next":{"default":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='belum'"}},"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value=this.dataset.number"}}}},"6_note":{},"7_type":{"type":"select","option":"mtl,htl"},"8_host":{"value":"hostname","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"9_url":{"value":"novel url","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"10_image":{"value":"cover image","next":{"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"11_update":{"type":"date","value":"last update","next":{"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').valueAsDate=new Date(Number(this.dataset.date))"}}}},"12_similar":{"value":"similar novel id"}}},"anime":{"source":{"1_host":{"value":"hostname"},"2_domain":{"value":"alternative domain"},"3_status":{"type":"select","option":"active,discontinued"},"4_theme":{"type":"select","option":"none,themesia,eastheme,koidezign"},"5_tag":{"type":"checkbox","option":"ads_newtab,not_support,_rightclick"},"6_project":{"value":"project url"},"7_icon":{"value":"favicon url"}},"list":{"1_id":{},"2_bmdb":{"value":"anime id","next":{"none":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='none'"}},"myanimelist":{"type":"button","value":"mal","attribute":{"onclick":"this.parentElement.querySelector('input').value='mal|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"anilist":{"type":"button","value":"anl","attribute":{"onclick":"this.parentElement.querySelector('input').value='anl|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"anidb":{"type":"button","value":"adb","attribute":{"onclick":"this.parentElement.querySelector('input').value='adb|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"open":{"type":"button"}}},"3_title":{"next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"4_alternative":{"value":"alternative title"},"5_number":{"value":"episode","next":{"default":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='belum'"}},"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value=this.dataset.number"}}}},"6_note":{},"7_host":{"value":"hostname","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"8_url":{"value":"anime url","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"9_image":{"value":"cover image","next":{"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"10_update":{"type":"date","value":"last update","next":{"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').valueAsDate=new Date(Number(this.dataset.date))"}}}},"11_similar":{"value":"similar novel id"}}}};
+  var db_settings = {"comic":{"source":{"1_host":{"value":"hostname"},"2_domain":{"value":"alternative domain"},"3_status":{"type":"select","option":"active,discontinued"},"4_language":{"type":"select","option":"id,en,raw"},"5_theme":{"type":"select","option":"none,themesia,madara,eastheme,koidezign,emissionhex,new_cms,reader_cms"},"6_tag":{"type":"checkbox","option":"ads_newtab,not_support,_rightclick"},"7_project":{"value":"project url"},"8_icon":{"value":"favicon url"}},"list":{"1_id":{},"2_bmdb":{"value":"comic id","next":{"none":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='none'"}},"mangadex":{"type":"button","value":"md","attribute":{"onclick":"this.parentElement.querySelector('input').value='md|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"mangaupdates":{"type":"button","value":"mu","attribute":{"onclick":"this.parentElement.querySelector('input').value='mu|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"open":{"type":"button"}}},"3_title":{"next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"4_alternative":{"value":"alternative title"},"5_number":{"value":"chapter","next":{"default":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='belum'"}},"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value=this.dataset.number"}}}},"6_note":{},"7_type":{"type":"select","option":"manga,manhwa,manhua"},"8_host":{"value":"hostname","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"9_url":{"value":"comic url","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"10_read":{"value":"link to read (if web to read is different)","next":{"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"11_image":{"value":"cover image","next":{"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"12_update":{"type":"date","value":"last update","next":{"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').valueAsDate=new Date(Number(this.dataset.date))"}}}},"13_similar":{"value":"similar comic id"}}},"novel":{"source":{"1_host":{"value":"hostname"},"2_domain":{"value":"alternative domain"},"3_status":{"type":"select","option":"active,discontinued"},"4_language":{"type":"select","option":"id,en,raw"},"5_theme":{"type":"select","option":"none,themesia,madara,koidezign,yuukithemes"},"6_tag":{"type":"checkbox","option":"ads_newtab,not_support,_rightclick"},"7_project":{"value":"project url"},"8_icon":{"value":"favicon url"}},"list":{"1_id":{},"2_bmdb":{"value":"novel id","next":{"none":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='none'"}},"mangaupdates":{"type":"button","value":"mu","attribute":{"onclick":"this.parentElement.querySelector('input').value='mu|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"open":{"type":"button"}}},"3_title":{"next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"4_alternative":{"value":"alternative title"},"5_number":{"value":"chapter","next":{"default":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='belum'"}},"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value=this.dataset.number"}}}},"6_note":{},"7_type":{"type":"select","option":"mtl,htl"},"8_host":{"value":"hostname","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"9_url":{"value":"novel url","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"10_image":{"value":"cover image","next":{"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"11_update":{"type":"date","value":"last update","next":{"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').valueAsDate=new Date(Number(this.dataset.date))"}}}},"12_similar":{"value":"similar novel id"}}},"anime":{"source":{"1_host":{"value":"hostname"},"2_domain":{"value":"alternative domain"},"3_status":{"type":"select","option":"active,discontinued"},"4_language":{"type":"select","option":"id,en,raw"},"5_theme":{"type":"select","option":"none,themesia,eastheme,koidezign"},"6_tag":{"type":"checkbox","option":"ads_newtab,not_support,_rightclick"},"7_project":{"value":"project url"},"8_icon":{"value":"favicon url"}},"list":{"1_id":{},"2_bmdb":{"value":"anime id","next":{"none":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='none'"}},"myanimelist":{"type":"button","value":"mal","attribute":{"onclick":"this.parentElement.querySelector('input').value='mal|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"anilist":{"type":"button","value":"anl","attribute":{"onclick":"this.parentElement.querySelector('input').value='anl|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"anidb":{"type":"button","value":"adb","attribute":{"onclick":"this.parentElement.querySelector('input').value='adb|';window.open(this.dataset.href);this.parentElement.querySelector('input').focus()"}},"open":{"type":"button"}}},"3_title":{"next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"4_alternative":{"value":"alternative title"},"5_number":{"value":"episode","next":{"default":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value='belum'"}},"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').value=this.dataset.number"}}}},"6_note":{},"7_host":{"value":"hostname","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}}}},"8_url":{"value":"anime url","next":{"select":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').select()"}},"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"9_image":{"value":"cover image","next":{"open":{"type":"button","attribute":{"onclick":"window.open(this.parentElement.querySelector('input').value)"}}}},"10_update":{"type":"date","value":"last update","next":{"before":{"type":"button","attribute":{"onclick":"this.parentElement.querySelector('input').valueAsDate=new Date(Number(this.dataset.date))"}}}},"11_similar":{"value":"similar novel id"}}}};
   
   var db_check = setInterval(function() {
     if (typeof firebase !== 'undefined' && typeof firebase.database !== 'undefined' && typeof firebase.auth !== 'undefined') {
