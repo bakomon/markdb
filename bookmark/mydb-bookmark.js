@@ -634,7 +634,12 @@ function mydb_bookmark() {
     b_txt += '<div class="db_idata flex_wrap db_hidden">';
     b_txt += '<div class="db_isearch flex_wrap db_100">';
     b_txt += '<div class="flex db_100"><input class="_db db_100" type="text" placeholder="Search ('+ mydb_type +')..."><span class="db_ihelp _db">?</span><button class="_db">Search</button></div>';
-    b_txt += '<div class="db_ihelp_note _db db_text flex_wrap db_100 db_hidden">How to use Advanced Search:<br/>In the search box, enter one of the Search operators below.<br/><br/>'+ (mydb_select == 'source' ? 'host, domain, status, language, theme, tag' : 'id, bmdb, title, alternative, number, note, type, host') +'<br/><br/>Examples:<br/>1. Search by host »&#160;&#160;host::mangaku<br/>2. Search for multiple operator with "@" :<br/>language::id@status::discontinued<br/>title::level@type::manhwa@number::belum</div>';
+    b_txt += '<div class="db_ihelp_note _db db_text flex_wrap db_100 db_hidden">';
+    b_txt += 'How to use Advanced Search:<br/>In the search box, enter one of the Search operators below.';
+    b_txt += '<br/><br/>Search operators (source):<br/>host, domain, status, language, theme, tag';
+    b_txt += '<br/><br/>Search operators (list)<br/>id, bmdb, title, alternative, number, note, type, host';
+    b_txt += '<br/><br/>Examples:<br/>1. Search by host<br/>&#160;&#160;»&#160;&#160;host::mangaku<br/>2. Search for multiple operator with "@"<br/>&#160;&#160;»&#160;&#160;language::id@status::discontinued<br/>&#160;&#160;»&#160;&#160;title::level@type::manhwa';
+    b_txt += '</div>';// .db_ihelp_note
     b_txt += '</div>';// .db_isearch
     b_txt += '<div class="db_imenu flex db_100">';
     b_txt += '<span class="db_inote db_text"></span><span class="f_grow"></span>';
