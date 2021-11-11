@@ -323,14 +323,19 @@ function mydb_tools() {
     if (mydb_login) {
       genSource('login');
     } else {
-      /* auto login firebase */
-      firebase.app(fbase_app).auth().signInWithEmailAndPassword(login_email, login_pass).then((user) => {
-        genSource('auth');
-      }).catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        alert('!! Error: '+ errorCode +', '+ errorMessage);
-      });
+      if (login_email == '' || login_pass == '') {
+        alert('!! Error: firebase login\nlogin_email or login_pass is empty');
+      } else {
+        /* auto login firebase */
+        firebase.app(fbase_app).auth().signInWithEmailAndPassword(login_email, login_pass).then((user) => {
+          genSource('auth');
+        }).catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.error('!! Error: function checkLogin(, code: '+ errorCode +', message: '+ errorMessage);
+          alert('!! Error: function checkLogin(\n'+ errorMessage);
+        });
+      }
     }
   }
   
@@ -511,7 +516,7 @@ var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|lis
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|11/11/2021, 9:08:20 PM';
+var local_interval = 'manual|11/12/2021, 12:00:27 AM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
