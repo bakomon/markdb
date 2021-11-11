@@ -9,6 +9,7 @@ Works on all PC & Mobile devices, using a browser that supports custom scripts.
 - Opera: 
   1. Add-ons: [`Install Chrome Extensions`](https://addons.opera.com/en/extensions/details/install-chrome-extensions/)
   2. Extension: [`User JavaScript and CSS`](https://chrome.google.com/webstore/detail/nbhcbdghjpllgmfilhnhkllmkecfmpld?hl=en)
+- Firefox: **not support**
 
 ### Android:
 - [`Via Browser`](https://play.google.com/store/apps/details?id=mark.via.gp&hl=en)
