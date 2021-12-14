@@ -60,11 +60,40 @@ function mydb_bookmark() {
       ':' + pad(tzo % 60);
   }
   
+  // Check if string is URL https://stackoverflow.com/a/49849482/7598333
+  function isValidUrl(string) {
+    var res = string.match(/((?:(?:https?:)?\/\/.)?(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b(?:[-a-zA-Z0-9@:%_\+.~#?&//=]*))/g);
+    return (res !== null);
+  }
+  
+  function db_info(text, type, timeout) {
+    if (text == 'RESET') {
+      setTimeout(function() {
+        el('.db_notif').classList.add('db_hidden');
+        el('.db_notif .db_notif_text').innerHTML = '';
+        el('.db_notif .db_notif_text').classList.remove('db_danger');
+      }, 500);
+    } else {
+      type = type || '';
+      el('.db_notif .db_notif_text').innerHTML = text;
+      el('.db_notif .db_notif_text').classList.add('db_'+ type);
+      el('.db_notif').classList.remove('db_hidden');
+      if (timeout) setTimeout(function() { el('.db_notif').classList.add('db_hidden'); }, 1500);
+    }
+  }
+  
+  function db_validId(type) {
+    var id_elem = el('.db_form .db_'+ type);
+    var id = id_elem.value;
+    if (id_elem.dataset[type]) id = id_elem.dataset[type];
+    return id;
+  }
+  
   function db_pathId(chk, custom) {
     var path = mydb_select == 'list' ? '' : 'source/';
     path = 'bookmark/'+ path + mydb_type;
     if (chk) {
-      var id = custom ? custom : mydb_select == 'list' ? el('.db_form .db_id').value : getHostname(el('.db_form .db_host').value).replace(/\./g, '-');
+      var id = custom ? custom : mydb_select == 'list' ? db_validId('id') : getHostname(db_validId('host')).replace(/\./g, '-');
       path = path +'/'+ id;
     }
     return path;
@@ -92,8 +121,7 @@ function mydb_bookmark() {
   }
   
   function db_deleteData(path) {
-    el('.db_notif span').innerHTML = 'Loading..';
-    el('.db_notif').classList.remove('db_hidden');
+    db_info('Loading..');
     
     firebase.app(fbase_app).database().ref(path).remove()
       .then(function() {
@@ -102,7 +130,7 @@ function mydb_bookmark() {
         if (mydb_select == 'source') changeSource();
       })
       .catch(function(error) {
-        el('.db_notif span').innerHTML = 'Error!!';
+        db_info('Error!!', 'danger', true);
       });
   }
   
@@ -110,7 +138,7 @@ function mydb_bookmark() {
     var g_val, g_arr = mydb_select == 'source' ? ['host','domain','status','language','theme','tag','project','icon'] : ['id','bmdb','title','alternative','number','note','type','host','url','read','image','update','similar'];
     var g_txt = '{';
     for (var i = 0; i < g_arr.length; i++) {
-      if (note == 'update' && g_arr[i] == 'id') continue;
+      if (note == 'update' && (g_arr[i] == 'id' || mydb_select == 'source' && g_arr[i] == 'host')) continue;
       if (mydb_type.search(/novel|anime/) != -1 && g_arr[i] == 'read') continue;
       if (mydb_type == 'anime' && g_arr[i] == 'type') continue;
       
@@ -140,20 +168,18 @@ function mydb_bookmark() {
   }
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
-  function db_changeData(type) {
-    firebase.app(fbase_app).database().ref(db_pathId(true))[type](db_genData(type), (error) => {
+  function db_changeData(note) {
+    firebase.app(fbase_app).database().ref(db_pathId(true))[note](db_genData(note), (error) => {
       if (error) {
         console.log(error);
-        el('.db_notif span').innerHTML = 'Error!!';
-        el('.db_notif span').classList.add('db_danger');
-        setTimeout(function() { el('.db_notif').classList.add('db_hidden'); }, 1500);
+        db_info('Error!!', 'danger', true);
       } else {
-        if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData(type);
-        if (type == 'update' && is_index) db_startIndex(type);
+        if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData(note);
+        if (note == 'update' && is_index) db_startIndex(note);
         if (mydb_select == 'source') {
           changeSource();
-          if (type == 'set') {
-            el('.db_notif span').innerHTML = 'Done';
+          if (note == 'set') {
+            db_info('Done');
             db_resetForm('remove');
           }
         }
@@ -169,11 +195,7 @@ function mydb_bookmark() {
       el('.db_tr1').classList.remove('db_hidden');
     }
     el('.db_form').innerHTML = '';
-    setTimeout(function() {
-      el('.db_notif').classList.add('db_hidden');
-      el('.db_notif span').innerHTML = '';
-      el('.db_notif span').classList.remove('db_danger');
-    }, 500);
+    db_info('RESET');
   }
   
   function db_resetMenu() {
@@ -185,11 +207,15 @@ function mydb_bookmark() {
   }
   
   function db_formCheck() {
+    if (el('.db_host').value == '') {
+      alert('web [hostname] is empty');
+      return false;
+    } else if (!isValidUrl(el('.db_host').value)) {
+      alert('web [hostname] not valid');
+      return false;
+    }
+    
     if (mydb_select == 'source') {
-      if (el('.db_host').value == '') {
-        alert('web [hostname] is empty');
-        return false;
-      }
       if (el('.db_status').value == '') {
         alert('web [status] is empty');
         return false;
@@ -199,27 +225,47 @@ function mydb_bookmark() {
         return false;
       }
     } else {
-      if (el('.db_id').value == '' || el('.db_number').value == '') {
-        var number = mydb_type == 'anime' ? 'episode' : 'chapter';
-        alert(`id or ${number} is empty`);
-        return false;
-      }
-      if (el('.db_type') && el('.db_type').value == '') {
-        alert(`${mydb_type} type is empty`);
+      if (el('.db_id').value == '') {
+        alert('[id] is empty');
         return false;
       }
       if (el('.db_bmdb').value == '') {
-        alert(`${mydb_type} id is empty or fill with "none"`);
+        alert(`[${mydb_type} id] is empty or fill with "none"`);
         return false;
       } else {
         if (el('.db_bmdb').value == 'none' && el('.db_image').value == '') {
-          alert('cover image is empty');
+          alert('[cover image] is empty');
           return false;
         }
-        /*if (el('.db_bmdb').value != 'none' && el('.db_bmdb').value.indexOf('md|') != -1 && el('.db_image').value != '') {
+        /* old: Mangadex
+        if (el('.db_bmdb').value != 'none' && el('.db_bmdb').value.indexOf('md|') != -1 && el('.db_image').value != '') {
           alert(`delete image, image is included in ${mydb_type} id`); //mangadex
           return false;
         }*/
+      }
+      if (el('.db_title').value == '') {
+        alert('[title] is empty');
+        return false;
+      }
+      if (el('.db_number').value == '') {
+        var number = mydb_type == 'anime' ? 'episode' : 'chapter';
+        alert(`[${number}] is empty`);
+        return false;
+      }
+      if (el('.db_type') && el('.db_type').value == '') {
+        alert(`[${mydb_type}] type is empty`);
+        return false;
+      }
+      if (el('.db_url').value == '') {
+        alert(`web [${mydb_type} url] is empty`);
+        return false;
+      } else if (!isValidUrl(el('.db_url').value)) {
+        alert(`web [${mydb_type} url] not valid`);
+        return false;
+      }
+      if (el('.db_update').value == '') {
+        alert('[last update] is empty');
+        return false;
       }
     }
     return true;
@@ -237,6 +283,8 @@ function mydb_bookmark() {
     
     el('.db_host').value = data.host;
     if (mydb_select == 'source') {
+      el('.db_host').readOnly = true;
+      el('.db_host').setAttribute('data-host', data.host);
       el('.db_domain').value = data.domain;
       el('.db_status').value = data.status;
       el('.db_language').value = data.language;
@@ -256,6 +304,8 @@ function mydb_bookmark() {
     } else {
       if (is_mobile) el('.db_host_select').classList.remove('db_hidden');
       el('.db_id').value = data.id;
+      el('.db_id').readOnly = true;
+      el('.db_id').setAttribute('data-id', data.id);
       el('.db_bmdb').value = data.bmdb;
       el('.db_title').value = data.title;
       el('.db_alternative').value = data.alternative;
@@ -399,23 +449,6 @@ function mydb_bookmark() {
         window.open('//'+ op_url);
       };
     }
-    
-    /*// old
-    f_txt += '<div class="db_cover db_100 t_center db_hidden"><img src=""></div>';
-    f_txt += '<input class="db_id _db db_100" type="text" placeholder="ID">';
-    f_txt += '<div class="flex db_100"><input class="db_bmdb _db db_100" type="text" placeholder="Comic ID"><button class="db_bmdb_mangadex _db db_selected db_hidden" onclick="window.open(this.dataset.href)">&#128270; MD</button><button class="db_bmdb_mangaupdates _db db_selected db_hidden" onclick="window.open(this.dataset.href)">&#128270; MU</button><button class="db_bmdb_open _db db_selected db_hidden">Open</button></div>';
-    f_txt += '<input class="db_title _db db_100" type="text" placeholder="Title">';
-    f_txt += '<input class="db_alternative _db db_100" type="text" placeholder="Alternative Title">';
-    f_txt += '<input class="db_number _db db_100" type="text" placeholder="number" onclick="this.select()">';
-    f_txt += '<input class="db_note _db db_100" type="text" placeholder="Note">';
-    f_txt += '<select class="db_type _db db_100" required><option value="" selected disabled hidden>Type</option><option value="manga">manga</option><option value="manhwa">manhwa</option><option value="manhua">manhua</option></select>';
-    f_txt += '<input class="db_host _db db_100" type="text" placeholder="hostname">';
-    f_txt += '<div class="flex db_100"><input class="db_url _db db_100" type="text" placeholder="URL"><button class="db_url_open _db flex f_middle db_selected db_hidden"><span>&#128279;</span> Open</button></div>';
-    f_txt += '<input class="db_read _db db_100" type="text" placeholder="Link to read (if web to read is different)">';
-    f_txt += '<div class="flex db_100"><input class="db_image _db db_100" type="text" placeholder="Cover image"><button class="db_image_open _db flex f_middle db_selected db_hidden"><span>&#128444;</span> Open</button></div>';
-    f_txt += '<div class="flex db_100"><input class="db_update _db f_grow" type="date" title="Last Update"><button class="db_update_before _db db_selected db_hidden" onclick="document.querySelector(\'.db_update\').valueAsDate = new Date(Number(this.dataset.date))">Before</button></div>';
-    f_txt += '<input class="db_similar _db db_100" type="text" placeholder="Similar comic ID">';
-    */
   }
   
   function db_index_nav_html() {
@@ -565,7 +598,7 @@ function mydb_bookmark() {
       index_arr = genArray(snapshot.val());
       
       if (note != 'start') {
-        el('.db_notif span').innerHTML = 'Done';
+        db_info('Done');
         db_resetForm('remove');
       }
       
@@ -578,34 +611,7 @@ function mydb_bookmark() {
       // index search
       if (is_isearch) {
         var query = note != 'start' && is_isearch ? el('.db_isearch input').value : param; //if data updated and "is_isearch = true" then show search
-        var s_arr, s_rgx;
-        is_iadvanced = query.search(/\w+\:\:/) != -1 ? true : false;
-        
-        if (is_iadvanced) {
-          s_arr = {};
-          var s_filter = query.split('@');
-          for (var i = 0; i < s_filter.length; i++) {
-            var s_operator = s_filter[i].split('::');
-            s_arr[s_operator[0]] = s_operator[1];
-          }
-          // Filter array multiple conditions https://stackoverflow.com/a/31831801/7598333
-          index_arr = index_arr.filter(function(item) {
-            for (var key in s_arr) {
-              s_rgx = new RegExp(escapeRegex(s_arr[key]), 'ig');
-              if (item[key] === undefined || item[key].search(s_rgx) == -1) return false;
-            }
-            return true;
-          });
-        } else {
-          s_rgx = new RegExp(escapeRegex(query), 'ig');
-          s_arr = mydb_select == 'source' ? ['host','domain','status','language','theme','tag'] : ['id','bmdb','title','alternative','number','note','type','host'];
-          index_arr = index_arr.filter(function(item) {
-            for (var i = 0; i < s_arr.length; i++) {
-              if (s_arr[i] == 'type' && !item['type']) continue; //list
-              if (item[s_arr[i]].search(s_rgx) != -1) return true;
-            }
-          });
-        }
+        index_arr = db_searchFilter('index', index_arr, query);
         el('.db_imenu').classList.remove('db_hidden');
       }
       
@@ -627,18 +633,19 @@ function mydb_bookmark() {
   function db_indexHtml() {
     var b_txt = '';
     // css
-    b_txt += '<style>.bm_index{padding:25px;}.db_idata{background:#17151b;padding:10px;}.db_idata .db_ihelp_note{padding:10px 15px;cursor:auto;}.db_imenu{margin-top:10px;}.db_icatalog{max-height:calc(100vh - 230px);overflow-y:auto;margin:15px 0;}.db_icatalog .db_ipost{padding:10px;}.db_icatalog.db_ilist .db_ipost{width:33.3%;}.db_icatalog.db_isource .db_ipost{width:25%;}.db_ipost .db_icover{width:25%;margin-right:10px;}.db_icover a{height:100%;}.db_iclose{position:fixed;bottom:0;left:0;}.db_image_bg{position:relative;height:115px;}.db_image_bg:before{content:\x27\x27;position:absolute;top:0;left:0;width:100%;height:100%;text-indent:-9999px;background:#252428;}.db_image_bg:after{content:\x27no image\x27;position:absolute;top:0;left:0;color:#ddd;font-size:14px;}.db_pagination .db_count{margin-left:20px;}.db_icon img{height:30px;width:30px;margin-right:10px;padding:5px;background:#ddd;}</style>';
+    b_txt += '<style>.bm_index{position:fixed;top:0;bottom:0;left:0;right:0;padding:25px;}.db_idata,.db_iloading{position:relative;}.db_idata{background:#17151b;padding:10px;}.db_idata .db_ihelp_note{padding:8px 10px 10px;cursor:default;}.db_imenu{margin-top:10px;}.db_icatalog{max-height:calc(100vh - 230px);overflow-y:auto;margin:15px 0;}.db_icatalog .db_ipost{padding:10px;}.db_icatalog.db_ilist .db_ipost{width:33.3%;}.db_icatalog.db_isource .db_ipost{width:25%;}.db_ipost .db_icover{width:25%;margin-right:10px;}.db_icover a{height:100%;}.db_iclose{position:fixed;bottom:0;left:0;}.db_image_bg{position:relative;height:115px;}.db_image_bg:before{content:\x27\x27;position:absolute;top:0;left:0;width:100%;height:100%;text-indent:-9999px;background:#252428;}.db_image_bg:after{content:\x27no image\x27;position:absolute;top:0;left:0;color:#ddd;font-size:14px;}.db_pagination .db_count{margin-left:20px;}.db_icon img{height:30px;width:30px;margin-right:10px;padding:5px;background:#ddd;}</style>';
     // mobile
     b_txt += '<style>.bm_index.db_mobile{padding:0;}.db_mobile .db_icatalog{max-height:calc(100vh - 210px);}.db_mobile .db_icatalog .db_ipost{width:100%;}.db_mobile .db_ipost .db_icover{width:30%;}.db_mobile .db_ifilter .db_text,.db_mobile .db_pagination .db_count{display:none;}</style>';
     // html
+    b_txt += '<div class="db_ibg"></div>';
     b_txt += '<div class="db_idata flex_wrap db_hidden">';
     b_txt += '<div class="db_isearch flex_wrap db_100">';
-    b_txt += '<div class="flex db_100"><input class="_db db_100" type="text" placeholder="Search ('+ mydb_type +')..."><span class="db_ihelp _db">?</span><button class="_db">Search</button></div>';
-    b_txt += '<div class="db_ihelp_note _db db_text flex_wrap db_100 db_hidden">';
-    b_txt += 'How to use Advanced Search:<br/>In the search box, enter one of the Search operators below.';
-    b_txt += '<br/><br/>Search operators (source):<br/>host, domain, status, language, theme, tag';
-    b_txt += '<br/><br/>Search operators (list)<br/>id, bmdb, title, alternative, number, note, type, host';
-    b_txt += '<br/><br/>Examples:<br/>1. Search by host<br/>&#160;&#160;»&#160;&#160;host::mangaku<br/>2. Search for multiple operator with "@"<br/>&#160;&#160;»&#160;&#160;language::id@status::discontinued<br/>&#160;&#160;»&#160;&#160;title::level@type::manhwa';
+    b_txt += '<div class="flex db_100"><input class="_db db_100" type="text" placeholder="Search ('+ mydb_type +')..."><span class="db_ihelp _db" title="How to use Advanced Search">?</span><button class="_db">Search</button></div>';
+    b_txt += '<div class="db_ihelp_note _db db_100 db_hidden">';
+    b_txt += '<b>How to use Advanced Search:</b><br/>In the search box, enter one of the Search operators below.';
+    b_txt += '<br/><br/><b>Search operators (source):</b><br/>host, domain, status, language, theme, tag';
+    b_txt += '<br/><br/><b>Search operators (list)</b><br/>id, bmdb, title, alternative, number, note, type, host';
+    b_txt += '<br/><br/><b>Examples:</b><br/>1. Search by host<br/>&#160;&#160;»&#160;host::mangaku<br/>2. Search for multiple operator with "@"<br/>&#160;&#160;»&#160;language::id@status::discontinued<br/>&#160;&#160;»&#160;title::level@type::manhwa@bmdb::none';
     b_txt += '</div>';// .db_ihelp_note
     b_txt += '</div>';// .db_isearch
     b_txt += '<div class="db_imenu flex db_100">';
@@ -678,7 +685,17 @@ function mydb_bookmark() {
         el('.bm_index').classList.add('db_hidden');
       };
       
+      el('.db_ibg').onclick = function() {
+        el('.db_iclose').click();
+      };
+      
+      el('.db_isearch .db_ihelp').onclick = function() {
+        this.classList.toggle('db_danger');
+        el('.db_ihelp_note').classList.toggle('db_hidden');
+      };
+      
       el('.db_isearch button').onclick = function() {
+        el('.db_isearch .db_ihelp').classList.remove('db_danger');
         el('.db_ihelp_note').classList.add('db_hidden');
         if (el('.db_isearch input').value == '') return;
         is_isearch = true;
@@ -687,10 +704,6 @@ function mydb_bookmark() {
         el('.db_icatalog').innerHTML = '<div class="db_100 t_center">Loading..</div>';
         el('.db_pagination').innerHTML = '';
         db_indexData('search', el('.db_isearch input').value);
-      };
-      
-      el('.db_isearch .db_ihelp').onclick = function() {
-        el('.db_ihelp_note').classList.toggle('db_hidden');
       };
       
       el('.db_ifilter input', 'all').forEach(function(item) {
@@ -710,6 +723,7 @@ function mydb_bookmark() {
         is_isearch = false;
         is_index = false;
         el('.db_isearch input').value = '';
+        el('.db_isearch .db_ihelp').classList.remove('db_danger');
         el('.db_ihelp_note').classList.add('db_hidden');
         el('.bm_index').classList.add('db_hidden');
       };
@@ -772,6 +786,38 @@ function mydb_bookmark() {
         }
       });
     });
+  }
+  
+  function db_searchFilter(note, arr, query) {
+    var s_data, s_arr, s_rgx;
+    is_advanced = query.search(/\w+\:\:/) != -1 ? true : false;
+    
+    if (is_advanced) {
+      s_arr = {};
+      var s_filter = query.split('@');
+      for (var i = 0; i < s_filter.length; i++) {
+        var s_operator = s_filter[i].split('::');
+        s_arr[s_operator[0]] = s_operator[1];
+      }
+      // Filter array multiple conditions https://stackoverflow.com/a/31831801/7598333
+      s_data = arr.filter(function(item) {
+        for (var key in s_arr) {
+          s_rgx = new RegExp(escapeRegex(s_arr[key]), 'ig');
+          if (item[key] === undefined || item[key].search(s_rgx) == -1) return false;
+        }
+        return true;
+      });
+    } else {
+      s_rgx = new RegExp(escapeRegex(query), 'ig');
+      s_arr = mydb_select == 'list' || note == 'main' ? ['id','bmdb','title','alternative','number','note','type','host'] : ['host','domain','status','language','theme','tag'];
+      s_data = arr.filter(function(item) {
+        for (var i = 0; i < s_arr.length; i++) {
+          if (s_arr[i] == 'type' && !item['type']) continue; //list
+          if (item[s_arr[i]].search(s_rgx) != -1) return true;
+        }
+      });
+    }
+    return s_data;
   }
   
   function db_supportCheck(data, name, value) {
@@ -935,7 +981,7 @@ function mydb_bookmark() {
       if (note == 'get') return;
       
       if (note != 'start') {
-        el('.db_notif span').innerHTML = 'Done';
+        db_info('Done');
         db_resetForm('remove');
       }
       
@@ -946,8 +992,7 @@ function mydb_bookmark() {
       // search
       query = note != 'start' && is_search ? el('.db_search input').value : query; //if data updated and "is_search = true" then show search
       if (query) {
-        var key_rgx = new RegExp(escapeRegex(query), 'ig');
-        var search_data = main_arr.filter(item => (item.id.search(key_rgx) != -1 || item.bmdb.search(key_rgx) != -1 || item.title.search(key_rgx) != -1 || item.alternative.search(key_rgx) != -1 || item.number.search(key_rgx) != -1 || item.note.search(key_rgx) != -1 || ('type' in item && item.type.search(key_rgx) != -1) || item.host.search(key_rgx) != -1));
+        var search_data = db_searchFilter('main', main_arr, query);
         db_searchResult(search_data);
       }
     });
@@ -1015,7 +1060,9 @@ function mydb_bookmark() {
     var b_txt = '';
     // css control already in database tools
     // css bookmark
-    b_txt += '<style>.db_100{width:100%;}.db_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark ::-webkit-input-placeholder{color:#757575;}._bmark ::placeholder{color:#757575;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;/*flex-direction:column;*/background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.db_shide{left:-350px;}._bmark ._db{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;text-transform:initial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bmark .db_next{padding:2px 4px;background:transparent;}.db_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.db_line_top{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.db_space{margin:10px 0;}._db.fp_content{margin:auto;}.db_text{padding:4px 8px;margin:4px;color:#ddd;}.db_btn_radio input[type="radio"]{display:none;}.db_btn_radio input[type="radio"]+label:before{content:none;}.db_btn_radio input[type="radio"]:checked+label,._bmark .db_selected,._bmark:not(.db_mobile) button:not(.db_no_hover):hover{background:#4267b2;border-color:#4267b2;}._bmark .db_active{background:#238636;border-color:#238636;}._bmark .db_danger{background:#d7382d;border-color:#d7382d;}.db_border{padding:1px 6px;border:1px solid #ddd;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}._bmark ul{padding:0;margin:0;list-style:none;}._bmark input[type="text"]{display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}._bmark input[type="text"]:hover{border-color:#3e3949;}._bmark label [type="radio"],._bmark label [type="checkbox"]{display:initial;margin:-2px 6px 0 0;vertical-align:middle;}.bmark_db:not(.db_s_shide) .db_bm_show .bm_list{max-height:25vh !important;}.db_bm_show .bm_similar .bm_main{margin:5px;border:4px solid #4267b2;}.db_bm_show .bm_similar .bm_main .bm_edit{background:#4267b2;border:0;}.db_bm_show .bm_list,.db_result .bs_list{overflow-y:auto;}.db_result li,.db_bm_show li{border-width:1px;}._bmark .db_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.db_bg,.bm_index{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.db_cover img{max-width:100px;}.db_radio label,.db_cbox label{display:inline-block;margin:5px 10px 5px 0;}._bmark ._db[disabled],._bmark ._db[disabled]:hover,._bmark .db_disabled{background:#252428;color:#555;border-color:#252428;cursor:not-allowed;}.bmark_db.db_s_shide .db_result,.db_hidden{display:none;}</style>';
+    b_txt += '<style>.db_100{width:100%;}.db_50{width:50%;}._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark ::-webkit-input-placeholder{color:#757575;}._bmark ::placeholder{color:#757575;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;/*flex-direction:column;*/background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.db_shide{left:-350px;}._bmark ._db{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;text-transform:initial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bmark .db_next{padding:2px 4px;background:transparent;}.db_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.db_line_top{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.db_space{margin:10px 0;}._db.fp_content{margin:auto;}.db_text{padding:4px 8px;margin:4px;color:#ddd;}.db_btn_radio input[type="radio"]{display:none;}.db_btn_radio input[type="radio"]+label:before{content:none;}.db_btn_radio input[type="radio"]:checked+label,._bmark .db_selected,._bmark:not(.db_mobile) button:not(.db_no_hover):hover{background:#4267b2;border-color:#4267b2;}._bmark .db_active{background:#238636;border-color:#238636;}._bmark .db_danger{background:#d7382d;border-color:#d7382d;}.db_border{padding:1px 6px;border:1px solid #ddd;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}._bmark ul{padding:0;margin:0;list-style:none;}._bmark input[type="text"]{display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}._bmark input[type="text"]:hover{border-color:#3e3949;}._bmark label [type="radio"],._bmark label [type="checkbox"]{display:initial;margin:-2px 6px 0 0;vertical-align:middle;}._bmark input[readonly]{cursor:default;background:#333 !important;}';
+    b_txt += '.db_out{padding:4px;}.bmark_db:not(.db_s_shide) .db_bm_show .bm_list{max-height:25vh !important;}.db_bm_show .bm_similar .bm_main{margin:5px;border:4px solid #4267b2;}.db_bm_show .bm_similar .bm_main .bm_edit{background:#4267b2;border:0;}.db_bm_show .bm_list,.db_result .bs_list{overflow-y:auto;}.db_result li,.db_bm_show li{border-width:1px;}.db_data .db_s_help_note{padding-bottom:8px;}';
+    b_txt += '._bmark .db_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}.db_bg,.db_ibg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.db_cover img{max-width:100px;}.db_radio label,.db_cbox label{display:inline-block;margin:5px 10px 5px 0;}._bmark ._db[disabled],._bmark ._db[disabled]:hover,._bmark .db_disabled{background:#252428;color:#555;border-color:#252428;cursor:not-allowed;}.bmark_db.db_s_shide .db_result,.db_hidden{display:none;}</style>';
     // css mobile
     b_txt += '<style>.db_mobile .bmark_db{width:80%;}.db_mobile .bmark_db.db_shide{left:-80%;}.db_mobile._bmark ._db{font-size:16px;}.db_mobile._bmark .db_toggle{right:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;text-shadow:-1px 0 #000,0 1px #000,1px 0 #000,0 -1px #000;}</style>';
     // html
@@ -1027,8 +1074,13 @@ function mydb_bookmark() {
     b_txt += '<div class="db_result db_line db_hidden"></div>';
     b_txt += '<div class="db_tr1">';
     b_txt += '<div class="db_td1">';
+    b_txt += '<div class="db_s_help_note _db db_hidden">';
+    b_txt += '<b>How to use Advanced Search:</b><br/>In the search box, enter one of the Search operators below.';
+    b_txt += '<br/><br/><b>Search operators</b><br/>id, bmdb, title, alternative, number, note, type, host';
+    b_txt += '<br/><br/><b>Examples:</b><br/>»&#160;&#160;host::mangaku<br/>»&#160;&#160;title::level@type::manhwa';
+    b_txt += '</div>';// .db_s_help_note
     b_txt += '<div class="db_bm_show db_line db_hidden"></div>';
-    b_txt += '<div class="db_search db_line flex"><input class="_db db_100" type="text" placeholder="Search ('+ mydb_type +')..."><button class="_db">GO</button></div>';
+    b_txt += '<div class="db_search db_line flex"><input class="_db db_100" type="text" placeholder="Search ('+ mydb_type +')..."><span class="db_s_help _db" title="How to use Advanced Search">?</span><button class="_db">GO</button></div>';
     b_txt += '</div>';// .db_td1
     b_txt += '<div class="db_menu2 db_line flex_wrap db_hidden">';
     b_txt += '<div class="db_td2 db_100 db_hidden">';
@@ -1038,10 +1090,10 @@ function mydb_bookmark() {
     b_txt += '</div>';// .db_td2
     b_txt += '<div class="db_bm_menu flex db_100">';
     b_txt += '<div class="db_btn_radio flex"><input type="radio" id="comic" name="bookmark" value="comic"><label class="_db db_comic" for="comic">Comic</label><input type="radio" id="novel" name="bookmark" value="novel"><label class="_db db_novel" for="novel">Novel</label><input type="radio" id="anime" name="bookmark" value="anime"><label class="_db db_anime" for="anime">Anime</label></div>';
-    b_txt += '<span class="f_grow"></span><button class="db_out _db">&#10006;</button>';
+    b_txt += '<span class="f_grow"></span><button class="db_out _db" title="Logout"><svg height="18" width="18" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M400 54.1c63 45 104 118.6 104 201.9 0 136.8-110.8 247.7-247.5 248C120 504.3 8.2 393 8 256.4 7.9 173.1 48.9 99.3 111.8 54.2c11.7-8.3 28-4.8 35 7.7L162.6 90c5.9 10.5 3.1 23.8-6.6 31-41.5 30.8-68 79.6-68 134.9-.1 92.3 74.5 168.1 168 168.1 91.6 0 168.6-74.2 168-169.1-.3-51.8-24.7-101.8-68.1-134-9.7-7.2-12.4-20.5-6.5-30.9l15.8-28.1c7-12.4 23.2-16.1 34.8-7.8zM296 264V24c0-13.3-10.7-24-24-24h-32c-13.3 0-24 10.7-24 24v240c0 13.3 10.7 24 24 24h32c13.3 0 24-10.7 24-24z"/></svg></button>';
     b_txt += '</div>';// .db_bm_menu
     b_txt += '</div>';// .db_menu2
-    b_txt += '<div class="db_menu flex"><button class="db_menu_shide _db">Menu</button><button class="db_new_gen _db" title="auto generate '+ mydb_type +' list">+</button><span class="f_grow"></span><span class="db_total _db db_active db_hidden"></span></div>';
+    b_txt += '<div class="db_menu flex"><button class="db_menu_shide _db">Menu</button><button class="db_new_gen _db" title="Auto generate '+ mydb_type +' list">+</button><span class="f_grow"></span><span class="db_total _db db_active db_hidden"></span></div>';
     b_txt += '</div>';// .db_tr1
     b_txt += '</div>';// .db_data
     b_txt += '<div class="db_login flex_wrap db_hidden">';
@@ -1050,7 +1102,7 @@ function mydb_bookmark() {
     b_txt += '<div class="flex"><button class="db_in _db">Login</button><span class="lg_notif _db db_selected db_hidden"></span></div>';
     b_txt += '</div>';// .db_login
     b_txt += '<div class="db_toggle _db db_100 flex f_center">&#9733;</div>';
-    b_txt += '<div class="db_notif flex flex_perfect" style="position:absolute;"><span class="_db fp_content">Loading..</span></div>';
+    b_txt += '<div class="db_notif flex flex_perfect" style="position:absolute;"><span class="db_notif_text _db fp_content">Loading..</span></div>';
     b_txt += '</div>';// .bmark_db
     
     var b_html = document.createElement('div');
@@ -1069,8 +1121,8 @@ function mydb_bookmark() {
       if (user) { //User is signed in.
         mydb_login = true;
         db_startData(); //Start firebase data
+        db_info('RESET');
         el('.db_login').classList.add('db_hidden');
-        el('.db_notif').classList.add('db_hidden');
         el('.db_data').classList.remove('db_hidden');
       } else {
         mydb_login = false;
@@ -1186,12 +1238,18 @@ function mydb_bookmark() {
       });
     });
     
+    el('.db_search .db_s_help').onclick = function() {
+      this.classList.toggle('db_danger');
+      el('.db_s_help_note').classList.toggle('db_hidden');
+    };
+    
     el('.db_search button').onclick = function() {
+      el('.db_search .db_s_help').classList.remove('db_danger');
+      el('.db_s_help_note').classList.add('db_hidden');
       if (el('.db_search input').value == '') return;
       is_search = true;
       document.activeElement.blur();
-      el('.db_notif span').innerHTML = 'Loading..';
-      el('.db_notif').classList.remove('db_hidden');
+      db_info('Loading..');
       db_mainData('search', el('.db_search input').value);
     };
     
@@ -1240,7 +1298,7 @@ function mydb_bookmark() {
           }
         }
         
-        // if bookmark id is "none" then it must be filled
+        // if bookmark id is "none", then it must be filled
         var gen_cover = el('.seriestucontent img') || el('.animefull .bigcontent img') || el('.komikinfo .bigcontent img') || el('.profile-manga .summary_image img') || el('.series .series-thumb img') || el('#Informasi .ims img') || el('.komik_info-content-thumbnail img') || el('.info-left img') || el('meta[property="og:image"]') || false;
         if (gen_cover) {
           var cover_tag = gen_cover.tagName == 'IMG' ? gen_cover.src : el('meta[property="og:image"]').getAttribute('content');
@@ -1262,26 +1320,20 @@ function mydb_bookmark() {
     
     el('.db_form_btn .db_set').onclick = function() {
       if (!db_formCheck()) return;
-      el('.db_notif span').innerHTML = 'Loading..';
-      el('.db_notif').classList.remove('db_hidden');
+      db_info('Loading..');
       db_checkData('id', db_pathId(true)).then(function(res) {
         if (!res) {
           db_changeData('set');
         } else {
-          el('.db_notif span').innerHTML = (mydb_select == 'source' ? mydb_select : mydb_type) +' already exist';
-          el('.db_notif span').classList.add('db_danger');
-          setTimeout(function() {
-            el('.db_notif').classList.add('db_hidden');
-            el('.db_notif span').classList.remove('db_danger');
-          }, 1500);
+          var exist_str = (mydb_select == 'source' ? mydb_select : mydb_type) +' already exist';
+          db_info(exist_str, 'danger', true);
         }
       });
     };
     
     el('.db_form_btn .db_btn_update').onclick = function() {
       if (!db_formCheck()) return;
-      el('.db_notif span').innerHTML = 'Loading..';
-      el('.db_notif').classList.remove('db_hidden');
+      db_info('Loading..');
       db_changeData('update');
     };
   }
@@ -1295,7 +1347,7 @@ function mydb_bookmark() {
   var is_form = false;
   var is_index = false;
   var is_isearch = false;
-  var is_iadvanced = false;
+  var is_advanced = false;
   var is_mobile = isMobile(); //from database tools
   var nav_max = 3; // result always: nav_max + 2 = 5
   var index_max = 12;
