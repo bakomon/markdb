@@ -866,7 +866,7 @@ function mydb_bookmark() {
       var s_filter = query.split('@');
       for (var i = 0; i < s_filter.length; i++) {
         var s_operator = s_filter[i].split('::');
-        s_arr[s_operator[0]] = s_operator[1];
+        s_arr[s_operator[0].toLowerCase()] = s_operator[1];
       }
       // Filter array multiple conditions https://stackoverflow.com/a/31831801/7598333
       s_data = arr.filter(function(item) {
