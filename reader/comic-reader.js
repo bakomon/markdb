@@ -947,7 +947,7 @@ function mydb_comic_reader() {
       // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
       var windowOpenBackup = window.open;
       window.open = function(url, name, features) {
-        console.log('window.open caught!');
+        console.log('window.open caught! url: '+ url);
         //window.open = windowOpenBackup;
       };
       
