@@ -17,6 +17,24 @@ function mydb_tools_fnc() {
     return elem;
   };
   
+  /* Restore native window.open https://stackoverflow.com/a/48006884/7598333 */
+  openInNewTab = function(url) {
+    var _iframe = document.createElement('iframe');
+    document.documentElement.appendChild(_iframe);
+    
+    var _window = _iframe.contentWindow;
+    window.nativeOpen = _window.open;   
+    
+    try {
+        window.open(url);
+    } catch (e) {
+        console.warn(e);
+    }
+    
+    window.nativeOpen(url);
+    _iframe.parentElement.removeChild(_iframe);
+  }
+  
   /* Add script to head https://codepen.io/sekedus/pen/QWKYpVR */
   addScript = function(n,o,t,e,s) {
     /* if a <script> tag failed to load https://stackoverflow.com/a/44325793/7598333 */
@@ -516,7 +534,7 @@ var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|lis
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|11/12/2021, 12:00:27 AM';
+var local_interval = 'manual|12/25/2021, 9:10:37 PM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
@@ -541,7 +559,7 @@ if (typeof el !== 'undefined') {
   localStorage.setItem('mydb_support', 'false');
 } else {
   /* global variables */
-  var global_arr = ['el','addScript','isMobile','crossStorage','genArray','genSource','changeSource','ls_saveLocal','getId'];
+  var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','genSource','changeSource','ls_saveLocal','getId'];
   for (var g = 0; g < global_arr.length; g++) {
     window[global_arr[g]];
   }
