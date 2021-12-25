@@ -23,15 +23,9 @@ function mydb_tools_fnc() {
     document.documentElement.appendChild(_iframe);
     
     var _window = _iframe.contentWindow;
-    window.nativeOpen = _window.open;   
-    
-    try {
-        window.open(url);
-    } catch (e) {
-        console.warn(e);
-    }
-    
+    window.nativeOpen = _window.open;
     window.nativeOpen(url);
+    
     _iframe.parentElement.removeChild(_iframe);
   }
   
@@ -534,7 +528,7 @@ var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|lis
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|12/25/2021, 9:10:37 PM';
+var local_interval = 'manual|12/25/2021, 9:32:55 PM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
