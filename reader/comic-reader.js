@@ -178,7 +178,7 @@ function mydb_comic_reader() {
     if (chcdn) r_txt += '<div class="rc_cdn rc_btn _rc" title="'+ cdnName +'">CDN</div>';
     if (chgi) r_txt += '<div class="rc_size rc_btn _rc">'+ imgSize +'</div>';
     r_txt += '</div>'; //.rc_others
-    r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" oncontextmenu="window.open(this.dataset.href)" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
+    r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" oncontextmenu="openInNewTab(this.dataset.href)" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
     r_txt += '<div class="rc_home rc_line rc_100"><button class="rc_btn _rc" onclick="window.location.href=\'//\'+window.location.hostname">Homepage</button></div>';
     r_txt += '<div class="rc_load rc_line flex">';
     r_txt += '<button class="rc_ld_img rc_btn _rc" title="alt + a">Load</button>';
@@ -459,7 +459,7 @@ function mydb_comic_reader() {
         imgSize = imgSize == 0 || imgSize > 800 ? 's'+ imgSize : 's1600';
       }
       
-      reader_html += '<div onclick="var img'+ (j+1) +'=this.querySelector(\'img\');window.open(img'+ (j+1) +'.src?img'+ (j+1) +'.src:img'+ (j+1) +'.dataset.readImg)" title="'+ (j+1) +' - '+ imgLink +'"><img style="min-height:750px;" data-read-img="'+ imgLink +'" alt="'+ (j+1) +'"></div>';
+      reader_html += '<div onclick="var img'+ (j+1) +'=this.querySelector(\'img\');openInNewTab(img'+ (j+1) +'.src?img'+ (j+1) +'.src:img'+ (j+1) +'.dataset.readImg)" title="'+ (j+1) +' - '+ imgLink +'"><img style="min-height:750px;" data-read-img="'+ imgLink +'" alt="'+ (j+1) +'"></div>';
     }
     reader_html += '</div>';
     
@@ -944,14 +944,17 @@ function mydb_comic_reader() {
         removeElem('iframe[style*="display: none"], iframe[style*="opacity: 0"]', 'all');
       };
       
-      // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
+      // Disable window.open
+      window.open = null;
+      
+      /*// Override window.open() https://codepen.io/crmolloy/pen/YqdagV
       var windowOpenBackup = window.open;
-      window.open = function(url, name, features) {
-        console.log('window.open caught!');
-        window.open = windowOpenBackup;
+      openInNewTab = function(url, name, features) {
+        console.log('openInNewTab caught!');
+        openInNewTab = windowOpenBackup;
       };
       
-      /*var el_a = el('a', 'all');
+      var el_a = el('a', 'all');
       for (var i = 0; i < el_a.length; i++) {
         var new_a = copyAttribute(el_a[i], 'i');
         new_a.classList.add('link-mod');
@@ -963,12 +966,12 @@ function mydb_comic_reader() {
       el('i[data-href]', 'all').forEach(function(item) {
         item.addEventListener('click', function(e) {
           //e.preventDefault();
-          //window.open(item.dataset.href);
+          //openInNewTab(item.dataset.href);
           wl.href = item.dataset.href;
         });
         // right click
         item.addEventListener('contextmenu', function(e) {
-          window.open(item.dataset.href);
+          openInNewTab(item.dataset.href);
         });
       });*/
     }
