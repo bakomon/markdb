@@ -944,17 +944,14 @@ function mydb_comic_reader() {
         removeElem('iframe[style*="display: none"], iframe[style*="opacity: 0"]', 'all');
       };
       
-      // Disable window.open
-      window.open = null;
-      
-      /*// Override window.open() https://codepen.io/crmolloy/pen/YqdagV
+      // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
       var windowOpenBackup = window.open;
-      openInNewTab = function(url, name, features) {
-        console.log('openInNewTab caught!');
-        openInNewTab = windowOpenBackup;
+      window.open = function(url, name, features) {
+        console.log('window.open caught!');
+        //window.open = windowOpenBackup;
       };
       
-      var el_a = el('a', 'all');
+      /*var el_a = el('a', 'all');
       for (var i = 0; i < el_a.length; i++) {
         var new_a = copyAttribute(el_a[i], 'i');
         new_a.classList.add('link-mod');
