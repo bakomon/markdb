@@ -940,14 +940,14 @@ function mydb_bookmark() {
       s_txt += firstCase(data.id, '-');
     }
     s_txt += '</div>';
-    s_txt += '<div class="db_100 '+ (not_support ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
+    s_txt += '<div class="db_100 '+ (not_support && note != 'db_startData' ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
     if (note != 'db_startData') {
       s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
       if ('read' in data && data.read != '') s_txt += '<button class="_db db_selected'+ (chk ? '' : ' db_hidden') +'" onclick="openInNewTab(\''+ data.read +'\')" title="'+ data.read +'">Read</button>';
       s_txt += '<button class="bm_edit _db'+ (chk ? '' : ' db_hidden') +'" data-id="list">Edit</button>';
       s_txt += '<button class="bm_delete _db'+ (chk ? '' : ' db_hidden') +'" title="Delete">X</button>';
     }
-    s_txt += '<span class="bm_site db_text'+ (wh.indexOf(data.host) != -1 ? ' db_hidden' : (not_support ? ' db_100 t_center' : '')) +'" onclick="openInNewTab(\''+ data.url +'\')">'+ data.host +'</span>';
+    s_txt += '<span class="bm_site db_text'+ (wh.indexOf(data.host) != -1 ? ' db_hidden' : (not_support && note != 'db_startData' ? ' db_100 t_center' : '')) +'" onclick="openInNewTab(\''+ data.url +'\')">'+ data.host +'</span>';
     s_txt += '</div>';
     s_txt += '</li>';
     
