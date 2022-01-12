@@ -988,7 +988,6 @@ function mydb_comic_reader() {
   var loadSize = false;
   var loadImage = false; //all images loaded
   var isPause = false; //pause images from loading
-  var isProject = false;
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from database tools
   var autoLike = false;
   var imgSize = ''; //image size
@@ -1006,14 +1005,14 @@ function mydb_comic_reader() {
     for (var n = 0; n < crList.length; n++) {
       if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && (crList[n].id == getId('bookmark').url || crList[n].url.indexOf(wp) != -1)) {
         console.log('project page: '+ crList[n].url);
-        isProject = true;
+        mydb_project = true;
         break;
       }
     }
   }
   
   // Start reader
-  if ((wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(number_t_rgx) != -1)) && !isProject) {
+  if ((wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(number_t_rgx) != -1)) && !mydb_project) {
     console.log('page: chapter');
     zoomID = getId('reader');
     if (localStorage.getItem(zoomID)) localStorage.removeItem(zoomID); //temporary
