@@ -246,15 +246,17 @@ function mydb_tools_fnc() {
   };
   
   getId = function(note) {
-    //old = ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
     var id = '';
-    var titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(baca|read|download)\s/i, '').replace(/\s?(man(ga|hwa|hua)|[kc]omi[kc]|novel|anime)\s?/i, '\x20').replace(number_t_rgx, ' ').replace(/[\||\-|\–|»](?:.(?![\||\-|\–|»]))+$/, '').replace(/^\s+/g, '');
+    var titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(baca|read|download)\s/i, '').replace(/\s?(man(ga|hwa|hua)|[kc]omi[kc]|novel|anime)\s?/i, '\x20');
+    if (!mydb_project) titleId = titleId.replace(number_t_rgx, ' ');
+    titleId = titleId.replace(/[\||\-|\–|»](?:.(?![\||\-|\–|»]))+$/, '').replace(/^\s+/g, ''); //old = ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
+    
     var wpId = window.location.pathname.match(id_w_rgx)[1].replace(/-((bahasa|sub(title)?)-)?indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/([-_])+/g, '$1').replace(/^[\W]+/, '').replace(/(\.html?|[-_]+)$/i, '').toLowerCase();
     
-    if (note == 'reader') {
+    if (note == 'reader') { //id from title, bug: if title is project and contains "episode" or "chapter"
       titleId = titleId.replace(/[^\s\w]/g, '').replace(/\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
       id = wh.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
-    } else if (note == 'bookmark') {
+    } else if (note == 'bookmark') { //id from url
       titleId = titleId.replace(/\s+$/g, '').replace(/\|/g, '').replace(/[\n"\&\r\t\b\f]/g, '\\$&'); //JSON.escape
       id = '{"url":"'+ wpId +'","title":"'+ titleId +'"}';
       id = JSON.parse(id);
@@ -346,6 +348,7 @@ function mydb_tools() {
           var errorMessage = error.message;
           console.error('!! Error: function checkLogin(, code: '+ errorCode +', message: '+ errorMessage);
           alert('!! Error: function checkLogin(\n'+ errorMessage);
+          localStorage.setItem('mydb_support', 'false');
         });
       }
     }
@@ -486,9 +489,17 @@ function mydb_tools() {
 }
 
 
-/*
+/* temporary
 var host_rgx = /(oploverz|webtoons|mangaku|mangaindo|komikstation|komikcast|westmanga|mangakita|mangashiro|mangacanblog|maid|ngomik|mangakyo|kiryuu|komikav|komiku|manhwa-san|matakomik|komikid|kombatch|mangceh|sektekomik|manhuaid|pojokmanga|sheamanga|klikmanga|bacakomik|mangayu|klankomik|boosei|comicfx|yuumanga|wordhero|gurukomik|masterkomik|kaisarkomik|softkomik|katakomik|mgkomik|kumamanga|komikru|komikindo|komiknesia|mangakane|tenseiscans|komikempus|kurutonime|nekomik|manhwaindo|wrt|mangacdn|wib|gabutscans|daveyscans|jscanla|nyanfm|mangapark|mangadex|mangabat|zeroscans|readmanhua|readmng|hatigarmscan[sz]|funmanga|bato|leviatanscans|merakiscans|mangarawr|toonily|mangasushi|reaperscans|asurascans|secretscans|rawdevart|azoramanga|animesc-kun|readcmic|mangapaus|ninkomik)\.((blogspot|wordpress)\.)?((co|my|web)(m|\.id)?|net|org|me|in|tv|id|to|jp|bz|pw|nl|info|xyz|pro|site|club)\/?(.*)/i;
 */
+
+// remove old data, temporary
+if (localStorage.getItem('comic_tools_bookmark')) localStorage.removeItem('comic_tools_bookmark');
+if (localStorage.getItem('comic_tools_reader')) localStorage.removeItem('comic_tools_reader');
+if (localStorage.getItem('comic_tools_list')) localStorage.removeItem('comic_tools_list');
+if (localStorage.getItem('mydb_tools_source')) localStorage.removeItem('mydb_tools_source');
+if (localStorage.getItem('mydb_source_check')) localStorage.removeItem('mydb_source_check');
+if (document.cookie.match(RegExp('(?:^|;\\s*)reader-zoom=([^;]*)'))) document.cookie = 'reader-zoom=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
 
 /* ============================================================ */
@@ -509,6 +520,7 @@ var mydb_source, mydb_type, mydb_type_bkp, mydb_read, mydb_zoom;
 var mydb_login = false;
 var mydb_firebase = false;
 var mydb_change = false;
+var mydb_project = false;
 var mydb_error = {};
 var mydb_select = 'list';
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
@@ -520,15 +532,15 @@ var cross_url = 'https://bakomon.blogspot.com';
 var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var wh_rgx = /^(w{3}|web|m(obile)?|read|data)\./i;
-var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/i; /* check id from <title> */
+var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/gi; /* check id from <title> */
 var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
 var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
-var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all)[-\/])?(\w{1,2}|project|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
+var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|project|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
 var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|list|release|author|artist)\/.*\/?$/i;
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|12/25/2021, 9:32:55 PM';
+var local_interval = 'manual|1/12/2022, 8:18:30 PM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
@@ -540,14 +552,6 @@ var live_test_comic_r = false;
   - https://purge.jsdelivr.net/npm/YOUR_PACKAGE@VERSION/foo/bar
 - gitcdn last commit: https://gitcdn.herokuapp.com/cdn/USER/YOUR_PACKAGE/LATEST_COMMIT/foo/bar
 */
-
-// remove old data, temporary
-if (localStorage.getItem('comic_tools_bookmark')) localStorage.removeItem('comic_tools_bookmark');
-if (localStorage.getItem('comic_tools_reader')) localStorage.removeItem('comic_tools_reader');
-if (localStorage.getItem('comic_tools_list')) localStorage.removeItem('comic_tools_list');
-if (localStorage.getItem('mydb_tools_source')) localStorage.removeItem('mydb_tools_source');
-if (localStorage.getItem('mydb_source_check')) localStorage.removeItem('mydb_source_check');
-if (document.cookie.match(RegExp('(?:^|;\\s*)reader-zoom=([^;]*)'))) document.cookie = 'reader-zoom=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
 if (typeof el !== 'undefined') {
   localStorage.setItem('mydb_support', 'false');
