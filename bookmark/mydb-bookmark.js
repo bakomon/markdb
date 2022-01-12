@@ -989,7 +989,7 @@ function mydb_bookmark() {
       }
     }
     
-    if (el('.bmark_db').classList.contains('db_shide') && (data.url.indexOf(wp) != -1 || (wp.search(number_w_rgx) == -1 && el('title').innerHTML.search(number_t_rgx) == -1))) {
+    if (el('.bmark_db').classList.contains('db_shide') && (mydb_project || data.url.indexOf(wp) != -1 || (wp.search(number_w_rgx) == -1 && el('title').innerHTML.search(number_t_rgx) == -1))) {
       el('.db_toggle').click();
     }  
     
