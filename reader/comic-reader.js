@@ -1004,7 +1004,7 @@ function mydb_comic_reader() {
   if (localStorage.getItem('mydb_comic_list')) {
     var crList = JSON.parse(localStorage.getItem('mydb_comic_list'));
     for (var n = 0; n < crList.length; n++) {
-      if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && crList[n].url.indexOf(wp) != -1) {
+      if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && (crList[n].id == getId('bookmark').url || crList[n].url.indexOf(wp) != -1)) {
         console.log('project page: '+ crList[n].url);
         isProject = true;
         break;
