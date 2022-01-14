@@ -964,6 +964,7 @@ function mydb_bookmark() {
     is_exist = true;
     var smlr_note = 'similar';
     db_showHtml(data);
+    el('title').innerHTML = '('+ data.number +') '+ el('title').innerHTML;
     el('.db_bm_show').classList.remove('db_hidden');
     console.log(`${mydb_type} data from: ${note}`);
     
