@@ -572,8 +572,8 @@ var login_pass = '';
 var local_interval = 'manual|1/18/2022, 7:52:08 AM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
-var live_test_bookmark = true;
-var live_test_comic_r = true;
+var live_test_bookmark = false;
+var live_test_comic_r = false;
 /* 
 - use "https://cdn.statically.io" or "https://cdn.jsdelivr.net"
 - jsdelivr purge cache: 
