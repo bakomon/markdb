@@ -132,7 +132,7 @@ function mydb_bookmark() {
       .then(function() {
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('remove');
         if (is_index) db_startIndex('remove');
-        if (mydb_select == 'source') changeSource();
+        if (mydb_select == 'source') sourceChange();
       })
       .catch(function(error) {
         db_info('Error!!', 'danger', true);
@@ -176,13 +176,13 @@ function mydb_bookmark() {
   function db_changeData(note) {
     firebase.app(fbase_app).database().ref(db_pathId(true))[note](db_genData(note), (error) => {
       if (error) {
-        console.log(error);
+        console.log('!!Error: '+ error);
         db_info('Error!!', 'danger', true);
       } else {
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData(note);
         if (note == 'update' && is_index) db_startIndex(note);
         if (mydb_select == 'source') {
-          changeSource();
+          sourceChange();
           if (note == 'set') {
             db_info('Done');
             db_resetForm('remove');
@@ -964,7 +964,7 @@ function mydb_bookmark() {
     is_exist = true;
     var smlr_note = 'similar';
     db_showHtml(data);
-    el('title').innerHTML = '('+ data.number +') '+ el('title').innerHTML;
+    el('title').innerHTML = '('+ data.number +') '+ el('title').innerHTML.replace(/^\([^\)]+\)\s/, '');
     el('.db_bm_show').classList.remove('db_hidden');
     console.log(`${mydb_type} data from: ${note}`);
     
@@ -1106,7 +1106,7 @@ function mydb_bookmark() {
         }
       });
       
-      var main_list = localStorage.getItem(`mydb_${mydb_type}_list`)
+      var main_list = localStorage.getItem(`mydb_${mydb_type}_list`);
       if (main_list) {
         main_arr = JSON.parse(main_list);
         console.log(`${mydb_type} bookmark: `+ main_arr.length);
@@ -1198,7 +1198,7 @@ function mydb_bookmark() {
     b_txt += '<div class="flex"><button class="db_in _db">Login</button><span class="lg_notif _db db_selected db_hidden"></span></div>';
     b_txt += '</div>';// .db_login
     b_txt += '<div class="db_toggle _db db_100 flex f_center">&#9733;</div>';
-    b_txt += '<div class="db_notif flex flex_perfect" style="position:absolute;"><span class="db_notif_text _db fp_content">Loading..</span></div>';
+    b_txt += '<div class="db_notif flex flex_perfect db_hidden" style="position:absolute;"><span class="db_notif_text _db fp_content">Loading..</span></div>';
     b_txt += '</div>';// .bmark_db
     
     var b_html = document.createElement('div');
@@ -1267,8 +1267,7 @@ function mydb_bookmark() {
       firebase.app(fbase_app).auth().signInWithEmailAndPassword(userEmail, userPass).then((user) => {
         el('.lg_notif').classList.add('db_hidden');
       }).catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
+        console.error('!! Error: Firebase login, code: '+ error.code +', message: '+ error.message);
         el('.lg_notif').innerHTML = 'Error!!';
       });
     };
@@ -1412,17 +1411,7 @@ function mydb_bookmark() {
       clearInterval(db_check);
       db_startBookmark();
       
-      /* always check & update source */
-      crossStorage.get('mydb_source_data', function(res) {
-        mydb_change = true;
-        if (res == null || res == 'error') {
-          genSource('change');
-        } else {
-          localStorage.setItem('mydb_source_data', res);
-          mydb_source = JSON.parse(res);
-          genSource('check');
-        }
-      });
+      sourceCheck('server', JSON.stringify(mydb_source)); //always check & update "source" data
     }
   }, 100);
 }
