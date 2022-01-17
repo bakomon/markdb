@@ -296,93 +296,128 @@ function mydb_tools() {
     return my_txt;
   }
   
-  changeSource = function() {
+  sourceChange = function() {
     var u_obj = {update: new Date().getTime()};
     firebase.app(fbase_app).database().ref('bookmark/source').update(u_obj, (error) => {
-      if (error) alert('!!ERROR: changeSource()');
-    });
-  };
-  
-  genSource = function(note) {
-    if (!mydb_change) return;
-    mydb_change = false;
-    
-    var path = 'bookmark/source';
-    if (note == 'check') path = path +'/update';
-    
-    firebase.app(fbase_app).database().ref(path).once('value').then(function(snapshot) {
-      var data = snapshot.val();
-      if (note == 'check') {
-        if (data != mydb_source.update) {
-          mydb_change = true;
-          changeSource();
-          genSource('change');
-        }
+      if (error) {
+        alert('!!ERROR: sourceChange(');
       } else {
-        /*var s_txt = '{"anime":'+ genObject(genArray(data.anime)) +',"comic":'+ genObject(genArray(data.comic)) +',"novel":'+ genObject(genArray(data.novel)) +'}';*/
-        var s_txt = JSON.stringify(data);
-        localStorage.setItem('mydb_source_data', s_txt);
-        crossStorage.set('mydb_source_data', s_txt);
-        if (note != 'change') sourceCheck('server', s_txt);
+        mydb_change = true;
+        sourceGen('change');
       }
     });
   };
   
-  function checkLogin() {
+  sourceGen = function(note) {
+    if (!mydb_change) return;
+    mydb_change = false;
+    
+    firebase.app(fbase_app).database().ref('bookmark/source').once('value').then(function(snapshot) {
+      var data = snapshot.val();
+      /*var sc_txt = '{"anime":'+ genObject(genArray(data.anime)) +',"comic":'+ genObject(genArray(data.comic)) +',"novel":'+ genObject(genArray(data.novel)) +'}';*/
+      var sc_txt = JSON.stringify(data);
+      localStorage.setItem('mydb_source_data', sc_txt);
+      crossStorage.set('mydb_source_data', sc_txt);
+      mydb_source = data;
+      if (note == 'start') startSource();
+    });
+  };
+  
+  sourceCheck = function(note, data) {
+    if (data && data.search(/null|error/i) == -1) {
+      data = JSON.parse(data);
+      if (note == 'local') {
+        crossStorage.get('mydb_source_data', function(res) {
+          if (res == null || res == 'error') {
+            mydb_change = true;
+            sourceGen('start');
+          } else {
+            localStorage.setItem('mydb_source_data', res);
+            mydb_source = JSON.parse(res);
+            startSource();
+          }
+        });
+      } else if (note == 'cross') {
+        localStorage.setItem('mydb_source_data', JSON.stringify(data));
+        mydb_source = data;
+        startSource();
+      } else {
+        firebase.app(fbase_app).database().ref('bookmark/source/update').once('value').then(function(snapshot) {
+          if (data.update != snapshot.val()) {
+            mydb_change = true;
+            console.log('mydb: generate new source');
+            sourceGen('new');
+          }
+        });
+      }
+    } else {
+      loadFirebase('source');
+      var sc_check = setInterval(function() {
+        if (typeof firebase !== 'undefined' && typeof firebase.database !== 'undefined' && typeof firebase.auth !== 'undefined' && mydb_login) {
+          clearInterval(sc_check);
+          mydb_change = true;
+          sourceGen('start');
+        }
+      }, 100);
+    }
+  };
+  
+  function autoLogin() {
     /* Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102 */
     firebase.app(fbase_app).auth().onAuthStateChanged(function(user) {
       mydb_login = user ? true : false;
     });
     
-    if (mydb_login) {
-      genSource('login');
-    } else {
-      if (login_email == '' || login_pass == '') {
-        alert('!! Error: firebase login\nlogin_email or login_pass is empty');
-      } else {
-        /* auto login firebase */
-        firebase.app(fbase_app).auth().signInWithEmailAndPassword(login_email, login_pass).then((user) => {
-          genSource('auth');
-        }).catch(function(error) {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.error('!! Error: function checkLogin(, code: '+ errorCode +', message: '+ errorMessage);
-          alert('!! Error: function checkLogin(\n'+ errorMessage);
-          localStorage.setItem('mydb_support', 'false');
-        });
+    var al_chk = setInterval(function() {
+      if (typeof mydb_login !== 'undefined') {
+        clearInterval(al_chk);
+        if (mydb_login === false) {
+          if (login_email == '' || login_pass == '') {
+            alert('!!Error: firebase login\nlogin_email or login_pass is empty');
+          } else {
+            /* auto login firebase */
+            firebase.app(fbase_app).auth().signInWithEmailAndPassword(login_email, login_pass).then((user) => {
+              console.log('Firebase: logged-in');
+            }).catch(function(error) {
+              console.error('!! Error: function autoLogin(, code: '+ error.code +', message: '+ error.message);
+              alert('!! Error: function autoLogin(\n'+ error.message);
+              localStorage.setItem('mydb_support', 'false'); /* not support */
+            });
+          }
+        }
       }
-    }
+    }, 100);
   }
   
-  function loadFirebase() {
+  function loadFirebase(note) {
     if (typeof firebase == 'undefined') {
       mydb_firebase = true;
-      addScript('https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js')
+      addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-app.js`)
         .catch(() => {
           /* only use catch() :
           - https://stackoverflow.com/a/36213268/7598333
           - https://javascript.info/promise-basics#catch
           */
-          clearInterval(db_chk);
+          clearInterval(lf_chk);
           console.error('!!Error: can\'t load firebase.');
-          callScript('error');
+          if (localStorage.getItem('mydb_support') != 'true') callScript('error');
         });
     }
     
-    var db_chk = setInterval(function() {
+    var lf_chk = setInterval(function() {
       if (typeof firebase !== 'undefined') {
-        clearInterval(db_chk);
+        clearInterval(lf_chk);
         /* Initialize new app with different name https://stackoverflow.com/a/37603526/7598333 */
         firebase.initializeApp(fbase_config, fbase_app);
-        if (typeof firebase.database == 'undefined') addScript('https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js');
+        if (typeof firebase.database == 'undefined') addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-database.js`);
         var db2_chk = setInterval(function() {
           if (typeof firebase.database !== 'undefined') {
             clearInterval(db2_chk);
-            if (typeof firebase.auth == 'undefined') addScript('https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js');
+            if (typeof firebase.auth == 'undefined') addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-auth.js`);
             var db3_chk = setInterval(function() {
               if (typeof firebase.auth !== 'undefined') {
                 clearInterval(db3_chk);
-                checkLogin();
+                if (mydb_settings.auto_login || note == 'source') autoLogin();
               }
             }, 100);
           }
@@ -412,7 +447,7 @@ function mydb_tools() {
             clearInterval(cr_chk);
             mydb_comic_reader();
           }
-        });
+        }, 100);
       } else {
         if (mydb_type == 'comic') ls_saveLocal(js_comic_reader, 'mydb_tools_'+ mydb_type +'_reader', 'js', local_interval);
       }
@@ -423,7 +458,7 @@ function mydb_tools() {
           var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); /* cloudflare */
           var is_cf = chk_cf ? true : false;
           if (!is_cf && !mydb_read) {
-            if (!mydb_firebase) loadFirebase();
+            if (!mydb_firebase) loadFirebase('bookmark');
             if (live_test_bookmark) {
               var bm_chk = setInterval(function() {
                 if (typeof mydb_bookmark !== 'undefined') {
@@ -440,12 +475,12 @@ function mydb_tools() {
     } else {
       mydb_error = {"mydb_type":'"'+ mydb_type +'"',"note":'"'+ note +'"'};
       if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
-      localStorage.setItem('mydb_support', 'false');
+      localStorage.setItem('mydb_support', 'false'); /* not support */
       console.log('mydb_support: false');
     }
   }
   
-  function typeCheck(prop) {
+  function getType(prop) {
     var data = mydb_source[prop];
     for (var site in data) {
       if (data[site]['host'].indexOf(w_host) != -1 || data[site]['domain'].indexOf(w_host) != -1) {
@@ -456,17 +491,9 @@ function mydb_tools() {
     return false;
   }
   
-  function sourceCheck(note, data) {
-    mydb_source = data;
-    if (mydb_source && mydb_source.search(/null|error/i) == -1) {
-      if (note == 'cross') localStorage.setItem('mydb_source_data', mydb_source);
-      mydb_source = JSON.parse(mydb_source);
-      mydb_type = typeCheck('anime') || typeCheck('comic') || typeCheck('novel');
-      callScript('source');
-    } else {
-      mydb_change = true;
-      loadFirebase();
-    }
+  function startSource() {
+    mydb_type = getType('anime') || getType('comic') || getType('novel');
+    callScript('source');
   }
   
   
@@ -478,7 +505,7 @@ function mydb_tools() {
   
   if (document.head.innerHTML == '' || localStorage.getItem('mydb_support') == 'false' || wp.search(/\.(gif|webp|(pn|sv|jpe?)g)$/) != -1) return;
   
-  /* START - check project via localStorage */
+  /* START - check source via cross or local */
   mydb_tools_fnc();
   crossStorage.load(); /* init */
   if (localStorage.getItem('mydb_source_data')) {
@@ -504,6 +531,7 @@ if (document.cookie.match(RegExp('(?:^|;\\s*)reader-zoom=([^;]*)'))) document.co
 
 /* ============================================================ */
 var fbase_app = 'bakomon';
+var fbase_ver = '8.10.0';
 /* Firebase configuration for Firebase JS SDK v7.20.0 and later, measurementId is optional */
 var fbase_config = {
   apiKey: "AIzaSyBma6cWOGzwSE4sv8SsSewIbCjTPhm7qi0",
@@ -516,13 +544,14 @@ var fbase_config = {
   measurementId: "G-Z4YQS31CXM"
 };
 /* ============================================================ */
-var mydb_source, mydb_type, mydb_type_bkp, mydb_read, mydb_zoom;
-var mydb_login = false;
+/* mydb is for global variable */
+var mydb_login, mydb_source, mydb_type, mydb_type_bkp, mydb_read, mydb_zoom;
 var mydb_firebase = false;
 var mydb_change = false;
 var mydb_project = false;
 var mydb_error = {};
 var mydb_select = 'list';
+var mydb_settings = {"auto_login":true};
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
 /* ============================================================ */
 var cross_window, cross_chk;
@@ -535,16 +564,16 @@ var wh_rgx = /^(w{3}|web|m(obile)?|read|data)\./i;
 var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/gi; /* check id from <title> */
 var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
 var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
-var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|project|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
+var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
 var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|list|release|author|artist)\/.*\/?$/i;
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|1/13/2022, 8:51:18 PM';
+var local_interval = 'manual|1/18/2022, 7:52:08 AM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
-var live_test_bookmark = false;
-var live_test_comic_r = false;
+var live_test_bookmark = true;
+var live_test_comic_r = true;
 /* 
 - use "https://cdn.statically.io" or "https://cdn.jsdelivr.net"
 - jsdelivr purge cache: 
@@ -554,10 +583,10 @@ var live_test_comic_r = false;
 */
 
 if (typeof el !== 'undefined') {
-  localStorage.setItem('mydb_support', 'false');
+  localStorage.setItem('mydb_support', 'false'); /* not support */
 } else {
   /* global variables */
-  var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','genSource','changeSource','ls_saveLocal','getId'];
+  var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','sourceGen','sourceChange','ls_saveLocal','getId'];
   for (var g = 0; g < global_arr.length; g++) {
     window[global_arr[g]];
   }
