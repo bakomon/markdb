@@ -836,12 +836,12 @@ function mydb_bookmark() {
         if (i+1 < arr.length) s_txt += ' db_line';
         if ('read' in arr[i] && arr[i].read != '') s_txt += ' db_url_read';
         s_txt += ' flex_wrap">';
-        s_txt += '<div class="_db db_100" onclick="openInNewTab(\''+ arr[i].url +'\')" title="'+ arr[i].url +'">'+ arr[i].title;
+        s_txt += '<div class="_db db_100" onclick="openInNewTab(\'bs_list\', \''+ arr[i].url +'\')" title="'+ arr[i].url +'">'+ arr[i].title;
         if (arr[i].alternative != '') s_txt += ' | '+ arr[i].alternative;
         s_txt += '</div>';
         s_txt += '<div class="flex db_100" data-id="'+ arr[i].id +'">';
         s_txt += '<span class="bs_ch _db db_100 line_text">'+ arr[i].number + (arr[i].note ? ' ('+ arr[i].note +')' : '') +'</span>';
-        if ('read' in arr[i] && arr[i].read != '') s_txt += '<button class="_db db_selected" onclick="openInNewTab(\''+ arr[i].read +'\')" title="'+ arr[i].read +'">Read</button>';
+        if ('read' in arr[i] && arr[i].read != '') s_txt += '<button class="_db db_selected" onclick="openInNewTab(\'bs_list\', \''+ arr[i].read +'\')" title="'+ arr[i].read +'">Read</button>';
         s_txt += '<button class="bs_edit _db" data-id="list">Edit</button>';
         s_txt += '<button class="bs_delete _db" title="Delete">X</button>';
         s_txt += '<span class="bs_num _db db_selected">'+ (i+1) +'</span>';
@@ -932,7 +932,7 @@ function mydb_bookmark() {
     s_txt += '<li class="_bm '+ (note ? 'db_line_top' : 'bm_main');
     if ('read' in data && data.read != '') s_txt += ' db_url_read';
     s_txt += ' flex_wrap">';
-    s_txt += '<div class="_db db_100"'+ ((wh.indexOf(data.host) == -1 || data.url.indexOf(wp) == -1 || note) && el('title').innerHTML.search(number_t_rgx) == -1 ? ' onclick="openInNewTab(\''+ data.url +'\')"' : '') +' title="'+ data.url +'">';
+    s_txt += '<div class="_db db_100"'+ ((wh.indexOf(data.host) == -1 || data.url.indexOf(wp) == -1 || note) && el('title').innerHTML.search(number_t_rgx) == -1 ? ' onclick="openInNewTab(\'bm_list\', \''+ data.url +'\')"' : '') +' title="'+ data.url +'">';
     if (note != 'db_startData') {
       s_txt += data.title;
       if (data.alternative != '') s_txt += ' | '+ data.alternative;
@@ -943,11 +943,11 @@ function mydb_bookmark() {
     s_txt += '<div class="db_100 '+ (not_support && note != 'db_startData' ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
     if (note != 'db_startData') {
       s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
-      if ('read' in data && data.read != '') s_txt += '<button class="_db db_selected'+ (chk ? '' : ' db_hidden') +'" onclick="openInNewTab(\''+ data.read +'\')" title="'+ data.read +'">Read</button>';
+      if ('read' in data && data.read != '') s_txt += '<button class="_db db_selected'+ (chk ? '' : ' db_hidden') +'" onclick="openInNewTab(\'bm_list\', \''+ data.read +'\')" title="'+ data.read +'">Read</button>';
       s_txt += '<button class="bm_edit _db'+ (chk ? '' : ' db_hidden') +'" data-id="list">Edit</button>';
       s_txt += '<button class="bm_delete _db'+ (chk ? '' : ' db_hidden') +'" title="Delete">X</button>';
     }
-    s_txt += '<span class="bm_site db_text'+ (wh.indexOf(data.host) != -1 ? ' db_hidden' : (not_support && note != 'db_startData' ? ' db_100 t_center' : '')) +'" onclick="openInNewTab(\''+ data.url +'\')">'+ data.host +'</span>';
+    s_txt += '<span class="bm_site db_text'+ (wh.indexOf(data.host) != -1 ? ' db_hidden' : (not_support && note != 'db_startData' ? ' db_100 t_center' : '')) +'" onclick="openInNewTab(\'bm_list\', \''+ data.url +'\')">'+ data.host +'</span>';
     s_txt += '</div>';
     s_txt += '</li>';
     
@@ -964,7 +964,7 @@ function mydb_bookmark() {
     is_exist = true;
     var smlr_note = 'similar';
     db_showHtml(data);
-    el('title').innerHTML = '('+ data.number +') '+ el('title').innerHTML.replace(/^\([^\)]+\)\s/, '');
+    if (mydb_settings.number_title) el('title').innerHTML = '('+ data.number +') '+ el('title').innerHTML.replace(/^\([^\)]+\)\s/, '');
     el('.db_bm_show').classList.remove('db_hidden');
     console.log(`${mydb_type} data from: ${note}`);
     
