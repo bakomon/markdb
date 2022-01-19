@@ -947,7 +947,7 @@ function mydb_comic_reader() {
       };
       
       // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
-      var windowOpenBackup = window.open;
+      var windowOpenBackup = window.open; //can't use if poper blocker extension installed
       window.open = function(url, name, features) {
         console.log('window.open caught! url: '+ url);
         //window.open = windowOpenBackup;
