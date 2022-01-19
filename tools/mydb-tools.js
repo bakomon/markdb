@@ -18,13 +18,18 @@ function mydb_tools_fnc() {
   };
   
   /* Restore native window.open https://stackoverflow.com/a/48006884/7598333 */
-  openInNewTab = function(url) {
+  openInNewTab = function(note, url) {
     var _iframe = document.createElement('iframe');
     document.documentElement.appendChild(_iframe);
     
     var _window = _iframe.contentWindow;
     window.nativeOpen = _window.open;
-    window.nativeOpen(url);
+    
+    if (note in mydb_settings.new_tab && !mydb_settings.new_tab[note]) {
+      window.nativeOpen(url, '_self');
+    } else {
+      window.nativeOpen(url);
+    }
     
     _iframe.parentElement.removeChild(_iframe);
   }
@@ -381,7 +386,7 @@ function mydb_tools() {
             }).catch(function(error) {
               console.error('!! Error: function autoLogin(, code: '+ error.code +', message: '+ error.message);
               alert('!! Error: function autoLogin(\n'+ error.message);
-              localStorage.setItem('mydb_support', 'false'); /* not support */
+              if (localStorage.getItem('mydb_support') != 'true') localStorage.setItem('mydb_support', 'false'); /* not support */
             });
           }
         }
@@ -480,7 +485,7 @@ function mydb_tools() {
     }
   }
   
-  function getType(prop) {
+  function getType(prop) { //check type & source
     var data = mydb_source[prop];
     for (var site in data) {
       if (data[site]['host'].indexOf(w_host) != -1 || data[site]['domain'].indexOf(w_host) != -1) {
@@ -551,7 +556,7 @@ var mydb_change = false;
 var mydb_project = false;
 var mydb_error = {};
 var mydb_select = 'list';
-var mydb_settings = {"auto_login":true};
+var mydb_settings = {"auto_login":true,"new_tab":{"bm_list":true,"bs_list":true},"number_title":false};
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
 /* ============================================================ */
 var cross_window, cross_chk;
@@ -561,7 +566,7 @@ var cross_url = 'https://bakomon.blogspot.com';
 var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var wh_rgx = /^(w{3}|web|m(obile)?|read|data)\./i;
-var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s-\s\d+)?|\s)/gi; /* check id from <title> */
+var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s?[-\.]\s?\d+)?|\s)/gi; /* check id from <title> */
 var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
 var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
 var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
@@ -569,7 +574,7 @@ var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|lis
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|1/18/2022, 7:52:08 AM';
+var local_interval = 'manual|1/19/2022, 9:45:43 AM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
