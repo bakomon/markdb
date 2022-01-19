@@ -18,7 +18,7 @@ function mydb_tools_fnc() {
   };
   
   /* Restore native window.open https://stackoverflow.com/a/48006884/7598333 */
-  openInNewTab = function(note, url) {
+  openInNewTab = function(url, note) {
     var _iframe = document.createElement('iframe');
     document.documentElement.appendChild(_iframe);
     
@@ -574,7 +574,7 @@ var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|lis
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|1/19/2022, 9:45:43 AM';
+var local_interval = 'manual|1/20/2022, 6:57:35 AM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
