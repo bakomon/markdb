@@ -800,50 +800,52 @@ function mydb_comic_reader() {
       'webtoons.com','#_episodeList',
       'mangabat.com','.row-content-chapter'
     ];
-    if (isMobile) {
-      var list_area, ch_area = el(ch_list[1]) || el(ch_list[3]) || el(ch_list[5]) || el(ch_list[7]) || el(ch_list[9]);
-      var ch_length = ch_list.length;
-      if (ch_length % 2 == 1) {
-        ch_length--
-      }
-      for (var i = 8; i < ch_length; i += 2) {
-        if (wh.indexOf(ch_list[i]) != -1 && el(ch_list[i + 1])) {
-          list_area = el(ch_list[i + 1]);
-          break;
-        } else {
-          list_area = ch_area;
-        }
-      }
-      if (list_area) {
-        var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
-        if (el(a_latest, list_area)) {
-          var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.-]\d)?)/;
-          var a_data = document.body.classList.contains('koidezign') ? 'title' : 'textContent';
-          var l_last = document.createElement('div');
-          l_last.id = 'mydb_latest_chapter';
-          l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483644;background:#252428;color:#ddd;padding:10px 15px;font-size:130%;border:1px solid #3e3949;';
-          l_last.innerHTML = el(a_latest, list_area)[a_data].match(a_rgx)[1];
-          document.body.appendChild(l_last);
-          
-          // scroll to chapter list
-          el('#mydb_latest_chapter').onclick = function() {
-            /*list_area.style.cssText = 'scroll-margin-top:'+ halfScreen +'px';
-            list_area.scrollIntoView();*/
-            window.scroll(0, (getOffset(list_area, 'top') - halfScreen));
-          };
-        }
-      }
-      
-      // style for chapter link visited
-      var l_visited = '';
-      for (var j = 1; j < ch_length; j += 2) {
-        l_visited += ch_list[j] +' a:visited';
-        if (j < ch_length-1) l_visited += ',';
-      }
-      var l_elem = document.createElement('style');
-      l_elem.innerHTML = l_visited +'{color:red !important;}';
-      document.body.appendChild(l_elem);
+    
+    var list_area, ch_area = el(ch_list[1]) || el(ch_list[3]) || el(ch_list[5]) || el(ch_list[7]) || el(ch_list[9]);
+    var ch_length = ch_list.length;
+    if (ch_length % 2 == 1) {
+      ch_length--
     }
+    for (var i = 8; i < ch_length; i += 2) {
+      if (wh.indexOf(ch_list[i]) != -1 && el(ch_list[i + 1])) {
+        list_area = el(ch_list[i + 1]);
+        break;
+      } else {
+        list_area = ch_area;
+      }
+    }
+    
+    if (list_area) mydb_project = true;
+    
+    if (list_area && isMobile) {
+      var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
+      if (el(a_latest, list_area)) {
+        var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.-]\d)?)/;
+        var a_data = document.body.classList.contains('koidezign') ? 'title' : 'textContent';
+        var l_last = document.createElement('div');
+        l_last.id = 'mydb_latest_chapter';
+        l_last.style.cssText = 'position:fixed;top:55%;right:0;z-index:2147483644;background:#252428;color:#ddd;padding:10px 15px;font-size:130%;border:1px solid #3e3949;';
+        l_last.innerHTML = el(a_latest, list_area)[a_data].match(a_rgx)[1];
+        document.body.appendChild(l_last);
+        
+        // scroll to chapter list
+        el('#mydb_latest_chapter').onclick = function() {
+          /*list_area.style.cssText = 'scroll-margin-top:'+ halfScreen +'px';
+          list_area.scrollIntoView();*/
+          window.scroll(0, (getOffset(list_area, 'top') - halfScreen));
+        };
+      }
+    }
+    
+    // css style for chapter link visited
+    var l_visited = '';
+    for (var j = 1; j < ch_length; j += 2) {
+      l_visited += ch_list[j] +' a:visited';
+      if (j < ch_length-1) l_visited += ',';
+    }
+    var l_elem = document.createElement('style');
+    l_elem.innerHTML = l_visited +'{color:red !important;}';
+    document.body.appendChild(l_elem);
   }
   
   function webDarkMode() {
@@ -997,13 +999,14 @@ function mydb_comic_reader() {
   
   blockContent();
   customEdit();
+  chapterList();
   
   // check if page is comic/project, from database bookmark
   // to avoid mis-detection, eg. blog from blogger.com or wordpress.com
   if (localStorage.getItem('mydb_comic_list')) {
     var crList = JSON.parse(localStorage.getItem('mydb_comic_list'));
     for (var n = 0; n < crList.length; n++) {
-      if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && (crList[n].id == getId('bookmark').url || crList[n].url.indexOf(wp) != -1)) {
+      if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && crList[n].url.indexOf(wp) != -1) {
         console.log('project page: '+ crList[n].url);
         mydb_project = true;
         break;
@@ -1012,7 +1015,7 @@ function mydb_comic_reader() {
   }
   
   // Start reader
-  if ((wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(number_t_rgx) != -1)) && !mydb_project) {
+  if ((wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || el('title') && el('title').innerHTML.search(number_t_rgx) != -1) && !mydb_project) {
     console.log('page: chapter');
     zoomID = getId('reader');
     if (localStorage.getItem(zoomID)) localStorage.removeItem(zoomID); //temporary
@@ -1026,7 +1029,6 @@ function mydb_comic_reader() {
   
   removeAADB(); //remove anti adblock notify mangacanblog
   webDarkMode();
-  chapterList();
   disqusMod();
   
   if (localStorage.getItem('visited-chapters')) localStorage.removeItem('visited-chapters');
