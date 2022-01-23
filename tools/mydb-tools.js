@@ -282,7 +282,7 @@ function mydb_tools() {
     // replace chatango z-index
     s_str += 'iframe[src*="chatango.com"]{z-index:214748364 !important}';
     
-    //if (el('.preloader .loading')) alert('test'), el('.preloader .loading').parentNode.style.cssText = 'display:none !important';
+    //if (el('.preloader .loading')) alert('test'), el('.preloader .loading').parentElement.style.cssText = 'display:none !important';
     
     var s_elem = document.createElement('style');
     s_elem.type = 'text/css';
@@ -302,7 +302,7 @@ function mydb_tools() {
   }
   
   sourceChange = function() {
-    var u_obj = {update: new Date().getTime()};
+    var u_obj = {update: new Date().getTime()}; /* name: value */
     firebase.app(fbase_app).database().ref('bookmark/source').update(u_obj, (error) => {
       if (error) {
         alert('!!ERROR: sourceChange(');
@@ -324,47 +324,8 @@ function mydb_tools() {
       localStorage.setItem('mydb_source_data', sc_txt);
       crossStorage.set('mydb_source_data', sc_txt);
       mydb_source = data;
-      if (note == 'start') startSource();
+      if (note != 'change') startSource();
     });
-  };
-  
-  sourceCheck = function(note, data) {
-    if (data && data.search(/null|error/i) == -1) {
-      data = JSON.parse(data);
-      if (note == 'local') {
-        crossStorage.get('mydb_source_data', function(res) {
-          if (res == null || res == 'error') {
-            mydb_change = true;
-            sourceGen('start');
-          } else {
-            localStorage.setItem('mydb_source_data', res);
-            mydb_source = JSON.parse(res);
-            startSource();
-          }
-        });
-      } else if (note == 'cross') {
-        localStorage.setItem('mydb_source_data', JSON.stringify(data));
-        mydb_source = data;
-        startSource();
-      } else {
-        firebase.app(fbase_app).database().ref('bookmark/source/update').once('value').then(function(snapshot) {
-          if (data.update != snapshot.val()) {
-            mydb_change = true;
-            console.log('mydb: generate new source');
-            sourceGen('new');
-          }
-        });
-      }
-    } else {
-      loadFirebase('source');
-      var sc_check = setInterval(function() {
-        if (typeof firebase !== 'undefined' && typeof firebase.database !== 'undefined' && typeof firebase.auth !== 'undefined' && mydb_login) {
-          clearInterval(sc_check);
-          mydb_change = true;
-          sourceGen('start');
-        }
-      }, 100);
-    }
   };
   
   function autoLogin() {
@@ -396,7 +357,7 @@ function mydb_tools() {
   
   function loadFirebase(note) {
     if (typeof firebase == 'undefined') {
-      mydb_firebase = true;
+      mydb_fbase_app = true;
       addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-app.js`)
         .catch(() => {
           /* only use catch() :
@@ -422,7 +383,9 @@ function mydb_tools() {
             var db3_chk = setInterval(function() {
               if (typeof firebase.auth !== 'undefined') {
                 clearInterval(db3_chk);
-                if (mydb_settings.auto_login || note == 'source') autoLogin();
+                mydb_fbase_loaded = true;
+                console.log('Firebase: loaded');
+                if (mydb_settings.auto_login && note != 'start') autoLogin();
               }
             }, 100);
           }
@@ -462,8 +425,8 @@ function mydb_tools() {
           clearInterval(reader_chk);
           var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); /* cloudflare */
           var is_cf = chk_cf ? true : false;
-          if (!is_cf && !mydb_read) {
-            if (!mydb_firebase) loadFirebase('bookmark');
+          if (!is_cf && (!mydb_read || mydb_settings.bmark_reader)) {
+            if (!mydb_fbase_app) loadFirebase('bookmark');
             if (live_test_bookmark) {
               var bm_chk = setInterval(function() {
                 if (typeof mydb_bookmark !== 'undefined') {
@@ -477,6 +440,8 @@ function mydb_tools() {
           }
         }
       }, 100);
+      
+      el('#_loader').parentElement.removeChild(el('#_loader'));
     } else {
       mydb_error = {"mydb_type":'"'+ mydb_type +'"',"note":'"'+ note +'"'};
       if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
@@ -501,6 +466,40 @@ function mydb_tools() {
     callScript('source');
   }
   
+  function sourceCheck(data) {
+    if (data && data.search(/null|error/i) == -1) {
+      data = JSON.parse(data);
+      if (!mydb_reader || mydb_settings.fbase_reader) {
+        firebase.app(fbase_app).database().ref('bookmark/source/update').once('value').then(function(snapshot) {
+          if (data.update != snapshot.val()) {
+            mydb_change = true;
+            console.log('mydb: update new source');
+            sourceGen('new');
+          } else {
+            mydb_source = data;
+            startSource();
+          }
+        });
+      } else {
+        mydb_source = data;
+        startSource();
+      }
+    } else {
+      mydb_change = true;
+      console.log('mydb: generate new source');
+      sourceGen('start');
+    }
+  };
+  
+  function startLoading() {
+    var sl_html = document.createElement('div');
+    sl_html.id = '_loader';
+    sl_html.style.cssText = 'display:-webkit-flex;display:flex;position:fixed;bottom:-1px;left:-1px;width:70px;height:70px;background:#252428;border:1px solid #3e3949;z-index:2147483642;'; //2147483647
+    sl_html.innerHTML = '<style>.sl-loader{margin:auto;border:5px solid #f3f3f3;border-top:5px solid #3498db;border-radius:50%;width:40px;height:40px;-webkit-animation:sl-spin 2s linear infinite;animation:sl-spin 2s linear infinite;}@-webkit-keyframes sl-spin{0%{-webkit-transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);}}@keyframes sl-spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>';
+    sl_html.innerHTML += '<div class="sl-loader"></div>';
+    document.body.appendChild(sl_html);
+  }
+  
   
   wl = window.location;
   wh = wl.hostname;
@@ -509,14 +508,22 @@ function mydb_tools() {
   document.body.classList.add(w_host.replace(/\./g, '-'));
   
   if (document.head.innerHTML == '' || localStorage.getItem('mydb_support') == 'false' || wp.search(/\.(gif|webp|(pn|sv|jpe?)g)$/) != -1) return;
-  
-  /* START - check source via cross or local */
+  startLoading();
   mydb_tools_fnc();
+  mydb_reader = wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || el('title') && el('title').innerHTML.search(number_t_rgx) != -1;
+  
+  /* START - check source via crossStorage */
   crossStorage.load(); /* init */
-  if (localStorage.getItem('mydb_source_data')) {
-    sourceCheck('local', localStorage.getItem('mydb_source_data'));
+  if (!mydb_reader || mydb_settings.fbase_reader) {
+    loadFirebase('start');
+    var sc_check = setInterval(function() {
+      if (mydb_fbase_loaded) {
+        clearInterval(sc_check);
+        crossStorage.get('mydb_source_data', function(res){ sourceCheck(res); });
+      }
+    }, 100);
   } else {
-    crossStorage.get('mydb_source_data', function(res){ sourceCheck('cross', res); });
+    crossStorage.get('mydb_source_data', function(res){ sourceCheck(res); });
   }
 }
 
@@ -531,6 +538,7 @@ if (localStorage.getItem('comic_tools_reader')) localStorage.removeItem('comic_t
 if (localStorage.getItem('comic_tools_list')) localStorage.removeItem('comic_tools_list');
 if (localStorage.getItem('mydb_tools_source')) localStorage.removeItem('mydb_tools_source');
 if (localStorage.getItem('mydb_source_check')) localStorage.removeItem('mydb_source_check');
+if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
 if (document.cookie.match(RegExp('(?:^|;\\s*)reader-zoom=([^;]*)'))) document.cookie = 'reader-zoom=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
 
@@ -550,14 +558,22 @@ var fbase_config = {
 };
 /* ============================================================ */
 /* mydb is for global variable */
-var mydb_login, mydb_source, mydb_type, mydb_type_bkp, mydb_read, mydb_zoom;
-var mydb_firebase = false;
+var mydb_reader, mydb_login, mydb_source, mydb_type, mydb_type_bkp, mydb_read, mydb_zoom;
+var mydb_fbase_app = false; //check if firebase function has been called
+var mydb_fbase_loaded = false;
 var mydb_change = false;
 var mydb_project = false;
 var mydb_error = {};
 var mydb_select = 'list';
-var mydb_settings = {"auto_login":true,"new_tab":{"bm_list":true,"bs_list":true},"number_title":false};
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
+var mydb_settings = {"fbase_reader":false,"bmark_reader":false,"auto_login":true,"new_tab":{"bm_list":true,"bs_list":true},"number_title":false};
+/* 
+- fbase_reader = load firebase on comic reader
+- bmark_reader = show bookmark on comic reader
+- new_tab.bm_list = open link in new tab on bookmark list (bm_list)
+- new_tab.bs_list = open link in new tab on search list (bs_list)
+- number_title = add [number] chapter/episode to <title>
+*/
 /* ============================================================ */
 var cross_window, cross_chk;
 var cross_callbacks = {};
@@ -574,7 +590,7 @@ var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|lis
 /* ============================================================ */
 var login_email = '';
 var login_pass = '';
-var local_interval = 'manual|1/20/2022, 6:57:35 AM';
+var local_interval = 'manual|1/23/2022, 8:35:59 PM';
 var js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var live_test_bookmark = false;
