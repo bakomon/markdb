@@ -193,7 +193,7 @@ function mydb_comic_reader() {
     r_txt += '<button class="rc_pause rc_btn _rc rc_no_hover" title="Pause images from loading">X</button>';
     r_txt += '</div>';
     r_txt += '<div class="flex f_middle">';
-    r_txt += '<button class="rc_from rc_btn _rc">From</button>';
+    r_txt += '<button class="rc_from rc_btn _rc rc_no_hover" title="Load images from [index]">From</button>';
     r_txt += '<input class="rc_fr_min rc_input _rc" value="1" onclick="this.select()" disabled>';
     r_txt += '<span>-</span>';
     r_txt += '<input class="rc_fr_max rc_input _rc" value="'+ imgList.length +'" onclick="this.select()" disabled>';
