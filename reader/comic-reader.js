@@ -1,5 +1,11 @@
 // COMIC READER
 function mydb_comic_reader() {
+  // check if string is number https://stackoverflow.com/a/175787/7598333
+  function isNumeric(str) {
+    if (typeof str != 'string') return false;
+    return !isNaN(str) && !isNaN(parseFloat(str));
+  }
+  
   // Position (X,Y) element https://stackoverflow.com/a/28222246
   function getOffset(el, p) {
     const rect = el.getBoundingClientRect();
@@ -97,7 +103,7 @@ function mydb_comic_reader() {
   
   function scrollImage(img) {
     window.onscroll = function() {
-      if (!isPause) {
+      if (!isPause && !isFrom) {
         for (var i = 0; i < img.length; i++) {
           if (!loadImage) {
             startChange(img[i]);
@@ -167,9 +173,9 @@ function mydb_comic_reader() {
     var r_txt = '';
     // css control & main already in css tools
     // css reader
-    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:160px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-160px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._rc[disabled],._rc[disabled]:hover{background:#252428 !important;color:#555 !important;border-color:#252428 !important;}.rc_hidden{display:none;}</style>';
+    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:165px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-165px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#238636;border-color:#238636;}.rc_danger{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._rc[disabled],._rc[disabled]:hover{background:#252428 !important;color:#555 !important;border-color:#252428 !important;}.rc_hidden{display:none;}</style>';
     r_txt += '<style>.scrollToTop,[title*="Back To Top"],.back-to-top,.go-to-top,.btn-top{display:none !important;}</style>'; //css hidden
-    r_txt += '<style>.rc_mobile ._rc{font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;}.rc_mobile .rc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.rc_mobile .rc_tr2{left:-81px;}.rc_mobile .reader_db:not(.rc_shide) .rc_tr2{left:-40px;}.rc_mobile .reader_db.rc_shide .rc_next button{position:fixed;top:0;left:0;margin:0;max-width:20%;height:50vh;background:0 0;color:transparent;border:0;}</style>'; //css mobile
+    r_txt += '<style>.rc_mobile ._rc{font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;text-shadow:-1px 0 #000,0 1px #000,1px 0 #000,0 -1px #000;}.rc_mobile .rc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.rc_mobile .rc_tr2{left:-81px;}.rc_mobile .reader_db:not(.rc_shide) .rc_tr2{left:-40px;}.rc_mobile .reader_db.rc_shide .rc_next button{position:fixed;top:0;left:0;margin:0;max-width:20%;height:50vh;background:0 0;color:transparent;border:0;}</style>'; //css mobile
     // html
     r_txt += '<div class="rc_bg'+ (isMobile ? ' rc_hidden' : '') +'"></div>';
     r_txt += '<div class="reader_db'+ (isMobile ? ' rc_shide' : '') +' flex_wrap f_bottom">';
@@ -180,10 +186,18 @@ function mydb_comic_reader() {
     r_txt += '</div>'; //.rc_others
     r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" oncontextmenu="openInNewTab(this.dataset.href)" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
     r_txt += '<div class="rc_home rc_line rc_100"><button class="rc_btn _rc" onclick="window.location.href=\'//\'+window.location.hostname">Homepage</button></div>';
-    r_txt += '<div class="rc_load rc_line flex">';
+    r_txt += '<div class="rc_load rc_line flex_wrap">';
+    r_txt += '<div class="flex">';
     r_txt += '<button class="rc_ld_img rc_btn _rc" title="alt + a">Load</button>';
     r_txt += '<input class="rc_all rc_input _rc" value="all" onclick="this.select()">';
     r_txt += '<button class="rc_pause rc_btn _rc rc_no_hover" title="Pause images from loading">X</button>';
+    r_txt += '</div>';
+    r_txt += '<div class="flex f_middle">';
+    r_txt += '<button class="rc_from rc_btn _rc">From</button>';
+    r_txt += '<input class="rc_fr_min rc_input _rc" value="1" onclick="this.select()" disabled>';
+    r_txt += '<span>-</span>';
+    r_txt += '<input class="rc_fr_max rc_input _rc" value="'+ imgList.length +'" onclick="this.select()" disabled>';
+    r_txt += '</div>';
     r_txt += '</div>';// .rc_load
     r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ readSize +'"></div>';
     r_txt += '</div>';// .rc_tr1
@@ -227,17 +241,32 @@ function mydb_comic_reader() {
     // Load all images
     el('.rc_load .rc_ld_img').onclick =  function() {
       if (el('.rc_load .rc_all').value.search(/all/i) != -1) {
+        // "img" from createBtn() parameter
         loadImage = true;
-        for (var i = 0; i < img.length; i++) {
+        var ld_index = isFrom ? (Number(el('.rc_load .rc_fr_min').value) - 1) : 0;
+        var ld_length = isFrom ? Number(el('.rc_load .rc_fr_max').value) : img.length;
+        for (var i = ld_index; i < ld_length; i++) {
           startChange(img[i], 'all');
         }
-      } else {
+      } else if (isNumeric(el('.rc_load .rc_all').value)) {
         startChange(img[Number(el('.rc_load .rc_all').value) - 1], 'single');
+      } else {
+        el('.rc_load .rc_all').value = 'all';
       }
     };
     
-    el('.rc_load .rc_pause').onclick =  function() {
+    el('.rc_load .rc_from').onclick =  function() {
+      var ld_from = this.classList.contains('rc_active');
+      el('.rc_load .rc_all').value = 'all';
+      el('.rc_load .rc_all').disabled = ld_from && !isPause ? false : true;
+      el('.rc_load .rc_fr_min').disabled = ld_from ? true : false;
+      el('.rc_load .rc_fr_max').disabled = ld_from ? true : false;
+      isFrom = ld_from ? false : true;
       this.classList.toggle('rc_active');
+    };
+    
+    el('.rc_load .rc_pause').onclick =  function() {
+      this.classList.toggle('rc_danger');
       el('.rc_ld_img').disabled = isPause ? false : true;
       el('.rc_load .rc_all').disabled = isPause ? false : true;
       isPause = isPause ? false : true;
@@ -819,7 +848,7 @@ function mydb_comic_reader() {
     
     if (list_area && isMobile) {
       var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
-      if (el(a_latest, list_area)) {
+      if (el(a_latest, list_area) && el(a_latest, list_area).href.search(/#$/) == -1) {
         var a_rgx = wh.indexOf('webtoons') != -1 ? /(#\d+)/ : /(\d+(?:[,\.-]\d)?)/;
         var a_data = document.body.classList.contains('koidezign') ? 'title' : 'textContent';
         var l_last = document.createElement('div');
@@ -990,6 +1019,7 @@ function mydb_comic_reader() {
   var loadSize = false;
   var loadImage = false; //all images loaded
   var isPause = false; //pause images from loading
+  var isFrom = false; //load image from [index]
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from database tools
   var autoLike = false;
   var imgSize = ''; //image size
@@ -1015,7 +1045,7 @@ function mydb_comic_reader() {
   }
   
   // Start reader
-  if ((wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || el('title') && el('title').innerHTML.search(number_t_rgx) != -1) && !mydb_project) {
+  if (mydb_reader && !mydb_project) {
     console.log('page: chapter');
     zoomID = getId('reader');
     if (localStorage.getItem(zoomID)) localStorage.removeItem(zoomID); //temporary
@@ -1027,7 +1057,7 @@ function mydb_comic_reader() {
     mydb_read = false;
   }
   
-  removeAADB(); //remove anti adblock notify mangacanblog
+  removeAADB(); //remove anti adblock notify for mangacanblog
   webDarkMode();
   disqusMod();
   
