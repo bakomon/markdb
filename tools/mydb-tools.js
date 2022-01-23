@@ -440,14 +440,13 @@ function mydb_tools() {
           }
         }
       }, 100);
-      
-      el('#_loader').parentElement.removeChild(el('#_loader'));
     } else {
       mydb_error = {"mydb_type":'"'+ mydb_type +'"',"note":'"'+ note +'"'};
       if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
       localStorage.setItem('mydb_support', 'false'); /* not support */
       console.log('mydb_support: false');
     }
+    el('#_loader').parentElement.removeChild(el('#_loader'));
   }
   
   function getType(prop) { //check type & source
@@ -494,8 +493,8 @@ function mydb_tools() {
   function startLoading() {
     var sl_html = document.createElement('div');
     sl_html.id = '_loader';
-    sl_html.style.cssText = 'display:-webkit-flex;display:flex;position:fixed;bottom:-1px;left:-1px;width:70px;height:70px;background:#252428;border:1px solid #3e3949;z-index:2147483642;'; //2147483647
-    sl_html.innerHTML = '<style>.sl-loader{margin:auto;border:5px solid #f3f3f3;border-top:5px solid #3498db;border-radius:50%;width:40px;height:40px;-webkit-animation:sl-spin 2s linear infinite;animation:sl-spin 2s linear infinite;}@-webkit-keyframes sl-spin{0%{-webkit-transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);}}@keyframes sl-spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>';
+    sl_html.style.cssText = 'display:-webkit-flex;display:flex;position:fixed;bottom:-1px;left:-1px;width:40px;height:40px;background:#252428;border:1px solid #3e3949;z-index:2147483642;'; //2147483647
+    sl_html.innerHTML = '<style>.sl-loader{margin:auto;border:4px solid #ddd;border-top:4px solid #3498db;border-radius:50%;width:20px;height:20px;-webkit-animation:sl-spin 2s linear infinite;animation:sl-spin 2s linear infinite;}@-webkit-keyframes sl-spin{0%{-webkit-transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);}}@keyframes sl-spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>';
     sl_html.innerHTML += '<div class="sl-loader"></div>';
     document.body.appendChild(sl_html);
   }
