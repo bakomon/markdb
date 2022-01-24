@@ -202,7 +202,7 @@ function mydb_tools_fnc() {
   }
   
   /* Save css, js, json to localStorage with Expiration https://codepen.io/sekedus/pen/LYbBagK */
-  ls_saveLocal =  function(url, id, type, interval) {
+  function ls_saveLocal(url, id, type, interval) {
     var ls_interval = interval || 'permanent';
     var ls_update = ls_interval.search(/manual\|/i) != -1 ? ls_interval.split('|')[1] : ls_genDate(ls_interval); /* default second+1 */
     console.log(`ls_data_id: ${id}`);
@@ -408,6 +408,7 @@ function mydb_tools() {
         document.body.classList.add(s_class[i]);
       }
       genCSS();
+      mydb_loaded = true;
       
       if (live_test_comic_r) {
         var cr_chk = setInterval(function() {
@@ -556,10 +557,26 @@ var fbase_config = {
   measurementId: "G-Z4YQS31CXM"
 };
 /* ============================================================ */
+var cross_window, cross_chk;
+var cross_callbacks = {};
+var cross_origin = 'coreaz';
+var cross_url = 'https://bakomon.blogspot.com';
+var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
+/* ============================================================ */
+var wh_rgx = /^(w{3}|web|m(obile)?|read|data)\./i;
+var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s?[-\.]\s?\d+)?|\s)/gi; /* check id from <title> */
+var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
+var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
+var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
+var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|list|release|author|artist)\/.*\/?$/i;
+/* ============================================================ */
 /* mydb is for global variable */
 var mydb_reader, mydb_login, mydb_source, mydb_type, mydb_type_bkp, mydb_read, mydb_zoom;
+var mydb_loaded = false;
 var mydb_fbase_app = false; //check if firebase function has been called
 var mydb_fbase_loaded = false;
+var mydb_bm_loaded = false;
+var mydb_cr_loaded = false;
 var mydb_change = false;
 var mydb_project = false;
 var mydb_error = {};
@@ -574,20 +591,7 @@ var mydb_settings = {"fbase_reader":false,"bmark_reader":false,"auto_login":true
 - number_title = add [number] chapter/episode to <title>
 */
 /* ============================================================ */
-var cross_window, cross_chk;
-var cross_callbacks = {};
-var cross_origin = 'coreaz';
-var cross_url = 'https://bakomon.blogspot.com';
-var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
-/* ============================================================ */
-var wh_rgx = /^(w{3}|web|m(obile)?|read|data)\./i;
-var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s?[-\.]\s?\d+)?|\s)/gi; /* check id from <title> */
-var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
-var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
-var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
-var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|list|release|author|artist)\/.*\/?$/i;
-/* ============================================================ */
-var local_interval = 'manual|1/24/2022, 6:33:34 AM';
+var local_interval = 'manual|1/24/2022, 8:55:10 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
@@ -605,7 +609,7 @@ if (typeof el !== 'undefined') {
   localStorage.setItem('mydb_support', 'false'); /* not support */
 } else {
   /* global variables */
-  var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','sourceGen','sourceChange','ls_saveLocal','getId'];
+  var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','sourceGen','sourceChange','getId'];
   for (var g = 0; g < global_arr.length; g++) {
     window[global_arr[g]];
   }
