@@ -2,6 +2,7 @@
 function mydb_comic_reader() {
   if (mydb_cr_loaded) return;
   mydb_cr_loaded = true;
+  console.log(mydb_cr_loaded);
   
   // check if string is number https://stackoverflow.com/a/175787/7598333
   function isNumeric(str) {
