@@ -1,5 +1,6 @@
 // COMIC READER
 function mydb_comic_reader() {
+  if (mydb_cr_loaded) return;
   mydb_cr_loaded = true;
   
   // check if string is number https://stackoverflow.com/a/175787/7598333
@@ -1071,4 +1072,4 @@ function mydb_comic_reader() {
   indexedDB.open('ts_series_history').onsuccess = function() { indexedDB.deleteDatabase('ts_series_history') };
 }
 
-if (!live_test_comic_r && !mydb_cr_loaded) mydb_comic_reader();
+if (!live_test_comic_r) mydb_comic_reader();
