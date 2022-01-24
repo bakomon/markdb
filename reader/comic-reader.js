@@ -1072,7 +1072,7 @@ function mydb_comic_reader() {
   indexedDB.open('ts_series_history').onsuccess = function() { indexedDB.deleteDatabase('ts_series_history') };
 }
 
-if (!live_test_bookmark && !mydb_cr_loaded) {
+if (!live_test_comic_r && !mydb_cr_loaded) {
   var db_cr_check = setInterval(function() {
     if (mydb_loaded) {
       clearInterval(db_cr_check);
