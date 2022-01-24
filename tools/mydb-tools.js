@@ -202,7 +202,7 @@ function mydb_tools_fnc() {
   }
   
   /* Save css, js, json to localStorage with Expiration https://codepen.io/sekedus/pen/LYbBagK */
-  function ls_saveLocal(url, id, type, interval) {
+  ls_saveLocal = function(url, id, type, interval) {
     var ls_interval = interval || 'permanent';
     var ls_update = ls_interval.search(/manual\|/i) != -1 ? ls_interval.split('|')[1] : ls_genDate(ls_interval); /* default second+1 */
     console.log(`ls_data_id: ${id}`);
@@ -609,7 +609,7 @@ if (typeof el !== 'undefined') {
   localStorage.setItem('mydb_support', 'false'); /* not support */
 } else {
   /* global variables */
-  var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','sourceGen','sourceChange','getId'];
+  var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','sourceGen','sourceChange','ls_saveLocal','getId'];
   for (var g = 0; g < global_arr.length; g++) {
     window[global_arr[g]];
   }
