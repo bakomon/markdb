@@ -1,5 +1,6 @@
 // DATABASE BOOKMARK
 function mydb_bookmark() {
+  if (mydb_bm_loaded) return;
   mydb_bm_loaded = true;
   
   // RegExp.escape function in JavaScript https://stackoverflow.com/a/3561711/7598333
@@ -1417,4 +1418,4 @@ function mydb_bookmark() {
   }, 100);
 }
 
-if (!live_test_bookmark && !mydb_bm_loaded) mydb_bookmark();
+if (!live_test_bookmark) mydb_bookmark();
