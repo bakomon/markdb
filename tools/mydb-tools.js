@@ -134,7 +134,7 @@ function mydb_tools_fnc() {
     },
     check: function(key, callback) {
       cross_chk = setTimeout(function() {
-        console.error(`!!Error crossStorage: can\'t get "${key}" data from iframe.`);
+        console.error(`!! Error crossStorage: can\'t get "${key}" data from iframe.`);
         callback('error');
       }, 8000);
     }
@@ -253,6 +253,7 @@ function mydb_tools_fnc() {
   getId = function(note) {
     var id = '';
     var titleId = !el('title') ? '' : el('title').innerHTML.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ').replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(baca|read|download)\s/i, '').replace(/\s?(man(ga|hwa|hua)|[kc]omi[kc]|novel|anime)\s?/i, '\x20');
+    titleId = titleId.replace(/\s?(man(ga|hwa|hua)|[kc]omi[kc]|novel|anime)\s?/i, '\x20'); /* multiple remove for komikid.com */
     if (!mydb_project) titleId = titleId.replace(number_t_rgx, ' ');
     titleId = titleId.replace(/[\||\-|\–|»](?:.(?![\||\-|\–|»]))+$/, '').replace(/^\s+/g, ''); //old = ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
     
@@ -302,10 +303,10 @@ function mydb_tools() {
   }
   
   sourceChange = function() {
-    var u_obj = {update: new Date().getTime()}; /* name: value */
-    firebase.app(fbase_app).database().ref('bookmark/source').update(u_obj, (error) => {
+    var sc_obj = {update: new Date().getTime()}; /* name: value */
+    firebase.app(fbase_app).database().ref('bookmark/source').update(sc_obj, (error) => {
       if (error) {
-        alert('!!ERROR: sourceChange(');
+        alert('!! Error: sourceChange(');
       } else {
         mydb_change = true;
         sourceGen('change');
@@ -339,7 +340,7 @@ function mydb_tools() {
         clearInterval(al_chk);
         if (mydb_login === false) {
           if (mydb_settings.login_data.email == '' || mydb_settings.login_data.password == '') {
-            alert('!!Error: firebase login\nlogin_email or login_pass is empty');
+            alert('!! Error: firebase login\nlogin_email or login_pass is empty');
           } else {
             /* auto login firebase */
             firebase.app(fbase_app).auth().signInWithEmailAndPassword(mydb_settings.login_data.email, mydb_settings.login_data.password).then((user) => {
@@ -365,7 +366,7 @@ function mydb_tools() {
           - https://javascript.info/promise-basics#catch
           */
           clearInterval(lf_chk);
-          console.error('!!Error: can\'t load firebase.');
+          console.error('!! Error: can\'t load firebase.');
           if (localStorage.getItem('mydb_support') != 'true') callScript('error');
         });
     }
@@ -427,7 +428,7 @@ function mydb_tools() {
           var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); /* cloudflare */
           var is_cf = chk_cf ? true : false;
           if (!is_cf && (!mydb_read || mydb_settings.bmark_reader)) {
-            if (!mydb_fbase_app) loadFirebase('bookmark');
+            if (!mydb_fbase_app && typeof firebase == 'undefined') loadFirebase('bookmark');
             if (live_test_bookmark) {
               var bm_chk = setInterval(function() {
                 if (typeof mydb_bookmark !== 'undefined') {
@@ -443,7 +444,6 @@ function mydb_tools() {
       }, 100);
     } else {
       mydb_error = {"mydb_type":'"'+ mydb_type +'"',"note":'"'+ note +'"'};
-      if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
       localStorage.setItem('mydb_support', 'false'); /* not support */
       console.log('mydb_support: false');
     }
@@ -466,14 +466,14 @@ function mydb_tools() {
     callScript('source');
   }
   
-  function sourceCheck(data) {
+  function sourceCheck(note, data) {
     if (data && data.search(/null|error/i) == -1) {
       data = JSON.parse(data);
       if (!mydb_reader || mydb_settings.fbase_reader) {
         firebase.app(fbase_app).database().ref('bookmark/source/update').once('value').then(function(snapshot) {
           if (data.update != snapshot.val()) {
-            mydb_change = true;
             console.log('mydb: update new source');
+            mydb_change = true;
             sourceGen('new');
           } else {
             mydb_source = data;
@@ -485,9 +485,19 @@ function mydb_tools() {
         startSource();
       }
     } else {
-      mydb_change = true;
       console.log('mydb: generate new source');
-      sourceGen('start');
+      mydb_change = true;
+      if (note == 'reader') {
+        loadFirebase('start');
+        var sc_check = setInterval(function() {
+          if (mydb_fbase_loaded) {
+            clearInterval(sc_check);
+            sourceGen('start');
+          }
+        }, 100);
+      } else {
+        sourceGen('start');
+      }
     }
   };
   
@@ -519,11 +529,11 @@ function mydb_tools() {
     var sc_check = setInterval(function() {
       if (mydb_fbase_loaded) {
         clearInterval(sc_check);
-        crossStorage.get('mydb_source_data', function(res){ sourceCheck(res); });
+        crossStorage.get('mydb_source_data', function(res){ sourceCheck('fbase', res); });
       }
     }, 100);
   } else {
-    crossStorage.get('mydb_source_data', function(res){ sourceCheck(res); });
+    crossStorage.get('mydb_source_data', function(res){ sourceCheck('reader', res); });
   }
 }
 
@@ -532,13 +542,16 @@ function mydb_tools() {
 var host_rgx = /(oploverz|webtoons|mangaku|mangaindo|komikstation|komikcast|westmanga|mangakita|mangashiro|mangacanblog|maid|ngomik|mangakyo|kiryuu|komikav|komiku|manhwa-san|matakomik|komikid|kombatch|mangceh|sektekomik|manhuaid|pojokmanga|sheamanga|klikmanga|bacakomik|mangayu|klankomik|boosei|comicfx|yuumanga|wordhero|gurukomik|masterkomik|kaisarkomik|softkomik|katakomik|mgkomik|kumamanga|komikru|komikindo|komiknesia|mangakane|tenseiscans|komikempus|kurutonime|nekomik|manhwaindo|wrt|mangacdn|wib|gabutscans|daveyscans|jscanla|nyanfm|mangapark|mangadex|mangabat|zeroscans|readmanhua|readmng|hatigarmscan[sz]|funmanga|bato|leviatanscans|merakiscans|mangarawr|toonily|mangasushi|reaperscans|asurascans|secretscans|rawdevart|azoramanga|animesc-kun|readcmic|mangapaus|ninkomik)\.((blogspot|wordpress)\.)?((co|my|web)(m|\.id)?|net|org|me|in|tv|id|to|jp|bz|pw|nl|info|xyz|pro|site|club)\/?(.*)/i;
 */
 
-// remove old data, temporary
+/* remove old data, temporary */
 if (localStorage.getItem('comic_tools_bookmark')) localStorage.removeItem('comic_tools_bookmark');
 if (localStorage.getItem('comic_tools_reader')) localStorage.removeItem('comic_tools_reader');
 if (localStorage.getItem('comic_tools_list')) localStorage.removeItem('comic_tools_list');
 if (localStorage.getItem('mydb_tools_source')) localStorage.removeItem('mydb_tools_source');
 if (localStorage.getItem('mydb_source_check')) localStorage.removeItem('mydb_source_check');
 if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_source_data');
+if (localStorage.getItem('mydb_anime_list')) localStorage.removeItem('mydb_anime_list');
+if (localStorage.getItem('mydb_comic_list')) localStorage.removeItem('mydb_comic_list');
+if (localStorage.getItem('mydb_novel_list')) localStorage.removeItem('mydb_novel_list');
 if (document.cookie.match(RegExp('(?:^|;\\s*)reader-zoom=([^;]*)'))) document.cookie = 'reader-zoom=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
 
@@ -582,16 +595,18 @@ var mydb_project = false;
 var mydb_error = {};
 var mydb_select = 'list';
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
-var mydb_settings = {"fbase_reader":false,"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false};
+var mydb_settings = {"fbase_reader":false,"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"always_check":{"bookmark":true},"remove_site":{"bookmark":true,"history":true},"number_reader":true};
 /* 
 - fbase_reader = load firebase on comic reader
 - bmark_reader = show bookmark on comic reader
 - new_tab.bm_list = open link in new tab on bookmark list (bm_list)
 - new_tab.bs_list = open link in new tab on search list (bs_list)
 - number_title = add [number] chapter/episode to <title>
+- always_check.bookmark = check if boookmark data updated (date)
+- number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|1/24/2022, 8:55:10 AM';
+var local_interval = 'manual|1/25/2022, 10:40:49 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
