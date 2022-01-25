@@ -491,12 +491,16 @@ function mydb_comic_reader() {
         imgSize = imgSize == 0 || imgSize > 800 ? 's'+ imgSize : 's1600';
       }
       
-      reader_html += '<div onclick="var img'+ (j+1) +'=this.querySelector(\'img\');openInNewTab(img'+ (j+1) +'.src?img'+ (j+1) +'.src:img'+ (j+1) +'.dataset.readImg)" title="'+ (j+1) +' - '+ imgLink +'"><img style="min-height:750px;" data-read-img="'+ imgLink +'" alt="'+ (j+1) +'"></div>';
+      reader_html += '<div class="reader_images" onclick="var img'+ (j+1) +'=this.querySelector(\'img\');openInNewTab(img'+ (j+1) +'.src?img'+ (j+1) +'.src:img'+ (j+1) +'.dataset.readImg)" title="'+ (j+1) +' - '+ imgLink +'">';
+      if (mydb_settings.number_reader) reader_html += '<div class="reader_index _rc">'+ (j+1) +'</div>';
+      reader_html += '<img style="min-height:750px;" data-read-img="'+ imgLink +'" alt="'+ (j+1) +'">';
+      reader_html += '</div>'; //.reader_images
     }
     reader_html += '</div>';
     
     var reader_mod = document.createElement('div');
     reader_mod.style.cssText = 'width:100%;';
+    if (mydb_settings.number_reader) reader_html = '<style>#reader-mod .reader_images{position:relative;}#reader-mod .reader_index{position:absolute;top:0;left:0;margin:0;}</style>'+ reader_html;
     reader_mod.innerHTML = reader_html;
     if (prnt && imgs && document.body.className.search(/new_cms|themesia|mangapark|webtoons/) == -1) {
       imgArea.appendChild(reader_mod);
@@ -716,6 +720,7 @@ function mydb_comic_reader() {
     } else if (document.body.classList.contains('reader_cms')) { //my Manga Reader CMS
       //if (el('#all')) el('#all').style.display = 'block';
       //if (el('#ppp')) el('#ppp').style.display = 'none';
+      if (wh.indexOf('comicfx') != -1 && el('.isi-chapter')) removeElem('.isi-chapter');
       createImage(window['pages']); //from web
     } else if (document.body.classList.contains('new_cms')) { //new cms
       var eShow = setInterval(function() {
@@ -908,7 +913,7 @@ function mydb_comic_reader() {
       el('head').appendChild(mgdx_css);
     } else if (wh.indexOf('mangayu') != -1) {
       localStorage.setItem('theme', 'dark');
-    } else if (wh.indexOf('wib.my.id') != -1) {
+    } else if (document.body.classList.contains('pemudanolep')) {
       localStorage.setItem('dark', 'true');
       document.documentElement.classList.add('dark');
     }
@@ -1036,16 +1041,18 @@ function mydb_comic_reader() {
   
   // check if page is comic/project, from database bookmark
   // to avoid mis-detection, eg. blog from blogger.com or wordpress.com
-  if (localStorage.getItem('mydb_comic_list')) {
-    var crList = JSON.parse(localStorage.getItem('mydb_comic_list'));
-    for (var n = 0; n < crList.length; n++) {
-      if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && crList[n].url.indexOf(wp) != -1) {
-        console.log('project page: '+ crList[n].url);
-        mydb_project = true;
-        break;
+  crossStorage.get('mydb_comic_data', function(res) { //bug: wait too long before "Start reader"
+    if (res != null && res != 'error') {
+      var crList = genArray(JSON.parse(res).list);
+      for (var n = 0; n < crList.length; n++) {
+        if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && crList[n].url.indexOf(wp) != -1) {
+          console.log('project page: '+ crList[n].url);
+          mydb_project = true;
+          break;
+        }
       }
     }
-  }
+  });
   
   // Start reader
   if (mydb_reader && !mydb_project) {
@@ -1064,12 +1071,15 @@ function mydb_comic_reader() {
   webDarkMode();
   disqusMod();
   
-  if (localStorage.getItem('visited-chapters')) localStorage.removeItem('visited-chapters');
-  if (localStorage.getItem('bookmark')) localStorage.removeItem('bookmark');
-  if (localStorage.getItem('history')) localStorage.removeItem('history');
-  if (localStorage.getItem('bm_history')) localStorage.removeItem('bm_history');
-  if (localStorage.getItem('ts_history')) localStorage.removeItem('ts_history');
-  indexedDB.open('ts_series_history').onsuccess = function() { indexedDB.deleteDatabase('ts_series_history') };
+  if (mydb_settings.remove_site.history) {
+    if (localStorage.getItem('visited-chapters')) localStorage.removeItem('visited-chapters'); //komikcast
+    if (localStorage.getItem('history')) localStorage.removeItem('history');
+    if (localStorage.getItem('bm_history')) localStorage.removeItem('bm_history'); //themesia
+    if (localStorage.getItem('ts_history')) localStorage.removeItem('ts_history'); //themesia
+    if (localStorage.getItem('ts_hs_history')) localStorage.removeItem('ts_hs_history'); //themesia
+    indexedDB.open('cfx_komik').onsuccess = function() { indexedDB.deleteDatabase('cfx_komik') }; //comicfx
+    indexedDB.open('ts_series_history').onsuccess = function() { indexedDB.deleteDatabase('ts_series_history') }; //themesia
+  }
 }
 
 if (!live_test_comic_r && !mydb_cr_loaded) {
