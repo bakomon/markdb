@@ -1122,7 +1122,7 @@ function mydb_bookmark() {
     el('.db_total').classList.remove('db_hidden');
   }
   
-  // temporary
+  /* temporary
   function db_genList(data) {
     main_arr = genArray(data.list); //only data from "list"
     
@@ -1136,7 +1136,7 @@ function mydb_bookmark() {
     
     var gl_data = '{"check":{"length":"'+ data.check['length'] +'","update":'+ data.check.update +'},"list":'+ gl_str +'}'
     crossStorage.set(`mydb_${mydb_type}_data`, gl_data);
-  }
+  }*/
   
   function db_mainData(note, query) {
     firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}`).once('value').then(function(snapshot) {
@@ -1171,7 +1171,7 @@ function mydb_bookmark() {
   }
   
   function listCheck(data) {
-    if (data && (data != 'null' || data != 'error')) {
+    if (data && (data != 'null' && data != 'error')) {
       data = JSON.parse(data);
       firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}/check`).once('value').then(function(snapshot) {
         var res = snapshot.val();
