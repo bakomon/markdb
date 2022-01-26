@@ -89,10 +89,10 @@ function mydb_tools_fnc() {
       
       window.addEventListener('message', function(e) {
         if (e.origin == cross_url && e.data.match(/cross__/i) && e.data.indexOf('cross_test') == -1) {
-          clearTimeout(cross_chk);
           var get_data = JSON.parse(e.data);
+          clearTimeout(window[get_data.name]);
           get_data.key = get_data.key.replace(/^cross__/, '');
-          crossStorage.write(get_data.key, get_data.data);
+          crossStorage.write(get_data.name, get_data.key, get_data.data);
         }
       });
     },
@@ -104,11 +104,14 @@ function mydb_tools_fnc() {
         }
       }, 100);
     },
-    write: function(key, data) {
+    write: function(name, key, data) {
+      /* old
       cross_callbacks[key].forEach(function(callback) {
         callback(data);
         cross_callbacks[key].splice(callback, 1); //remove value from array after callback
-      });
+      });*/
+      cross_callbacks[name].callback(data);
+      delete cross_callbacks[name];
     },
     set: function(key, data) {
       /* save data to subdomain localStorage */
@@ -117,24 +120,28 @@ function mydb_tools_fnc() {
       crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
     },
     get: function(key, callback) {
+      var name = Math.random().toString(36).substr(2, 5);
+      
+      /* old
       if (!cross_callbacks[key]) {
         cross_callbacks[key] = [];
       }
-      cross_callbacks[key].push(callback);
+      cross_callbacks[key].push(callback);*/
+      cross_callbacks[name] = {"key":key,"callback":callback};
       
       /* load saved data from subdomain localStorage */
-      var l_obj = '{"method":"get","key":"'+ key +'","origin":"'+ cross_origin +'"}';
+      var l_obj = '{"method":"get","name":"'+ name +'","key":"'+ key +'","origin":"'+ cross_origin +'"}';
       crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
-      crossStorage.check(key, function(res){callback(res)});
+      crossStorage.check(name, key, function(res){callback(res)});
     },
     remove: function(key) {
       /* remove data from subdomain localStorage */
       var l_obj = '{"method":"remove","key":"'+ key +'","origin":"'+ cross_origin +'"}';
       crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
     },
-    check: function(key, callback) {
-      cross_chk = setTimeout(function() {
-        console.error(`!! Error crossStorage: can\'t get "${key}" data from iframe.`);
+    check: function(name, key, callback) {
+      window[name] = setTimeout(function() {
+        console.error(`!! Error crossStorage: [${name}] can\'t get "${key}" data from iframe.`);
         callback('error');
       }, 8000);
     }
@@ -385,7 +392,7 @@ function mydb_tools() {
               if (typeof firebase.auth !== 'undefined') {
                 clearInterval(db3_chk);
                 mydb_fbase_loaded = true;
-                console.log('Firebase: loaded');
+                console.log('Firebase: all loaded');
                 if (mydb_settings.auto_login) autoLogin();
               }
             }, 100);
@@ -570,7 +577,7 @@ var fbase_config = {
   measurementId: "G-Z4YQS31CXM"
 };
 /* ============================================================ */
-var cross_window, cross_chk;
+var cross_window;
 var cross_callbacks = {};
 var cross_origin = 'coreaz';
 var cross_url = 'https://bakomon.blogspot.com';
@@ -606,7 +613,7 @@ var mydb_settings = {"fbase_reader":false,"bmark_reader":false,"auto_login":true
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|1/25/2022, 10:40:49 PM';
+var local_interval = 'manual|1/26/2022, 10:20:04 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
