@@ -720,7 +720,7 @@ function mydb_comic_reader() {
     } else if (document.body.classList.contains('reader_cms')) { //my Manga Reader CMS
       //if (el('#all')) el('#all').style.display = 'block';
       //if (el('#ppp')) el('#ppp').style.display = 'none';
-      if (wh.indexOf('comicfx') != -1 && el('.isi-chapter')) removeElem('.isi-chapter');
+      if (wh.indexOf('comicfx') != -1 && el('.viewer-cnt .isi-chapter')) removeElem('.viewer-cnt .isi-chapter');
       createImage(window['pages']); //from web
     } else if (document.body.classList.contains('new_cms')) { //new cms
       var eShow = setInterval(function() {
