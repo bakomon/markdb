@@ -1,11 +1,17 @@
 {
   "rules": {
-     "bookmark": { // only allows bookmark/
-        ".read": "auth != null",
-        ".write": "auth != null",
-        "comic": {".indexOn": ["id", "bmdb", "title", "alternative"]},
-        "novel": {".indexOn": ["id", "bmdb", "title", "alternative"]},
-        "anime": {".indexOn": ["id", "bmdb", "title", "alternative"]}
-     }
+    "bookmark": { // only allows bookmark
+      ".read": "true",
+      ".write": "auth != null",
+      "comic": {
+        "list": {".indexOn": ["id", "bmdb", "title", "alternative"]}
+      },
+      "novel": {
+        "list": {".indexOn": ["id", "bmdb", "title", "alternative"]}
+      },
+      "anime": {
+        "list": {".indexOn": ["id", "bmdb", "title", "alternative"]}
+      }
+    }
   }
 }
