@@ -197,7 +197,15 @@ function mydb_bookmark() {
         console.log('!! Error: '+ error);
         db_info('Error!!', 'danger', true);
       } else {
-        if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData(note);
+        if (mydb_type == mydb_type_bkp && mydb_select == 'list') {
+          if (note == 'update' && !is_search && !mydb_settings.always_check.bookmark) {
+            db_info('Done');
+            db_resetForm('remove');
+            listCheck(JSON.stringify(main_data));
+          } else {
+            db_mainData(note);
+          }
+        }
         if (note == 'update' && is_index) db_startIndex(note);
         if (mydb_select == 'source') {
           sourceChange();
@@ -333,6 +341,7 @@ function mydb_bookmark() {
         }
       }
     } else {
+      ch_before = is_search ? false : data.number;
       if (is_mobile) el('.db_host_select').classList.remove('db_hidden');
       el('.db_id').value = data.id;
       el('.db_id').readOnly = true;
@@ -394,10 +403,10 @@ function mydb_bookmark() {
       //if (wp.search(/^\/((m|id|en)\/?)?$/) == -1 && wl.href.search(/[\/\?&](s(earch)?|page)[\/=\?]/) == -1) { //temporary
       if (wp != '/' && wp.search(skip1_rgx) == -1 && wp.search(skip2_rgx) == -1) {
         var bmark_id = getId('bookmark').url; //from wl.pathname
-        el('.db_id').value = bmark_id;
+        if (is_form == 'new') el('.db_id').value = bmark_id;
         el('.db_bmdb').dataset.val = bmark_id.replace(/[-_\.]/g, ' ');
         if (wp.search(/\/(title|anime|novel|series)\/\d+\//) != -1) el('.db_bmdb').value = wp.match(/\/(title|anime|novel|series)\/([^\/]+)/)[1];
-        el('.db_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(bmark_id, '_') : firstCase(bmark_id, '-');
+        if (is_form == 'new') el('.db_title').value = wh.indexOf('mangacanblog') != -1 ? firstCase(bmark_id, '_') : firstCase(bmark_id, '-');
         if (is_mobile) el('.db_title_select').classList.remove('db_hidden');
         el('.db_url').value = '//'+ wh.replace(wh_rgx, '') + wp + (wh.indexOf('webtoons') != -1 ? wl.search : '');
         if (is_mobile) el('.db_url_select').classList.remove('db_hidden');
@@ -421,12 +430,12 @@ function mydb_bookmark() {
       
       // if bookmark id is "none", then it must be filled
       var gen_cover = el('.seriestucontent img') || el('.animefull .bigcontent img') || el('.komikinfo .bigcontent img') || el('.profile-manga .summary_image img') || el('.series .series-thumb img') || el('#Informasi .ims img') || el('.komik_info-content-thumbnail img') || el('.info-left img') || el('meta[property="og:image"]') || false;
-      if (gen_cover) {
+      if (gen_cover && is_form == 'new') {
         var cover_tag = gen_cover.tagName == 'IMG' ? gen_cover.src : el('meta[property="og:image"]').getAttribute('content');
         el('.db_image').value = cover_tag.replace(/i\d+\.wp\.com\//, '');
       }
       
-      /* old: Mangadex image format, example: 
+      /* old: Mangadex image format, temporary
       - https://mangadex.org/images/manga/58050.jpg
       - https://mangadex.org/images/manga/58050.large.jpg
       */
@@ -950,42 +959,43 @@ function mydb_bookmark() {
     var not_support = db_supportCheck(data.host, 'status', 'discontinued') || db_supportCheck(data.host, 'tag', 'not_support');
     var chk = not_support || wh.indexOf(data.host) != -1;
     var s_txt = '';
-    s_txt += '<li class="_bm '+ (note ? 'db_line_top' : 'bm_main');
+    s_txt += '<li class="_bm '+ (note.indexOf('similar') != -1 ? 'db_line_top' : 'bm_main');
     if ('read' in data && data.read != '') s_txt += ' db_url_read';
     s_txt += ' flex_wrap">';
     // bug: if title is project and contains "episode" or "chapter"
-    s_txt += '<div class="_db db_100"'+ ((wh.indexOf(data.host) == -1 || data.url.indexOf(wp) == -1 || note) && el('title').innerHTML.search(number_t_rgx) == -1 ? ' onclick="openInNewTab(\''+ data.url +'\', \'bm_list\')"' : '') +' title="'+ data.url +'">';
-    if (note != 'single_data') {
+    s_txt += '<div class="_db db_100"'+ ((wh.indexOf(data.host) == -1 || data.url.indexOf(wp) == -1 || note.indexOf('similar') != -1) && el('title').innerHTML.search(number_t_rgx) == -1 ? ' onclick="openInNewTab(\''+ data.url +'\', \'bm_list\')"' : '') +' title="'+ data.url +'">';
+    if (note != 'similar_one') {
       s_txt += data.title;
       if (data.alternative != '') s_txt += ' | '+ data.alternative;
     } else {
       s_txt += firstCase(data.id, '-');
     }
     s_txt += '</div>';
-    s_txt += '<div class="db_100 '+ (not_support && note != 'single_data' ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
-    if (note != 'single_data') {
-      s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
+    s_txt += '<div class="db_100 '+ (not_support && note != 'similar_one' ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
+    if (note != 'similar_one') {
+      s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ (ch_before && ch_before != data.number ? (ch_before +' > ') : '') + data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
       if ('read' in data && data.read != '') s_txt += '<button class="_db db_selected'+ (chk ? '' : ' db_hidden') +'" onclick="openInNewTab(\''+ data.read +'\', \'bm_list\')" title="'+ data.read +'">Read</button>';
       s_txt += '<button class="bm_edit _db'+ (chk ? '' : ' db_hidden') +'" data-id="list">Edit</button>';
       s_txt += '<button class="bm_delete _db'+ (chk ? '' : ' db_hidden') +'" title="Delete">X</button>';
     }
-    s_txt += '<span class="bm_site db_text'+ (wh.indexOf(data.host) != -1 ? ' db_hidden' : (not_support && note != 'single_data' ? ' db_100 t_center' : '')) +'" onclick="openInNewTab(\''+ data.url +'\', \'bm_list\')">'+ data.host +'</span>';
+    s_txt += '<span class="bm_site db_text'+ (wh.indexOf(data.host) != -1 ? ' db_hidden' : (not_support && note != 'similar_one' ? ' db_100 t_center' : '')) +'" onclick="openInNewTab(\''+ data.url +'\', \'bm_list\')">'+ data.host +'</span>';
     s_txt += '</div>';
     s_txt += '</li>';
     
-    if (note) {
+    if (note.indexOf('similar') != -1) {
       el('.db_bm_show .bm_list').classList.add('bm_similar');
       el('.db_bm_show .bm_list').innerHTML += s_txt;
     } else {
       el('.db_bm_show').innerHTML = '<ul class="bm_list">'+ s_txt +'</ul>';
       el('.db_bm_show .bm_list').style.maxHeight = 'calc(100vh - '+ (el('.db_menu').offsetHeight + el('.db_search').offsetHeight  + 60) +'px)';
     }
+    ch_before = false;
   }
   
   function db_showData(data, note) {
     is_exist = true;
     var smlr_note = 'similar';
-    db_showHtml(data);
+    db_showHtml(data, 'main');
     if (mydb_settings.number_title) el('title').innerHTML = '('+ data.number +') '+ el('title').innerHTML.replace(/^\([^\)]+\)\s/, '');
     el('.db_bm_show').classList.remove('db_hidden');
     console.log(`${mydb_type} data from: ${note}`);
@@ -998,7 +1008,7 @@ function mydb_bookmark() {
       if (localStorage.getItem(getId('reader'))) localStorage.removeItem(getId('reader')); //remove old data, temporary
     }
     
-    if (note.indexOf('db_checkBookmarkOne') != -1) smlr_note = 'single_data';
+    if (note.indexOf('db_checkBookmarkOne') != -1) smlr_note = 'similar_one';
     
     if (data.similar != '') {
       var smlr_list = data.similar.replace(/\s+/g, '').split(',');
@@ -1108,6 +1118,11 @@ function mydb_bookmark() {
       } else {
         if (data) {
           data = genArray(data)[0];
+          // change crossStorage data after update, from db_changeData(
+          if (JSON.stringify(main_data.list[data.id]) != JSON.stringify(data)) {
+            main_data.list[data.id] = data;
+            crossStorage.set(`mydb_${mydb_type}_data`, JSON.stringify(main_data));
+          }
           db_showData(data, 'db_checkBookmarkOne '+ child);
         } else {
           db_mainData('start'); //if not found, search bookmark with "all" data
@@ -1325,10 +1340,10 @@ function mydb_bookmark() {
       db_resetMenu();
       this.classList.toggle('db_danger');
       if (this.classList.contains('db_danger')) {
-        mydb_type = mydb_type_bkp;
         this.innerHTML = 'Close';
         el('.db_menu .db_new_gen').classList.add('db_hidden');
       } else {
+        mydb_type = mydb_type_bkp;
         this.innerHTML = 'Menu';
         el('.db_menu .db_new_gen').classList.remove('db_hidden');
       }
@@ -1424,7 +1439,7 @@ function mydb_bookmark() {
     };
   }
   
-  var main_data, main_arr, nav_total, nav_elem, nav_current, index_data, index_arr, index_sort, index_order;
+  var main_data, main_arr, ch_before, nav_total, nav_elem, nav_current, index_data, index_arr, index_sort, index_order;
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
