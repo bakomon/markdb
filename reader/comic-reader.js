@@ -979,12 +979,13 @@ function mydb_comic_reader() {
     }
     // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net || ruppiamartha.casa
     if (document.body.classList.contains('ads_newtab')) {
+      removeElem('iframe[style*="display: none"], iframe[style*="opacity: 0"]', 'all');
       var ads_chk = setInterval(function() {
         if (el('iframe[style*="display: none"], iframe[style*="opacity: 0"]')) {
           removeElem('iframe[style*="display: none"], iframe[style*="opacity: 0"]', 'all');
         }
       }, 5000);
-      setTimeout(function() { console.log(ads_chk);clearInterval(ads_chk); }, 30000);
+      setTimeout(function() { clearInterval(ads_chk); }, 30000);
       
       // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
       var windowOpenBackup = window.open; //can't use if poper blocker extension installed
