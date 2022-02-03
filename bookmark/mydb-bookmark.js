@@ -198,7 +198,7 @@ function mydb_bookmark() {
         db_info('Error!!', 'danger', true);
       } else {
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') {
-          if (note == 'update' && !is_search && !mydb_settings.always_check.bookmark) {
+          if (note == 'update' && !is_search && !mydb_settings.server_check.bm_list) {
             db_info('Done');
             db_resetForm('remove');
             listCheck(JSON.stringify(main_data));
@@ -1190,7 +1190,7 @@ function mydb_bookmark() {
       data = JSON.parse(data);
       firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}/check`).once('value').then(function(snapshot) {
         var res = snapshot.val();
-        if ((data.check['length'] != res['length']) || (data.check.update != res.update) && mydb_settings.always_check.bookmark) {
+        if ((data.check['length'] != res['length']) || (data.check.update != res.update) && mydb_settings.server_check.bm_list) {
           console.log(`mydb: update mydb_${mydb_type}_data`);
           db_mainData('get');
         } else {
@@ -1468,6 +1468,8 @@ function mydb_bookmark() {
       db_startBookmark();
     }
   }, 100);
+  
+  mydb_info['bookmark_js'] = 'loaded';
   
   if (mydb_settings.remove_site.bookmark) {
     if (localStorage.getItem('bookmarkedKomik')) localStorage.removeItem('bookmarkedKomik'); //komikcast
