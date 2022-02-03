@@ -1071,6 +1071,8 @@ function mydb_comic_reader() {
   webDarkMode();
   disqusMod();
   
+  mydb_info['reader_js'] = 'loaded';
+  
   if (mydb_settings.remove_site.history) {
     if (localStorage.getItem('visited-chapters')) localStorage.removeItem('visited-chapters'); //komikcast
     if (localStorage.getItem('history')) localStorage.removeItem('history');
