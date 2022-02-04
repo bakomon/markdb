@@ -337,6 +337,8 @@ function mydb_tools() {
   };
   
   function autoLogin() {
+    mydb_info['fbase_auto_login'] = 'true';
+    
     /* Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102 */
     firebase.app(fbase_app).auth().onAuthStateChanged(function(user) {
       mydb_login = user ? true : false;
@@ -376,21 +378,26 @@ function mydb_tools() {
           console.error('!! Error: can\'t load firebase.');
           if (localStorage.getItem('mydb_support') != 'true') callScript('error');
         });
+    } else {
+      mydb_fbase_app = true;
     }
     
     var lf_chk = setInterval(function() {
       if (typeof firebase !== 'undefined') {
         clearInterval(lf_chk);
+        mydb_info['fbase_app'] = 'loaded';
         /* Initialize new app with different name https://stackoverflow.com/a/37603526/7598333 */
         firebase.initializeApp(fbase_config, fbase_app);
         if (typeof firebase.database == 'undefined') addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-database.js`);
         var db2_chk = setInterval(function() {
           if (typeof firebase.database !== 'undefined') {
             clearInterval(db2_chk);
+            mydb_info['fbase_database'] = 'loaded';
             if (typeof firebase.auth == 'undefined') addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-auth.js`);
             var db3_chk = setInterval(function() {
               if (typeof firebase.auth !== 'undefined') {
                 clearInterval(db3_chk);
+                mydb_info['fbase_auth'] = 'loaded';
                 mydb_fbase_loaded = true;
                 console.log('Firebase: all loaded');
                 if (mydb_settings.auto_login) autoLogin();
@@ -404,6 +411,7 @@ function mydb_tools() {
   
   function callScript(note) {
     if (mydb_type && note != 'error') {
+      mydb_info['type'] = mydb_type;
       mydb_type_bkp = mydb_type;
       localStorage.setItem('mydb_support', 'true');
       
@@ -418,6 +426,7 @@ function mydb_tools() {
       genCSS();
       mydb_loaded = true;
       
+      mydb_info['reader_js'] = 'wait';
       if (live_test_comic_r) {
         var cr_chk = setInterval(function() {
           if (typeof mydb_comic_reader !== 'undefined') {
@@ -435,7 +444,8 @@ function mydb_tools() {
           var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); /* cloudflare */
           var is_cf = chk_cf ? true : false;
           if (!is_cf && (!mydb_read || mydb_settings.bmark_reader)) {
-            if (!mydb_fbase_app && typeof firebase == 'undefined') loadFirebase('bookmark');
+            mydb_info['bookmark_js'] = 'wait';
+            if (!mydb_fbase_app) loadFirebase('bookmark');
             if (live_test_bookmark) {
               var bm_chk = setInterval(function() {
                 if (typeof mydb_bookmark !== 'undefined') {
@@ -450,7 +460,7 @@ function mydb_tools() {
         }
       }, 100);
     } else {
-      mydb_error = {"mydb_type":'"'+ mydb_type +'"',"note":'"'+ note +'"'};
+      mydb_info['error'] = {"mydb_type":'"'+ mydb_type +'"',"note":'"'+ note +'"'};
       localStorage.setItem('mydb_support', 'false'); /* not support */
       console.log('mydb_support: false');
     }
@@ -474,9 +484,10 @@ function mydb_tools() {
   }
   
   function sourceCheck(note, data) {
+    mydb_info['source'] = note;
     if (data && data.search(/null|error/i) == -1) {
       data = JSON.parse(data);
-      if (!mydb_reader || mydb_settings.fbase_reader) {
+      if (!mydb_reader || mydb_settings.server_check.reader) {
         firebase.app(fbase_app).database().ref('bookmark/source/update').once('value').then(function(snapshot) {
           if (data.update != snapshot.val()) {
             console.log('mydb: update new source');
@@ -525,13 +536,14 @@ function mydb_tools() {
   document.body.classList.add(w_host.replace(/\./g, '-'));
   
   if (document.head.innerHTML == '' || localStorage.getItem('mydb_support') == 'false' || wp.search(/\.(gif|webp|(pn|sv|jpe?)g)$/) != -1) return;
+  mydb_info['support'] = 'true';
   startLoading();
   mydb_tools_fnc();
   mydb_reader = wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || el('title') && el('title').innerHTML.search(number_t_rgx) != -1;
   
   /* START - check source via crossStorage */
   crossStorage.load(); /* init */
-  if (!mydb_reader || mydb_settings.fbase_reader) {
+  if (!mydb_reader || mydb_settings.server_check.reader) {
     loadFirebase('start');
     var sc_check = setInterval(function() {
       if (mydb_fbase_loaded) {
@@ -599,21 +611,21 @@ var mydb_bm_loaded = false;
 var mydb_cr_loaded = false;
 var mydb_change = false;
 var mydb_project = false;
-var mydb_error = {};
 var mydb_select = 'list';
+var mydb_info = {"error":{},"support":"","source":"","type":"","fbase_app":"","fbase_database":"","fbase_auth":"","fbase_auto_login":"","reader_js":"","bookmark_js":""};
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
-var mydb_settings = {"fbase_reader":false,"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"always_check":{"bookmark":true},"remove_site":{"bookmark":true,"history":true},"number_reader":true};
+var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"bm_list":false,"reader":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true};
 /* 
-- fbase_reader = load firebase on comic reader
 - bmark_reader = show bookmark on comic reader
 - new_tab.bm_list = open link in new tab on bookmark list (bm_list)
 - new_tab.bs_list = open link in new tab on search list (bs_list)
 - number_title = add [number] chapter/episode to <title>
-- always_check.bookmark = check if boookmark data updated (date)
+- server_check.bm_list = check if bm_list data updated (date)
+- server_check.reader = check if source data updated on comic reader
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|1/26/2022, 10:20:04 AM';
+var local_interval = 'manual|2/4/2022, 8:57:22 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
