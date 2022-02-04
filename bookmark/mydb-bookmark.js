@@ -199,9 +199,10 @@ function mydb_bookmark() {
       } else {
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') {
           if (note == 'update' && !is_search && !mydb_settings.server_check.bm_list) {
+            el('.db_bm_show').innerHTML = 'Loading...';
+            listCheck(JSON.stringify(main_data));
             db_info('Done');
             db_resetForm('remove');
-            listCheck(JSON.stringify(main_data));
           } else {
             db_mainData(note);
           }
