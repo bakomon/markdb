@@ -977,7 +977,7 @@ function mydb_comic_reader() {
         wccp_free_iscontenteditable = function() { return true; };
       }
     }
-    // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net || ruppiamartha.casa
+    // skip ads window.open(), eg. syndication.exdynsrv.com || jomtingi.net
     if (document.body.classList.contains('ads_newtab')) {
       removeElem('iframe[style*="display: none"], iframe[style*="opacity: 0"]', 'all');
       var ads_chk = setInterval(function() {
@@ -1088,7 +1088,7 @@ function mydb_comic_reader() {
   }
 }
 
-if (!live_test_comic_r && !mydb_cr_loaded) {
+if ((typeof live_test_comic_r != 'undefined' && typeof mydb_cr_loaded != 'undefined') && (!live_test_comic_r && !mydb_cr_loaded)) {
   var db_cr_check = setInterval(function() {
     if (mydb_loaded) {
       clearInterval(db_cr_check);
