@@ -1467,6 +1467,8 @@ function mydb_bookmark() {
     if (mydb_fbase_loaded) {
       clearInterval(fbase_wait);
       db_startBookmark();
+      
+      if (!mydb_settings.server_check.source_bm) sourceCheck('after', JSON.stringify(mydb_source));
     }
   }, 100);
   
@@ -1481,7 +1483,7 @@ function mydb_bookmark() {
   }
 }
 
-if (!live_test_bookmark && !mydb_bm_loaded) {
+if ((typeof live_test_bookmark != 'undefined' && typeof mydb_bm_loaded != 'undefined') && (!live_test_bookmark && !mydb_bm_loaded)) {
   var db_bm_check = setInterval(function() {
     if (mydb_loaded) {
       clearInterval(db_bm_check);
