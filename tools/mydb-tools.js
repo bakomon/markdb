@@ -357,7 +357,7 @@ function mydb_tools() {
             }).catch(function(error) {
               console.error('!! Error: function autoLogin(, code: '+ error.code +', message: '+ error.message);
               alert('!! Error: function autoLogin(\n'+ error.message);
-              if (mydb_support && mydb_support.indexOf('true') == -1) {
+              if (!mydb_support || (mydb_support && mydb_support.indexOf('true') == -1)) {
                 mydb_spt_info = '{"support":"false","note":"autoLogin( '+ error.message +'"}';
                 localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
               }
@@ -379,7 +379,7 @@ function mydb_tools() {
           */
           clearInterval(lf_chk);
           console.error('!! Error: can\'t load firebase.');
-          if (mydb_support && mydb_support.indexOf('true') == -1) callScript('error');
+          if (!mydb_support || (mydb_support && mydb_support.indexOf('true') == -1)) callScript('error');
         });
     } else {
       mydb_fbase_app = true;
