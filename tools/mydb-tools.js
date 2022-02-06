@@ -147,104 +147,102 @@ function mydb_tools_fnc() {
     }
   };
   
-  /* loadXMLDoc (XMLHttpRequest) https://codepen.io/sekedus/pen/vYGYBNP */
-  function ls_loadXMLDoc(url, callback, info) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == XMLHttpRequest.DONE) {
-        if (this.status == 200) {
-          var response = this.responseText;
-          if (info == 'parse') {
-            var resHTML = new DOMParser();
-            response = resHTML.parseFromString(response, 'text/html');
-          }
-          callback(response);
-        } else {
-          callback(this.status);
-        }
-      }
-    };
-    xhr.open('GET', url, true);
-    xhr.send();
-  };
-  
-  function ls_replaceData(str, note) {
-    if (note) { /* reverse */
-      str = str.replace(/##x5c;##x27;/g, '\\\'').replace(/##x5c;##x22;/g, '\\\"').replace(/##x5c;##x6e;/g, '\\n').replace(/##x5c;/g, '\\').replace(/##x2f;##x2f;/g, '\/\/').replace(/##x27;/g, '\'').replace(/##x22;/g, '\"').replace(/##xa;/g, '\n');
-    } else {
-      str = str.replace(/\t/g, '\x20\x20').replace(/\\\'/g, '##x5c;##x27;').replace(/\\\"/g, '##x5c;##x22;').replace(/\\n/g, '##x5c;##x6e;').replace(/\\/g, '##x5c;').replace(/\/\//g, '##x2f;##x2f;').replace(/\'/g, '##x27;').replace(/\"/g, '##x22;').replace(/\n/g, '##xa;');
-    }
-    return str;
-  }
-  
-  function ls_getData(data, id, type, info, date) {
-    if (info == 'reverse') {
-      data = ls_replaceData(data, info);
-      if (type == 'json') data = 'var '+ id +' = "'+ data +'";';
-    } else {
-      if (type.indexOf('json/') != -1) data = type.split('/')[1] +'('+ JSON.stringify(data) +');'; /* type.split('/')[1] = callback */
-      var scr_txt = '{"update":"'+ date +'","data":"'+ ls_replaceData(data.toString()) +'"}';
-      localStorage.setItem(id, scr_txt);
-    }
-    
-    var elem_tag = type == 'css' ? 'style' : 'script';
-    var elem_new = document.createElement(elem_tag);
-    elem_new.id = id;
-    elem_new.innerHTML = data;
-    document.querySelector('head').appendChild(elem_new);
-  }
-  
-  function ls_genDate(interval) {
-    var date_time, ls_date = new Date();
-    var ls_add = interval.indexOf('|') != -1 ? Number(interval.split('|')[1]) : 1;
-    if (interval.search(/(year|month)s?/i) != -1) {
-      var year_add = interval.search(/years?/i) != -1 ? ls_add : 0;
-      var month_add = interval.search(/months?/i) != -1 ? ls_add : 0;
-      ls_date.setFullYear(ls_date.getFullYear() + year_add, ls_date.getMonth() + month_add);
-    } else {
-      var date_num = interval.search(/weeks?/i) != -1 ? (ls_add*7*24*60*60) : interval.search(/days?/i) != -1 ? (ls_add*24*60*60) : interval.search(/hours?/i) != -1 ? (ls_add*60*60) : interval.search(/minutes?/i) != -1 ? (ls_add*60) : ls_add; /* default second */
-      ls_date.setTime(ls_date.getTime() + (date_num * 1000));
-    }
-    return ls_date.toLocaleString();
-  }
-  
   /* Save css, js, json to localStorage with Expiration https://codepen.io/sekedus/pen/LYbBagK */
-  ls_saveLocal = function(url, id, type, interval) {
-    var ls_interval = interval || 'permanent';
-    var ls_update = ls_interval.search(/manual\|/i) != -1 ? ls_interval.split('|')[1] : ls_genDate(ls_interval); /* default second+1 */
-    console.log(`ls_data_id: ${id}`);
-    console.log(`ls_interval: ${ls_interval}`);
-    console.log(`ls_update: ${ls_update}`);
-    
-    var data_local = localStorage.getItem(id);
-    if (data_local) {
-      data_local = JSON.parse(data_local);
-      if (data_local.update && data_local.data) {
-        if (data_local.data == '0') {
-          localStorage.removeItem(id);
-          alert(`!! ERROR: ${id} data is "${data_local.data}" !!\n\nTry to:\n1. check console on browser\n2. check XHR on ${window.location.hostname} in AdBlock filter.`);
-          return;
-        }
-        var date_chk = ls_interval.search(/manual\|/i) != -1 ? new Date(ls_interval.split('|')[1]) : new Date();
-        date_chk = date_chk.getTime() <= Date.parse(data_local.update); /* check time interval */
-        if (date_chk || ls_interval == 'permanent') {
-          console.log('ls_data: true');
-          ls_getData(data_local.data, id, type, 'reverse');
+  localSave = {
+    load: function(url, id, type, interval, callback) {
+      var ls_interval = interval || 'permanent';
+      var ls_update = ls_interval.search(/manual\|/i) != -1 ? ls_interval.split('|')[1] : localSave.date(ls_interval); /* default second+1 */
+      console.log(`ls_data_id: ${id}`);
+      console.log(`ls_interval: ${ls_interval}`);
+      console.log(`ls_update: ${ls_update}`);
+      
+      var data_local = localStorage.getItem(id);
+      if (data_local) {
+        data_local = JSON.parse(data_local);
+        if (data_local.update && data_local.data) {
+          if (data_local.data == '0') {
+            localStorage.removeItem(id);
+            alert(`!! ERROR: ${id} data is "${data_local.data}" !!\n\nTry to:\n1. check console on browser\n2. check XHR on ${window.location.hostname} in AdBlock filter.`);
+            return;
+          }
+          var date_chk = ls_interval.search(/manual\|/i) != -1 ? new Date(ls_interval.split('|')[1]) : new Date();
+          date_chk = date_chk.getTime() <= Date.parse(data_local.update); /* check time interval */
+          if (date_chk || ls_interval == 'permanent') {
+            console.log('ls_data: true');
+            localSave.set(data_local.data, id, type, 'true_time');
+          } else {
+            console.log('ls_data: false expired');
+            localStorage.removeItem(id);
+            localSave.get(url, function(res){ localSave.set(res, id, type, 'false_expired', ls_update); });
+          }
         } else {
-          console.log('ls_data: false time');
+          console.log('ls_data: false undefined');
           localStorage.removeItem(id);
-          ls_loadXMLDoc(url, function(res){ ls_getData(res, id, type, 'change_time', ls_update); });
+          localSave.get(url, function(res){ localSave.set(res, id, type, 'false_undefined', ls_update); });
         }
       } else {
-        console.log('ls_data: false undefined');
-        localStorage.removeItem(id);
-        ls_loadXMLDoc(url, function(res){ ls_getData(res, id, type, 'undefined', ls_update); });
+        console.log('ls_data: false not_found');
+        localSave.get(url, function(res){ localSave.set(res, id, type, 'false_notfound', ls_update); });
       }
-    } else {
-      console.log('ls_data: false');
-      ls_loadXMLDoc(url, function(res){ ls_getData(res, id, type, 'not_found', ls_update); });
-    }
-  }
+    },
+    get: function(url, callback, info) {
+      /* loadXMLDoc (XMLHttpRequest) https://codepen.io/sekedus/pen/vYGYBNP */
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+          if (this.status == 200) {
+            var response = this.responseText;
+            if (info == 'parse') {
+              var resHTML = new DOMParser();
+              response = resHTML.parseFromString(response, 'text/html');
+            }
+            callback(response);
+          } else {
+            callback(this.status);
+          }
+        }
+      };
+      xhr.open('GET', url, true);
+      xhr.send();
+    },
+    set: function(data, id, type, info, date) {
+      if (info.search(/^false_/) != -1) {
+        if (type.indexOf('json/') != -1) data = type.split('/')[1] +'('+ JSON.stringify(data) +');'; /* type.split('/')[1] = callback */
+        var scr_txt = '{"id":"'+ id +'","type":"'+ type +'","update":"'+ date +'","data":"'+ localSave.replace(data.toString()) +'"}';
+        localStorage.setItem(id, scr_txt);
+      } else {
+        data = localSave.replace(data, 'reverse');
+        if (type == 'json') data = 'var '+ id +' = "'+ data +'";';
+      }
+      
+      var elem_tag = type == 'css' ? 'style' : 'script';
+      var elem_new = document.createElement(elem_tag);
+      elem_new.id = id;
+      elem_new.innerHTML = data;
+      document.querySelector('head').appendChild(elem_new);
+    },
+    date: function(interval) {
+      var date_time, ls_date = new Date();
+      var ls_add = interval.indexOf('|') != -1 ? Number(interval.split('|')[1]) : 1;
+      if (interval.search(/(year|month)s?/i) != -1) {
+        var year_add = interval.search(/years?/i) != -1 ? ls_add : 0;
+        var month_add = interval.search(/months?/i) != -1 ? ls_add : 0;
+        ls_date.setFullYear(ls_date.getFullYear() + year_add, ls_date.getMonth() + month_add);
+      } else {
+        var date_num = interval.search(/weeks?/i) != -1 ? (ls_add*7*24*60*60) : interval.search(/days?/i) != -1 ? (ls_add*24*60*60) : interval.search(/hours?/i) != -1 ? (ls_add*60*60) : interval.search(/minutes?/i) != -1 ? (ls_add*60) : ls_add; /* default second */
+        ls_date.setTime(ls_date.getTime() + (date_num * 1000));
+      }
+      return ls_date.toLocaleString();
+    },
+    replace: function(str, note) {
+      if (note == 'reverse') {
+        str = str.replace(/##x5c;##x27;/g, '\\\'').replace(/##x5c;##x22;/g, '\\\"').replace(/##x5c;##x6e;/g, '\\n').replace(/##x5c;/g, '\\').replace(/##x2f;##x2f;/g, '\/\/').replace(/##x27;/g, '\'').replace(/##x22;/g, '\"').replace(/##xa;/g, '\n');
+      } else {
+        str = str.replace(/\t/g, '\x20\x20').replace(/\\\'/g, '##x5c;##x27;').replace(/\\\"/g, '##x5c;##x22;').replace(/\\n/g, '##x5c;##x6e;').replace(/\\/g, '##x5c;').replace(/\/\//g, '##x2f;##x2f;').replace(/\'/g, '##x27;').replace(/\"/g, '##x22;').replace(/\n/g, '##xa;');
+      }
+      return str;
+    },
+  };
   
   /* ============================================================ */
   
@@ -412,6 +410,23 @@ function mydb_tools() {
     }, 100);
   }
   
+  function crossJSDataMOD(data, url, id, type, date) {
+    if (data && (data != 'null' && data != 'error')) {
+      var cr_data = JSON.parse(data);
+      if (cr_data.update == date) {
+        localSave.set(cr_data.data, id, type, 'MOD');
+      } else {
+        crossJSDataMOD(false, url, id, type, date);
+      }
+    } else {
+      localSave.get(url, function(res) {
+        localSave.set(res.toString(), id, type, 'MOD');
+        var cr_data = '{"id":"'+ id +'","type":"'+ type +'","update":"'+ date +'","data":"'+ localSave.replace(res.toString()) +'"}';
+        crossStorage.set(id, cr_data);
+      });
+    }
+  }
+  
   function callScript(note) {
     if (mydb_type && note != 'error') {
       mydb_info['type'] = mydb_type;
@@ -439,7 +454,18 @@ function mydb_tools() {
           }
         }, 100);
       } else {
-        if (mydb_type == 'comic') ls_saveLocal(url_js_comic_reader, 'mydb_tools_'+ mydb_type +'_reader', 'js', local_interval);
+        if (mydb_type == 'comic') {
+          var cr_id = `mydb_tools_${mydb_type}_reader`;
+          var cr_type = 'js';
+          
+          /* old
+          localSave.load(url_js_comic_reader, cr_id, cr_type, local_interval); */
+          
+          /* new */
+          crossStorage.get(cr_id, function(res) {
+            crossJSDataMOD(res, url_js_comic_reader, cr_id, cr_type, local_interval);
+          });
+        }
       }
       
       var reader_chk = setInterval(function() {
@@ -458,21 +484,30 @@ function mydb_tools() {
                 }
               }, 100);
             } else {
-              ls_saveLocal(url_js_bookmark, 'mydb_tools_bookmark', 'js', local_interval);
+              var bm_id = 'mydb_tools_bookmark';
+              var bm_type = 'js';
+              
+              /* old
+              localSave.load(url_js_bookmark, bm_id, bm_type, local_interval); */
+              
+              /* new */
+              crossStorage.get(bm_id, function(res) {
+                crossJSDataMOD(res, url_js_bookmark, bm_id, bm_type, local_interval);
+              });
             }
           }
         }
       }, 100);
     } else {
       mydb_info['error'] = {"mydb_type":'"'+ mydb_type +'"',"note":'"'+ note +'"'};
-      mydb_spt_info = '{"support":"false","note":"callScript( '+ note +'"}';
+      mydb_spt_info = '{"support":"false","note":"⚠️ not support ⚠️"}';
       localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
       console.log('mydb_support: false');
     }
     el('#_loader').parentElement.removeChild(el('#_loader'));
   }
   
-  function getType(prop) { //check type & source
+  function getType(prop) { /* check type & source */
     var data = mydb_source[prop];
     for (var site in data) {
       if (data[site]['host'].indexOf(w_host) != -1 || data[site]['domain'].indexOf(w_host) != -1) {
@@ -490,7 +525,7 @@ function mydb_tools() {
   
   sourceCheck = function(note, data) {
     mydb_info['source'] = note;
-    if (data && data.search(/null|error/i) == -1) {
+    if (data && (data != 'null' && data != 'error')) {
       data = JSON.parse(data);
       if (note == 'fbase' || note == 'after') {
         firebase.app(fbase_app).database().ref('bookmark/source/update').once('value').then(function(snapshot) {
@@ -570,6 +605,8 @@ var host_rgx = /(oploverz|webtoons|mangaku|mangaindo|komikstation|komikcast|west
 */
 
 /* remove old data, temporary */
+if (localStorage.getItem('mydb_tools_comic_reader')) localStorage.removeItem('mydb_tools_comic_reader');
+if (localStorage.getItem('mydb_tools_bookmark')) localStorage.removeItem('mydb_tools_bookmark');
 if (localStorage.getItem('comic_tools_bookmark')) localStorage.removeItem('comic_tools_bookmark');
 if (localStorage.getItem('comic_tools_reader')) localStorage.removeItem('comic_tools_reader');
 if (localStorage.getItem('comic_tools_list')) localStorage.removeItem('comic_tools_list');
@@ -635,7 +672,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/5/2022, 9:37:49 PM';
+var local_interval = 'manual|2/6/2022, 10:11:38 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
@@ -654,7 +691,7 @@ if (typeof el !== 'undefined') {
   localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
 } else {
   /* global variables */
-  var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','sourceGen','sourceChange','ls_saveLocal','getId','sourceCheck'];
+  var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','sourceGen','sourceChange','localSave','getId','sourceCheck'];
   for (var g = 0; g < global_arr.length; g++) {
     window[global_arr[g]];
   }
