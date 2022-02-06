@@ -605,7 +605,9 @@ var host_rgx = /(oploverz|webtoons|mangaku|mangaindo|komikstation|komikcast|west
 */
 
 /* remove old data, temporary */
+if (localStorage.getItem('mydb_tools_anime_reader')) localStorage.removeItem('mydb_tools_anime_reader');
 if (localStorage.getItem('mydb_tools_comic_reader')) localStorage.removeItem('mydb_tools_comic_reader');
+if (localStorage.getItem('mydb_tools_novel_reader')) localStorage.removeItem('mydb_tools_novel_reader');
 if (localStorage.getItem('mydb_tools_bookmark')) localStorage.removeItem('mydb_tools_bookmark');
 if (localStorage.getItem('comic_tools_bookmark')) localStorage.removeItem('comic_tools_bookmark');
 if (localStorage.getItem('comic_tools_reader')) localStorage.removeItem('comic_tools_reader');
@@ -672,7 +674,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/6/2022, 10:11:38 PM';
+var local_interval = 'manual|2/6/2022, 10:15:35 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
