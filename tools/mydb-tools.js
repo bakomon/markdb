@@ -357,7 +357,10 @@ function mydb_tools() {
             }).catch(function(error) {
               console.error('!! Error: function autoLogin(, code: '+ error.code +', message: '+ error.message);
               alert('!! Error: function autoLogin(\n'+ error.message);
-              if (localStorage.getItem('mydb_support') != 'true') localStorage.setItem('mydb_support', 'false'); /* not support */
+              if (mydb_support && mydb_support.indexOf('true') == -1) {
+                mydb_spt_info = '{"support":"false","note":"autoLogin( '+ error.message +'"}';
+                localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
+              }
             });
           }
         }
@@ -376,7 +379,7 @@ function mydb_tools() {
           */
           clearInterval(lf_chk);
           console.error('!! Error: can\'t load firebase.');
-          if (localStorage.getItem('mydb_support') != 'true') callScript('error');
+          if (mydb_support && mydb_support.indexOf('true') == -1) callScript('error');
         });
     } else {
       mydb_fbase_app = true;
@@ -413,7 +416,8 @@ function mydb_tools() {
     if (mydb_type && note != 'error') {
       mydb_info['type'] = mydb_type;
       mydb_type_bkp = mydb_type;
-      localStorage.setItem('mydb_support', 'true');
+      mydb_spt_info = '{"support":"true","note":"🎉 supported site 🎉"}';
+      localStorage.setItem('mydb_tools_support', mydb_spt_info);
       
       /* add class to body from source: status, tag, theme */
       var s_data = mydb_source[mydb_type][w_host];
@@ -461,7 +465,8 @@ function mydb_tools() {
       }, 100);
     } else {
       mydb_info['error'] = {"mydb_type":'"'+ mydb_type +'"',"note":'"'+ note +'"'};
-      localStorage.setItem('mydb_support', 'false'); /* not support */
+      mydb_spt_info = '{"support":"false","note":"callScript( '+ note +'"}';
+      localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
       console.log('mydb_support: false');
     }
     el('#_loader').parentElement.removeChild(el('#_loader'));
@@ -536,8 +541,9 @@ function mydb_tools() {
   wp = wl.pathname;
   var w_host = wh.replace(wh_rgx, '');
   document.body.classList.add(w_host.replace(/\./g, '-'));
+  mydb_support = localStorage.getItem('mydb_tools_support');
   
-  if (document.head.innerHTML == '' || localStorage.getItem('mydb_support') == 'false' || wp.search(/\.(gif|webp|(pn|sv|jpe?)g)$/) != -1) return;
+  if (document.head.innerHTML == '' || (mydb_support && mydb_support.indexOf('false') != -1) || wp.search(/\.(gif|webp|(pn|sv|jpe?)g)$/) != -1) return;
   mydb_info['support'] = 'true';
   startLoading();
   mydb_tools_fnc();
@@ -573,6 +579,7 @@ if (localStorage.getItem('mydb_source_data')) localStorage.removeItem('mydb_sour
 if (localStorage.getItem('mydb_anime_list')) localStorage.removeItem('mydb_anime_list');
 if (localStorage.getItem('mydb_comic_list')) localStorage.removeItem('mydb_comic_list');
 if (localStorage.getItem('mydb_novel_list')) localStorage.removeItem('mydb_novel_list');
+if (localStorage.getItem('mydb_support')) localStorage.removeItem('mydb_support');
 if (document.cookie.match(RegExp('(?:^|;\\s*)reader-zoom=([^;]*)'))) document.cookie = 'reader-zoom=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
 
@@ -605,7 +612,7 @@ var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|ac
 var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|list|release|author|artist)\/.*\/?$/i;
 /* ============================================================ */
 /* mydb is for global variable */
-var mydb_reader, mydb_login, mydb_source, mydb_type, mydb_type_bkp, mydb_read, mydb_zoom;
+var mydb_reader, mydb_login, mydb_source, mydb_type, mydb_type_bkp, mydb_read, mydb_zoom, mydb_support, mydb_spt_info;
 var mydb_loaded = false;
 var mydb_fbase_app = false; //check if firebase function has been called
 var mydb_fbase_loaded = false;
@@ -632,8 +639,8 @@ var local_interval = 'manual|2/5/2022, 9:37:49 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
-var live_test_bookmark = true;
-var live_test_comic_r = true;
+var live_test_bookmark = false;
+var live_test_comic_r = false;
 /* 
 - use "https://cdn.statically.io" or "https://cdn.jsdelivr.net"
 - jsdelivr purge cache: 
@@ -643,7 +650,8 @@ var live_test_comic_r = true;
 */
 
 if (typeof el !== 'undefined') {
-  localStorage.setItem('mydb_support', 'false'); /* not support */
+  mydb_spt_info = '{"support":"false","note":"el( function exist"}';
+  localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
 } else {
   /* global variables */
   var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','sourceGen','sourceChange','ls_saveLocal','getId','sourceCheck'];
