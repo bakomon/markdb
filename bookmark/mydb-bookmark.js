@@ -974,7 +974,7 @@ function mydb_bookmark() {
     s_txt += '</div>';
     s_txt += '<div class="db_100 '+ (not_support && note != 'similar_one' ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
     if (note != 'similar_one') {
-      s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ (ch_before && ch_before != data.number ? (ch_before +' > ') : '') + data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
+      s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ (ch_before && ch_before != data.number ? (ch_before +' <span style="font-size:120%;line-height:0;">&#10142;</span> ') : '') + data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
       if ('read' in data && data.read != '') s_txt += '<button class="_db db_selected'+ (chk ? '' : ' db_hidden') +'" onclick="openInNewTab(\''+ data.read +'\', \'bm_list\')" title="'+ data.read +'">Read</button>';
       s_txt += '<button class="bm_edit _db'+ (chk ? '' : ' db_hidden') +'" data-id="list">Edit</button>';
       s_txt += '<button class="bm_delete _db'+ (chk ? '' : ' db_hidden') +'" title="Delete">X</button>';
