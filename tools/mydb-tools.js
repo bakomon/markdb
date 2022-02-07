@@ -355,10 +355,7 @@ function mydb_tools() {
             }).catch(function(error) {
               console.error('!! Error: function autoLogin(, code: '+ error.code +', message: '+ error.message);
               alert('!! Error: function autoLogin(\n'+ error.message);
-              if (!mydb_support || (mydb_support && mydb_support.indexOf('true') == -1)) {
-                mydb_spt_info = '{"support":"false","note":"autoLogin( '+ error.message +'"}';
-                localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
-              }
+              if (!mydb_support || (mydb_support && mydb_support.indexOf('true') == -1)) callScript('error autoLogin(');
             });
           }
         }
@@ -369,16 +366,15 @@ function mydb_tools() {
   function loadFirebase(note) {
     if (typeof firebase == 'undefined') {
       mydb_fbase_app = true;
-      addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-app.js`)
-        .catch(() => {
-          /* only use catch() :
-          - https://stackoverflow.com/a/36213268/7598333
-          - https://javascript.info/promise-basics#catch
-          */
-          clearInterval(lf_chk);
-          console.error('!! Error: can\'t load firebase.');
-          if (!mydb_support || (mydb_support && mydb_support.indexOf('true') == -1)) callScript('error');
-        });
+      addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-app.js`).catch(() => {
+        /* only use catch() :
+        - https://stackoverflow.com/a/36213268/7598333
+        - https://javascript.info/promise-basics#catch
+        */
+        clearInterval(lf_chk);
+        console.error('!! Error: can\'t load firebase.');
+        if (!mydb_support || (mydb_support && mydb_support.indexOf('true') == -1)) callScript('error loadFirebase(');
+      });
     } else {
       mydb_fbase_app = true;
     }
@@ -410,13 +406,13 @@ function mydb_tools() {
     }, 100);
   }
   
-  function crossJSDataMOD(data, url, id, type, date) {
+  function localJSDataMOD(data, url, id, type, date) {
     if (data && (data != 'null' && data != 'error')) {
       var cr_data = JSON.parse(data);
       if (cr_data.update == date) {
         localSave.set(cr_data.data, id, type, 'MOD');
       } else {
-        crossJSDataMOD(false, url, id, type, date);
+        localJSDataMOD(false, url, id, type, date);
       }
     } else {
       localSave.get(url, function(res) {
@@ -428,7 +424,7 @@ function mydb_tools() {
   }
   
   function callScript(note) {
-    if (mydb_type && note != 'error') {
+    if (mydb_type && note.search(/^error/) == -1) {
       mydb_info['type'] = mydb_type;
       mydb_type_bkp = mydb_type;
       mydb_spt_info = '{"support":"true","note":"🎉 supported site 🎉"}';
@@ -463,7 +459,7 @@ function mydb_tools() {
           
           /* new */
           crossStorage.get(cr_id, function(res) {
-            crossJSDataMOD(res, url_js_comic_reader, cr_id, cr_type, local_interval);
+            localJSDataMOD(res, url_js_comic_reader, cr_id, cr_type, local_interval);
           });
         }
       }
@@ -492,15 +488,16 @@ function mydb_tools() {
               
               /* new */
               crossStorage.get(bm_id, function(res) {
-                crossJSDataMOD(res, url_js_bookmark, bm_id, bm_type, local_interval);
+                localJSDataMOD(res, url_js_bookmark, bm_id, bm_type, local_interval);
               });
             }
           }
         }
       }, 100);
     } else {
-      mydb_info['error'] = {"mydb_type":'"'+ mydb_type +'"',"note":'"'+ note +'"'};
-      mydb_spt_info = '{"support":"false","note":"⚠️ not support ⚠️"}';
+      mydb_info['support'] = false;
+      mydb_info['error'] = JSON.parse('{"mydb_type":"'+ mydb_type +'","note":"'+ note +'"}');
+      mydb_spt_info = '{"support":"false","note":"'+ note +'"}';
       localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
       console.log('mydb_support: false');
     }
@@ -674,7 +671,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/6/2022, 10:15:35 PM';
+var local_interval = 'manual|2/7/2022, 1:07:43 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
