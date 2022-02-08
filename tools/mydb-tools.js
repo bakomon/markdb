@@ -355,7 +355,7 @@ function mydb_tools() {
             }).catch(function(error) {
               console.error('!! Error: function autoLogin(, code: '+ error.code +', message: '+ error.message);
               alert('!! Error: function autoLogin(\n'+ error.message);
-              if (!mydb_support || (mydb_support && mydb_support.indexOf('true') == -1)) callScript('error autoLogin(');
+              if (!mydb_support || (mydb_support && mydb_support == mydb_spt_message)) callScript('error autoLogin(');
             });
           }
         }
@@ -373,7 +373,7 @@ function mydb_tools() {
         */
         clearInterval(lf_chk);
         console.error('!! Error: can\'t load firebase.');
-        if (!mydb_support || (mydb_support && mydb_support.indexOf('true') == -1)) callScript('error loadFirebase(');
+        if (!mydb_support || (mydb_support && mydb_support == mydb_spt_message)) callScript('error loadFirebase(');
       });
     } else {
       mydb_fbase_app = true;
@@ -427,7 +427,7 @@ function mydb_tools() {
     if (mydb_type && note.search(/^error/) == -1) {
       mydb_info['type'] = mydb_type;
       mydb_type_bkp = mydb_type;
-      mydb_spt_info = '{"support":"true","note":"🎉 supported site 🎉"}';
+      mydb_spt_info = '{"support":"true","note":"'+ mydb_spt_message +'"}';
       localStorage.setItem('mydb_tools_support', mydb_spt_info);
       
       /* add class to body from source: status, tag, theme */
@@ -497,7 +497,7 @@ function mydb_tools() {
     } else {
       mydb_info['support'] = false;
       mydb_info['error'] = JSON.parse('{"mydb_type":"'+ mydb_type +'","note":"'+ note +'"}');
-      mydb_spt_info = '{"support":"false","note":"'+ note +'"}';
+      mydb_spt_info = '{"support":"false","note":"'+ note +'","type":"'+ mydb_type +'"}';
       localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
       console.log('mydb_support: false');
     }
@@ -657,6 +657,7 @@ var mydb_cr_loaded = false;
 var mydb_change = false;
 var mydb_project = false;
 var mydb_select = 'list';
+var mydb_spt_message = '🎉 supported site 🎉';
 var mydb_info = {"error":{},"support":"","source":"","type":"","fbase_app":"","fbase_database":"","fbase_auth":"","fbase_auto_login":"","reader_js":"","bookmark_js":""};
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
 var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"source_bm":false,"source_cr":false,"bm_list":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true};
@@ -671,7 +672,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/7/2022, 1:07:43 PM';
+var local_interval = 'manual|2/8/2022, 7:37:15 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
