@@ -227,7 +227,7 @@ function mydb_comic_reader() {
     if (chcdn || chgi) el('.rc_others').classList.remove('rc_hidden');
     imgArea.style.cssText = 'max-width:'+ readSize +'px !important;';
     
-    if (wh.search(/mangacanblog|mangayu|merakiscans|mangapark/) != -1) {nextChapter();} //next button
+    if (wh.search(/mangacanblog|mangayu|merakiscans|mangapark/) != -1) nextChapter(); //next button
     
     el('.rc_toggle').onclick = function() {
       this.classList.toggle('db_danger');
