@@ -87,7 +87,7 @@ function mydb_comic_reader() {
   
   function startChange(img, note) {
     var imgs = '';
-    if ((getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) && !img.classList.contains('rc_loaded')) || note != undefined) {
+    if ((getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) && !img.classList.contains('rc_loaded')) || note != 'scroll') {
       imgs = img.dataset.readImg;
       if (loadCDN) imgs = imgs.replace(cdnRgx, '').replace(/\/[fhwq]=[^\/]+/, '');
       if (imgs.search(/(pending\-load|cdn\.statically\.io)/) != -1) {
@@ -109,9 +109,9 @@ function mydb_comic_reader() {
       if (!isPause && !isFrom) {
         for (var i = 0; i < img.length; i++) {
           if (!loadImage) {
-            startChange(img[i]);
+            startChange(img[i], 'scroll');
           }
-          if (img[img.length-1].src) {loadImage = true;}
+          if (img[img.length-1].src) loadImage = true;
         }
       }
       
@@ -170,11 +170,11 @@ function mydb_comic_reader() {
     }
   }
   
-  function createBtn(img) {
+      function createBtn(imglistMod) {
     var readSize = isMobile ? window.screen.width : zoomID in mydb_zoom ? mydb_zoom[zoomID] : imgArea.offsetWidth;
     if (zoomID in mydb_zoom && !isMobile) readSize = readSize == 'manga' ? '750' : readSize == 'manhua' ? '650' : readSize == 'manhwa' ? '500' : readSize;
     var r_txt = '';
-    // css control & main already in css tools
+    // css control & main already in database tools
     // css reader
     r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:165px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-165px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#238636;border-color:#238636;}.rc_danger{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all,.rc_fr_min,.rc_fr_max{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._rc[disabled],._rc[disabled]:hover{background:#252428 !important;color:#555 !important;border-color:#252428 !important;}.rc_hidden{display:none;}</style>';
     r_txt += '<style>.scrollToTop,[title*="Back To Top"],.back-to-top,.go-to-top,.btn-top{display:none !important;}</style>'; //css hidden
@@ -244,15 +244,15 @@ function mydb_comic_reader() {
     // Load all images
     el('.rc_load .rc_ld_img').onclick =  function() {
       if (el('.rc_load .rc_all').value.search(/all/i) != -1) {
-        // "img" from createBtn() parameter
-        loadImage = true;
+        // "imglistMod" from createBtn() parameter
+        if (!isFrom) loadImage = true;
         var ld_index = isFrom ? (Number(el('.rc_load .rc_fr_min').value) - 1) : 0;
-        var ld_length = isFrom ? Number(el('.rc_load .rc_fr_max').value) : img.length;
+        var ld_length = isFrom ? Number(el('.rc_load .rc_fr_max').value) : imglistMod.length;
         for (var i = ld_index; i < ld_length; i++) {
-          startChange(img[i], 'all');
+          startChange(imglistMod[i], 'all');
         }
       } else if (isNumeric(el('.rc_load .rc_all').value)) {
-        startChange(img[Number(el('.rc_load .rc_all').value) - 1], 'single');
+        startChange(imglistMod[Number(el('.rc_load .rc_all').value) - 1], 'single');
       } else {
         el('.rc_load .rc_all').value = 'all';
       }
