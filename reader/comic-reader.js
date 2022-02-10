@@ -825,7 +825,7 @@ function mydb_comic_reader() {
     var ch_list = [
       '0','#chapterlist',
       '1','#chapter_list',
-      '2','#manga-chapters-holder',
+      '2','.listing-chapters_wrap',
       '3','#--box-list',
       '4','.series-chapterlist',
       'komikcast.com','.komik_info-chapters',
@@ -1041,7 +1041,23 @@ function mydb_comic_reader() {
   
   blockContent();
   customEdit();
-  chapterList();
+  
+  if (document.body.classList.contains('madara')) {
+    var cl_intrvl = setInterval(function() {
+      if (el('.listing-chapters_wrap')) {
+        clearInterval(cl_intrvl);
+        clearTimeout(cl_tmout);
+        chapterList();
+      }
+    }, 100);
+    
+    var cl_tmout = setTimeout(function() {
+      clearInterval(cl_intrvl);
+      chapterList();
+    }, 60000);
+  } else {
+    chapterList();
+  }
   
   // check if page is comic/project, from database bookmark
   // to avoid mis-detection, eg. blog from blogger.com or wordpress.com
