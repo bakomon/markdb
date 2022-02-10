@@ -355,7 +355,7 @@ function mydb_tools() {
             }).catch(function(error) {
               console.error('!! Error: function autoLogin(, code: '+ error.code +', message: '+ error.message);
               alert('!! Error: function autoLogin(\n'+ error.message);
-              if (!mydb_support || (mydb_support && mydb_support == mydb_spt_message)) callScript('error autoLogin(');
+              if (!mydb_support || (mydb_support && mydb_support.indexOf(mydb_spt_message) == -1)) callScript('error autoLogin(');
             });
           }
         }
@@ -373,7 +373,7 @@ function mydb_tools() {
         */
         clearInterval(lf_chk);
         console.error('!! Error: can\'t load firebase.');
-        if (!mydb_support || (mydb_support && mydb_support == mydb_spt_message)) callScript('error loadFirebase(');
+        if (!mydb_support || (mydb_support && mydb_support.indexOf(mydb_spt_message) == -1)) callScript('error loadFirebase(');
       });
     } else {
       mydb_fbase_app = true;
@@ -672,7 +672,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/8/2022, 7:37:15 PM';
+var local_interval = 'manual|2/10/2022, 10:53:40 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
