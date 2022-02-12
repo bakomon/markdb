@@ -511,9 +511,9 @@ function mydb_tools() {
       var data = mydb_source[prop[i]];
       for (var site in data) {
         if (data[site]['host'].indexOf(w_host) != -1 || data[site]['domain'].indexOf(w_host) != -1) {
-          w_host = data[site]['host'].replace(/\./g, '-');
-          mydb_info['type'] = [prop[i]];
-          return [prop[i]];
+          mydb_info['type'] = prop[i];
+          localStorage.setItem('mydb_tools_type', prop[i]);
+          return prop[i];
         }
       }
     }
@@ -521,7 +521,9 @@ function mydb_tools() {
   }
   
   function startSource() {
-    mydb_type = getType(); /* check type & source */
+    var ss_type = localStorage.getItem('mydb_tools_type');
+    mydb_type = ss_type && ss_type.search(/anime|comic|novel/) != -1 ? ss_type : getType(); /* check type & source */
+    w_host = w_host.replace(/\./g, '-');
     
     var ss_chk = setInterval(function() {
       if (typeof mydb_type !== 'undefined') {
@@ -683,7 +685,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/12/2022, 6:04:44 PM';
+var local_interval = 'manual|2/12/2022, 9:44:15 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
