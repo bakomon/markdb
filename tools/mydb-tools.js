@@ -504,20 +504,31 @@ function mydb_tools() {
     el('#_loader').parentElement.removeChild(el('#_loader'));
   }
   
-  function getType(prop) { /* check type & source */
-    var data = mydb_source[prop];
-    for (var site in data) {
-      if (data[site]['host'].indexOf(w_host) != -1 || data[site]['domain'].indexOf(w_host) != -1) {
-        w_host = data[site]['host'].replace(/\./g, '-');
-        return prop;
+  function getType() {
+    var prop = ['anime','comic','novel'];
+    
+    for (var i = 0; i < prop.length; i++) {
+      var data = mydb_source[prop[i]];
+      for (var site in data) {
+        if (data[site]['host'].indexOf(w_host) != -1 || data[site]['domain'].indexOf(w_host) != -1) {
+          w_host = data[site]['host'].replace(/\./g, '-');
+          mydb_info['type'] = [prop[i]];
+          return [prop[i]];
+        }
       }
     }
     return false;
   }
   
   function startSource() {
-    mydb_type = getType('anime') || getType('comic') || getType('novel');
-    callScript('source');
+    mydb_type = getType(); /* check type & source */
+    
+    var ss_chk = setInterval(function() {
+      if (typeof mydb_type !== 'undefined') {
+        clearInterval(ss_chk);
+        callScript('source');
+      }
+    }, 100);
   }
   
   sourceCheck = function(note, data) {
@@ -672,7 +683,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/10/2022, 10:53:40 PM';
+var local_interval = 'manual|2/12/2022, 6:04:44 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
