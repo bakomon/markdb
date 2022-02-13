@@ -266,7 +266,7 @@ function mydb_tools_fnc() {
     
     if (note == 'reader') { //id from title, bug: if title is project and contains "episode" or "chapter"
       titleId = titleId.replace(/[^\s\w]/g, '').replace(/\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
-      id = wh.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
+      id = window.location.hostname.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
     } else if (note == 'bookmark') { //id from url
       titleId = titleId.replace(/\s+$/g, '').replace(/\|/g, '').replace(/[\n"\&\r\t\b\f]/g, '\\$&'); //JSON.escape
       id = '{"url":"'+ wpId +'","title":"'+ titleId +'"}';
@@ -425,7 +425,6 @@ function mydb_tools() {
   
   function callScript(note) {
     if (mydb_type && note.search(/^error/) == -1) {
-      mydb_info['type'] = mydb_type;
       mydb_type_bkp = mydb_type;
       mydb_spt_info = '{"support":"true","note":"'+ mydb_spt_message +'"}';
       localStorage.setItem('mydb_tools_support', mydb_spt_info);
@@ -435,7 +434,7 @@ function mydb_tools() {
       var s_class = s_data['status'] +','+ s_data['tag'] +','+ s_data['theme'];
       s_class = s_class.replace(/,+/, ',').replace(/,$/, '');
       s_class = s_class.split(',');
-      for (var i = 0; i < s_class.length; i++) {
+      for (var i in s_class) {
         document.body.classList.add(s_class[i]);
       }
       genCSS();
@@ -497,34 +496,46 @@ function mydb_tools() {
     } else {
       mydb_info['support'] = false;
       mydb_info['error'] = JSON.parse('{"mydb_type":"'+ mydb_type +'","note":"'+ note +'"}');
-      mydb_spt_info = '{"support":"false","note":"'+ note +'","type":"'+ mydb_type +'"}';
+      mydb_spt_info = '{"support":"false","note":"'+ note +'"'+ (typeof mydb_type !== 'undefined' ? (',"type":"'+ mydb_type +'"') : '') +'}';
       localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
       console.log('mydb_support: false');
     }
     el('#_loader').parentElement.removeChild(el('#_loader'));
   }
   
-  function getType() {
-    var prop = ['anime','comic','novel'];
-    
-    for (var i = 0; i < prop.length; i++) {
-      var data = mydb_source[prop[i]];
-      for (var site in data) {
-        if (data[site]['host'].indexOf(w_host) != -1 || data[site]['domain'].indexOf(w_host) != -1) {
-          mydb_info['type'] = prop[i];
-          localStorage.setItem('mydb_tools_type', prop[i]);
-          return prop[i];
-        }
+  function getType(prop) {
+    var data = mydb_source[prop];
+    for (var site in data) {
+      if (data[site]['host'].indexOf(w_host) != -1 || data[site]['domain'].indexOf(w_host) != -1) {
+        mydb_info['type'] = prop;
+        w_host = data[site]['host'].replace(/\./g, '-');
+        localStorage.setItem('mydb_tools_type', '{"type":"'+ prop +'","id":"'+ w_host +'"}');
+        return prop;
       }
     }
     return false;
   }
   
   function startSource() {
-    var ss_type = localStorage.getItem('mydb_tools_type');
-    mydb_type = ss_type && ss_type.search(/anime|comic|novel/) != -1 ? ss_type : getType(); /* check type & source */
-    w_host = w_host.replace(/\./g, '-');
+    var ss_local = localStorage.getItem('mydb_tools_type');
+    var ss_prop = ['anime','comic','novel'];
     
+    /* check type & source */
+    if (ss_local && ss_local.search(/anime|comic|novel/) != -1) {
+      var ss_data = JSON.parse(ss_local);
+      w_host = ss_data.id;
+      mydb_type = ss_data.type;
+    } else {
+      for (var i = 0; i < ss_prop.length; i++) {
+        var data = getType(ss_prop[i]);
+        if (data) {
+          mydb_type = data;
+          break;
+        }
+        if (i == ss_prop.length-1) mydb_type = false;
+      }
+    }
+
     var ss_chk = setInterval(function() {
       if (typeof mydb_type !== 'undefined') {
         clearInterval(ss_chk);
@@ -581,9 +592,9 @@ function mydb_tools() {
   }
   
   
-  wl = window.location;
-  wh = wl.hostname;
-  wp = wl.pathname;
+  var wl = window.location;
+  var wh = wl.hostname;
+  var wp = wl.pathname;
   var w_host = wh.replace(wh_rgx, '');
   document.body.classList.add(w_host.replace(/\./g, '-'));
   mydb_support = localStorage.getItem('mydb_tools_support');
@@ -685,7 +696,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/12/2022, 9:44:15 PM';
+var local_interval = 'manual|2/13/2022, 7:14:23 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
