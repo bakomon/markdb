@@ -2,6 +2,7 @@
 function mydb_comic_reader() {
   if (mydb_cr_loaded) return;
   mydb_cr_loaded = true;
+  if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
   
   // check if string is number https://stackoverflow.com/a/175787/7598333
   function isNumeric(str) {
@@ -1074,7 +1075,7 @@ function mydb_comic_reader() {
     }
   });
   
-  // Start reader
+  // START reader
   if (mydb_reader && !mydb_project) {
     console.log('page: chapter');
     zoomID = getId('reader');
