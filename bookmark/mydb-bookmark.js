@@ -2,6 +2,7 @@
 function mydb_bookmark() {
   if (mydb_bm_loaded) return;
   mydb_bm_loaded = true;
+  if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
   
   // RegExp.escape function in JavaScript https://stackoverflow.com/a/3561711/7598333
   function escapeRegex(str) {
