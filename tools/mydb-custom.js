@@ -47,7 +47,7 @@ function mydb_custom() {
     var mu_btn = document.createElement('div');
     mu_btn.id = 'mu_copy';
     mu_btn.style.cssText = 'position:fixed;left:0;right:0;z-index:2147483647;'+ (mu_mobile ? 'bottom' : 'top') +':0;';
-    mu_btn.innerHTML = '<button style="background:#252428;color:#ddd;padding:4px 8px;margin:4px;cursor:pointer;outline:0!important;border:1px solid #3e3949;">COPY</button>';
+    mu_btn.innerHTML = '<button style="background:#4267b2;color:#ddd;padding:8px 16px;font:16px Arial;cursor:pointer;outline:0!important;border:0;">COPY</button>';
     document.body.appendChild(mu_btn);
     
     document.querySelector('#mu_copy button').onclick = function() {
