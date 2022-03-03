@@ -424,75 +424,90 @@ function mydb_tools() {
   }
   
   function callScript(note) {
-    if (mydb_type && note.search(/^error/) == -1) {
-      mydb_type_bkp = mydb_type;
-      mydb_spt_info = '{"support":"true","note":"'+ mydb_spt_message +'"}';
-      localStorage.setItem('mydb_tools_support', mydb_spt_info);
-      
-      /* add class to body from source: status, tag, theme */
-      var s_data = mydb_source[mydb_type][w_host];
-      var s_class = s_data['status'] +','+ s_data['tag'] +','+ s_data['theme'];
-      s_class = s_class.replace(/,+/, ',').replace(/,$/, '');
-      s_class = s_class.split(',');
-      for (var i in s_class) {
-        document.body.classList.add(s_class[i]);
+    if (mydb_database || (mydb_type && note.search(/^error/) == -1)) {
+      if (mydb_type) {
+        mydb_type_bkp = mydb_type;
+        mydb_spt_info = '{"support":"true","note":"'+ mydb_spt_message +'"}';
+        localStorage.setItem('mydb_tools_support', mydb_spt_info);
+        
+        /* add class to body from source: status, tag, theme */
+        var s_data = mydb_source[mydb_type][w_host];
+        var s_class = s_data['status'] +','+ s_data['tag'] +','+ s_data['theme'];
+        s_class = s_class.replace(/,+/, ',').replace(/,$/, '');
+        s_class = s_class.split(',');
+        for (var i in s_class) {
+          document.body.classList.add(s_class[i]);
+        }
+        genCSS();
+        mydb_loaded = true;
+        
+        mydb_info['reader_js'] = 'wait';
+        if (live_test_comic_r) {
+          var cr_chk = setInterval(function() {
+            if (typeof mydb_comic_reader !== 'undefined') {
+              clearInterval(cr_chk);
+              mydb_comic_reader();
+            }
+          }, 100);
+        } else {
+          if (mydb_type == 'comic') {
+            var cr_id = `mydb_tools_${mydb_type}_reader`;
+            var cr_type = 'js';
+            
+            /* old
+            localSave.load(url_js_comic_reader, cr_id, cr_type, local_interval); */
+            
+            /* new */
+            crossStorage.get(cr_id, function(res) {
+              localJSDataMOD(res, url_js_comic_reader, cr_id, cr_type, local_interval);
+            });
+          }
+        }
+        
+        var reader_chk = setInterval(function() {
+          if (typeof mydb_read !== 'undefined') {
+            clearInterval(reader_chk);
+            var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); /* cloudflare */
+            var is_cf = chk_cf ? true : false;
+            if (!is_cf && (!mydb_read || mydb_settings.bmark_reader)) {
+              mydb_info['bookmark_js'] = 'wait';
+              if (!mydb_fbase_app) loadFirebase('bookmark');
+              if (live_test_bookmark) {
+                var bm_chk = setInterval(function() {
+                  if (typeof mydb_bookmark !== 'undefined') {
+                    clearInterval(bm_chk);
+                    mydb_bookmark();
+                  }
+                }, 100);
+              } else {
+                var bm_id = 'mydb_tools_bookmark';
+                var bm_type = 'js';
+                
+                /* old
+                localSave.load(url_js_bookmark, bm_id, bm_type, local_interval); */
+                
+                /* new */
+                crossStorage.get(bm_id, function(res) {
+                  localJSDataMOD(res, url_js_bookmark, bm_id, bm_type, local_interval);
+                });
+              }
+            }
+          }
+        }, 100);
       }
-      genCSS();
-      mydb_loaded = true;
       
-      mydb_info['reader_js'] = 'wait';
-      if (live_test_comic_r) {
-        var cr_chk = setInterval(function() {
-          if (typeof mydb_comic_reader !== 'undefined') {
-            clearInterval(cr_chk);
-            mydb_comic_reader();
+      if (live_test_custom) {
+        var x_chk = setInterval(function() {
+          if (typeof mydb_custom !== 'undefined') {
+            clearInterval(x_chk);
+            mydb_custom();
           }
         }, 100);
       } else {
-        if (mydb_type == 'comic') {
-          var cr_id = `mydb_tools_${mydb_type}_reader`;
-          var cr_type = 'js';
-          
-          /* old
-          localSave.load(url_js_comic_reader, cr_id, cr_type, local_interval); */
-          
-          /* new */
-          crossStorage.get(cr_id, function(res) {
-            localJSDataMOD(res, url_js_comic_reader, cr_id, cr_type, local_interval);
-          });
-        }
+        crossStorage.get('mydb_tools_custom', function(res) {
+          localJSDataMOD(res, url_js_custom, 'mydb_tools_custom', 'js', local_interval);
+        });
       }
-      
-      var reader_chk = setInterval(function() {
-        if (typeof mydb_read !== 'undefined') {
-          clearInterval(reader_chk);
-          var chk_cf = el('h1 [data-translate="checking_browser"]') || el('h1 .cf-error-type') || el('meta[name="captcha-bypass"]'); /* cloudflare */
-          var is_cf = chk_cf ? true : false;
-          if (!is_cf && (!mydb_read || mydb_settings.bmark_reader)) {
-            mydb_info['bookmark_js'] = 'wait';
-            if (!mydb_fbase_app) loadFirebase('bookmark');
-            if (live_test_bookmark) {
-              var bm_chk = setInterval(function() {
-                if (typeof mydb_bookmark !== 'undefined') {
-                  clearInterval(bm_chk);
-                  mydb_bookmark();
-                }
-              }, 100);
-            } else {
-              var bm_id = 'mydb_tools_bookmark';
-              var bm_type = 'js';
-              
-              /* old
-              localSave.load(url_js_bookmark, bm_id, bm_type, local_interval); */
-              
-              /* new */
-              crossStorage.get(bm_id, function(res) {
-                localJSDataMOD(res, url_js_bookmark, bm_id, bm_type, local_interval);
-              });
-            }
-          }
-        }
-      }, 100);
     } else {
       mydb_info['support'] = false;
       mydb_info['error'] = JSON.parse('{"mydb_type":"'+ mydb_type +'","note":"'+ note +'"}');
@@ -599,7 +614,15 @@ function mydb_tools() {
   document.body.classList.add(w_host.replace(/\./g, '-'));
   mydb_support = localStorage.getItem('mydb_tools_support');
   
-  if (document.head.innerHTML == '' || (mydb_support && mydb_support.indexOf('false') != -1) || wp.search(/\.(gif|webp|(pn|sv|jpe?)g)$/) != -1) return;
+  for (var i = 0; i < mydb_db_list.length; i++) {
+    if (w_host.indexOf(mydb_db_list[i]) != -1) {
+      mydb_database = true;
+      break;
+    }
+  }
+  
+  if ((mydb_support && mydb_support.indexOf('false') != -1 && !mydb_database) || document.head.innerHTML == '' || wp.search(/\.(gif|webp|(pn|sv|jpe?)g)$/) != -1) return;
+  
   mydb_info['support'] = 'true';
   startLoading();
   mydb_tools_fnc();
@@ -678,13 +701,16 @@ var mydb_fbase_app = false; //check if firebase function has been called
 var mydb_fbase_loaded = false;
 var mydb_bm_loaded = false;
 var mydb_cr_loaded = false;
+var mydb_x_loaded = false;
 var mydb_change = false;
 var mydb_project = false;
+var mydb_database = false;
 var mydb_select = 'list';
 var mydb_spt_message = '🎉 supported site 🎉';
+var mydb_db_list = ['mangadex','mangaupdates'];
 var mydb_info = {"error":{},"support":"","source":"","type":"","fbase_app":"","fbase_database":"","fbase_auth":"","fbase_auto_login":"","reader_js":"","bookmark_js":""};
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
-var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"source_bm":false,"source_cr":false,"bm_list":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true};
+var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"source_bm":false,"source_cr":false,"bm_list":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true,"mod_disqus":true};
 /* 
 - bmark_reader = show bookmark on comic reader
 - new_tab.bm_list = open link in new tab on bookmark list (bm_list)
@@ -696,12 +722,14 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/23/2022, 9:29:20 AM';
+var local_interval = 'manual|3/3/2022, 9:59:35 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
+var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
 var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/update.txt';
 var live_test_bookmark = false;
 var live_test_comic_r = false;
+var live_test_custom = false;
 /* 
 - use "https://cdn.statically.io" or "https://cdn.jsdelivr.net"
 - jsdelivr purge cache: 
