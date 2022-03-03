@@ -4,6 +4,27 @@ function mydb_custom() {
   mydb_x_loaded = true;
   if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
   
+    /* Copy to clipboard https://stackoverflow.com/a/30810322/7598333*/
+  function copyToClipboard(text, elem) {
+    var msg, elm = elem || document.body; /* parent element for textarea */
+    var copyTextarea = document.createElement('textarea');
+    copyTextarea.value = text;
+    elm.appendChild(copyTextarea);
+    copyTextarea.focus();
+    copyTextarea.select();
+  
+    try {
+      var successful = document.execCommand('copy');
+      msg = successful ? true : false;
+    } catch (err) {
+      msg = false;
+      console.log('Oops, unable to copy ', err);
+    }
+  
+    elm.removeChild(copyTextarea);
+    return msg;
+  }
+  
   function typeMU() {
     var mu_cat = document.querySelectorAll('#main_content .sCat');
     for (var i = 0; i < mu_cat.length; i++) {
