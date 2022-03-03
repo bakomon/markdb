@@ -2,6 +2,7 @@
 function mydb_custom() {
   if (mydb_x_loaded) return;
   mydb_x_loaded = true;
+  if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
   
   function typeMU() {
     var mu_cat = document.querySelectorAll('#main_content .sCat');
