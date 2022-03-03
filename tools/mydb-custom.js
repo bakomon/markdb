@@ -36,7 +36,10 @@ function mydb_custom() {
     
   }
   
-  // START
+  
+  var wl = window.location;
+  var wh = wl.hostname;
+  var wp = wl.pathname;
   if (wh.indexOf('mangaupdates') != -1 && wl.href.indexOf('/series.html?id=') != -1) copyMU();
 }
 
