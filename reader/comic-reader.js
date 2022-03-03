@@ -1087,10 +1087,11 @@ function mydb_comic_reader() {
   } else {
     mydb_read = false;
   }
+  // START reader
   
   removeAADB(); //remove anti adblock notify for mangacanblog
   webDarkMode();
-  disqusMod();
+  if (mydb_settings.mod_disqus) disqusMod();
   
   mydb_info['reader_js'] = 'loaded';
   
