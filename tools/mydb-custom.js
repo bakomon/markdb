@@ -34,6 +34,7 @@ function mydb_custom() {
   }
   
   function copyMU() {
+    var mu_mobile = document.documentElement.classList.contains('is-mobile');
     var mu_id = wl.search.replace(/\?id=/, '');
     var mu_type = typeMU();
     var mu_img = document.querySelector('img[src*="/image/i"]');
@@ -43,11 +44,11 @@ function mydb_custom() {
     if (mu_type) mu_data['type'] = mu_type;
     if (mu_img) mu_data['img'] = mu_img.src;
     
-    var cm_btn = document.createElement('div');
-    cm_btn.id = 'mu_copy';
-    cm_btn.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:2147483647;';
-    cm_btn.innerHTML = '<button>COPY</button>';
-    document.body.appendChild(cm_btn);
+    var mu_btn = document.createElement('div');
+    mu_btn.id = 'mu_copy';
+    mu_btn.style.cssText = 'position:fixed;left:0;right:0;z-index:2147483647;'+ (mu_mobile ? 'bottom' : 'top') +':0;';
+    mu_btn.innerHTML = '<button>COPY</button>';
+    document.body.appendChild(mu_btn);
     
     document.querySelector('#mu_copy button').onclick = function() {
       copyToClipboard(JSON.stringify(mu_data));
