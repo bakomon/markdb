@@ -40,7 +40,7 @@ function mydb_custom() {
     var mu_img = document.querySelector('img[src*="/image/i"]');
     var mu_data = {};
     
-    mu_data['id'] = mu_id;
+    mu_data['id'] = 'mu|'+ mu_id;
     if (mu_type) mu_data['type'] = mu_type;
     if (mu_img) mu_data['img'] = mu_img.src;
     
