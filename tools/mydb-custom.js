@@ -119,7 +119,7 @@ function mydb_custom() {
       localStorage.setItem('dark', 'true');
       document.documentElement.classList.add('dark');
     } else if (document.body.classList.contains('yuukithemes')) {
-      createCookie('dark', 'yes', '7');
+      createCookie('darkmode', 'yes', '7');
       document.documentElement.classList.add('dark');
     }
   }
