@@ -886,40 +886,6 @@ function mydb_comic_reader() {
     document.body.appendChild(l_elem);
   }
   
-  function webDarkMode() {
-    // Dark mode
-    if (el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch') || el('.theme.switchmode') || el('#quickswitcher')) {
-      // theme enduser.id|themesia.com || theme eastheme.com || komikcast.com
-      localStorage.setItem('thememode', 'darkmode');
-      localStorage.setItem('theme-mode', 'dark');
-      document.body.classList.add('darkmode', 'dark');
-      document.body.classList.remove('lightmode');
-    } else if (document.body.classList.contains('text-ui-dark')) {
-      // theme mangabooth.com (madara)
-      document.body.classList.add('text-ui-light');
-      document.body.classList.remove('text-ui-dark');
-    } else if (wh.indexOf('manhuaid.com') != -1) {
-      localStorage.setItem('theme', 'dark');
-      document.body.setAttribute('id', 'darkbody');
-      el('.isdark').setAttribute('id', 'darkmode');
-      el('nav').classList.add('bg-dark');
-      el('nav').classList.remove('bg-success', 'fixed-top');
-    } else if (document.body.classList.contains('emissionhex')) {
-      localStorage.setItem('mode', 'darkmode');
-      el('#modeSwitch').classList.add('dark-mode');
-    } else if (wh.indexOf('mangadex') != -1) {
-      var mgdx_css = document.createElement('link');
-      mgdx_css.href = '//mangadex.org/scripts/css/Dark-Slate.css';
-      mgdx_css.setAttribute('rel', 'stylesheet');
-      el('head').appendChild(mgdx_css);
-    } else if (wh.indexOf('mangayu') != -1) {
-      localStorage.setItem('theme', 'dark');
-    } else if (document.body.classList.contains('pemudanolep')) {
-      localStorage.setItem('dark', 'true');
-      document.documentElement.classList.add('dark');
-    }
-  }
-  
   function removeAADB() {
     var adb_id, adb_style = el('style','all');
     for (var i = 0; i < adb_style.length; i++) {
@@ -1090,7 +1056,6 @@ function mydb_comic_reader() {
   // START reader
   
   removeAADB(); //remove anti adblock notify for mangacanblog
-  webDarkMode();
   if (mydb_settings.mod_disqus) disqusMod();
   
   mydb_info['reader_js'] = 'loaded';
