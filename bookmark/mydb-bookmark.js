@@ -541,9 +541,10 @@ function mydb_bookmark() {
     }
     el('.db_form').innerHTML = '<div class="f_grow"></div><div class="flex_wrap">'+ f_txt +'</div>';
     el('.db_form').style.cssText = 'flex-direction:column;overflow-y:auto;height:calc(100vh - '+ (el('.db_form_btn').offsetHeight + 31) +'px);';
-    el('.db_paste_generate').classList.remove('db_hidden');
     
     if (mydb_select == 'list') {
+      el('.db_paste_generate').classList.remove('db_hidden');
+      
       el('.db_id').onkeyup = function() {
         el('.db_bmdb').dataset.val = el('.db_id').value.replace(/[-_\.]/g, ' ');
       };
@@ -996,7 +997,7 @@ function mydb_bookmark() {
   
   function db_showHtml(data, note) {
     var not_support = db_supportCheck(data.host, 'status', 'discontinued') || db_supportCheck(data.host, 'tag', 'not_support');
-    var chk = not_support || wh.indexOf(data.host) != -1;
+    var chk = not_support || wh.indexOf(data.host) != -1 || !mydb_settings.read_project;
     var s_txt = '';
     s_txt += '<li class="_bm '+ (note.indexOf('similar') != -1 ? 'db_line_top' : 'bm_main');
     if ('read' in data && data.read != '') s_txt += ' db_url_read';
@@ -1010,14 +1011,14 @@ function mydb_bookmark() {
       s_txt += firstCase(data.id, '-');
     }
     s_txt += '</div>';
-    s_txt += '<div class="db_100 '+ (not_support && note != 'similar_one' ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
+    s_txt += '<div class="db_100 '+ ((not_support && note != 'similar_one') || !mydb_settings.read_project ? 'flex_wrap' : 'flex') +'" data-id="'+ data.id +'">';
     if (note != 'similar_one') {
       s_txt += '<span class="bm_ch _db line_text'+ (chk ? ' f_grow' : ' db_50') +'">'+ (ch_before && ch_before != data.number ? (ch_before +' <span style="font-size:120%;line-height:0;">&#10142;</span> ') : '') + data.number + (data.note ? ' ('+ data.note +')' : '') +'</span>';
       if ('read' in data && data.read != '') s_txt += '<button class="_db db_selected'+ (chk ? '' : ' db_hidden') +'" onclick="openInNewTab(\''+ data.read +'\', \'bm_list\')" title="'+ data.read +'">Read</button>';
       s_txt += '<button class="bm_edit _db'+ (chk ? '' : ' db_hidden') +'" data-id="list">Edit</button>';
       s_txt += '<button class="bm_delete _db'+ (chk ? '' : ' db_hidden') +'" title="Delete">X</button>';
     }
-    s_txt += '<span class="bm_site db_text'+ (wh.indexOf(data.host) != -1 ? ' db_hidden' : (not_support && note != 'similar_one' ? ' db_100 t_center' : '')) +'" onclick="openInNewTab(\''+ data.url +'\', \'bm_list\')">'+ data.host +'</span>';
+    s_txt += '<span class="bm_site db_text'+ (wh.indexOf(data.host) != -1 ? ' db_hidden' : ((not_support && note != 'similar_one') || !mydb_settings.read_project ? ' db_100 t_center' : '')) +'" onclick="openInNewTab(\''+ data.url +'\', \'bm_list\')">'+ data.host +'</span>';
     s_txt += '</div>';
     s_txt += '</li>';
     
