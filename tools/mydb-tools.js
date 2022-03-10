@@ -143,7 +143,7 @@ function mydb_tools_fnc() {
       window[name] = setTimeout(function() {
         console.error(`!! Error crossStorage: [${name}] can\'t get "${key}" data from iframe.`);
         callback('error');
-      }, 8000);
+      }, 30000);
     }
   };
   
@@ -691,7 +691,7 @@ var wh_rgx = /^(w{3}|web|m(obile)?|read|data)\./i;
 var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s?[-\.]\s?\d+)?|\s)/gi; /* check id from <title> */
 var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|ep(isodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
 var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
-var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
+var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|(my)?bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
 var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|list|release|author|artist)\/.*\/?$/i;
 /* ============================================================ */
 /* mydb is for global variable */
@@ -710,7 +710,7 @@ var mydb_spt_message = '🎉 supported site 🎉';
 var mydb_db_list = ['mangadex','mangaupdates','myanimelist','anilist','anidb'];
 var mydb_info = {"error":{},"support":"","source":"","type":"","fbase_app":"","fbase_database":"","fbase_auth":"","fbase_auto_login":"","reader_js":"","bookmark_js":""};
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
-var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"source_bm":false,"source_cr":false,"bm_list":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true,"mod_disqus":true};
+var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"source_bm":false,"source_cr":false,"bm_list":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true,"mod_disqus":true,"read_project":true};
 /* 
 - bmark_reader = show bookmark on comic reader
 - new_tab.bm_list = open link in new tab on bookmark list (bm_list)
@@ -719,10 +719,12 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - server_check.source_bm = check if source data updated on bookmark
 - server_check.source_cr = check if source data updated on comic reader
 - server_check.bm_list = check if bm_list data updated (date)
+- remove_site.bookmark = remove localStorage bookmark
+- remove_site.history = remove localStorage history
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|3/4/2022, 10:06:58 AM';
+var local_interval = 'manual|3/11/2022, 6:29:26 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
