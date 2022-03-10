@@ -425,6 +425,19 @@ function mydb_tools() {
   
   function callScript(note) {
     if (mydb_database || (mydb_type && note.search(/^error/) == -1)) {
+      if (live_test_custom) {
+        var x_chk = setInterval(function() {
+          if (typeof mydb_custom !== 'undefined') {
+            clearInterval(x_chk);
+            mydb_custom();
+          }
+        }, 100);
+      } else {
+        crossStorage.get('mydb_tools_custom', function(res) {
+          localJSDataMOD(res, url_js_custom, 'mydb_tools_custom', 'js', local_interval);
+        });
+      }
+      
       if (mydb_type) {
         mydb_type_bkp = mydb_type;
         mydb_spt_info = '{"support":"true","note":"'+ mydb_spt_message +'"}';
@@ -494,19 +507,6 @@ function mydb_tools() {
             }
           }
         }, 100);
-      }
-      
-      if (live_test_custom) {
-        var x_chk = setInterval(function() {
-          if (typeof mydb_custom !== 'undefined') {
-            clearInterval(x_chk);
-            mydb_custom();
-          }
-        }, 100);
-      } else {
-        crossStorage.get('mydb_tools_custom', function(res) {
-          localJSDataMOD(res, url_js_custom, 'mydb_tools_custom', 'js', local_interval);
-        });
       }
     } else {
       mydb_info['support'] = false;
@@ -724,7 +724,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|3/11/2022, 6:29:26 AM';
+var local_interval = 'manual|3/11/2022, 6:59:21 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
