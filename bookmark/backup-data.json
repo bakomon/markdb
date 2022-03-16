@@ -23,8 +23,8 @@
     },
     "comic" : {
       "check" : {
-        "length" : "2554",
-        "update" : 1646921946178
+        "length" : "2567",
+        "update" : 1647386262425
       },
       "list" : {
         "1-second" : {
@@ -149,17 +149,17 @@
         },
         "4-cut-hero" : {
           "alternative" : "",
-          "bmdb" : "md|15771",
+          "bmdb" : "mu|124028",
           "host" : "komikcast.com",
           "id" : "4-cut-hero",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i249767.jpg",
           "note" : "",
           "number" : "115",
           "read" : "",
           "similar" : "",
           "title" : "4 Cut Hero",
           "type" : "manhwa",
-          "update" : 1595088000000,
+          "update" : 1595030400000,
           "url" : "//komikcast.com/komik/4-cut-hero/"
         },
         "6-gou-keibi" : {
@@ -214,20 +214,20 @@
           "id" : "8-circle-wizards-reincarnation",
           "image" : "https://www.mangaupdates.com/image/i317046.png",
           "note" : "",
-          "number" : "75",
+          "number" : "77",
           "read" : "",
           "similar" : "",
           "title" : "8 Circle Wizards Reincarnation",
           "type" : "manhwa",
-          "update" : 1645574400000,
+          "update" : 1647129600000,
           "url" : "//komikcast.com/komik/8-circle-wizards-reincarnation/"
         },
         "8kaijuu" : {
           "alternative" : "8 Kaijuu | Kaiju No. 8 | 怪獣８号",
-          "bmdb" : "md|50954",
-          "host" : "mangaku.live",
+          "bmdb" : "mu|169423",
+          "host" : "mangaku.site",
           "id" : "8kaijuu",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i377398.jpg",
           "note" : "",
           "number" : "19",
           "read" : "",
@@ -235,7 +235,7 @@
           "title" : "8kaijuu",
           "type" : "manga",
           "update" : 1607040000000,
-          "url" : "//mangaku.live/komik/8kaijuu/"
+          "url" : "//mangaku.site/komik/8kaijuu/"
         },
         "990k-ex-life-hunter" : {
           "alternative" : "",
@@ -314,10 +314,10 @@
         },
         "a-breakthrough-brought-by-forbidden-master-and-disciple" : {
           "alternative" : "",
-          "bmdb" : "md|47371",
+          "bmdb" : "mu|168579",
           "host" : "kiryuu.id",
           "id" : "a-breakthrough-brought-by-forbidden-master-and-disciple",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i324479.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -389,25 +389,25 @@
         },
         "a-i-doctor" : {
           "alternative" : "",
-          "bmdb" : "md|61529",
-          "host" : "klankomik.com",
+          "bmdb" : "mu|177529",
+          "host" : "mangadex.org",
           "id" : "a-i-doctor",
-          "image" : "",
-          "note" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i363953.jpg",
+          "note" : "kurutonime",
           "number" : "belum",
           "read" : "",
           "similar" : "",
           "title" : "A.I Doctor",
           "type" : "manhwa",
           "update" : 1613260800000,
-          "url" : "//klankomik.com/manga/a-i-doctor/"
+          "url" : "//mangadex.org/title/61529"
         },
         "a-legend-of-the-wind" : {
           "alternative" : "",
-          "bmdb" : "md|47037",
+          "bmdb" : "mu|165380",
           "host" : "sektekomik.com",
           "id" : "a-legend-of-the-wind",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i312839.jpg",
           "note" : "",
           "number" : "50",
           "read" : "",
@@ -419,10 +419,10 @@
         },
         "a-post-apocalyptic-journey" : {
           "alternative" : "",
-          "bmdb" : "md|35608",
+          "bmdb" : "mu|153375",
           "host" : "ngomik.net",
           "id" : "a-post-apocalyptic-journey",
-          "image" : "https://www.mangaupdates.com/image/i289098.png",
+          "image" : "https://cdn.mangaupdates.com/image/i289098.png",
           "note" : "",
           "number" : "68",
           "read" : "",
@@ -479,10 +479,10 @@
         },
         "a-ruined-princess-and-alternate-world-hero-make-a-great-country" : {
           "alternative" : "",
-          "bmdb" : "md|53778",
+          "bmdb" : "mu|159325",
           "host" : "boosei.com",
           "id" : "a-ruined-princess-and-alternate-world-hero-make-a-great-country",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i373982.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -554,10 +554,10 @@
         },
         "a-sword-master-childhood-friend-power-harassed-me-harshly-so-i-broke-off-our-relationship-and-make-a-fresh-start-at-the-frontier-as-a-magic-swordsman" : {
           "alternative" : "",
-          "bmdb" : "md|55481",
+          "bmdb" : "mu|172388",
           "host" : "comicfx.net",
           "id" : "a-sword-master-childhood-friend-power-harassed-me-harshly-so-i-broke-off-our-relationship-and-make-a-fresh-start-at-the-frontier-as-a-magic-swordsman",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i369215.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -584,10 +584,10 @@
         },
         "a-wife-who-heals-with-tights" : {
           "alternative" : "",
-          "bmdb" : "md|43208",
+          "bmdb" : "mu|158639",
           "host" : "boosei.com",
           "id" : "a-wife-who-heals-with-tights",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i346728.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -674,16 +674,16 @@
         },
         "academy-of-monster" : {
           "alternative" : "Supernatural Beast Academy | 몬스터 아카데미",
-          "bmdb" : "md|53460",
+          "bmdb" : "mu|176412",
           "host" : "komikplay.com",
           "id" : "academy-of-monster",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i364528.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
           "similar" : "",
           "title" : "Academy Of Monster",
-          "type" : "manhwa",
+          "type" : "manhua",
           "update" : 1608249600000,
           "url" : "//komikplay.com/series/academy-of-monster/"
         },
@@ -779,10 +779,10 @@
         },
         "again-my-life" : {
           "alternative" : "",
-          "bmdb" : "md|45472",
+          "bmdb" : "mu|162990",
           "host" : "komikcast.com",
           "id" : "again-my-life",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i352269.jpg",
           "note" : "",
           "number" : "2",
           "read" : "",
@@ -794,17 +794,17 @@
         },
         "against-the-gods" : {
           "alternative" : "",
-          "bmdb" : "md|31414",
+          "bmdb" : "mu|152269",
           "host" : "komikcast.com",
           "id" : "against-the-gods",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i285054.png",
           "note" : "",
           "number" : "174",
           "read" : "",
           "similar" : "",
-          "title" : "Against The Gods",
+          "title" : "Against the Gods",
           "type" : "manhua",
-          "update" : 1598022395000,
+          "update" : 1597968000000,
           "url" : "//komikcast.com/komik/against-the-gods/"
         },
         "against-the-heaven-supreme" : {
@@ -884,10 +884,10 @@
         },
         "agravity-boys" : {
           "alternative" : "",
-          "bmdb" : "md|43649",
-          "host" : "mangaku.live",
+          "bmdb" : "mu|158809",
+          "host" : "mangaku.site",
           "id" : "agravity-boys",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i351784.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -895,7 +895,7 @@
           "title" : "Agravity Boys",
           "type" : "manga",
           "update" : 1576368000000,
-          "url" : "//mangaku.live/komik/agravity-boys/"
+          "url" : "//mangaku.site/komik/agravity-boys/"
         },
         "air-gear" : {
           "alternative" : "",
@@ -914,18 +914,18 @@
         },
         "ajin" : {
           "alternative" : "",
-          "bmdb" : "md|9570",
-          "host" : "mangaku.live",
+          "bmdb" : "mu|75929",
+          "host" : "mangaku.site",
           "id" : "ajin",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i342625.jpg",
           "note" : "",
           "number" : "76",
           "read" : "",
           "similar" : "",
           "title" : "Ajin",
           "type" : "manga",
-          "update" : 1581074321000,
-          "url" : "//mangaku.live/komik/ajin/"
+          "update" : 1581033600000,
+          "url" : "//mangaku.site/komik/ajin/"
         },
         "akaaka-shita-chi-no-monogatari" : {
           "alternative" : "",
@@ -958,11 +958,11 @@
           "url" : "//kiryuu.id/manga/akai-kiri-no-naka-kara/"
         },
         "akame-ga-kill-zero" : {
-          "alternative" : "",
-          "bmdb" : "md|9902",
+          "alternative" : "Akame ga Kiru! Zero",
+          "bmdb" : "mu|102282",
           "host" : "kiryuu.id",
           "id" : "akame-ga-kill-zero",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i290228.png",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -1159,12 +1159,12 @@
           "id" : "alone-necromancer",
           "image" : "https://www.mangaupdates.com/image/i363924.png",
           "note" : "",
-          "number" : "30",
+          "number" : "31",
           "read" : "",
           "similar" : "",
           "title" : "Alone Necromancer",
           "type" : "manhwa",
-          "update" : 1646265600000,
+          "update" : 1646956800000,
           "url" : "//sektekomik.com/manga/a-lone-necromancer/"
         },
         "am-i-invincible" : {
@@ -1347,6 +1347,21 @@
           "update" : 1633564800000,
           "url" : "//kiryuu.id/manga/ano-hi-chikyuu-ni-dungeon-ga-shutsugen-shita/"
         },
+        "another-world-where-i-cant-even-collapse-and-die-ikidaore-mo-dekinai-konna-isekai-ja" : {
+          "alternative" : "Ikidaore mo Dekinai Konna Isekai ja",
+          "bmdb" : "mu|168120",
+          "host" : "komikcast.com",
+          "id" : "another-world-where-i-cant-even-collapse-and-die-ikidaore-mo-dekinai-konna-isekai-ja",
+          "image" : "https://cdn.mangaupdates.com/image/i361825.jpg",
+          "note" : "riztrnsltion",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Another World Where I Can’t Even Collapse and Die",
+          "type" : "manga",
+          "update" : 1602028800000,
+          "url" : "//komikcast.com/komik/another-world-where-i-cant-even-collapse-and-die-ikidaore-mo-dekinai-konna-isekai-ja/"
+        },
         "ansatsu-skill-de-isekai-saikyou-renkinjutsu-to-ansatsujutsu-o-kiwameta-ore-wa-sekai-o-kage-kara-shihai-suru" : {
           "alternative" : "",
           "bmdb" : "md|59679",
@@ -1380,7 +1395,7 @@
         "ao-no-exorcist" : {
           "alternative" : "",
           "bmdb" : "md|283",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "ao-no-exorcist",
           "image" : "",
           "note" : "",
@@ -1390,7 +1405,7 @@
           "title" : "Ao no Exorcist",
           "type" : "manga",
           "update" : 1570752000000,
-          "url" : "//mangaku.live/komik/ao-no-exorcist/"
+          "url" : "//mangaku.site/komik/ao-no-exorcist/"
         },
         "ao-no-orchestra" : {
           "alternative" : "",
@@ -1605,7 +1620,7 @@
         "argate-online" : {
           "alternative" : "",
           "bmdb" : "md|21810",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "argate-online",
           "image" : "",
           "note" : "",
@@ -1615,7 +1630,7 @@
           "title" : "Argate Online",
           "type" : "manga",
           "update" : 1571184000000,
-          "url" : "//mangaku.live/komik/argate-online/"
+          "url" : "//mangaku.site/komik/argate-online/"
         },
         "arifureta-gakuen-de-sekai-saikyou" : {
           "alternative" : "",
@@ -1965,7 +1980,7 @@
         "ayashimon" : {
           "alternative" : "",
           "bmdb" : "mu|191620",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "ayashimon",
           "image" : "https://www.mangaupdates.com/image/i367896.jpg",
           "note" : "",
@@ -1975,7 +1990,7 @@
           "title" : "Ayashimon",
           "type" : "manga",
           "update" : 1637020800000,
-          "url" : "//mangaku.live/komik/ayashimon/"
+          "url" : "//mangaku.site/komik/ayashimon/"
         },
         "bachelors-return" : {
           "alternative" : "Return of The Bachelor",
@@ -2235,7 +2250,7 @@
         "beastars" : {
           "alternative" : "",
           "bmdb" : "md|20523",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "beastars",
           "image" : "",
           "note" : "",
@@ -2245,7 +2260,7 @@
           "title" : "Beastars",
           "type" : "manga",
           "update" : 1576022400000,
-          "url" : "//mangaku.live/komik/beastars/"
+          "url" : "//mangaku.site/komik/beastars/"
         },
         "beautiful-boss-cold-hearted" : {
           "alternative" : "Spicy Female Boss",
@@ -2441,6 +2456,21 @@
           "type" : "manhua",
           "update" : 1609372800000,
           "url" : "//klankomik.com/manga/best-son-in-law/"
+        },
+        "beyond-myriad-peoples" : {
+          "alternative" : "",
+          "bmdb" : "mu|183538",
+          "host" : "mangayaro.com",
+          "id" : "beyond-myriad-peoples",
+          "image" : "https://cdn.mangaupdates.com/image/i380870.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Beyond Myriad Peoples",
+          "type" : "manhua",
+          "update" : 1647216000000,
+          "url" : "//mangayaro.com/manga/beyond-myriad-peoples/"
         },
         "beyond-the-strong" : {
           "alternative" : "",
@@ -2700,7 +2730,7 @@
         "black-torch" : {
           "alternative" : "",
           "bmdb" : "mu|138753",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "black-torch",
           "image" : "https://www.mangaupdates.com/image/i314247.png",
           "note" : "",
@@ -2710,7 +2740,7 @@
           "title" : "Black Torch",
           "type" : "manga",
           "update" : 1490313600000,
-          "url" : "//mangaku.live/komik/black-torch/"
+          "url" : "//mangaku.site/komik/black-torch/"
         },
         "blacksun" : {
           "alternative" : "",
@@ -2745,7 +2775,7 @@
         "blade-note" : {
           "alternative" : "",
           "bmdb" : "md|16110",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "blade-note",
           "image" : "",
           "note" : "",
@@ -2755,7 +2785,7 @@
           "title" : "Blade Note",
           "type" : "manhwa",
           "update" : 1567641600000,
-          "url" : "//mangaku.live/komik/blade-note/"
+          "url" : "//mangaku.site/komik/blade-note/"
         },
         "blame" : {
           "alternative" : "",
@@ -3120,7 +3150,7 @@
         "bone-collection" : {
           "alternative" : "",
           "bmdb" : "md|41267",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "bone-collection",
           "image" : "",
           "note" : "",
@@ -3130,7 +3160,7 @@
           "title" : "Bone Collection",
           "type" : "manga",
           "update" : 1552953600000,
-          "url" : "//mangaku.live/komik/bone-collection/"
+          "url" : "//mangaku.site/komik/bone-collection/"
         },
         "bonkotsu-shinpei-no-monster-life" : {
           "alternative" : "",
@@ -3255,7 +3285,7 @@
         "boruto-naruto-next-generations" : {
           "alternative" : "",
           "bmdb" : "md|23105",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "boruto-naruto-next-generations",
           "image" : "",
           "note" : "",
@@ -3265,7 +3295,7 @@
           "title" : "Boruto: Naruto Next Generations",
           "type" : "manga",
           "update" : 1573430400000,
-          "url" : "//mangaku.live/komik/boruto-naruto-next-generations/"
+          "url" : "//mangaku.site/komik/boruto-naruto-next-generations/"
         },
         "boss-in-school" : {
           "alternative" : "",
@@ -3555,7 +3585,7 @@
         "build-king" : {
           "alternative" : "",
           "bmdb" : "md|57744",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "build-king",
           "image" : "",
           "note" : "",
@@ -3565,7 +3595,7 @@
           "title" : "Build King",
           "type" : "manga",
           "update" : 1605744000000,
-          "url" : "//mangaku.live/komik/build-king/"
+          "url" : "//mangaku.site/komik/build-king/"
         },
         "build-up" : {
           "alternative" : "",
@@ -3600,7 +3630,7 @@
         "burn-the-witch" : {
           "alternative" : "",
           "bmdb" : "md|28900",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "burn-the-witch",
           "image" : "",
           "note" : "",
@@ -3610,7 +3640,7 @@
           "title" : "Burn The Witch",
           "type" : "manga",
           "update" : 1598572800000,
-          "url" : "//mangaku.live/komik/burn-the-witch/"
+          "url" : "//mangaku.site/komik/burn-the-witch/"
         },
         "burnout-shock" : {
           "alternative" : "",
@@ -4110,7 +4140,7 @@
         "chongsa" : {
           "alternative" : "Musketeer",
           "bmdb" : "md|12637",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "chongsa",
           "image" : "",
           "note" : "",
@@ -4120,7 +4150,7 @@
           "title" : "Chongsa",
           "type" : "manhwa",
           "update" : 1595980800000,
-          "url" : "//mangaku.live/komik/chongsa/"
+          "url" : "//mangaku.site/komik/chongsa/"
         },
         "chou-onna-kirai-na-ore-ga-isekai-no-joshikou-ni-ryuugaku-suru-koto-ni-natta" : {
           "alternative" : "",
@@ -4159,12 +4189,12 @@
           "id" : "chronicles-of-heavenly-demon",
           "image" : "https://www.mangaupdates.com/image/i352058.jpg",
           "note" : "",
-          "number" : "164",
+          "number" : "165",
           "read" : "",
           "similar" : "",
           "title" : "Chronicles of Heavenly Demon",
           "type" : "manhwa",
-          "update" : 1646524800000,
+          "update" : 1646956800000,
           "url" : "//komikcast.com/komik/chronicles-of-heavenly-demon/"
         },
         "chu-boss-san-level-99-saikyou-no-buka-tachi-to-tomo-ni-nishuume-totsunyuu" : {
@@ -4362,6 +4392,21 @@
           "update" : 1619740800000,
           "url" : "//komikcast.com/komik/class-saiya-sune-de-urareta-ore-wa-jitsu-wa-saikyou-parameter/"
         },
+        "class-teni-de-ore-dake-haburareta-node-doukyuusei-harem-tsukuru-koto-ni-shita" : {
+          "alternative" : "",
+          "bmdb" : "mu|154051",
+          "host" : "bacamanga.org",
+          "id" : "class-teni-de-ore-dake-haburareta-node-doukyuusei-harem-tsukuru-koto-ni-shita",
+          "image" : "https://cdn.mangaupdates.com/image/i368383.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Class Teni de Ore dake Haburareta node, Doukyuusei Harem Tsukuru Koto ni Shita",
+          "type" : "manga",
+          "update" : 1555027200000,
+          "url" : "//bacamanga.org/manga/class-teni-de-ore-dake-haburareta-node-doukyuusei-harem-tsukuru-koto-ni-shita/"
+        },
         "clockwork-planet" : {
           "alternative" : "",
           "bmdb" : "mu|101565",
@@ -4440,7 +4485,7 @@
         "colorless" : {
           "alternative" : "",
           "bmdb" : "md|44452",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "colorless",
           "image" : "",
           "note" : "",
@@ -4450,7 +4495,7 @@
           "title" : "Colorless",
           "type" : "manga",
           "update" : 1621728000000,
-          "url" : "//mangaku.live/komik/colorless/"
+          "url" : "//mangaku.site/komik/colorless/"
         },
         "combine-cube" : {
           "alternative" : "The Unity of All Things",
@@ -5115,7 +5160,7 @@
         "darwins-game" : {
           "alternative" : "",
           "bmdb" : "md|8466",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "darwins-game",
           "image" : "",
           "note" : "",
@@ -5125,7 +5170,7 @@
           "title" : "Darwin's Game",
           "type" : "manga",
           "update" : 1492732800000,
-          "url" : "//mangaku.live/komik/18-darwins-game/"
+          "url" : "//mangaku.site/komik/18-darwins-game/"
         },
         "dead-life" : {
           "alternative" : "",
@@ -5190,7 +5235,7 @@
         "deadman-wonderland" : {
           "alternative" : "",
           "bmdb" : "md|84",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "deadman-wonderland",
           "image" : "",
           "note" : "",
@@ -5200,7 +5245,7 @@
           "title" : "Deadman Wonderland",
           "type" : "manga",
           "update" : 1498694400000,
-          "url" : "//mangaku.live/komik/deadman-wonderland/"
+          "url" : "//mangaku.site/komik/deadman-wonderland/"
         },
         "deadpool-samurai" : {
           "alternative" : "",
@@ -5220,7 +5265,7 @@
         "death-field" : {
           "alternative" : "",
           "bmdb" : "md|22235",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "death-field",
           "image" : "",
           "note" : "",
@@ -5230,7 +5275,7 @@
           "title" : "Death Field",
           "type" : "manhua",
           "update" : 1572339404000,
-          "url" : "//mangaku.live/komik/death-field/"
+          "url" : "//mangaku.site/komik/death-field/"
         },
         "death-march-kara-hajimaru-isekai-kyousoukyoku" : {
           "alternative" : "",
@@ -5865,7 +5910,7 @@
         "domestic-na-kanojo" : {
           "alternative" : "",
           "bmdb" : "mu|110333",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "domestic-na-kanojo",
           "image" : "https://www.mangaupdates.com/image/i321719.jpg",
           "note" : "kurang seru",
@@ -5875,7 +5920,7 @@
           "title" : "Domestic na Kanojo",
           "type" : "manga",
           "update" : 1493337600000,
-          "url" : "//mangaku.live/komik/18-domestic-na-kanojo/"
+          "url" : "//mangaku.site/komik/18-domestic-na-kanojo/"
         },
         "dominate-the-three-exclusive-worlds" : {
           "alternative" : "Dominate the Three Realms",
@@ -6015,7 +6060,7 @@
         "dorohedoro" : {
           "alternative" : "",
           "bmdb" : "mu|209",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "dorohedoro",
           "image" : "https://www.mangaupdates.com/image/i294314.jpg",
           "note" : "",
@@ -6025,7 +6070,7 @@
           "title" : "Dorohedoro",
           "type" : "manga",
           "update" : 1625702400000,
-          "url" : "//mangaku.live/komik/dorohedoro/"
+          "url" : "//mangaku.site/komik/dorohedoro/"
         },
         "dorondororon" : {
           "alternative" : "",
@@ -6180,7 +6225,7 @@
         "dr-stone" : {
           "alternative" : "",
           "bmdb" : "md|20882",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "dr-stone",
           "image" : "",
           "note" : "",
@@ -6190,12 +6235,12 @@
           "title" : "Dr. Stone",
           "type" : "manga",
           "update" : 1606694400000,
-          "url" : "//mangaku.live/komik/dr-stone/"
+          "url" : "//mangaku.site/komik/dr-stone/"
         },
         "dr-stone-reboot" : {
           "alternative" : "Dr. Stone reboot: Byakuya",
           "bmdb" : "md|42291",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "dr-stone-reboot",
           "image" : "",
           "note" : "",
@@ -6205,7 +6250,7 @@
           "title" : "Dr. Stone Reboot",
           "type" : "manga",
           "update" : 1572393600000,
-          "url" : "//mangaku.live/komik/dr-stone-reboot/"
+          "url" : "//mangaku.site/komik/dr-stone-reboot/"
         },
         "dracorun" : {
           "alternative" : "",
@@ -6240,7 +6285,7 @@
         "dragon-ball-super" : {
           "alternative" : "",
           "bmdb" : "md|15653",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "dragon-ball-super",
           "image" : "",
           "note" : "",
@@ -6250,7 +6295,7 @@
           "title" : "Dragon Ball Super",
           "type" : "manga",
           "update" : 1568122361000,
-          "url" : "//mangaku.live/komik/dragon-ball-super/"
+          "url" : "//mangaku.site/komik/dragon-ball-super/"
         },
         "dragon-ego" : {
           "alternative" : "",
@@ -6434,10 +6479,10 @@
         },
         "drawing-saikyou-mangaka-wa-oekaki-skill-de-isekai-musou-suru" : {
           "alternative" : "",
-          "bmdb" : "none",
+          "bmdb" : "mu|192514",
           "host" : "westmanga.info",
           "id" : "drawing-saikyou-mangaka-wa-oekaki-skill-de-isekai-musou-suru",
-          "image" : "https://komikcast.com/wp-content/uploads/2021/10/dsmwo.jpg",
+          "image" : "https://cdn.mangaupdates.com/image/i369836.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -6480,7 +6525,7 @@
         "drifters" : {
           "alternative" : "",
           "bmdb" : "md|759",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "drifters",
           "image" : "",
           "note" : "",
@@ -6490,7 +6535,7 @@
           "title" : "Drifters",
           "type" : "manga",
           "update" : 1568122964000,
-          "url" : "//mangaku.live/komik/drifters/"
+          "url" : "//mangaku.site/komik/drifters/"
         },
         "duke-death-black-maid" : {
           "alternative" : "",
@@ -6559,12 +6604,12 @@
           "id" : "dungeon-reset",
           "image" : "https://www.mangaupdates.com/image/i363041.jpg",
           "note" : "",
-          "number" : "113",
+          "number" : "114",
           "read" : "",
           "similar" : "",
           "title" : "Dungeon Reset",
           "type" : "manhwa",
-          "update" : 1646265600000,
+          "update" : 1647129600000,
           "url" : "//ngomik.net/manga/dungeon-reset/"
         },
         "dungeons-artifacts" : {
@@ -6645,7 +6690,7 @@
         "earthchild" : {
           "alternative" : "",
           "bmdb" : "mu|196861",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "earthchild",
           "image" : "https://cdn.mangaupdates.com/image/i379315.jpg",
           "note" : "",
@@ -6655,7 +6700,7 @@
           "title" : "Earthchild",
           "type" : "manga",
           "update" : 1645747200000,
-          "url" : "//mangaku.live/komik/earthchild/"
+          "url" : "//mangaku.site/komik/earthchild/"
         },
         "ecstas-online" : {
           "alternative" : "",
@@ -6852,10 +6897,25 @@
           "update" : 1593820800000,
           "url" : "//mangadex.org/title/38123/endo-and-kobayashi-s-live-commentary-on-the-villainess"
         },
+        "enemies" : {
+          "alternative" : "원수",
+          "bmdb" : "mu|196097",
+          "host" : "mangayaro.com",
+          "id" : "enemies",
+          "image" : "https://cdn.mangaupdates.com/image/i377745.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Enemies",
+          "type" : "manhwa",
+          "update" : 1647302400000,
+          "url" : "//mangayaro.com/manga/enemies/"
+        },
         "enen-no-shouboutai" : {
           "alternative" : "Fire Brigade of Flames | Fire Force",
           "bmdb" : "md|16411",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "enen-no-shouboutai",
           "image" : "",
           "note" : "",
@@ -6865,7 +6925,7 @@
           "title" : "Enen No Shouboutai",
           "type" : "manga",
           "update" : 1607389359000,
-          "url" : "//mangaku.live/komik/enen-no-shouboutai/"
+          "url" : "//mangaku.site/komik/enen-no-shouboutai/"
         },
         "energy-hunters" : {
           "alternative" : "",
@@ -7380,7 +7440,7 @@
         "fairy-tail-100-years-quest" : {
           "alternative" : "",
           "bmdb" : "md|29270",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "fairy-tail-100-years-quest",
           "image" : "",
           "note" : "",
@@ -7390,12 +7450,12 @@
           "title" : "Fairy Tail: 100 Years Quest",
           "type" : "manga",
           "update" : 1532563200000,
-          "url" : "//mangaku.live/komik/fairy-tail-100-years-quest/"
+          "url" : "//mangaku.site/komik/fairy-tail-100-years-quest/"
         },
         "fake-hero" : {
           "alternative" : "",
           "bmdb" : "mu|159237",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "fake-hero",
           "image" : "https://www.mangaupdates.com/image/i302642.jpg",
           "note" : "",
@@ -7405,7 +7465,7 @@
           "title" : "Fake Hero",
           "type" : "manga",
           "update" : 1578268800000,
-          "url" : "//mangaku.live/komik/fake-hero/"
+          "url" : "//mangaku.site/komik/fake-hero/"
         },
         "fantasy-bishoujo-juniku-ojisan-to" : {
           "alternative" : "",
@@ -7665,7 +7725,7 @@
         "fire-punch" : {
           "alternative" : "",
           "bmdb" : "mu|132491",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "fire-punch",
           "image" : "https://www.mangaupdates.com/image/i270467.jpg",
           "note" : "",
@@ -7675,7 +7735,7 @@
           "title" : "Fire Punch",
           "type" : "manga",
           "update" : 1492905600000,
-          "url" : "//mangaku.live/komik/fire-punch/"
+          "url" : "//mangaku.site/komik/fire-punch/"
         },
         "first-class-family" : {
           "alternative" : "First Class Servant",
@@ -8040,7 +8100,7 @@
         "fukushuu-kyoushitsu" : {
           "alternative" : "",
           "bmdb" : "mu|105505",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "fukushuu-kyoushitsu",
           "image" : "https://www.mangaupdates.com/image/i246171.png",
           "note" : "",
@@ -8050,7 +8110,7 @@
           "title" : "Fukushuu Kyoushitsu",
           "type" : "manga",
           "update" : 1496275200000,
-          "url" : "//mangaku.live/komik/fukushuu-kyoushitsu/"
+          "url" : "//mangaku.site/komik/fukushuu-kyoushitsu/"
         },
         "fukushuu-no-kyoukasho" : {
           "alternative" : "",
@@ -8234,10 +8294,10 @@
         },
         "fuun-kara-no-saikyou-otoko" : {
           "alternative" : "",
-          "bmdb" : "none",
+          "bmdb" : "mu|197164",
           "host" : "komikcast.com",
           "id" : "fuun-kara-no-saikyou-otoko",
-          "image" : "https://komikcast.com/wp-content/uploads/2021/10/ee3fd65f-80ed-4414-8c41-f0d93f6c252c-768x1092.jpg",
+          "image" : "https://cdn.mangaupdates.com/image/i379727.png",
           "note" : "mangadex",
           "number" : "belum",
           "read" : "",
@@ -8460,7 +8520,7 @@
         "gantz-g" : {
           "alternative" : "",
           "bmdb" : "mu|128409",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "gantz-g",
           "image" : "https://www.mangaupdates.com/image/i323042.jpg",
           "note" : "tamat",
@@ -8470,7 +8530,7 @@
           "title" : "Gantz:G",
           "type" : "manga",
           "update" : 1625270400000,
-          "url" : "//mangaku.live/komik/gantzg/"
+          "url" : "//mangaku.site/komik/gantzg/"
         },
         "ganzi-monster" : {
           "alternative" : "",
@@ -8655,9 +8715,9 @@
         "ghost-reaper-girl" : {
           "alternative" : "",
           "bmdb" : "mu|169893",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "ghost-reaper-girl",
-          "image" : "https://cdn1.mangaku.link/mangaku.live/gambar/2021/04/16099814a73c9c8a7b14d30a-1c4131d07c89a2f0e7392be2b6277c61.jpg",
+          "image" : "https://cdn1.mangaku.link/mangaku.site/gambar/2021/04/16099814a73c9c8a7b14d30a-1c4131d07c89a2f0e7392be2b6277c61.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -8665,7 +8725,7 @@
           "title" : "Ghost Reaper Girl",
           "type" : "manga",
           "update" : 1594944000000,
-          "url" : "//mangaku.live/komik/ghost-reaper-girl/"
+          "url" : "//mangaku.site/komik/ghost-reaper-girl/"
         },
         "ghost-teller" : {
           "alternative" : "",
@@ -9177,6 +9237,21 @@
           "update" : 1580688000000,
           "url" : "//komikindo.web.id/manga/good-deeds-of-kane-of-old-guy/"
         },
+        "good-morning-leon" : {
+          "alternative" : "",
+          "bmdb" : "mu|187477",
+          "host" : "mangayaro.com",
+          "id" : "good-morning-leon",
+          "image" : "https://cdn.mangaupdates.com/image/i359322.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Good Morning Leon",
+          "type" : "manga",
+          "update" : 1647043200000,
+          "url" : "//mangayaro.com/manga/good-morning-leon/"
+        },
         "good-night-world" : {
           "alternative" : "",
           "bmdb" : "mu|129881",
@@ -9274,12 +9349,12 @@
           "id" : "grand-general",
           "image" : "https://cdn.mangaupdates.com/image/i371437.jpg",
           "note" : "",
-          "number" : "29",
+          "number" : "30",
           "read" : "",
           "similar" : "",
           "title" : "Grand General",
           "type" : "manhwa",
-          "update" : 1646784000000,
+          "update" : 1646956800000,
           "url" : "//komikcast.com/komik/grand-general/"
         },
         "great-doctor-ling-ran" : {
@@ -9507,6 +9582,21 @@
           "update" : 1634169600000,
           "url" : "//daveyscans.com/manga/gwanghaes-lover/"
         },
+        "gyakkou-shita-akuyaku-reijou-wa-naze-ka-maryoku-wo-ushinattanode-shinsou-no-reijou-ni-narimasu" : {
+          "alternative" : "The Villainess Who Traveled Back in Time Inexplicably Lost Her Magic, so She Went Into Seclusion",
+          "bmdb" : "mu|177504",
+          "host" : "komikcast.com",
+          "id" : "gyakkou-shita-akuyaku-reijou-wa-naze-ka-maryoku-wo-ushinattanode-shinsou-no-reijou-ni-narimasu",
+          "image" : "https://cdn.mangaupdates.com/image/i358153.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Gyakkou Shita Akuyaku Reijou wa, Naze ka Maryoku wo Ushinattanode Shinsou no Reijou ni Narimasu",
+          "type" : "manga",
+          "update" : 1625702400000,
+          "url" : "//komikcast.com/komik/gyakkou-shita-akuyaku-reijou-wa-naze-ka-maryoku-wo-ushinattanode-shinsou-no-reijou-ni-narimasu-the-villainess-who-traveled-back-in-time-inexplicably-lost-her-magic-so-she-went-into-seclusion/"
+        },
         "gyaru-gamer-homeraretai" : {
           "alternative" : "",
           "bmdb" : "mu|175120",
@@ -9719,7 +9809,7 @@
         },
         "harapeko-no-marie" : {
           "alternative" : "",
-          "bmdb" : "mu|",
+          "bmdb" : "mu|139459",
           "host" : "komikcast.com",
           "id" : "harapeko-no-marie",
           "image" : "https://komikcast.com/wp-content/uploads/2019/03/192833l.jpg",
@@ -9975,7 +10065,7 @@
         "heart-gear" : {
           "alternative" : "",
           "bmdb" : "md|35870",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "heart-gear",
           "image" : "",
           "note" : "",
@@ -9985,7 +10075,7 @@
           "title" : "Heart Gear",
           "type" : "manga",
           "update" : 1571529600000,
-          "url" : "//mangaku.live/komik/heart-gear/"
+          "url" : "//mangaku.site/komik/heart-gear/"
         },
         "heart-warming-meals-with-mother-fenrir" : {
           "alternative" : "",
@@ -10069,12 +10159,12 @@
           "id" : "heavenly-martial-god",
           "image" : "https://www.mangaupdates.com/image/i362944.jpg",
           "note" : "",
-          "number" : "43",
+          "number" : "44",
           "read" : "",
           "similar" : "",
           "title" : "Heavenly Martial God",
           "type" : "manhwa",
-          "update" : 1646524800000,
+          "update" : 1647129600000,
           "url" : "//komikcast.com/komik/heavenly-martial-god/"
         },
         "heavenly-moon" : {
@@ -10879,12 +10969,12 @@
           "id" : "how-to-live-as-a-villain",
           "image" : "https://www.mangaupdates.com/image/i367460.jpg",
           "note" : "",
-          "number" : "33",
+          "number" : "34",
           "read" : "",
           "similar" : "",
           "title" : "How to Live as a Villain",
           "type" : "manhwa",
-          "update" : 1646179200000,
+          "update" : 1647129600000,
           "url" : "//kiryuu.id/manga/how-to-live-as-a-villain/"
         },
         "how-to-properly-care-for-your-pet-wife" : {
@@ -10980,7 +11070,7 @@
         "hungry-marie" : {
           "alternative" : "Harapeko no Marie",
           "bmdb" : "mu|139459",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "hungry-marie",
           "image" : "https://www.mangaupdates.com/image/i288668.png",
           "note" : "",
@@ -10990,7 +11080,7 @@
           "title" : "Hungry Marie",
           "type" : "manga",
           "update" : 1488067200000,
-          "url" : "//mangaku.live/komik/hungry-marie/"
+          "url" : "//mangaku.site/komik/hungry-marie/"
         },
         "hunt-twelve-saints-the-beginning-of-the-end" : {
           "alternative" : "Hunt Twelve Saints, Start of Apocalypse",
@@ -11802,6 +11892,21 @@
           "update" : 1595376000000,
           "url" : "//mangayu.com/manga/i-have-twin-girlfriends"
         },
+        "i-havent-been-an-immortal-emperor-for-many-years" : {
+          "alternative" : "",
+          "bmdb" : "mu|197471",
+          "host" : "mangayaro.com",
+          "id" : "i-havent-been-an-immortal-emperor-for-many-years",
+          "image" : "https://cdn.mangaupdates.com/image/i380418.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "I Haven’t Been an Immortal Emperor for Many Years",
+          "type" : "manhua",
+          "update" : 1646956800000,
+          "url" : "//mangayaro.com/manga/i-havent-been-an-immortal-emperor-for-many-years/"
+        },
         "i-just-dont-play-the-card-according-to-the-routine" : {
           "alternative" : "",
           "bmdb" : "mu|189100",
@@ -12419,10 +12524,10 @@
         },
         "iam-the-bug-pendant" : {
           "alternative" : "",
-          "bmdb" : "none",
+          "bmdb" : "mu|190680",
           "host" : "sektekomik.com",
           "id" : "iam-the-bug-pendant",
-          "image" : "https://sektekomik.com/wp-content/uploads/2021/10/420-2-193x278-965863-1fkyhi56-612929-tKVbm0F5.jpg",
+          "image" : "https://cdn.mangaupdates.com/image/i365928.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -13770,7 +13875,7 @@
         "isekai-kenkokuki" : {
           "alternative" : "",
           "bmdb" : "md|22303",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "isekai-kenkokuki",
           "image" : "",
           "note" : "",
@@ -13780,7 +13885,7 @@
           "title" : "Isekai Kenkokuki",
           "type" : "manga",
           "update" : 1541894400000,
-          "url" : "//mangaku.live/komik/isekai-kenkokuki/"
+          "url" : "//mangaku.site/komik/isekai-kenkokuki/"
         },
         "isekai-kokka-arukimairasaijaku-no-o-to-muso-no-gunzei" : {
           "alternative" : "",
@@ -14081,6 +14186,21 @@
           "type" : "manga",
           "update" : 1577232000000,
           "url" : "//westmanga.info/manga/isekai-shikkaku/"
+        },
+        "isekai-shokan-saretekita-seijo-sama-ga-kareshi-ga-shinda-to-naku-bakari-de-hataraite-kuremasen-tokorode-sono-shinda-kareshi-zense-no-ore-desu-ne" : {
+          "alternative" : "",
+          "bmdb" : "mu|196895",
+          "host" : "ngomik.net",
+          "id" : "isekai-shokan-saretekita-seijo-sama-ga-kareshi-ga-shinda-to-naku-bakari-de-hataraite-kuremasen-tokorode-sono-shinda-kareshi-zense-no-ore-desu-ne",
+          "image" : "https://cdn.mangaupdates.com/image/i379197.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Isekai Shokan Saretekita Seijo-sama ga ~ kareshi ga shinda ~ to Naku Bakari de Hataraite Kuremasen. Tokorode Sono Shinda Kareshi, Zense no Ore desu ne",
+          "type" : "manga",
+          "update" : 1647129600000,
+          "url" : "//ngomik.net/manga/isekai-shokan-saretekita-seijo-sama-ga-kareshi-ga-shinda-to-naku-bakari-de-hataraite-kuremasen-tokorode-sono-shinda-kareshi-zense-no-ore-desu-ne/"
         },
         "isekai-shoukan-wa-nidome-desu" : {
           "alternative" : "",
@@ -14412,21 +14532,6 @@
           "update" : 1592870400000,
           "url" : "//westmanga.info/manga/itsuka-kamen-wo-nugu-tame-ni-warau-kishin-to-yumemiru-dorei/"
         },
-        "ive-become-a-rogue-lord-in-a-world-where-only-i-can-level-up" : {
-          "alternative" : "",
-          "bmdb" : "none",
-          "host" : "komikindo.co",
-          "id" : "ive-become-a-rogue-lord-in-a-world-where-only-i-can-level-up",
-          "image" : "https://komikindo.co/wp-content/uploads/2021/10/ive-become-a-rogue-lord-in-a-world-where-only-i-can-level-up.jpg",
-          "note" : "",
-          "number" : "belum",
-          "read" : "",
-          "similar" : "",
-          "title" : "Ore dake Level ga Agaru Sekai de Akutoku Ryoushu ni Natteita",
-          "type" : "manga",
-          "update" : 1635033600000,
-          "url" : "//komikindo.co/manga/ive-become-a-rogue-lord-in-a-world-where-only-i-can-level-up/"
-        },
         "ive-become-the-villainous-emperor-of-a-novel" : {
           "alternative" : "",
           "bmdb" : "md|52838",
@@ -14460,7 +14565,7 @@
         "jagaaaaaan" : {
           "alternative" : "",
           "bmdb" : "md|21048",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "jagaaaaaan",
           "image" : "",
           "note" : "",
@@ -14470,12 +14575,12 @@
           "title" : "Jagaaaaaan",
           "type" : "manga",
           "update" : 1570598223000,
-          "url" : "//mangaku.live/komik/jagaaaaaan/"
+          "url" : "//mangaku.site/komik/jagaaaaaan/"
         },
         "jaryuu-tensei" : {
           "alternative" : "",
           "bmdb" : "md|20255",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "jaryuu-tensei",
           "image" : "",
           "note" : "",
@@ -14485,7 +14590,7 @@
           "title" : "Jaryuu Tensei",
           "type" : "manga",
           "update" : 1569974400000,
-          "url" : "//mangaku.live/komik/jaryuu-tensei/"
+          "url" : "//mangaku.site/komik/jaryuu-tensei/"
         },
         "jiang-ye" : {
           "alternative" : "",
@@ -14505,7 +14610,7 @@
         "jianren" : {
           "alternative" : "",
           "bmdb" : "mu|171875",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "jianren",
           "image" : "https://komikav.com/wp-content/uploads/2019/12/157374203494123241ab97294e.jpg",
           "note" : "",
@@ -14515,7 +14620,7 @@
           "title" : "JIANREN",
           "type" : "manhua",
           "update" : 1577232000000,
-          "url" : "//mangaku.live/komik/jianren/"
+          "url" : "//mangaku.site/komik/jianren/"
         },
         "jibaku-shounen-hanako-kun" : {
           "alternative" : "",
@@ -14775,7 +14880,7 @@
         "journey-to-the-west" : {
           "alternative" : "",
           "bmdb" : "md|21071",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "journey-to-the-west",
           "image" : "",
           "note" : "",
@@ -14785,7 +14890,7 @@
           "title" : "Journey To The West",
           "type" : "manga",
           "update" : 1570695766000,
-          "url" : "//mangaku.live/komik/journey-to-the-west/"
+          "url" : "//mangaku.site/komik/journey-to-the-west/"
         },
         "judge-lee-han-young" : {
           "alternative" : "",
@@ -14820,7 +14925,7 @@
         "jujutsu-kaisen" : {
           "alternative" : "",
           "bmdb" : "md|28004",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "jujutsu-kaisen",
           "image" : "",
           "note" : "",
@@ -14830,7 +14935,7 @@
           "title" : "Jujutsu Kaisen",
           "type" : "manga",
           "update" : 1574657725000,
-          "url" : "//mangaku.live/komik/jujutsu-kaisen/"
+          "url" : "//mangaku.site/komik/jujutsu-kaisen/"
         },
         "jukokuin-no-tensei-boukensha" : {
           "alternative" : "呪刻印の転生冒険者",
@@ -14985,7 +15090,7 @@
         "kagamigami" : {
           "alternative" : "",
           "bmdb" : "mu|119149",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "kagamigami",
           "image" : "https://www.mangaupdates.com/image/i231061.jpg",
           "note" : "",
@@ -14995,7 +15100,7 @@
           "title" : "Kagamigami",
           "type" : "manga",
           "update" : 1499644800000,
-          "url" : "//mangaku.live/komik/kagamigami/"
+          "url" : "//mangaku.site/komik/kagamigami/"
         },
         "kage-no-eiyuu-no-nichijou-tan" : {
           "alternative" : "",
@@ -15540,7 +15645,7 @@
         "kekkon-yubiwa-monogatari" : {
           "alternative" : "",
           "bmdb" : "md|11521",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "kekkon-yubiwa-monogatari",
           "image" : "",
           "note" : "",
@@ -15550,7 +15655,7 @@
           "title" : "Kekkon Yubiwa Monogatari",
           "type" : "manga",
           "update" : 1570297540000,
-          "url" : "//mangaku.live/komik/kekkon-yubiwa-monogatari/"
+          "url" : "//mangaku.site/komik/kekkon-yubiwa-monogatari/"
         },
         "kemono-giga" : {
           "alternative" : "",
@@ -15585,7 +15690,7 @@
         "kemono-michi" : {
           "alternative" : "",
           "bmdb" : "mu|141601",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "kemono-michi",
           "image" : "https://www.mangaupdates.com/image/i361473.jpg",
           "note" : "",
@@ -15595,7 +15700,7 @@
           "title" : "Kemono Michi",
           "type" : "manga",
           "update" : 1533600000000,
-          "url" : "//mangaku.live/komik/kemono-michi/"
+          "url" : "//mangaku.site/komik/kemono-michi/"
         },
         "ken-to-mahou-no-zeikin-taisaku" : {
           "alternative" : "",
@@ -15630,7 +15735,7 @@
         "kengan-omega" : {
           "alternative" : "",
           "bmdb" : "md|33538",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "kengan-omega",
           "image" : "",
           "note" : "",
@@ -15640,7 +15745,7 @@
           "title" : "Kengan Omega",
           "type" : "manga",
           "update" : 1596973731000,
-          "url" : "//mangaku.live/komik/kengan-omega/"
+          "url" : "//mangaku.site/komik/kengan-omega/"
         },
         "kenja-no-deshi-wo-nanoru-kenja" : {
           "alternative" : "",
@@ -15769,12 +15874,12 @@
           "id" : "kill-the-hero",
           "image" : "https://www.mangaupdates.com/image/i355591.jpg",
           "note" : "",
-          "number" : "90",
+          "number" : "91",
           "read" : "",
           "similar" : "",
           "title" : "Kill The Hero",
           "type" : "manhwa",
-          "update" : 1646352000000,
+          "update" : 1646956800000,
           "url" : "//komikcast.com/komik/kill-the-hero/"
         },
         "killing-den" : {
@@ -16034,10 +16139,10 @@
         },
         "king-of-the-labyrinth" : {
           "alternative" : "",
-          "bmdb" : "none",
+          "bmdb" : "mu|191855",
           "host" : "mangayaro.com",
           "id" : "king-of-the-labyrinth",
-          "image" : "https://mangayaro.com/wp-content/uploads/2021/11/1636024591-1475-i329257.jpg",
+          "image" : "https://cdn.mangaupdates.com/image/i379550.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -16050,7 +16155,7 @@
         "kingdom" : {
           "alternative" : "",
           "bmdb" : "md|642",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "kingdom",
           "image" : "",
           "note" : "",
@@ -16060,7 +16165,7 @@
           "title" : "Kingdom",
           "type" : "manga",
           "update" : 1485302400000,
-          "url" : "//mangaku.live/komik/kingdom/"
+          "url" : "//mangaku.site/komik/kingdom/"
         },
         "kingdom-of-the-z" : {
           "alternative" : "",
@@ -16875,7 +16980,7 @@
         "kuutei-dragons" : {
           "alternative" : "",
           "bmdb" : "mu|135805",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "kuutei-dragons",
           "image" : "https://www.mangaupdates.com/image/i371784.jpg",
           "note" : "",
@@ -16885,7 +16990,7 @@
           "title" : "Kuutei Dragons",
           "type" : "manga",
           "update" : 1641427200000,
-          "url" : "//mangaku.live/komik/kuutei-dragons/"
+          "url" : "//mangaku.site/komik/kuutei-dragons/"
         },
         "kyokou-suiri-invented-inference" : {
           "alternative" : "",
@@ -16904,10 +17009,10 @@
         },
         "kyokuten-no-hono-majutsushi-fire-ball-shika-tsukaenai-kedo-motetai-isshin-de-saikyo-ni-narimashita" : {
           "alternative" : "",
-          "bmdb" : "none",
+          "bmdb" : "mu|193395",
           "host" : "comicfx.net",
           "id" : "kyokuten-no-hono-majutsushi-fire-ball-shika-tsukaenai-kedo-motetai-isshin-de-saikyo-ni-narimashita",
-          "image" : "https://comicfx.net/uploads/manga/kyokuten-no-hono-majutsushi-fire-ball-shika-tsukaenai-kedo-motetai-isshin-de-saikyo-ni-narimashita/cover/cover_250x350.jpg",
+          "image" : "https://cdn.mangaupdates.com/image/i372815.png",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -17279,7 +17384,7 @@
         },
         "legendary-fish-take-the-world" : {
           "alternative" : "King of Spirit Beast | 鲲吞天下",
-          "bmdb" : "mu|",
+          "bmdb" : "mu|173052",
           "host" : "sektekomik.com",
           "id" : "legendary-fish-take-the-world",
           "image" : "https://www.mangaupdates.com/image/i326913.png",
@@ -17291,6 +17396,21 @@
           "type" : "manhua",
           "update" : 1578700800000,
           "url" : "//sektekomik.com/manga/legendary-fish-take-the-world/"
+        },
+        "legendary-youngest-son-of-the-marquis-house" : {
+          "alternative" : "",
+          "bmdb" : "mu|197725",
+          "host" : "komikcast.com",
+          "id" : "legendary-youngest-son-of-the-marquis-house",
+          "image" : "https://cdn.mangaupdates.com/image/i380857.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Legendary Youngest Son of the Marquis House",
+          "type" : "manhwa",
+          "update" : 1647129600000,
+          "url" : "//komikcast.com/komik/legendary-youngest-son-of-the-marquis-house/"
         },
         "level-1-dakedo-yuniiku-sukiru-de-saikyou-desu" : {
           "alternative" : "",
@@ -17404,12 +17524,12 @@
           "id" : "leveling-with-the-gods",
           "image" : "https://www.mangaupdates.com/image/i358103.jpg",
           "note" : "",
-          "number" : "44",
+          "number" : "45",
           "read" : "",
           "similar" : "",
           "title" : "Leveling With The Gods",
           "type" : "manhwa",
-          "update" : 1646265600000,
+          "update" : 1647388800000,
           "url" : "//komikcast.com/komik/leveling-with-the-gods/"
         },
         "leviathan" : {
@@ -18315,7 +18435,7 @@
         "mahou-shoujo-of-the-end" : {
           "alternative" : "",
           "bmdb" : "mu|79428",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "mahou-shoujo-of-the-end",
           "image" : "https://www.mangaupdates.com/image/i292139.jpg",
           "note" : "",
@@ -18325,7 +18445,7 @@
           "title" : "Mahou Shoujo of the End",
           "type" : "manga",
           "update" : 1494633600000,
-          "url" : "//mangaku.live/komik/mahou-shoujo-of-the-end/"
+          "url" : "//mangaku.site/komik/mahou-shoujo-of-the-end/"
         },
         "mahou-shoujo-site" : {
           "alternative" : "",
@@ -19185,7 +19305,7 @@
         "mashle-magic-and-muscles" : {
           "alternative" : "",
           "bmdb" : "mu|160845",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "mashle-magic-and-muscles",
           "image" : "https://www.mangaupdates.com/image/i363209.png",
           "note" : "",
@@ -19195,7 +19315,7 @@
           "title" : "Mashle: Magic and Muscles",
           "type" : "manga",
           "update" : 1646611200000,
-          "url" : "//mangaku.live/komik/mashle-magic-and-muscles/"
+          "url" : "//mangaku.site/komik/mashle-magic-and-muscles/"
         },
         "master-campus" : {
           "alternative" : "Master University",
@@ -19830,7 +19950,7 @@
         "mission-yozakura-family" : {
           "alternative" : "",
           "bmdb" : "md|40816",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "mission-yozakura-family",
           "image" : "",
           "note" : "",
@@ -19840,7 +19960,7 @@
           "title" : "Mission: Yozakura Family",
           "type" : "manga",
           "update" : 1567555200000,
-          "url" : "//mangaku.live/komik/mission-yozakura-family/"
+          "url" : "//mangaku.site/komik/mission-yozakura-family/"
         },
         "missys-geek-residing-plan" : {
           "alternative" : "",
@@ -19860,7 +19980,7 @@
         "mitama-security" : {
           "alternative" : "Mitama Security: Spirit Busters",
           "bmdb" : "mu|156263",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "mitama-security",
           "image" : "https://mangaku.in/manga/img/2019/09/528c79fc0fc251dc214d7d17-i296702.jpg",
           "note" : "",
@@ -19870,7 +19990,7 @@
           "title" : "Mitama Secureity",
           "type" : "manga",
           "update" : 1567468800000,
-          "url" : "//mangaku.live/komik/mitama-security-spirit-busters/"
+          "url" : "//mangaku.site/komik/mitama-security-spirit-busters/"
         },
         "mob-kara-hajimaru-tansaku-eiyuutan" : {
           "alternative" : "",
@@ -20584,12 +20704,12 @@
           "id" : "murim-login",
           "image" : "https://www.mangaupdates.com/image/i315557.png",
           "note" : "",
-          "number" : "48",
+          "number" : "49",
           "read" : "",
           "similar" : "",
           "title" : "Murim Login",
           "type" : "manhwa",
-          "update" : 1646265600000,
+          "update" : 1647129600000,
           "url" : "//ngomik.net/manga/murim-login/"
         },
         "murim-possesses-the-youngest-son" : {
@@ -20730,7 +20850,7 @@
         "mutou-black" : {
           "alternative" : "",
           "bmdb" : "md|9020",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "mutou-black",
           "image" : "",
           "note" : "",
@@ -20740,7 +20860,7 @@
           "title" : "Mutou Black",
           "type" : "manga",
           "update" : 1611273600000,
-          "url" : "//mangaku.live/komik/mutou-black/"
+          "url" : "//mangaku.site/komik/mutou-black/"
         },
         "mutually-unrequited-twin-sisters" : {
           "alternative" : "",
@@ -20929,12 +21049,12 @@
           "id" : "my-dad-is-too-strong",
           "image" : "https://www.mangaupdates.com/image/i321584.jpg",
           "note" : "",
-          "number" : "71",
+          "number" : "73",
           "read" : "",
           "similar" : "",
           "title" : "My Dad Is Too Strong",
           "type" : "manhwa",
-          "update" : 1645920000000,
+          "update" : 1647302400000,
           "url" : "//komikcast.com/komik/my-dad-is-too-strong/"
         },
         "my-death-flags-show-no-sign-of-ending" : {
@@ -21629,10 +21749,10 @@
         },
         "nana-seiken-to-maken-no-hime" : {
           "alternative" : "",
-          "bmdb" : "none",
+          "bmdb" : "mu|193284",
           "host" : "bacamanga.org",
           "id" : "nana-seiken-to-maken-no-hime",
-          "image" : "https://bacamanga.org/wp-content/uploads/2021/12/Nana-Seiken-to-Maken-no-Hime.png",
+          "image" : "https://cdn.mangaupdates.com/image/i371957.png",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -22107,6 +22227,21 @@
           "update" : 1610496000000,
           "url" : "//softkomik.com/night-bookstore-bahasa-indonesia"
         },
+        "night-of-shadows" : {
+          "alternative" : "",
+          "bmdb" : "mu|197003",
+          "host" : "rrscans.my.id",
+          "id" : "night-of-shadows",
+          "image" : "https://cdn.mangaupdates.com/image/i379904.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Night of Shadows",
+          "type" : "manhwa",
+          "update" : 1646611200000,
+          "url" : "//rrscans.my.id/manga/night-of-shadows/"
+        },
         "nightmare-game" : {
           "alternative" : "",
           "bmdb" : "mu|183510",
@@ -22260,7 +22395,7 @@
         "noragami" : {
           "alternative" : "",
           "bmdb" : "mu|56588",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "noragami",
           "image" : "https://www.mangaupdates.com/image/i363909.jpg",
           "note" : "kurang seru",
@@ -22270,7 +22405,7 @@
           "title" : "Noragami",
           "type" : "manga",
           "update" : 1498694400000,
-          "url" : "//mangaku.live/komik/noragami/"
+          "url" : "//mangaku.site/komik/noragami/"
         },
         "north-by-northwest" : {
           "alternative" : "",
@@ -22369,12 +22504,12 @@
           "id" : "number-one-star-instructor-master-baek",
           "image" : "https://www.mangaupdates.com/image/i366097.jpg",
           "note" : "",
-          "number" : "belum",
+          "number" : "10.2",
           "read" : "",
           "similar" : "",
           "title" : "Number One Star Instructor Master Baek",
           "type" : "manhwa",
-          "update" : 1635033600000,
+          "update" : 1646956800000,
           "url" : "//kiryuu.id/manga/number-one-star-instructor-master-baek-one-hit-teacher-master-baek/"
         },
         "nusantara-droid-war" : {
@@ -22394,10 +22529,10 @@
         },
         "ochikobore-datta-ani-ga-jitsuha-saikyou-shijou-saikyou-no-yuusha-wa-tensei-shi-gakuen-de-mujikaku-ni-musou-suru" : {
           "alternative" : "",
-          "bmdb" : "none",
+          "bmdb" : "mu|195409",
           "host" : "komikcast.com",
           "id" : "ochikobore-datta-ani-ga-jitsuha-saikyou-shijou-saikyou-no-yuusha-wa-tensei-shi-gakuen-de-mujikaku-ni-musou-suru",
-          "image" : "https://komikcast.com/wp-content/uploads/2021/12/krycepvslv.jpg",
+          "image" : "https://cdn.mangaupdates.com/image/i380552.jpg",
           "note" : "mangkomik",
           "number" : "belum",
           "read" : "",
@@ -22534,12 +22669,12 @@
           "id" : "omniscient-readers-viewpoint",
           "image" : "https://www.mangaupdates.com/image/i351850.jpg",
           "note" : "",
-          "number" : "97",
+          "number" : "98",
           "read" : "",
           "similar" : "",
           "title" : "Omniscient Reader's Viewpoint",
           "type" : "manhwa",
-          "update" : 1646524800000,
+          "update" : 1647129600000,
           "url" : "//komikcast.com/komik/omniscient-readers-viewpoint/"
         },
         "once-again-idol" : {
@@ -22620,7 +22755,7 @@
         "one-piece" : {
           "alternative" : "",
           "bmdb" : "md|39",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "one-piece",
           "image" : "",
           "note" : "loncat chapter",
@@ -22630,7 +22765,7 @@
           "title" : "One Piece",
           "type" : "manga",
           "update" : 1572480000000,
-          "url" : "//mangaku.live/komik/one-piece/"
+          "url" : "//mangaku.site/komik/one-piece/"
         },
         "one-punch-man" : {
           "alternative" : "Onepunch-Man | One-Punch Man | Onepunchman | Onepanman",
@@ -22856,6 +22991,21 @@
           "type" : "manga",
           "update" : 1550534400000,
           "url" : "//westmanga.info/manga/ore-dake-haireru-kakushi-dungeon-kossori-kitaete-sekai-saikyou/"
+        },
+        "ore-dake-level-ga-agaru-sekai-de-akutoku-ryoushu-ni-natteita" : {
+          "alternative" : "I've Become a Rogue Lord in a World Where Only I Can Level Up",
+          "bmdb" : "mu|188397",
+          "host" : "komikindo.co",
+          "id" : "ore-dake-level-ga-agaru-sekai-de-akutoku-ryoushu-ni-natteita",
+          "image" : "https://cdn.mangaupdates.com/image/i366149.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Ore dake Level ga Agaru Sekai de Akutoku Ryoushu ni Natteita",
+          "type" : "manga",
+          "update" : 1635033600000,
+          "url" : "//komikindo.co/manga/ore-dake-level-ga-agaru-sekai-de-akutoku-ryoushu-ni-natteita/"
         },
         "ore-no-genjitsu-wa-renai-game-ka-to-omottara-inochigake-no-game-datta" : {
           "alternative" : "",
@@ -23640,7 +23790,7 @@
         "phantom-seer" : {
           "alternative" : "",
           "bmdb" : "md|35683",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "phantom-seer",
           "image" : "",
           "note" : "",
@@ -23650,7 +23800,7 @@
           "title" : "Phantom Seer",
           "type" : "manga",
           "update" : 1599560639000,
-          "url" : "//mangaku.live/komik/phantom-seer/"
+          "url" : "//mangaku.site/komik/phantom-seer/"
         },
         "phantom-spirit-king" : {
           "alternative" : "",
@@ -23730,7 +23880,7 @@
         "platinum-end" : {
           "alternative" : "",
           "bmdb" : "md|16476",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "platinum-end",
           "image" : "",
           "note" : "",
@@ -23740,7 +23890,7 @@
           "title" : "Platinum End",
           "type" : "manga",
           "update" : 1569110400000,
-          "url" : "//mangaku.live/komik/platinum-end/"
+          "url" : "//mangaku.site/komik/platinum-end/"
         },
         "player" : {
           "alternative" : "",
@@ -24315,7 +24465,7 @@
         "radiant" : {
           "alternative" : "",
           "bmdb" : "md|16444",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "radiant",
           "image" : "",
           "note" : "",
@@ -24325,7 +24475,7 @@
           "title" : "Radiant",
           "type" : "manga",
           "update" : 1568851200000,
-          "url" : "//mangaku.live/komik/radiant/"
+          "url" : "//mangaku.site/komik/radiant/"
         },
         "radiation-house" : {
           "alternative" : "",
@@ -24435,7 +24585,7 @@
         "ramia-yana" : {
           "alternative" : "",
           "bmdb" : "md|52064",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "ramia-yana",
           "image" : "",
           "note" : "en",
@@ -24445,7 +24595,7 @@
           "title" : "Ramia-Yana",
           "type" : "manga",
           "update" : 1614211200000,
-          "url" : "//mangaku.live/komik/ramia-yana/"
+          "url" : "//mangaku.site/komik/ramia-yana/"
         },
         "ranger-reject" : {
           "alternative" : "",
@@ -25155,7 +25305,7 @@
         "relife" : {
           "alternative" : "",
           "bmdb" : "md|14377",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "relife",
           "image" : "",
           "note" : "",
@@ -25165,7 +25315,7 @@
           "title" : "ReLIFE",
           "type" : "manga",
           "update" : 1568937600000,
-          "url" : "//mangaku.live/komik/relife/"
+          "url" : "//mangaku.site/komik/relife/"
         },
         "renai-harem-game-shuuryou-no-oshirase-ga-kuru-koro-ni" : {
           "alternative" : "",
@@ -25860,7 +26010,7 @@
         "rurouni-kenshin-meiji-kenkaku-romantan-hokkaido-hen" : {
           "alternative" : "",
           "bmdb" : "mu|140712",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "rurouni-kenshin-meiji-kenkaku-romantan-hokkaido-hen",
           "image" : "https://www.mangaupdates.com/image/i350860.jpg",
           "note" : "",
@@ -25870,7 +26020,7 @@
           "title" : "Rurouni Kenshin: Meiji Kenkaku Romantan – Hokkaido-hen",
           "type" : "manga",
           "update" : 1506038400000,
-          "url" : "//mangaku.live/komik/rurouni-kenshin-meiji-kenkaku-romantan-hokkaido-hen/"
+          "url" : "//mangaku.site/komik/rurouni-kenshin-meiji-kenkaku-romantan-hokkaido-hen/"
         },
         "ryle-to-yari" : {
           "alternative" : "Ryle to Louis",
@@ -26265,7 +26415,7 @@
         "samurai-8" : {
           "alternative" : "",
           "bmdb" : "md|36435",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "samurai-8",
           "image" : "",
           "note" : "",
@@ -26275,7 +26425,7 @@
           "title" : "Samurai 8",
           "type" : "manga",
           "update" : 1556150400000,
-          "url" : "//mangaku.live/komik/samurai-8/"
+          "url" : "//mangaku.site/komik/samurai-8/"
         },
         "santairiku-eiyuuki" : {
           "alternative" : "",
@@ -26637,6 +26787,21 @@
           "update" : 1492473600000,
           "url" : "//mangashiro.co/manga/seiken-no-blacksmith/"
         },
+        "seiken-shoujo-densetsu-intai-magiwa-no-ossan-boukensha-seiken-wo-nuite-eiyuu-ni-naru" : {
+          "alternative" : "",
+          "bmdb" : "none",
+          "host" : "komikcast.com",
+          "id" : "seiken-shoujo-densetsu-intai-magiwa-no-ossan-boukensha-seiken-wo-nuite-eiyuu-ni-naru",
+          "image" : "https://img.statically.io/img/kcast/komikcast.com/wp-content/uploads/2022/03/Seiken-Shoujo-Densetsu-Intai.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Seiken Shoujo Densetsu Intai Magiwa no Ossan Boukensha, Seiken wo Nuite Eiyuu ni Naru",
+          "type" : "manga",
+          "update" : 1647129600000,
+          "url" : "//komikcast.com/komik/seiken-shoujo-densetsu-intai-magiwa-no-ossan-boukensha-seiken-wo-nuite-eiyuu-ni-naru/"
+        },
         "seikenshi-sama-no-maken-chan" : {
           "alternative" : "",
           "bmdb" : "mu|175445",
@@ -26909,10 +27074,10 @@
         },
         "senmetsumadou-no-saikyou-kenja-musai-no-kenja-madou-wo-kiwame-saikyou-e-itaru" : {
           "alternative" : "",
-          "bmdb" : "md|54655",
+          "bmdb" : "mu|172030",
           "host" : "westmanga.info",
           "id" : "senmetsumadou-no-saikyou-kenja-musai-no-kenja-madou-wo-kiwame-saikyou-e-itaru",
-          "image" : "",
+          "image" : "https://cdn.mangaupdates.com/image/i338847.jpg",
           "note" : "prequel",
           "number" : "1.1",
           "read" : "",
@@ -27004,12 +27169,12 @@
           "id" : "seoul-station-druid",
           "image" : "https://www.mangaupdates.com/image/i349633.jpg",
           "note" : "",
-          "number" : "42",
+          "number" : "43",
           "read" : "",
           "similar" : "",
           "title" : "Seoul Station Druid",
           "type" : "manhwa",
-          "update" : 1646524800000,
+          "update" : 1647216000000,
           "url" : "//komikcast.com/komik/seoul-station-druid/"
         },
         "seoul-stations-necromancer" : {
@@ -27019,12 +27184,12 @@
           "id" : "seoul-stations-necromancer",
           "image" : "https://www.mangaupdates.com/image/i365220.jpg",
           "note" : "",
-          "number" : "36",
+          "number" : "37",
           "read" : "",
           "similar" : "",
           "title" : "Seoul Station Necromancer",
           "type" : "manhwa",
-          "update" : 1645747200000,
+          "update" : 1646956800000,
           "url" : "//kiryuu.id/manga/seoul-stations-necromancer/"
         },
         "seven-day-alternating-personality-syndrome" : {
@@ -27319,12 +27484,12 @@
           "id" : "shikkaku-mon-no-saikyou-kenja",
           "image" : "https://www.mangaupdates.com/image/i348859.jpg",
           "note" : "",
-          "number" : "47",
+          "number" : "53.3",
           "read" : "",
           "similar" : "senmetsumadou-no-saikyou-kenja-musai-no-kenja-madou-wo-kiwame-saikyou-e-itaru",
           "title" : "Shikkaku Mon No Saikyou Kenja",
           "type" : "manga",
-          "update" : 1633996800000,
+          "update" : 1647302400000,
           "url" : "//westmanga.info/manga/shikkaku-mon-no-saikyou-kenja/"
         },
         "shikkoku-tsukai-no-saikyo-yusha-nakama-zenin-ni-uragira-retanode-saikyo-no-mamono" : {
@@ -27420,7 +27585,7 @@
         "shingeki-no-kyojin" : {
           "alternative" : "Attack on Titan",
           "bmdb" : "md|429",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "shingeki-no-kyojin",
           "image" : "",
           "note" : "tamat",
@@ -27430,12 +27595,12 @@
           "title" : "Shingeki no Kyojin",
           "type" : "manga",
           "update" : 1621468800000,
-          "url" : "//mangaku.live/komik/shingeki-no-kyojin/"
+          "url" : "//mangaku.site/komik/shingeki-no-kyojin/"
         },
         "shingeki-no-kyojin-before-the-fall" : {
           "alternative" : "",
           "bmdb" : "md|9844",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "shingeki-no-kyojin-before-the-fall",
           "image" : "",
           "note" : "",
@@ -27445,7 +27610,7 @@
           "title" : "Shingeki No Kyojin: Before The Fall",
           "type" : "manga",
           "update" : 1568815385000,
-          "url" : "//mangaku.live/komik/shingeki-no-kyojin-before-the-fall/"
+          "url" : "//mangaku.site/komik/shingeki-no-kyojin-before-the-fall/"
         },
         "shinigami-ni-sodaterareta-shoujo-wa-shikkoku-no-tsurugi-wo-mune-ni-idaku" : {
           "alternative" : "",
@@ -27523,7 +27688,7 @@
           "url" : "//comicfx.net/komik/shinmai-ossan-boukensha-saikyou-paati-ni-shinu-hodo-kitae-rarete-muteki-ni-naru"
         },
         "shinsei-no-shiki" : {
-          "alternative" : "",
+          "alternative" : "新星のシキ",
           "bmdb" : "none",
           "host" : "mangayaro.com",
           "id" : "shinsei-no-shiki",
@@ -27544,12 +27709,12 @@
           "id" : "shinsu-jeil-sword",
           "image" : "",
           "note" : "",
-          "number" : "belum",
+          "number" : "24",
           "read" : "",
           "similar" : "",
           "title" : "Sinsu Jeil Sword",
           "type" : "manhwa",
-          "update" : 1607385600000,
+          "update" : 1647129600000,
           "url" : "//masterkomik.com/manga/sinsu-jeil-sword/"
         },
         "shirokuma-tensei" : {
@@ -27629,10 +27794,10 @@
         },
         "shokubutsu-monster-musume-nikki" : {
           "alternative" : "植物モンスター娘日記",
-          "bmdb" : "none",
+          "bmdb" : "mu|192605",
           "host" : "kombatch.com",
           "id" : "shokubutsu-monster-musume-nikki",
-          "image" : "https://kombatch.com/wp-content/uploads/2021/11/Diary-Si-Gadis-Monster-Tanaman.jpg",
+          "image" : "https://cdn.mangaupdates.com/image/i369994.jpg",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -27671,6 +27836,21 @@
           "type" : "manga",
           "update" : 1617580800000,
           "url" : "//westmanga.info/manga/shoukan-sareta-kenja-wa-isekai-o-iku-saikyouna-no-wa-fuyou-zaiko-no-aitemudeshita/"
+        },
+        "shoukan-suru-sekai" : {
+          "alternative" : "",
+          "bmdb" : "mu|195623",
+          "host" : "komikcast.com",
+          "id" : "shoukan-suru-sekai",
+          "image" : "https://cdn.mangaupdates.com/image/i377074.jpg",
+          "note" : "",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Shoukan Suru Sekai",
+          "type" : "manga",
+          "update" : 1647129600000,
+          "url" : "//komikcast.com/komik/shoukan-suru-sekai/"
         },
         "shounen-wo-kau-sweet-days-with-a-boy" : {
           "alternative" : "Sweet Days with a Boy",
@@ -27765,7 +27945,7 @@
         "shuumatsu-no-valkyrie" : {
           "alternative" : "",
           "bmdb" : "md|33537",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "shuumatsu-no-valkyrie",
           "image" : "",
           "note" : "",
@@ -27775,7 +27955,7 @@
           "title" : "Shuumatsu No Valkyrie",
           "type" : "manga",
           "update" : 1550334753000,
-          "url" : "//mangaku.live/komik/shuumatsu-no-valkyrie/"
+          "url" : "//mangaku.site/komik/shuumatsu-no-valkyrie/"
         },
         "shuumatsu-touring" : {
           "alternative" : "World’s End Touring",
@@ -28020,7 +28200,7 @@
         "smokin-parade" : {
           "alternative" : "",
           "bmdb" : "mu|124584",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "smokin-parade",
           "image" : "https://mangaku.co/mirror3/wp-content/uploads/2019/08/16215-193x278.jpg",
           "note" : "",
@@ -28030,7 +28210,7 @@
           "title" : "Smokin’ Parade",
           "type" : "manga",
           "update" : 1500249600000,
-          "url" : "//mangaku.live/komik/smokin-parade/"
+          "url" : "//mangaku.site/komik/smokin-parade/"
         },
         "snowball-earth" : {
           "alternative" : "",
@@ -28129,12 +28309,12 @@
           "id" : "solo-max-level-newbie",
           "image" : "https://www.mangaupdates.com/image/i365926.jpg",
           "note" : "",
-          "number" : "37",
+          "number" : "38",
           "read" : "",
           "similar" : "",
           "title" : "Solo Max-Level Newbie",
           "type" : "manhwa",
-          "update" : 1646352000000,
+          "update" : 1646956800000,
           "url" : "//pojokmanga.com/komik/solo-max-level-newbie/"
         },
         "solo-player" : {
@@ -28692,10 +28872,25 @@
           "update" : 1566777600000,
           "url" : "//komikcast.com/komik/springtime-for-blossom/"
         },
+        "spy-room" : {
+          "alternative" : "",
+          "bmdb" : "mu|167702",
+          "host" : "komikcast.com",
+          "id" : "spy-room",
+          "image" : "https://cdn.mangaupdates.com/image/i351267.jpg",
+          "note" : "mus world",
+          "number" : "belum",
+          "read" : "",
+          "similar" : "",
+          "title" : "Spy Room",
+          "type" : "manga",
+          "update" : 1590796800000,
+          "url" : "//komikcast.com/komik/spy-room/"
+        },
         "spy-x-family" : {
           "alternative" : "",
           "bmdb" : "md|35705",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "spy-x-family",
           "image" : "",
           "note" : "",
@@ -28705,7 +28900,7 @@
           "title" : "Spy X Family",
           "type" : "manga",
           "update" : 1568851200000,
-          "url" : "//mangaku.live/komik/spy-x-family/"
+          "url" : "//mangaku.site/komik/spy-x-family/"
         },
         "sss-class-gacha-hunter" : {
           "alternative" : "뽑기로 강해진 SSS급 헌터",
@@ -29220,7 +29415,7 @@
         "sukedachi-09" : {
           "alternative" : "Sukedachi Nine",
           "bmdb" : "md|13511",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "sukedachi-09",
           "image" : "",
           "note" : "",
@@ -29230,7 +29425,7 @@
           "title" : "Sukedachi 09",
           "type" : "manga",
           "update" : 1568764800000,
-          "url" : "////mangaku.live/komik/sukedachi-09/"
+          "url" : "////mangaku.site/komik/sukedachi-09/"
         },
         "summertime-render" : {
           "alternative" : "",
@@ -30034,12 +30229,12 @@
           "id" : "talent-swallowing-magician",
           "image" : "https://cdn.mangaupdates.com/image/i374485.jpg",
           "note" : "",
-          "number" : "21",
+          "number" : "23",
           "read" : "",
           "similar" : "",
           "title" : "Talent-Swallowing Magician",
           "type" : "manhwa",
-          "update" : 1645056000000,
+          "update" : 1647043200000,
           "url" : "//komikcast.com/komik/talent-swallowing-magician/"
         },
         "talented-genius" : {
@@ -30240,7 +30435,7 @@
         "tate-no-yuusha-no-nariagari" : {
           "alternative" : "The Rising of the Shield Hero",
           "bmdb" : "mu|107199",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "tate-no-yuusha-no-nariagari",
           "image" : "https://www.mangaupdates.com/image/i360846.jpg",
           "note" : "",
@@ -30250,7 +30445,7 @@
           "title" : "Tate No Yuusha No Nariagari",
           "type" : "manga",
           "update" : 1612828800000,
-          "url" : "//mangaku.live/komik/tate-no-yuusha-no-nariagari/"
+          "url" : "//mangaku.site/komik/tate-no-yuusha-no-nariagari/"
         },
         "tatoeba-last-dungeon-mae-no-mura-no-shounen-ga-joban-no-machi-de-kurasu-youna-monogatari" : {
           "alternative" : "",
@@ -31080,7 +31275,7 @@
         "the-black-june" : {
           "alternative" : "",
           "bmdb" : "mu|143160",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "the-black-june",
           "image" : "https://www.mangaupdates.com/image/i288010.jpg",
           "note" : "",
@@ -31090,7 +31285,7 @@
           "title" : "The Black June",
           "type" : "manga",
           "update" : 1557187200000,
-          "url" : "//mangaku.live/komik/the-black-june/"
+          "url" : "//mangaku.site/komik/the-black-june/"
         },
         "the-blade-of-evolution-walking-alone-in-the-dungeon" : {
           "alternative" : "",
@@ -31650,9 +31845,9 @@
         "the-elusive-samurai" : {
           "alternative" : "",
           "bmdb" : "mu|176634",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "the-elusive-samurai",
-          "image" : "https://mangaku.live/gambar/2021/04/69828da9764cfacfdd4cedcc-30c93469c43474885cdfe31b1f465ca9.png",
+          "image" : "https://mangaku.site/gambar/2021/04/69828da9764cfacfdd4cedcc-30c93469c43474885cdfe31b1f465ca9.png",
           "note" : "",
           "number" : "belum",
           "read" : "",
@@ -31660,7 +31855,7 @@
           "title" : "The Elusive Samurai",
           "type" : "manga",
           "update" : 1619308800000,
-          "url" : "//mangaku.live/komik/the-elusive-samurai/"
+          "url" : "//mangaku.site/komik/the-elusive-samurai/"
         },
         "the-evil-girl-is-the-emperor" : {
           "alternative" : "Way to the Glory",
@@ -32385,7 +32580,7 @@
         "the-hunters-guild-red-hood" : {
           "alternative" : "",
           "bmdb" : "mu|173287",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "the-hunters-guild-red-hood",
           "image" : "https://cdn.mangaku.my.id/gambar/2021/06/82f68359d060e524f67fc26a-c1c1995dec7c3031dc95f461404826a7.jpg",
           "note" : "",
@@ -32395,7 +32590,7 @@
           "title" : "The Hunters Guild: Red Hood",
           "type" : "manga",
           "update" : 1625011200000,
-          "url" : "//mangaku.live/komik/the-hunters-guild-red-hood/"
+          "url" : "//mangaku.site/komik/the-hunters-guild-red-hood/"
         },
         "the-infectee" : {
           "alternative" : "",
@@ -32854,12 +33049,12 @@
           "id" : "the-live",
           "image" : "https://www.mangaupdates.com/image/i312425.png",
           "note" : "",
-          "number" : "90",
+          "number" : "91",
           "read" : "",
           "similar" : "",
           "title" : "The Live",
           "type" : "manhwa",
-          "update" : 1646784000000,
+          "update" : 1647302400000,
           "url" : "//ngomik.net/manga/the-live/"
         },
         "the-lords-coins-arent-decreasing" : {
@@ -32880,7 +33075,7 @@
         "the-lost-city" : {
           "alternative" : "",
           "bmdb" : "md|29534",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "the-lost-city",
           "image" : "",
           "note" : "",
@@ -32890,7 +33085,7 @@
           "title" : "The Lost City",
           "type" : "manhua",
           "update" : 1568592000000,
-          "url" : "//mangaku.live/komik/the-lost-city/"
+          "url" : "//mangaku.site/komik/the-lost-city/"
         },
         "the-magic-chef-of-ice-and-fire" : {
           "alternative" : "",
@@ -33300,7 +33495,7 @@
         "the-red-ranger-becomes-an-adventurer-in-another-world" : {
           "alternative" : "",
           "bmdb" : "mu|173028",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "the-red-ranger-becomes-an-adventurer-in-another-world",
           "image" : "https://www.mangaupdates.com/image/i341797.jpg",
           "note" : "",
@@ -33310,7 +33505,7 @@
           "title" : "The Red Ranger Becomes an Adventurer in Another World",
           "type" : "manga",
           "update" : 1632182400000,
-          "url" : "//mangaku.live/komik/the-red-ranger-becomes-an-adventurer-in-another-world/"
+          "url" : "//mangaku.site/komik/the-red-ranger-becomes-an-adventurer-in-another-world/"
         },
         "the-reincarnated-granny-wont-look-away-the-second-life-of-the-former-tyrannical-empress" : {
           "alternative" : "",
@@ -33439,12 +33634,12 @@
           "id" : "the-s-classes-that-i-raised",
           "image" : "https://www.mangaupdates.com/image/i367924.jpg",
           "note" : "",
-          "number" : "24",
+          "number" : "25",
           "read" : "",
           "similar" : "",
           "title" : "The S-Classes That I Raised",
           "type" : "manhwa",
-          "update" : 1646524800000,
+          "update" : 1647129600000,
           "url" : "//komikcast.com/komik/the-s-classes-that-i-raised/"
         },
         "the-sacred-ruins" : {
@@ -34425,7 +34620,7 @@
         "the-wolf-child-sora-in-the-war-zone" : {
           "alternative" : "",
           "bmdb" : "mu|155610",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "the-wolf-child-sora-in-the-war-zone",
           "image" : "https://www.mangaupdates.com/image/i310278.jpg",
           "note" : "",
@@ -34435,7 +34630,7 @@
           "title" : "The Wolf Child Sora in The War Zone",
           "type" : "manga",
           "update" : 1633305600000,
-          "url" : "//mangaku.live/komik/the-wolf-child-sora-in-the-war-zone/"
+          "url" : "//mangaku.site/komik/the-wolf-child-sora-in-the-war-zone/"
         },
         "the-world-after-the-fall" : {
           "alternative" : "",
@@ -34950,7 +35145,7 @@
         "tokyo-shinobi-squad" : {
           "alternative" : "",
           "bmdb" : "md|36933",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "tokyo-shinobi-squad",
           "image" : "",
           "note" : "",
@@ -34960,7 +35155,7 @@
           "title" : "Tokyo Shinobi Squad",
           "type" : "manga",
           "update" : 1568678400000,
-          "url" : "//mangaku.live/komik/tokyo-shinobi-squad/"
+          "url" : "//mangaku.site/komik/tokyo-shinobi-squad/"
         },
         "tomb-raider-king" : {
           "alternative" : "King of Excavation",
@@ -35115,7 +35310,7 @@
         "toubousha-elio" : {
           "alternative" : "Elio the Fugitive | Toubousha Erio",
           "bmdb" : "md|39506",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "toubousha-elio",
           "image" : "",
           "note" : "",
@@ -35125,7 +35320,7 @@
           "title" : "Toubousha Elio",
           "type" : "manga",
           "update" : 1611146699000,
-          "url" : "//mangaku.live/komik/toubousha-elio/"
+          "url" : "//mangaku.site/komik/toubousha-elio/"
         },
         "touge-oni" : {
           "alternative" : "",
@@ -35145,7 +35340,7 @@
         "tougen-anki" : {
           "alternative" : "",
           "bmdb" : "md|49754",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "tougen-anki",
           "image" : "",
           "note" : "",
@@ -35155,7 +35350,7 @@
           "title" : "Tougen Anki",
           "type" : "manga",
           "update" : 1601164800000,
-          "url" : "//mangaku.live/komik/tougen-anki/"
+          "url" : "//mangaku.site/komik/tougen-anki/"
         },
         "tower-into-the-clouds" : {
           "alternative" : "",
@@ -35295,7 +35490,7 @@
         "transmoe-sword-fantasy" : {
           "alternative" : "",
           "bmdb" : "mu|180668",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "transmoe-sword-fantasy",
           "image" : "https://www.mangaupdates.com/image/i343904.jpg",
           "note" : "",
@@ -35305,7 +35500,7 @@
           "title" : "Transmoe Sword Fantasy",
           "type" : "manhua",
           "update" : 1622505600000,
-          "url" : "//mangaku.live/komik/transmoe-sword-fantasy/"
+          "url" : "//mangaku.site/komik/transmoe-sword-fantasy/"
         },
         "trash-of-the-counts-family" : {
           "alternative" : "Trash Noble",
@@ -36000,7 +36195,7 @@
         "uq-holder" : {
           "alternative" : "",
           "bmdb" : "md|9905",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "uq-holder",
           "image" : "",
           "note" : "",
@@ -36010,7 +36205,7 @@
           "title" : "UQ Holder!",
           "type" : "manga",
           "update" : 1568419200000,
-          "url" : "//mangaku.live/komik/uq-holder/"
+          "url" : "//mangaku.site/komik/uq-holder/"
         },
         "uragirareta-s-rank-boukensha-no-ore-wa-aisuru-dorei-no-kanojora-to-tomoni-dorei-dake-no-harem-guild-o-tsukuru" : {
           "alternative" : "",
@@ -36330,7 +36525,7 @@
         "vigilante-boku-no-hero-academia-illegals" : {
           "alternative" : "",
           "bmdb" : "md|19692",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "vigilante-boku-no-hero-academia-illegals",
           "image" : "",
           "note" : "",
@@ -36340,7 +36535,7 @@
           "title" : "Vigilante: Boku no Hero Academia Illegals",
           "type" : "manga",
           "update" : 1568419200000,
-          "url" : "//mangaku.live/komik/vigilante-boku-no-hero-academia-illegals/"
+          "url" : "//mangaku.site/komik/vigilante-boku-no-hero-academia-illegals/"
         },
         "villager-a-wants-to-save-the-villainess-no-matter-what" : {
           "alternative" : "",
@@ -36405,7 +36600,7 @@
         "vinland-saga" : {
           "alternative" : "",
           "bmdb" : "md|350",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "vinland-saga",
           "image" : "",
           "note" : "",
@@ -36415,7 +36610,7 @@
           "title" : "Vinland Saga",
           "type" : "manga",
           "update" : 1596384000000,
-          "url" : "//mangaku.live/komik/vinland-saga/"
+          "url" : "//mangaku.site/komik/vinland-saga/"
         },
         "virtual-world-close-combat-mage" : {
           "alternative" : "",
@@ -36484,12 +36679,12 @@
           "id" : "volcanic-age",
           "image" : "https://www.mangaupdates.com/image/i289294.jpg",
           "note" : "",
-          "number" : "193",
+          "number" : "194",
           "read" : "",
           "similar" : "",
           "title" : "Volcanic Age",
           "type" : "manhwa",
-          "update" : 1646179200000,
+          "update" : 1647302400000,
           "url" : "//ngomik.net/manga/volcanic-age/"
         },
         "wake-up-warrior" : {
@@ -36690,7 +36885,7 @@
         "we-live-in-an-mmo" : {
           "alternative" : "",
           "bmdb" : "none",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "we-live-in-an-mmo",
           "image" : "https://komikcast.com/wp-content/uploads/2021/07/64d90752e826443ea70bca9f2dd862d1.jpg",
           "note" : "",
@@ -36700,7 +36895,7 @@
           "title" : "We Live In An MMO?!",
           "type" : "manga",
           "update" : 1626393600000,
-          "url" : "//mangaku.live/komik/we-live-in-an-mmo/"
+          "url" : "//mangaku.site/komik/we-live-in-an-mmo/"
         },
         "weak-demon-hunter" : {
           "alternative" : "",
@@ -36990,7 +37185,7 @@
         "witch-watch" : {
           "alternative" : "",
           "bmdb" : "md|61239",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "witch-watch",
           "image" : "",
           "note" : "",
@@ -37000,7 +37195,7 @@
           "title" : "Witch Watch",
           "type" : "manga",
           "update" : 1621296000000,
-          "url" : "//mangaku.live/komik/witch-watch/"
+          "url" : "//mangaku.site/komik/witch-watch/"
         },
         "without-a-daoist-partner-i-will-die" : {
           "alternative" : "",
@@ -37140,7 +37335,7 @@
         "world-trigger" : {
           "alternative" : "",
           "bmdb" : "md|8245",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "world-trigger",
           "image" : "",
           "note" : "",
@@ -37150,7 +37345,7 @@
           "title" : "World Trigger",
           "type" : "manga",
           "update" : 1573527581000,
-          "url" : "//mangaku.live/komik/world-trigger/"
+          "url" : "//mangaku.site/komik/world-trigger/"
         },
         "worlds-apocalypse-online" : {
           "alternative" : "",
@@ -37455,7 +37650,7 @@
         "yamada-kun-to-7-nin-no-majo" : {
           "alternative" : "",
           "bmdb" : "mu|74942",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "yamada-kun-to-7-nin-no-majo",
           "image" : "https://www.mangaupdates.com/image/i287249.png",
           "note" : "",
@@ -37465,7 +37660,7 @@
           "title" : "Yamada-kun to 7-nin no Majo",
           "type" : "manga",
           "update" : 1500076800000,
-          "url" : "//mangaku.live/komik/yamada-kun-to-7-nin-no-majo/"
+          "url" : "//mangaku.site/komik/yamada-kun-to-7-nin-no-majo/"
         },
         "yamada-kun-to-lv999-no-koi-wo-suru" : {
           "alternative" : "",
@@ -37695,7 +37890,7 @@
         "yoru-ni-naru-to-boku-wa" : {
           "alternative" : "When Night Falls",
           "bmdb" : "md|28857",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "yoru-ni-naru-to-boku-wa",
           "image" : "",
           "note" : "",
@@ -37705,7 +37900,7 @@
           "title" : "Yoru ni Naru to Boku wa",
           "type" : "manga",
           "update" : 1568332800000,
-          "url" : "//mangaku.live/komik/yoru-ni-naru-to-boku-wa/"
+          "url" : "//mangaku.site/komik/yoru-ni-naru-to-boku-wa/"
         },
         "you-immortal-cultivate-i-draw-cards" : {
           "alternative" : "",
@@ -38265,7 +38460,7 @@
         "zipman" : {
           "alternative" : "",
           "bmdb" : "md|43579",
-          "host" : "mangaku.live",
+          "host" : "mangaku.site",
           "id" : "zipman",
           "image" : "",
           "note" : "",
@@ -38275,7 +38470,7 @@
           "title" : "Zipman",
           "type" : "manga",
           "update" : 1576108800000,
-          "url" : "//mangaku.live/komik/zipman/"
+          "url" : "//mangaku.site/komik/zipman/"
         },
         "zither-emperor" : {
           "alternative" : "",
@@ -38895,11 +39090,11 @@
           "theme" : "themesia"
         },
         "mangaku-web-id" : {
-          "domain" : "mangaku.cc | mangaku.in | mangaku.pro | mangaku.pw | mangaku.nl | mangaku.club | mangaku.live",
+          "domain" : "mangaku.cc | mangaku.in | mangaku.pro | mangaku.pw | mangaku.nl | mangaku.club | mangaku.live | mangaku.site",
           "host" : "mangaku.web.id",
           "icon" : "https://i.postimg.cc/25Hvn6WL/mangaku.gif",
           "language" : "id",
-          "project" : "//mangaku.live/?s=&label=project",
+          "project" : "//mangaku.site/?s=&label=project",
           "status" : "active",
           "tag" : "not_support,_rightclick",
           "theme" : "none"
@@ -39164,6 +39359,16 @@
           "tag" : "",
           "theme" : "madara"
         },
+        "reset-scans-com" : {
+          "domain" : "",
+          "host" : "reset-scans.com",
+          "icon" : "https://i.postimg.cc/rFKbzpLV/reset-scans.png",
+          "language" : "en",
+          "project" : "",
+          "status" : "active",
+          "tag" : "",
+          "theme" : "madara"
+        },
         "rrscans-my-id" : {
           "domain" : "",
           "host" : "rrscans.my.id",
@@ -39357,7 +39562,7 @@
           "theme" : "yuukithemes"
         }
       },
-      "update" : 1646951114996
+      "update" : 1647386795762
     }
   }
 }
