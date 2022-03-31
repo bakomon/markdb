@@ -992,7 +992,7 @@ function mydb_comic_reader() {
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
-  var chcdn = false; //if image has wp.com or statically.io
+  var chcdn = false; //if image use CDN, wp.com | statically.io | imagesimple.co
   var chgi = false; //if google images
   var loadCDN = false;
   var loadSize = false;
@@ -1003,7 +1003,7 @@ function mydb_comic_reader() {
   var autoLike = false;
   var imgSize = ''; //image size
   var halfScreen = Math.floor((window.screen.height / 2) + 30);
-  var cdnRgx = /(?:i\d+|cdn|img)\.(wp|statically)\.(?:com|io)\/(?:img\/(?:[^\.]+\/)?)?/;
+  var cdnRgx = /(?:i\d+|cdn|img)\.(wp|statically|imagesimple)\.(?:com?|io)\/(?:img\/(?:[^\.]+\/)?)?/;
   var checkPoint, imgArea, imgList, cdnName, zoomID;
   
   blockContent();
