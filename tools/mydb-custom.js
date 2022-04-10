@@ -91,7 +91,21 @@ function mydb_custom() {
     var rs_rgx = /(?:cdn|img)\.(statically)\.(?:io)\/(?:img\/(?:[^\.]+\/)?)?/i;
     
     for (var i = 0; i < rs_images.length; i++) {
-      if (rs_images[i].src.search(rs_rgx) != -1) rs_images[i].src = rs_images[i].src.replace(rs_rgx, '');
+      if (rs_images[i].getAttribute('original')) {
+        rs_images[i].setAttribute('original', rs_images[i].getAttribute('original').replace(rs_rgx, ''));
+      } else if (rs_images[i].dataset.src) {
+        rs_images[i].dataset.src = rs_images[i].dataset.src.replace(rs_rgx, '');
+      } else if (rs_images[i].dataset.lazySrc) {
+        rs_images[i].dataset.lazySrc = rs_images[i].dataset.lazySrc.replace(rs_rgx, '');
+      } else if (rs_images[i].dataset.url) {
+        rs_images[i].dataset.url = rs_images[i].dataset.url.replace(rs_rgx, '');
+      } else if (rs_images[i].dataset.imgsrc) {
+        rs_images[i].dataset.imgsrc = rs_images[i].dataset.imgsrc.replace(rs_rgx, '');
+      } else if (rs_images[i].dataset.cfsrc) {
+        rs_images[i].dataset.cfsrc = rs_images[i].dataset.cfsrc.replace(rs_rgx, '');
+      } else {
+        rs_images[i].src = rs_images[i].src.replace(rs_rgx, '');
+      }
     }
   }
   
