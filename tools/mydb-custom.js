@@ -84,7 +84,15 @@ function mydb_custom() {
       this.disabled = true;
       window.scroll(0,0);
     };
+  }
+  
+  function removeStatically() {
+    var rs_images = el('img', 'all');
+    var rs_rgx = /(?:cdn|img)\.(statically)\.(?:io)\/(?:img\/(?:[^\.]+\/)?)?/i;
     
+    for (var i = 0; i < rs_images.length; i++) {
+      if (rs_images[i].src.search(rs_rgx) != -1) rs_images[i].src = rs_images[i].src.replace(rs_rgx, '');
+    }
   }
   
   function webDarkMode() {
@@ -130,6 +138,7 @@ function mydb_custom() {
   var wp = wl.pathname;
   
   webDarkMode();
+  if (mydb_settings.remove_statically) removeStatically();
   if (wh.indexOf('mangaupdates') != -1 && wl.href.indexOf('/series.html?id=') != -1) copyMU();
 }
 
