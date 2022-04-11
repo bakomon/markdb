@@ -103,9 +103,8 @@ function mydb_custom() {
         rs_images[i].dataset.imgsrc = rs_images[i].dataset.imgsrc.replace(rs_rgx, '');
       } else if (rs_images[i].dataset.cfsrc) {
         rs_images[i].dataset.cfsrc = rs_images[i].dataset.cfsrc.replace(rs_rgx, '');
-      } else {
-        rs_images[i].src = rs_images[i].src.replace(rs_rgx, '');
       }
+      if (rs_images[i].src) rs_images[i].src = rs_images[i].src.replace(rs_rgx, '');
     }
   }
   
