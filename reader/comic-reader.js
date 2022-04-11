@@ -171,7 +171,7 @@ function mydb_comic_reader() {
     }
   }
   
-      function createBtn(imglistMod) {
+  function createBtn(imglistMod) {
     var readSize = isMobile ? window.screen.width : zoomID in mydb_zoom ? mydb_zoom[zoomID] : imgArea.offsetWidth;
     if (zoomID in mydb_zoom && !isMobile) readSize = readSize == 'manga' ? '750' : readSize == 'manhua' ? '650' : readSize == 'manhwa' ? '500' : readSize;
     var r_txt = '';
@@ -480,8 +480,13 @@ function mydb_comic_reader() {
       imgLink = imgLink.replace(/^\s/, '').replace(/\s$/, '');
       
       if (imgLink.search(cdnRgx) != -1) {
-        chcdn = true;
-        cdnName = imgLink.match(cdnRgx)[1];
+        if (imgLink.search(/statically\./i) != -1 && mydb_settings.remove_statically) {
+          chcdn = false;
+          imgLink = imgLink.replace(cdnRgx, '');
+        } else {
+          chcdn = true;
+          cdnName = imgLink.match(cdnRgx)[1];
+        }
       }
       
       if (imgLink.search(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+)[^\n]+/) != -1) {
