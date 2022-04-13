@@ -177,7 +177,7 @@ function mydb_comic_reader() {
     var r_txt = '';
     // css control & main already in database tools
     // css reader
-    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:165px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-165px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#238636;border-color:#238636;}.rc_danger{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}.rc_all,.rc_fr_min,.rc_fr_max{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._rc[disabled],._rc[disabled]:hover{background:#252428 !important;color:#555 !important;border-color:#252428 !important;}.rc_hidden{display:none;}</style>';
+    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:165px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-165px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#238636;border-color:#238636;}.rc_danger{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}input._rc.no_arrows::-webkit-inner-spin-button,input._rc.no_arrows::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}input._rc.no_arrows[type=number]{-moz-appearance:textfield;}.rc_all,.rc_fr_min,.rc_fr_max{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._rc[disabled],._rc[disabled]:hover{background:#252428 !important;color:#555 !important;border-color:#252428 !important;}.rc_hidden{display:none;}</style>';
     r_txt += '<style>.scrollToTop,[title*="Back To Top"],.back-to-top,.go-to-top,.btn-top{display:none !important;}</style>'; //css hidden
     r_txt += '<style>.rc_mobile ._rc{font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;text-shadow:-1px 0 #000,0 1px #000,1px 0 #000,0 -1px #000;}.rc_mobile .rc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.rc_mobile .rc_tr2{left:-81px;}.rc_mobile .reader_db:not(.rc_shide) .rc_tr2{left:-40px;}.rc_mobile .reader_db.rc_shide .rc_next button{position:fixed;top:0;left:0;margin:0;max-width:20%;height:50vh;background:0 0;color:transparent;border:0;}</style>'; //css mobile
     // html
@@ -198,9 +198,9 @@ function mydb_comic_reader() {
     r_txt += '</div>';
     r_txt += '<div class="flex f_middle">';
     r_txt += '<button class="rc_from rc_btn _rc rc_no_hover" title="Load images from [index]">From</button>';
-    r_txt += '<input class="rc_fr_min rc_input _rc" value="1" onclick="this.select()" disabled>';
+    r_txt += '<input class="rc_fr_min rc_input _rc no_arrows" type="number" value="1" onclick="this.select()" disabled>';
     r_txt += '<span>-</span>';
-    r_txt += '<input class="rc_fr_max rc_input _rc" value="'+ imgList.length +'" onclick="this.select()" disabled>';
+    r_txt += '<input class="rc_fr_max rc_input _rc no_arrows" type="number" value="'+ imgList.length +'" data-value="'+ imgList.length +'" onclick="this.select()" disabled>';
     r_txt += '</div>';
     r_txt += '</div>';// .rc_load
     r_txt += '<div class="rc_zoom rc_100"><button class="rc_plus rc_btn _rc" title="shift + up">+</button><button class="rc_less rc_btn _rc" title="shift + down">-</button><input style="width:40px;" class="rc_input _rc" value="'+ readSize +'"></div>';
@@ -242,37 +242,47 @@ function mydb_comic_reader() {
       el('.rc_toggle').click();
     };
     
+    el('.rc_load input', 'all').forEach(function(item) {
+      item.oninput = function() {
+        if (this.value > imglistMod.length) this.value = imglistMod.length;
+      };
+    });
+    
     // Load all images
-    el('.rc_load .rc_ld_img').onclick =  function() {
-      if (el('.rc_load .rc_all').value.search(/all/i) != -1) {
+    el('.rc_load .rc_ld_img').onclick = function() {
+      if (isNumeric(el('.rc_load .rc_all').value)) {
+        startChange(imglistMod[Number(el('.rc_load .rc_all').value) - 1], 'single');
+      } else {
         // "imglistMod" from createBtn() parameter
         if (!isFrom) loadImage = true;
-        var ld_index = isFrom ? (Number(el('.rc_load .rc_fr_min').value) - 1) : 0;
-        var ld_length = isFrom ? Number(el('.rc_load .rc_fr_max').value) : imglistMod.length;
+        el('.rc_load .rc_all').value = 'all';
+        var ld_index = isFrom && el('.rc_load .rc_fr_min').value != '' ? (Number(el('.rc_load .rc_fr_min').value) - 1) : 0;
+        var ld_length = isFrom && el('.rc_load .rc_fr_max').value != '' ? Number(el('.rc_load .rc_fr_max').value) : imglistMod.length;
         for (var i = ld_index; i < ld_length; i++) {
           startChange(imglistMod[i], 'all');
         }
-      } else if (isNumeric(el('.rc_load .rc_all').value)) {
-        startChange(imglistMod[Number(el('.rc_load .rc_all').value) - 1], 'single');
-      } else {
-        el('.rc_load .rc_all').value = 'all';
       }
     };
     
-    el('.rc_load .rc_from').onclick =  function() {
+    el('.rc_load .rc_from').onclick = function() {
       var ld_from = this.classList.contains('rc_active');
       el('.rc_load .rc_all').value = 'all';
       el('.rc_load .rc_all').disabled = ld_from && !isPause ? false : true;
       el('.rc_load .rc_fr_min').disabled = ld_from ? true : false;
       el('.rc_load .rc_fr_max').disabled = ld_from ? true : false;
+      if (ld_from) {
+        el('.rc_load .rc_fr_min').value = '1';
+        el('.rc_load .rc_fr_max').value = el('.rc_load .rc_fr_max').dataset.value;
+      }
       isFrom = ld_from ? false : true;
       this.classList.toggle('rc_active');
     };
     
-    el('.rc_load .rc_pause').onclick =  function() {
+    el('.rc_load .rc_pause').onclick = function() {
       this.classList.toggle('rc_danger');
       el('.rc_ld_img').disabled = isPause ? false : true;
       el('.rc_load .rc_all').disabled = isPause ? false : true;
+      el('.rc_load .rc_from').disabled = isPause ? false : true;
       isPause = isPause ? false : true;
     };
     
@@ -337,7 +347,7 @@ function mydb_comic_reader() {
     - .btn-sm i[class*="right"] = new CMS "scans"
     - i[rel="next"] = ads_newtab
     */
-    var next_chap =  el('.manhuaid-com a[class*="float-left"]') || el('.nyanfm-com .fa-angle-right') || el('.funmanga-com #chapter-next-link')|| el('.readmng-com a[class*="next_page"]') || el('.funmanga-com #chapter-next-link') || el('.mangabat-com .navi-change-chapter-btn-next') || el('.bato-to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
+    var next_chap = el('.manhuaid-com a[class*="float-left"]') || el('.nyanfm-com .fa-angle-right') || el('.funmanga-com #chapter-next-link')|| el('.readmng-com a[class*="next_page"]') || el('.funmanga-com #chapter-next-link') || el('.mangabat-com .navi-change-chapter-btn-next') || el('.bato-to .nav-next a') || el('.btn-sm i[class*="right"]') || el('.pager-cnt .pull-right a') || el('a[rel="next"]') || el('a[class*="next"]') || el('i[rel="next"]');
     if (next_chap) {
       next_chap = document.body.className.search(/new_cms|mangadropout|nyanfm/) != -1 ? next_chap.parentElement : next_chap;
       var next_url = /*document.body.classList.contains('ads_newtab') ? next_chap.dataset.href :*/ next_chap.href;
