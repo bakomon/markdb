@@ -901,28 +901,6 @@ function mydb_comic_reader() {
     document.body.appendChild(l_elem);
   }
   
-  function removeAADB() {
-    var adb_id, adb_style = el('style','all');
-    for (var i = 0; i < adb_style.length; i++) {
-      if (adb_style[i].innerHTML.search(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/) != -1) {
-        adb_style[i].parentElement.removeChild(adb_style[i]);
-        adb_id = adb_style[i].innerHTML.match(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/)[1];
-        var adb_chk = setInterval(function() {
-          if (el(adb_id)) {
-            el(adb_id).parentElement.removeChild(el(adb_id));
-            clearInterval(adb_chk);
-            var adb_elem = el('[style*="display"','all');
-            for (var j = 0; j < adb_elem.length; j++) {
-              if (adb_elem[j].tagName.toLowerCase().search(/meta|link|style|script/) == -1) {
-                adb_elem[j].style.display = null;
-              }
-            }
-          }
-        }, 100);
-      }
-    }
-  }
-  
   function customEdit() {
     if (wh.indexOf('webtoons') != -1) {
       el('#wrap').classList.add('no-css');
@@ -970,6 +948,7 @@ function mydb_comic_reader() {
       setTimeout(function() { clearInterval(ads_chk); }, 30000);
       
       // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
+      // bug: komikcast.com (desktop), ads?
       var windowOpenBackup = window.open; //can't use if poper blocker extension installed
       window.open = function(url, name, features) {
         console.log('window.open caught! url: '+ url);
@@ -1070,7 +1049,6 @@ function mydb_comic_reader() {
   }
   // START reader
   
-  removeAADB(); //remove anti adblock notify for mangacanblog
   if (mydb_settings.mod_disqus) disqusMod();
   
   mydb_info['reader_js'] = 'loaded';
