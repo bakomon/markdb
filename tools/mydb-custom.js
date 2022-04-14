@@ -4,7 +4,7 @@ function mydb_custom() {
   mydb_x_loaded = true;
   if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
   
-    // Cookies https://www.quirksmode.org/js/cookies.html
+  // Cookies https://www.quirksmode.org/js/cookies.html
   function createCookie(name, value, timer) {
     if (timer) {
       var date = new Date();
@@ -32,7 +32,7 @@ function mydb_custom() {
     createCookie(name,'',-1);
   }
   
-    /* Copy to clipboard https://stackoverflow.com/a/30810322/7598333*/
+  /* Copy to clipboard https://stackoverflow.com/a/30810322/7598333*/
   function copyToClipboard(text, elem) {
     var msg, elm = elem || document.body; /* parent element for textarea */
     var copyTextarea = document.createElement('textarea');
@@ -145,11 +145,34 @@ function mydb_custom() {
     }
   }
   
+  function removeAADB() {
+    var adb_id, adb_style = el('style','all');
+    for (var i = 0; i < adb_style.length; i++) {
+      if (adb_style[i].innerHTML.search(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/) != -1) {
+        adb_style[i].parentElement.removeChild(adb_style[i]);
+        adb_id = adb_style[i].innerHTML.match(/(#\w+)\s?~\s?\*\s?\{display:\s?none\s?(?:!important)?;?\}?/)[1];
+        var adb_chk = setInterval(function() {
+          if (el(adb_id)) {
+            el(adb_id).parentElement.removeChild(el(adb_id));
+            clearInterval(adb_chk);
+            var adb_elem = el('[style*="display"','all');
+            for (var j = 0; j < adb_elem.length; j++) {
+              if (adb_elem[j].tagName.toLowerCase().search(/meta|link|style|script/) == -1) {
+                adb_elem[j].style.display = null;
+              }
+            }
+          }
+        }, 100);
+      }
+    }
+  }
+  
   
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
   
+  removeAADB(); //remove anti adblock notify for mangacanblog
   webDarkMode();
   if (mydb_settings.remove_statically) removeStatically();
   if (wh.indexOf('mangaupdates') != -1 && wl.href.indexOf('/series.html?id=') != -1) copyMU();
