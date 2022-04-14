@@ -89,22 +89,15 @@ function mydb_custom() {
   function removeStatically() {
     var rs_images = el('img', 'all');
     var rs_rgx = /(?:cdn|img)\.(statically)\.(?:io)\/(?:img\/(?:[^\.]+\/)?)?/i;
+    var rs_list = ['src','lazySrc','url','imgsrc','cfsrc'];
     
     for (var i = 0; i < rs_images.length; i++) {
-      if (rs_images[i].getAttribute('original')) {
-        rs_images[i].setAttribute('original', rs_images[i].getAttribute('original').replace(rs_rgx, ''));
-      } else if (rs_images[i].dataset.src) {
-        rs_images[i].dataset.src = rs_images[i].dataset.src.replace(rs_rgx, '');
-      } else if (rs_images[i].dataset.lazySrc) {
-        rs_images[i].dataset.lazySrc = rs_images[i].dataset.lazySrc.replace(rs_rgx, '');
-      } else if (rs_images[i].dataset.url) {
-        rs_images[i].dataset.url = rs_images[i].dataset.url.replace(rs_rgx, '');
-      } else if (rs_images[i].dataset.imgsrc) {
-        rs_images[i].dataset.imgsrc = rs_images[i].dataset.imgsrc.replace(rs_rgx, '');
-      } else if (rs_images[i].dataset.cfsrc) {
-        rs_images[i].dataset.cfsrc = rs_images[i].dataset.cfsrc.replace(rs_rgx, '');
+      if (rs_images[i].getAttribute('original')) rs_images[i].setAttribute('original', rs_images[i].getAttribute('original').replace(rs_rgx, '').replace(/\/[fhwq]=[^\/]+/, ''));
+      // dataset
+      for (var j = 0; j < rs_list.length; j++) {
+        if (rs_images[i].dataset[rs_list[j]]) rs_images[i].dataset[rs_list[j]] = rs_images[i].dataset[rs_list[j]].replace(rs_rgx, '').replace(/\/[fhwq]=[^\/]+/, '');
       }
-      if (rs_images[i].src) rs_images[i].src = rs_images[i].src.replace(rs_rgx, '');
+      if (rs_images[i].src) rs_images[i].src = rs_images[i].src.replace(rs_rgx, '').replace(/\/[fhwq]=[^\/]+/, '');
     }
   }
   
