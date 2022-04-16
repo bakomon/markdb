@@ -1365,16 +1365,11 @@ function mydb_bookmark() {
         el('.db_isearch button').click();
       }
       // enter to set/update
-      if (!el('.db_form').classList.contains('db_hidden') && e.keyCode == 13) {
-        if (el('.db_paste_form textarea') === document.activeElement) {
-          // enter to generate data
-          el('.db_paste_form button').click();
-        } else {
-          if (el('.db_set').classList.contains('db_hidden')) el('.db_btn_update').click();
-          if (el('.db_btn_update').classList.contains('db_hidden')) el('.db_set').click();
-        }
+      if (!el('.db_form').classList.contains('db_hidden') && 'TEXTAREA' !== document.activeElement.tagName && e.keyCode == 13) {
+        if (el('.db_set').classList.contains('db_hidden')) el('.db_btn_update').click();
+        if (el('.db_btn_update').classList.contains('db_hidden')) el('.db_set').click();
       }
-      if (e.keyCode == 13) document.activeElement.blur();
+      if ('TEXTAREA' !== document.activeElement.tagName && e.keyCode == 13) document.activeElement.blur();
     };
     
     el('.db_toggle').onclick = function() {
