@@ -624,7 +624,7 @@ function mydb_tools() {
     }
   }
   
-  if ((mydb_support && mydb_support.indexOf('false') != -1 && !mydb_database) || document.head.innerHTML == '' || wp.search(/\.(gif|webp|(pn|sv|jpe?)g)$/) != -1) return;
+  if ((mydb_support && mydb_support.indexOf('false') != -1 && !mydb_database) || document.head.innerHTML == '' || wp.search(/\.(rss|gif|webp|(pn|sv|jpe?)g)$/) != -1) return;
   
   mydb_info['support'] = 'true';
   startLoading();
@@ -713,7 +713,7 @@ var mydb_spt_message = '🎉 supported site 🎉';
 var mydb_db_list = ['mangadex','mangaupdates','myanimelist','anilist','anidb'];
 var mydb_info = {"error":{},"support":"","source":"","type":"","fbase_app":"","fbase_database":"","fbase_auth":"","fbase_auto_login":"","reader_js":"","bookmark_js":""};
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
-var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"source_bm":false,"source_cr":false,"bm_list":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true,"mod_disqus":true,"read_project":true,"remove_statically":true};
+var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email":"\x75\x73\x65\x72\x31\x40\x62\x61\x6b\x6f\x6d\x6f\x6e\x2e\x63\x6f\x6d","password":"\x7a\x36\x51\x70\x76\x31\x50\x32\x37\x43\x48"},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"source_bm":false,"source_cr":false,"bm_list":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true,"mod_disqus":true,"read_project":true,"remove_statically":true};
 /* 
 - bmark_reader = show bookmark on comic reader
 - new_tab.bm_list = open link in new tab on bookmark list (bm_list)
@@ -727,7 +727,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|4/15/2022, 8:49:26 PM';
+var local_interval = 'manual|5/17/2022, 7:38:58 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
