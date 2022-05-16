@@ -63,12 +63,13 @@ function mydb_custom() {
   
   function copyMU() {
     var mu_mobile = document.documentElement.classList.contains('is-mobile');
+    var mu_ver = wl.href.indexOf('/series.html?id=') != -1 ? 'mu' : 'mu2';
     var mu_id = wl.href.match(mu_rgx)[1];
     var mu_type = typeMU();
     var mu_img = document.querySelector('img[src*="/image/i"]');
     var mu_data = {};
     
-    mu_data['id'] = 'mu|'+ mu_id;
+    mu_data['id'] = mu_ver +'|'+ mu_id;
     if (mu_type) mu_data['type'] = mu_type;
     if (mu_img) mu_data['img'] = mu_img.src;
     
