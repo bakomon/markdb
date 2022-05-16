@@ -63,7 +63,7 @@ function mydb_custom() {
   
   function copyMU() {
     var mu_mobile = document.documentElement.classList.contains('is-mobile');
-    var mu_id = wl.search.replace(/\?id=/, '');
+    var mu_id = wl.search.match(mu_rgx)[1];
     var mu_type = typeMU();
     var mu_img = document.querySelector('img[src*="/image/i"]');
     var mu_data = {};
@@ -164,11 +164,12 @@ function mydb_custom() {
   var wl = window.location;
   var wh = wl.hostname;
   var wp = wl.pathname;
+  var mu_rgx = /\/series(?:\.html\?id=|\/)([^\/]+)/;
   
   removeAADB(); //remove anti adblock notify for mangacanblog
   webDarkMode();
   if (mydb_settings.remove_statically) removeStatically();
-  if (wh.indexOf('mangaupdates') != -1 && wl.href.indexOf('/series.html?id=') != -1) copyMU();
+  if (wh.indexOf('mangaupdates') != -1 && wl.href.search(mu_rgx) != -1) copyMU();
 }
 
 if ((typeof live_test_custom != 'undefined' && typeof mydb_x_loaded != 'undefined') && (!live_test_custom && !mydb_x_loaded)) {
