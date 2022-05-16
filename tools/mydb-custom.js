@@ -63,7 +63,7 @@ function mydb_custom() {
   
   function copyMU() {
     var mu_mobile = document.documentElement.classList.contains('is-mobile');
-    var mu_id = wl.search.match(mu_rgx)[1];
+    var mu_id = wl.href.match(mu_rgx)[1];
     var mu_type = typeMU();
     var mu_img = document.querySelector('img[src*="/image/i"]');
     var mu_data = {};
