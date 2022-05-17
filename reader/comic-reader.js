@@ -177,9 +177,9 @@ function mydb_comic_reader() {
     var r_txt = '';
     // css control & main already in database tools
     // css reader
-    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:165px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-165px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#238636;border-color:#238636;}.rc_danger{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}input._rc.no_arrows::-webkit-inner-spin-button,input._rc.no_arrows::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}input._rc.no_arrows[type=number]{-moz-appearance:textfield;}.rc_all,.rc_fr_min,.rc_fr_max{width:30px !important;}.rc_pause{border-radius:50%;}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._rc[disabled],._rc[disabled]:hover{background:#252428 !important;color:#555 !important;border-color:#252428 !important;}.rc_hidden{display:none;}</style>';
+    r_txt += '<style>.rc_100{width:100%;}.rc_50{width:50%;}.reader_db{position:fixed;bottom:0;right:0;width:165px;padding:10px;background:#17151b;border:1px solid #333;border-right:0;border-bottom:0;}.reader_db.rc_shide{right:-165px;}._rc{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;cursor:pointer;border:1px solid #3e3949;}._rc a{color:#ddd;font-size:14px;text-decoration:none;}.rc_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.rc_text{padding:4px 8px;margin:4px;}.rc_selected,.rc_btn:not(.rc_no_hover):hover{background:#4267b2;border-color:#4267b2;}.rc_active{background:#238636;border-color:#238636;}.rc_danger{background:#ea4335;border-color:#ea4335;}input._rc{padding:4px;display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}input._rc:hover{border-color:#3e3949;}input._rc.no_arrows::-webkit-inner-spin-button,input._rc.no_arrows::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}input._rc.no_arrows[type=number]{-moz-appearance:textfield;}.rc_all,.rc_fr_min,.rc_fr_max{width:30px !important;}.rc_pause{border-radius:50%;font-size:150%;padding:4px 8px;line-height:100%;}.rc_pause,.rc_pause2{transform:rotate(90deg);}.rc_tr2{position:absolute;bottom:0;left:-40px;}.rc_tr2 .rc_btn{align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._rc[disabled],._rc[disabled]:hover{background:#252428 !important;color:#555 !important;border-color:#252428 !important;}.rc_hidden{display:none;}</style>';
     r_txt += '<style>.scrollToTop,[title*="Back To Top"],.back-to-top,.go-to-top,.btn-top{display:none !important;}</style>'; //css hidden
-    r_txt += '<style>.rc_mobile ._rc{font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;text-shadow:-1px 0 #000,0 1px #000,1px 0 #000,0 -1px #000;}.rc_mobile .rc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.rc_mobile .rc_tr2{left:-81px;}.rc_mobile .reader_db:not(.rc_shide) .rc_tr2{left:-40px;}.rc_mobile .reader_db.rc_shide .rc_next button{position:fixed;top:0;left:0;margin:0;max-width:20%;height:50vh;background:0 0;color:transparent;border:0;}</style>'; //css mobile
+    r_txt += '<style>.rc_mobile ._rc:not(.no_moblie_font){font-size:16px;}.rc_mobile .rc_toggle{position:absolute;bottom:0;left:-70px;width:70px;height:70px;background:transparent;color:#fff;border:0;text-shadow:-1px 0 #000,0 1px #000,1px 0 #000,0 -1px #000;}.rc_mobile .rc_bg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.rc_mobile .rc_tr2{left:-81px;}.rc_mobile .reader_db:not(.rc_shide) .rc_tr2{left:-40px;}.rc_mobile .reader_db.rc_shide .rc_next button{position:fixed;top:0;left:0;margin:0;max-width:20%;height:50vh;background:0 0;color:transparent;border:0;}</style>'; //css mobile
     // html
     r_txt += '<div class="rc_bg'+ (isMobile ? ' rc_hidden' : '') +'"></div>';
     r_txt += '<div class="reader_db'+ (isMobile ? ' rc_shide' : '') +' flex_wrap f_bottom">';
@@ -194,7 +194,7 @@ function mydb_comic_reader() {
     r_txt += '<div class="flex">';
     r_txt += '<button class="rc_ld_img rc_btn _rc" title="alt + a">Load</button>';
     r_txt += '<input class="rc_all rc_input _rc" value="all" onclick="this.select()">';
-    r_txt += '<button class="rc_pause rc_btn _rc rc_no_hover" title="Pause images from loading">X</button>';
+    r_txt += '<button class="rc_pause rc_btn _rc rc_no_hover no_moblie_font" title="Pause images from loading">&#61;</button>';
     r_txt += '</div>';
     r_txt += '<div class="flex f_middle">';
     r_txt += '<button class="rc_from rc_btn _rc rc_no_hover" title="Load images from [index]">From</button>';
@@ -211,6 +211,7 @@ function mydb_comic_reader() {
     r_txt += '<div class="rc_load2 rc_btn _rc flex f_center" onclick="document.querySelector(\'.rc_ld_img\').click()">&#671;</div>';
     r_txt += '</div>';// .rc_td1
     r_txt += '<div class="rc_td2">';
+    r_txt += '<div class="rc_pause2 rc_btn _rc flex f_center rc_no_hover no_moblie_font'+ (isMobile ? '' : ' rc_hidden') +'" onclick="document.querySelector(\'.rc_pause\').click()">&#61;</div>';
     r_txt += '<div class="rc_rest"><div class="rc_reload rc_btn _rc flex f_center rc_hidden" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="rc_stop rc_btn _rc flex f_center" title="alt + x">&#10007;</div></div>';
     r_txt += '<div class="rc_top rc_btn _rc flex f_center">&#9652;</div>';
     r_txt += '<div class="rc_bottom rc_btn _rc flex f_center">&#9662;</div>';
@@ -236,6 +237,7 @@ function mydb_comic_reader() {
       if (isMobile) el('.rc_bg').classList.toggle('rc_hidden');
       if (el('.rc_next button').dataset.href) el('.rc_next2').classList.toggle('rc_hidden');
       el('.rc_tr2 .rc_td1').classList.toggle('rc_hidden');
+      el('.rc_pause2').classList.toggle('rc_hidden');
     };
     
     el('.rc_bg').onclick = function() {
@@ -280,6 +282,7 @@ function mydb_comic_reader() {
     
     el('.rc_load .rc_pause').onclick = function() {
       this.classList.toggle('rc_danger');
+      el('.rc_pause2').classList.toggle('rc_danger');
       el('.rc_ld_img').disabled = isPause ? false : true;
       el('.rc_load .rc_all').disabled = isPause ? false : true;
       el('.rc_load .rc_from').disabled = isPause ? false : true;
