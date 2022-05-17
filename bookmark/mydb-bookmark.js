@@ -131,13 +131,16 @@ function mydb_bookmark() {
         // chek 1
         if (note == 'id') {
           if (snapshot.exists()) {
-            return true;
+            return '{"check":true,"note":"id"}';
           } else {
             return el('.db_form .db_bmdb').value == 'none' ? false : db_checkData('bmdb', `bookmark/${mydb_type}/list`);
           }
         }
         // check 2
-        if (note == 'bmdb') return snapshot.exists() ? true : false;
+        if (note == 'bmdb') {
+          var cd_chk = snapshot.exists() ? true : false;
+          return '{"check":'+ cd_chk +',"note":"bmdb"}';
+        }
       } else {
         return snapshot.exists() ? true : false;
       }
@@ -614,13 +617,13 @@ function mydb_bookmark() {
       el('.db_bmdb_open').onclick = function() {
         var op_url, op_id = el('.db_bmdb').value;
         if (mydb_type == 'comic') {
-          op_url = op_id.search(/mu\d?\|/) != -1 ? ('mangaupdates.com/series'+ (op_id.indexOf('mu|') != -1 ? '.html?id=' : '/')) : 'mangadex.org/title/';
+          op_url = op_id.indexOf('mu|') != -1 ? 'mangaupdates.com/series.html?id=' : 'mangadex.org/title/';
         } else if (mydb_type == 'novel') {
-          op_url = 'mangaupdates.com/series'+ (op_id.indexOf('mu|') != -1 ? '.html?id=' : '/');
+          op_url = 'mangaupdates.com/series.html?id=';
         } else {
           op_url = op_id.indexOf('mal|') != -1 ? 'myanimelist.net/anime/' : op_id.indexOf('al|') != -1 ? 'anilist.co/anime/' : 'anidb.net/anime/';
         }
-        op_url = op_url + op_id.replace(/^(m(d|u2?|al)|a(nl|db))\|/, '');
+        op_url = op_url + op_id.replace(/^(m(d|u|al)|a(nl|db))\|/, '');
         openInNewTab('//'+ op_url);
       };
       
@@ -1507,10 +1510,11 @@ function mydb_bookmark() {
       if (!db_formCheck()) return;
       db_info('Loading..');
       db_checkData('id', db_pathId(true)).then(function(res) {
-        if (!res) {
+        var cd_res = JSON.parse(res);
+        if (!cd_res.check) {
           db_changeData('set');
         } else {
-          var exist_str = (mydb_select == 'source' ? mydb_select : mydb_type) +' already exist';
+          var exist_str = (mydb_select == 'source' ? mydb_select : mydb_type) +' already exist: '+ cd_res.note;
           db_info(exist_str, 'danger', true);
         }
       });
