@@ -617,13 +617,13 @@ function mydb_bookmark() {
       el('.db_bmdb_open').onclick = function() {
         var op_url, op_id = el('.db_bmdb').value;
         if (mydb_type == 'comic') {
-          op_url = op_id.indexOf('mu|') != -1 ? 'mangaupdates.com/series.html?id=' : 'mangadex.org/title/';
+          op_url = op_id.search(/mu\d?\|/) != -1 ? 'mangaupdates.com/series.html?id=' : 'mangadex.org/title/';
         } else if (mydb_type == 'novel') {
           op_url = 'mangaupdates.com/series.html?id=';
         } else {
           op_url = op_id.indexOf('mal|') != -1 ? 'myanimelist.net/anime/' : op_id.indexOf('al|') != -1 ? 'anilist.co/anime/' : 'anidb.net/anime/';
         }
-        op_url = op_url + op_id.replace(/^(m(d|u|al)|a(nl|db))\|/, '');
+        op_url = op_url + op_id.replace(/^(m(d|u\d?|al)|a(nl|db))\|/, '');
         openInNewTab('//'+ op_url);
       };
       
