@@ -76,10 +76,13 @@ function mydb_custom() {
     mu_btn.id = 'mu_copy';
     mu_btn.style.cssText = 'position:fixed;left:0;right:0;z-index:2147483647;'+ (mu_mobile ? 'bottom' : 'top') +':0;';
     mu_btn.innerHTML = '<button style="background:#4267b2;color:#ddd;padding:8px 16px;font:16px Arial;cursor:pointer;outline:0!important;border:0;">COPY</button>';
+    mu_btn.innerHTML += '<textarea style="display:none;"></textarea>';
     document.body.appendChild(mu_btn);
     
     document.querySelector('#mu_copy button').onclick = function() {
-      copyToClipboard(JSON.stringify(mu_data));
+      var mu_str = JSON.stringify(mu_data);
+      document.querySelector('#mu_copy textarea').value = mu_str;
+      copyToClipboard(mu_str);
       this.innerHTML = 'COPIED';
       this.disabled = true;
       window.scroll(0,0);
