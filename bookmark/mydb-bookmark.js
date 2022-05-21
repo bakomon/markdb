@@ -682,7 +682,7 @@ function mydb_bookmark() {
     // "prev" button
     n_txt += '<li';
     if (nav_current != 1) n_txt += ' data-page="'+ (nav_current-1) +'"';
-    n_txt += '><div class="_db '+ (nav_current == 1 ? 'db_disabled' : 'db_inav') +'">&#10094;</div></li>';
+    n_txt += '><div class="_db db_iprev '+ (nav_current == 1 ? 'db_disabled' : 'db_inav') +'">&#10094;</div></li>';
     
     // add '...'
     if (n_start > 1) {
@@ -705,7 +705,7 @@ function mydb_bookmark() {
     // "next" button
     n_txt += '<li';
     if (nav_current != nav_total) n_txt += ' data-page="'+ (nav_current+1) +'"';
-    n_txt += '><div class="_db '+ (nav_current == nav_total ? 'db_disabled' : 'db_inav') +'">&#10095;</div></li>';
+    n_txt += '><div class="_db db_inext '+ (nav_current == nav_total ? 'db_disabled' : 'db_inav') +'">&#10095;</div></li>';
     
     n_txt += '</ul>';
     n_txt += '<div class="db_count db_text">Page '+ nav_current +' of '+ nav_total +'</div>';
