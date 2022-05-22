@@ -1441,6 +1441,7 @@ function mydb_bookmark() {
     };
     
     el('.db_menu .db_new_gen').onclick = function() {
+      is_autoGen = true;
       el('.db_menu .db_menu_shide').click();
       el('.db_menu .db_new_gen').classList.add('db_hidden');
       setTimeout(function() { el('.db_bm_menu .db_'+ mydb_type).click(); }, 100);
@@ -1504,6 +1505,10 @@ function mydb_bookmark() {
       db_resetForm('remove');
       if (is_search) el('.bmark_db').classList.remove('db_s_shide');
       if (is_index) el('.bm_index').classList.remove('db_hidden');
+      if (is_autoGen) {
+        is_autoGen = false;
+        setTimeout(function() { el('.db_menu .db_menu_shide').click(); }, 100);
+      }
     };
     
     el('.db_form_btn .db_set').onclick = function() {
@@ -1533,6 +1538,7 @@ function mydb_bookmark() {
   var wp = wl.pathname;
   var is_exist = false;
   var is_search = false;
+  var is_autoGen = false;
   var is_form = false;
   var is_index = false;
   var is_isearch = false;
