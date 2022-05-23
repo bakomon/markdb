@@ -299,7 +299,7 @@ function mydb_bookmark() {
         return false;
       }
       if (el('.db_type') && el('.db_type').value == '') {
-        alert(`[${mydb_type}] type is empty`);
+        alert(`[${mydb_type} type] is empty`);
         return false;
       }
       if (el('.db_url').value == '') {
@@ -371,6 +371,7 @@ function mydb_bookmark() {
       el('.db_note').value = data.note;
       if ('type' in data && el('.db_type')) {
         el('.db_type option[value="'+ data.type +'"]').selected = true;
+        el('.db_type').setAttribute('data-type', data.type);
         el('.db_type_manual').classList.remove('db_hidden');
       }
       el('.db_url').value = data.url;
@@ -590,7 +591,10 @@ function mydb_bookmark() {
         
         ps_obj = JSON.parse(ps_txt.value);
         el('.db_bmdb').value = ps_obj.id;
-        if ('type' in ps_obj && el('.db_type')) el('.db_type').value = ps_obj.type;
+        if ('type' in ps_obj && el('.db_type')) {
+          if (ps_obj.type.search(/man(ga|h[wu]a)/i) != -1) el('.db_type').value = ps_obj.type;
+          if (el('.db_type').dataset.type) el('.db_type').value = el('.db_type').dataset.type;
+        }
         if ('img' in ps_obj) el('.db_image').value = ps_obj.img;
         
         ps_txt.value = '';
