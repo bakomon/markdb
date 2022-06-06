@@ -627,7 +627,7 @@ function mydb_bookmark() {
         } else {
           op_url = op_id.indexOf('mal|') != -1 ? 'myanimelist.net/anime/' : op_id.indexOf('al|') != -1 ? 'anilist.co/anime/' : 'anidb.net/anime/';
         }
-        op_url = op_url + op_id.replace(/^(m(d|u\d?|al)|a(nl|db))\|/, '');
+        op_url = op_url + op_id.replace(/^(m(d\d?|u\d?|al)|a(nl|db))\|/, '');
         openInNewTab('//'+ op_url);
       };
       
