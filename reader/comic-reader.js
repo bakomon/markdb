@@ -847,9 +847,9 @@ function mydb_comic_reader() {
       '2','.listing-chapters_wrap',
       '3','#--box-list',
       '4','.series-chapterlist',
-      'komikcast.com','.komik_info-chapters',
+      'komikcast.me','.komik_info-chapters',
       'comicfx.net','.chaplist',
-      'komikstation.com','.bxcl',
+      'komikstation.co','.bxcl',
       'manhuaid.com','.tb-custom-scrollbar',
       'komiku.id','#Daftar_Chapter',
       'mangacdn.my.id','.lcp_catlist',
@@ -951,7 +951,7 @@ function mydb_comic_reader() {
       setTimeout(function() { clearInterval(ads_chk); }, 30000);
       
       // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
-      // bug: komikcast.com (desktop), ads?
+      // bug: komikcast.me (desktop), ads?
       var windowOpenBackup = window.open; //can't use if poper blocker extension installed
       window.open = function(url, name, features) {
         console.log('window.open caught! url: '+ url);
