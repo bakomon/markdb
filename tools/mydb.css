@@ -110,12 +110,12 @@ body[class*="mangaku-"] .owl-carousel {
 .readcmic-blogspot-com #outer-wrapper {
   background: #151515 !important;
 }
-/* komikcast.com */
-.is-mobile .komikcast-com .list-update_items-wrapper {
+/* komikcast.me */
+.is-mobile .komikcast-me .list-update_items-wrapper {
   display: flex;
   flex-wrap: wrap;
 }
-.is-mobile .komikcast-com .list-update_item {
+.is-mobile .komikcast-me .list-update_item {
   flex: initial;
   max-width: 100%;
   width: 50%;
@@ -224,7 +224,7 @@ a[href*="agacelebir.com"][style*="fixed"], .themesia #teaser3, .themesia #wp-bot
 
 #footer2, noscript, #ftads, .c-sub-header-nav.sticky, #navkanan[class*="scroll"], #bottom-banner-ads, footer.perapih.chf, .restrictcontainer, .adult-content #adult_modal, .adult-content .modal-backdrop, #Notifikasi,
 
-.komikcast-com [class*="komik_info-alert"], .manhuaid-com img[alt^="Aplikasi"], .mangayu-com .swal2-container, body[class*="komiku-"] #continue, body[class*="komiku-"] #history2, .is-mobile .webtoons-com #_appDownloadPopup, .is-mobile .webtoons-com #toolbarEpisodeListArea, .is-mobile .webtoons-com #loadingDiv, .mangabat-com #panel-description-linear {
+.komikcast-me [class*="komik_info-alert"], .manhuaid-com img[alt^="Aplikasi"], .mangayu-com .swal2-container, body[class*="komiku-"] #continue, body[class*="komiku-"] #history2, .is-mobile .webtoons-com #_appDownloadPopup, .is-mobile .webtoons-com #toolbarEpisodeListArea, .is-mobile .webtoons-com #loadingDiv, .mangabat-com #panel-description-linear {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
