@@ -17,7 +17,7 @@ html, body, article {
 }
 body {
   position: relative !important;
-  overflow: auto !important;
+  overflow: visible !important; /* default */
 }
 .mangainfo li a:visited, .komikinfo li a:visited, .animeinfo li a:visited, .animeinfo .episodelist a:visited, .wp-manga-chapter a:visited, .bixbox li a:visited, .bxcl li a:visited, #scans a:visited h3, #latestchapters .updates a:visited, #list .chapter a:visited, .chapter-container .chapter-row a:visited, .elementor-icon-list-item a:visited, .epxs a:visited, .chapter-item a:visited, .fixyear a:visited, .fixyear a:visited .year .ytps a:visited, .chli .cli a:visited, .Manga_Chapter a:visited .viewind {
   color: #d7382d !important;
