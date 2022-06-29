@@ -13,8 +13,27 @@ function mydb_comic_reader() {
   // Position (X,Y) element https://stackoverflow.com/a/28222246
   function getOffset(el, p) {
     const rect = el.getBoundingClientRect();
-    var xy = p == 'left' ? rect.left + window.scrollX : rect.top + window.scrollY;
-    return xy;
+    var num = p == 'top' ? rect.top + window.scrollY : p == 'bottom' ? rect.bottom + window.scrollY : p == 'right' ? rect.right + window.scrollX : rect.left + window.scrollX;
+    return num;
+  }
+  
+  function checkReadyState() {
+    var current;
+    var state = ['uninitialized','loading','interactive','complete'];
+    state.forEach(function(item, index) {
+      if (document.readyState == item) current = index;
+    });
+    return current;
+  }
+  
+  // Fix Issues With CSS Position Sticky Not Working https://www.designcise.com/web/tutorial/how-to-fix-issues-with-css-position-sticky-not-working#checking-if-an-ancestor-element-has-overflow-property-set
+  function overflowUnset(elem) {
+    var parent = elem.parentElement;
+    while (parent) {
+      var hasOverflow = getComputedStyle(parent).overflow;
+      if (hasOverflow !== 'visible') parent.style.setProperty('overflow', 'visible', 'important');
+      parent = parent.parentElement;
+    }
   }
   
   // Remove element https://codepen.io/sekedus/pen/ZEYRyeY
@@ -86,14 +105,14 @@ function mydb_comic_reader() {
     };
   }
   
-  function startChange(img, note) {
+  function lazyLoad(img, note) {
     var imgs = '';
     if ((getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) && !img.classList.contains('rc_loaded')) || note != 'scroll') {
       imgs = img.dataset.readImg;
-      if (loadCDN) imgs = imgs.replace(cdnRgx, '').replace(/\/[fhwq]=[^\/]+/, '');
+      if (loadCDN) imgs = imgs.replace(rgxCdn, '').replace(/\/[fhwq]=[^\/]+/, '');
       if (imgs.search(/(pending\-load|cdn\.statically\.io)/) != -1) {
         imgs = imgs.replace(/\?(.*)/g, ''); //remove location.search ?=
-      } else if (loadSize) {
+      } else if (loadGi) {
         var sNum = el('.rc_size').innerHTML;
         imgs = imgs.replace(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\//, '/'+ sNum +'/');
         imgs = imgs.replace(/=[swh](\d+)[^\n]*/, '='+ sNum);
@@ -110,7 +129,7 @@ function mydb_comic_reader() {
       if (!isPause && !isFrom) {
         for (var i = 0; i < img.length; i++) {
           if (!loadImage) {
-            startChange(img[i], 'scroll');
+            lazyLoad(img[i], 'scroll');
           }
           if (img[img.length-1].src) loadImage = true;
         }
@@ -186,7 +205,7 @@ function mydb_comic_reader() {
     r_txt += '<div class="rc_tr1 flex_wrap">';
     r_txt += '<div class="rc_others rc_line rc_100 flex rc_hidden">';
     if (chcdn) r_txt += '<div class="rc_cdn rc_btn _rc" title="'+ cdnName +'">CDN</div>';
-    if (chgi) r_txt += '<div class="rc_size rc_btn _rc">'+ imgSize +'</div>';
+    if (chgi) r_txt += '<div class="rc_size rc_btn _rc">'+ imgGi +'</div>';
     r_txt += '</div>'; //.rc_others
     r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" oncontextmenu="openInNewTab(this.dataset.href)" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
     r_txt += '<div class="rc_home rc_line rc_100"><button class="rc_btn _rc" onclick="window.location.href=\'//\'+window.location.hostname">Homepage</button></div>';
@@ -227,7 +246,7 @@ function mydb_comic_reader() {
     document.body.appendChild(r_html);
     if (isMobile) el('.rc_toggle').classList.add('rc_no_hover');
     if (chcdn || chgi) el('.rc_others').classList.remove('rc_hidden');
-    imgArea.style.cssText = 'max-width:'+ readSize +'px !important;';
+    imgArea.style.setProperty('max-width', readSize +'px', 'important');
     
     if (wh.search(/mangacanblog|mangayu|merakiscans|mangapark/) != -1) nextChapter(); //next button
     
@@ -253,7 +272,7 @@ function mydb_comic_reader() {
     // Load all images
     el('.rc_load .rc_ld_img').onclick = function() {
       if (isNumeric(el('.rc_load .rc_all').value)) {
-        startChange(imglistMod[Number(el('.rc_load .rc_all').value) - 1], 'single');
+        lazyLoad(imglistMod[Number(el('.rc_load .rc_all').value) - 1], 'single');
       } else {
         // "imglistMod" from createBtn() parameter
         if (!isFrom) loadImage = true;
@@ -261,7 +280,7 @@ function mydb_comic_reader() {
         var ld_index = isFrom && el('.rc_load .rc_fr_min').value != '' ? (Number(el('.rc_load .rc_fr_min').value) - 1) : 0;
         var ld_length = isFrom && el('.rc_load .rc_fr_max').value != '' ? Number(el('.rc_load .rc_fr_max').value) : imglistMod.length;
         for (var i = ld_index; i < ld_length; i++) {
-          startChange(imglistMod[i], 'all');
+          lazyLoad(imglistMod[i], 'all');
         }
       }
     };
@@ -283,16 +302,17 @@ function mydb_comic_reader() {
     el('.rc_load .rc_pause').onclick = function() {
       this.classList.toggle('rc_danger');
       el('.rc_pause2').classList.toggle('rc_danger');
-      el('.rc_ld_img').disabled = isPause ? false : true;
-      el('.rc_load .rc_all').disabled = isPause ? false : true;
-      el('.rc_load .rc_from').disabled = isPause ? false : true;
       isPause = isPause ? false : true;
+      el('.rc_ld_img').disabled = isPause ? true : false;
+      el('.rc_load .rc_all').disabled = isPause ? true : false;
+      if (el('.rc_load .rc_from').classList.contains('cm_active')) el('.rc_load .rc_from').click();
+      el('.rc_load .rc_from').disabled = isPause ? true : false;
     };
     
     if (chgi) {
       el('.rc_size').onclick = function() {
-        this.innerHTML = this.innerHTML == imgSize ? 's15000' : imgSize;
-        loadSize = this.innerHTML == imgSize ? false : true;
+        this.innerHTML = this.innerHTML == imgGi ? 's15000' : imgGi;
+        loadGi = this.innerHTML == imgGi ? false : true;
       };
     }
     
@@ -315,7 +335,7 @@ function mydb_comic_reader() {
         } else {
           load_zm += -50
         }
-        imgArea.style.cssText = 'max-width:'+ load_zm +'px !important;';
+        imgArea.style.setProperty('max-width', load_zm +'px', 'important');
         el('.rc_zoom input').value = load_zm;
         mydb_zoom[zoomID] = load_zm;
         localStorage.setItem('mydb_zoom', JSON.stringify(mydb_zoom));
@@ -398,7 +418,7 @@ function mydb_comic_reader() {
       // enter to zoom
       if (el('.rc_zoom input') === document.activeElement && e.keyCode == 13) {
         var load_zm = Number(el('.rc_zoom input').value);
-        imgArea.style.cssText = 'max-width:'+ load_zm +'px !important;';
+        imgArea.style.setProperty('max-width', load_zm +'px', 'important');
         el('.rc_zoom input').value = load_zm;
         mydb_zoom[zoomID] = load_zm;
         localStorage.setItem('mydb_zoom', JSON.stringify(mydb_zoom));
@@ -413,8 +433,7 @@ function mydb_comic_reader() {
   function startImage(note, prnt, imgs) {
     var cp = document.createElement('div');
     cp.id = 'check-point';
-    cp.style.cssText = 'position:fixed;bottom:0;z-index:2;color:transparent;';
-    cp.innerHTML = '.';
+    cp.style.cssText = 'position:fixed;bottom:0;left:-2px;';
     document.body.appendChild(cp);
     checkPoint = el('#check-point');
     
@@ -492,34 +511,37 @@ function mydb_comic_reader() {
       }
       imgLink = imgLink.replace(/^\s/, '').replace(/\s$/, '');
       
-      if (imgLink.search(cdnRgx) != -1) {
+      if (imgLink.search(rgxCdn) != -1) {
         if (imgLink.search(/statically\./i) != -1 && mydb_settings.remove_statically) {
           chcdn = false;
-          imgLink = imgLink.replace(cdnRgx, '');
+          imgLink = imgLink.replace(rgxCdn, '');
         } else {
           chcdn = true;
-          cdnName = imgLink.match(cdnRgx)[1];
+          cdnName = imgLink.match(rgxCdn)[1];
         }
       }
       
-      if (imgLink.search(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+)[^\n]+/) != -1) {
+      if (imgLink.search(rgxGi) != -1) {
         chgi = true;
-        imgSize = imgLink.match(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+)[^\n]+/);
-        imgSize = imgSize[1] || imgSize[2];
-        imgSize = Number(imgSize.replace(/[swh]/,''));
-        imgSize = imgSize == 0 || imgSize > 800 ? 's'+ imgSize : 's1600';
+        imgGi = imgLink.match(rgxGi);
+        imgGi = imgGi[1] || imgGi[2];
+        imgGi = Number(imgGi.replace(/[swh]/,''));
+        imgGi = imgGi == 0 || imgGi > 800 ? 's'+ imgGi : 's1600';
       }
       
       reader_html += '<div class="reader_images" onclick="var img'+ (j+1) +'=this.querySelector(\'img\');openInNewTab(img'+ (j+1) +'.src?img'+ (j+1) +'.src:img'+ (j+1) +'.dataset.readImg)" title="'+ (j+1) +' - '+ imgLink +'">';
-      if (mydb_settings.number_reader) reader_html += '<div class="reader_index _rc">'+ (j+1) +'</div>';
       reader_html += '<img style="min-height:750px;" data-read-img="'+ imgLink +'" alt="'+ (j+1) +'">';
+      if (mydb_settings.number_reader) reader_html += '<div class="reader_index"><div class="sticky"><div class="_rc">'+ (j+1) +'</div></div></div>';
       reader_html += '</div>'; //.reader_images
     }
     reader_html += '</div>';
     
     var reader_mod = document.createElement('div');
     reader_mod.style.cssText = 'width:100%;';
-    if (mydb_settings.number_reader) reader_html = '<style>#reader-mod .reader_images{position:relative;}#reader-mod .reader_index{position:absolute;top:0;left:0;margin:0;}</style>'+ reader_html;
+    if (mydb_settings.number_reader) {
+      var reader_css = '#reader-mod .reader_images{position:relative;}#reader-mod .reader_index{position:absolute;top:0;bottom:0;}#reader-mod .reader_index .sticky{position:sticky;top:50vh;}#reader-mod .reader_index ._rc{margin:0;}';
+      reader_html = `<style>${reader_css}</style>`+ reader_html;
+    }
     reader_mod.innerHTML = reader_html;
     if (prnt && imgs && document.body.className.search(/new_cms|themesia|mangapark|webtoons/) == -1) {
       imgArea.appendChild(reader_mod);
@@ -529,6 +551,7 @@ function mydb_comic_reader() {
     }
     imgArea = el('#reader-mod');
     
+    overflowUnset(el('#reader-mod .reader_index .sticky'));
     scrollImage(el('#reader-mod img', 'all'));
     createBtn(el('#reader-mod img', 'all'));
     document.body.classList.add('read-mode');
@@ -543,20 +566,23 @@ function mydb_comic_reader() {
       document.body.classList.remove('fixed');
     }
     
-    /*//webtoons auto like
-    window.addEventListener('load', function() {
-      if (wh.indexOf('webtoons') != -1) {
-        autoLike = true;
-        el('#likeItButton').scrollIntoView();
-        var e_like = setInterval(function() {
-          if (el('#footer_favorites.on')) {
-            clearInterval(e_like);
-            if (!el('#likeItButton ._btnLike.on')) el('#likeItButton').click();
-            setTimeout(function() { el('.paginate a[class*="pg_next"]').click(); }, 1200);
-          }
-        }, 100);
-      }
-    });*/
+    //webtoons auto like
+    if (wh.indexOf('webtoons') != -1 && autoLike) {
+      isPause = true;
+      var wt_like = setInterval(function() {
+        if (checkReadyState() == 3) { //complete
+          clearInterval(wt_like);
+          el('#likeItButton').scrollIntoView();
+          var e_like = setInterval(function() {
+            if (el('#footer_favorites.on')) {
+              clearInterval(e_like);
+              if (!el('#likeItButton ._btnLike.on')) el('#likeItButton').click();
+              setTimeout(function() { el('.paginate a[class*="pg_next"]').click(); }, 1200);
+            }
+          }, 100);
+        }
+      }, 100);
+    }
   }
   
   // Comics api/data
@@ -950,9 +976,9 @@ function mydb_comic_reader() {
       }, 5000);
       setTimeout(function() { clearInterval(ads_chk); }, 30000);
       
+      // Ref: Restore native window.open https://stackoverflow.com/a/48006884/7598333
       // Override window.open() https://codepen.io/crmolloy/pen/YqdagV
-      // bug: komikcast.me (desktop), ads?
-      var windowOpenBackup = window.open; //can't use if poper blocker extension installed
+      // var windowOpenBackup = window.open; //ERROR if poper blocker or ublock extension installed
       window.open = function(url, name, features) {
         console.log('window.open caught! url: '+ url);
         //window.open = windowOpenBackup;
@@ -992,15 +1018,16 @@ function mydb_comic_reader() {
   var chcdn = false; //if image use CDN, wp.com | statically.io | imagesimple.co
   var chgi = false; //if google images
   var loadCDN = false;
-  var loadSize = false;
+  var loadGi = false;
   var loadImage = false; //all images loaded
   var isPause = false; //pause images from loading
   var isFrom = false; //load image from [index]
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from database tools
-  var autoLike = false;
-  var imgSize = ''; //image size
+  var autoLike = false; //auto like webtoons
+  var imgGi = ''; //image size
   var halfScreen = Math.floor((window.screen.height / 2) + 30);
-  var cdnRgx = /(?:i\d+|cdn|img)\.(wp|statically|imagesimple)\.(?:com?|io)\/(?:img\/(?:[^\.]+\/)?)?/;
+  var rgxCdn = /(?:i\d+|cdn|img)\.(wp|statically|imagesimple)\.(?:com?|io)\/(?:img\/(?:[^\.]+\/)?)?/i;
+  var rgxGi = /\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+)[^\n]+/i;
   var checkPoint, imgArea, imgList, cdnName, zoomID;
   
   blockContent();
