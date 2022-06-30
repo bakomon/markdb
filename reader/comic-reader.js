@@ -60,6 +60,24 @@ function mydb_comic_reader() {
     }
   }
   
+  // DOM parents() https://github.com/ziggi/dom-parents
+  function getParents(element, selector) {
+    var isWithSelector = selector !== undefined;
+    var parents = [];
+    var elem = element.parentElement;
+  
+    while (elem !== null) {
+      if (elem.nodeType === Node.ELEMENT_NODE) {
+        if (!isWithSelector || elem.matches(selector)) {
+          parents.push(elem);
+        }
+      }
+      elem = elem.parentElement;
+    }
+  
+    return parents;
+  }
+  
   function copyAttribute(element, new_node) {
     var el_new = document.createElement(new_node);
     var el_att = element.outerHTML.match(/<[^\s]+\s([^>]+)>/)[1];
@@ -476,6 +494,7 @@ function mydb_comic_reader() {
         }
       }
       console.log('imgArea: '+ document.body.contains(imgArea));
+      if (!document.body.contains(imgArea)) alert('imgArea: '+ document.body.contains(imgArea));
     }
     if (prnt && imgs) imgArea = prnt;
     if (!imgArea) return;
@@ -531,7 +550,7 @@ function mydb_comic_reader() {
       
       reader_html += '<div class="reader_images" onclick="var img'+ (j+1) +'=this.querySelector(\'img\');openInNewTab(img'+ (j+1) +'.src?img'+ (j+1) +'.src:img'+ (j+1) +'.dataset.readImg)" title="'+ (j+1) +' - '+ imgLink +'">';
       reader_html += '<img style="min-height:750px;" data-read-img="'+ imgLink +'" alt="'+ (j+1) +'">';
-      if (mydb_settings.number_reader) reader_html += '<div class="reader_index"><div class="sticky"><div class="_rc">'+ (j+1) +'</div></div></div>';
+      if (mydb_settings.number_reader) reader_html += '<div class="reader_index"><div class="rc_sticky"><div class="_rc">'+ (j+1) +'</div></div></div>';
       reader_html += '</div>'; //.reader_images
     }
     reader_html += '</div>';
@@ -539,7 +558,7 @@ function mydb_comic_reader() {
     var reader_mod = document.createElement('div');
     reader_mod.style.cssText = 'width:100%;';
     if (mydb_settings.number_reader) {
-      var reader_css = '#reader-mod .reader_images{position:relative;}#reader-mod .reader_index{position:absolute;top:0;bottom:0;}#reader-mod .reader_index .sticky{position:sticky;top:50vh;}#reader-mod .reader_index ._rc{margin:0;}';
+      var reader_css = '#reader-mod .reader_images{position:relative;}#reader-mod .reader_index{position:absolute;top:0;bottom:0;}#reader-mod .reader_index .rc_sticky{position:sticky;top:50vh;}#reader-mod .reader_index ._rc{margin:0;}';
       reader_html = `<style>${reader_css}</style>`+ reader_html;
     }
     reader_mod.innerHTML = reader_html;
@@ -551,7 +570,7 @@ function mydb_comic_reader() {
     }
     imgArea = el('#reader-mod');
     
-    overflowUnset(el('#reader-mod .reader_index .sticky'));
+    overflowUnset(el('#reader-mod .reader_index .rc_sticky'));
     scrollImage(el('#reader-mod img', 'all'));
     createBtn(el('#reader-mod img', 'all'));
     document.body.classList.add('read-mode');
@@ -897,7 +916,8 @@ function mydb_comic_reader() {
       }
     }
     
-    if (list_area) mydb_project = true;
+    // infoanime from bacakomik.co or eastheme
+    if (list_area && getParents(list_area, '.infoanime').length == 0) mydb_project = true;
     
     if (list_area && isMobile) {
       var a_latest = wh.indexOf('webtoons') != -1 ? '[id^="episode_"] a' : 'a';
