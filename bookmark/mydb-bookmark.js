@@ -1318,7 +1318,8 @@ function mydb_bookmark() {
     b_txt += '<br/><br/><b>Examples:</b><br/>»&#160;&#160;host::mangaku<br/>»&#160;&#160;title::level@type::manhwa';
     b_txt += '</div>';// .db_s_help_note
     b_txt += '<div class="db_bm_show db_line db_hidden"></div>';
-    b_txt += '<div class="db_search db_line flex"><input class="_db db_100" type="search" placeholder="Search ('+ mydb_type +')..." autocomplete="false"><span class="db_s_help _db" title="How to use Advanced Search">?</span><button class="_db">GO</button></div>';
+    // onfocus readonly to remove chrome autocomplete
+    b_txt += '<div class="db_search db_line flex"><input class="_db db_100" type="search" placeholder="Search ('+ mydb_type +')..." readonly onfocus="this.removeAttribute(\'readonly\')"><span class="db_s_help _db" title="How to use Advanced Search">?</span><button class="_db">GO</button></div>';
     b_txt += '</div>';// .db_td1
     b_txt += '<div class="db_menu2 db_line flex_wrap db_hidden">';
     b_txt += '<div class="db_td2 db_100 db_hidden">';
@@ -1335,8 +1336,8 @@ function mydb_bookmark() {
     b_txt += '</div>';// .db_tr1
     b_txt += '</div>';// .db_data
     b_txt += '<div class="db_login flex_wrap db_hidden">';
-    b_txt += '<input class="db_email _db db_100" type="email" placeholder="Email">';
-    b_txt += '<input class="db_pass _db db_100" type="password" placeholder="Password">';
+    b_txt += '<input class="db_email _db db_100" type="email" placeholder="Email" readonly onfocus="this.removeAttribute(\'readonly\')">';
+    b_txt += '<input class="db_pass _db db_100" type="password" placeholder="Password" readonly onfocus="this.removeAttribute(\'readonly\')">';
     b_txt += '<div class="flex"><button class="db_in _db">Login</button><span class="lg_notif _db db_selected db_hidden"></span></div>';
     b_txt += '</div>';// .db_login
     b_txt += '<div class="db_toggle _db db_100 flex f_center">&#9733;</div>';
