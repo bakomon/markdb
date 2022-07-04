@@ -428,7 +428,7 @@ function mydb_tools() {
                 mydb_info['fbase_auth'] = 'loaded';
                 mydb_fbase_loaded = true;
                 console.log('Firebase: all loaded');
-                if (mydb_settings.auto_login) autoLogin();
+                if (mydb_settings.auto_login && typeof bakomon_web === 'undefined') autoLogin();
               }
             }, 100);
           }
@@ -758,7 +758,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|7/4/2022, 11:28:01 PM';
+var local_interval = 'manual|7/5/2022, 1:07:21 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
