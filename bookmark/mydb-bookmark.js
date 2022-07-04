@@ -1341,7 +1341,7 @@ function mydb_bookmark() {
     b_txt += '<div class="flex"><button class="db_in _db">Login</button><span class="lg_notif _db db_selected db_hidden"></span></div>';
     b_txt += '</div>';// .db_login
     b_txt += '<div class="db_toggle _db db_100 flex f_center">&#9733;</div>';
-    b_txt += '<div class="db_notif flex flex_perfect db_hidden" style="position:absolute;"><span class="db_notif_text _db fp_content">Loading..</span></div>';
+    b_txt += '<div class="db_notif flex f_perfect db_hidden" style="position:absolute;"><span class="db_notif_text _db fp_content">Loading..</span></div>';
     b_txt += '</div>';// .bmark_db
     
     var b_html = document.createElement('div');
