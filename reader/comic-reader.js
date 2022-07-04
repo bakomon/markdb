@@ -300,6 +300,7 @@ function mydb_comic_reader() {
         for (var i = ld_index; i < ld_length; i++) {
           lazyLoad(imglistMod[i], 'all');
         }
+        if (isFrom) el(`#reader-mod [title^="${ld_index+1}"]`).scrollIntoView();
       }
     };
     
@@ -1093,7 +1094,7 @@ function mydb_comic_reader() {
     mydb_read = true;
     mydb_zoom = localStorage.getItem('mydb_zoom') ? JSON.parse(localStorage.getItem('mydb_zoom')) : {};
     window.onunload = function() { window.scrollTo(0,0); }; //prevent browsers auto scroll on reload/refresh
-    checkAll();
+    if (typeof bakomon_web === 'undefined') checkAll();
   } else {
     mydb_read = false;
   }
