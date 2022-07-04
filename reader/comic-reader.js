@@ -127,7 +127,7 @@ function mydb_comic_reader() {
     var imgs = '';
     if ((getOffset(img, 'top') < (getOffset(checkPoint, 'top') + 1000) && !img.classList.contains('rc_loaded')) || note != 'scroll') {
       imgs = img.dataset.readImg;
-      if (loadCDN) imgs = imgs.replace(rgxCdn, '').replace(/\/[fhwq]=[^\/]+/, '');
+      if (!loadCDN) imgs = imgs.replace(rgxCdn, '').replace(/\/[fhwq]=[^\/]+/, '');
       if (imgs.search(/(pending\-load|cdn\.statically\.io)/) != -1) {
         imgs = imgs.replace(/\?(.*)/g, ''); //remove location.search ?=
       } else if (loadGi) {
@@ -338,7 +338,7 @@ function mydb_comic_reader() {
     if (chcdn) {
       el('.rc_cdn').onclick = function() {
         this.innerHTML = this.innerHTML == 'CDN' ? 'not' : 'CDN';
-        loadCDN = this.innerHTML == 'CDN' ? false : true;
+        loadCDN = this.innerHTML == 'CDN' ? true : false;
         if (chgi) {
           el('.rc_size').innerHTML = 's15000';
           el('.rc_size').click();
@@ -537,6 +537,7 @@ function mydb_comic_reader() {
           imgLink = imgLink.replace(rgxCdn, '');
         } else {
           chcdn = true;
+          loadCDN = true;
           cdnName = imgLink.match(rgxCdn)[1];
         }
       }
@@ -1045,7 +1046,7 @@ function mydb_comic_reader() {
   var isFrom = false; //load image from [index]
   var isMobile = document.documentElement.classList.contains('is-mobile') ? true : false; //from database tools
   var autoLike = false; //auto like webtoons
-  var imgGi = ''; //image size
+  var imgGi = ''; //default google image size
   var halfScreen = Math.floor((window.screen.height / 2) + 30);
   var rgxCdn = /(?:i\d+|cdn|img)\.(wp|statically|imagesimple)\.(?:com?|io)\/(?:img\/(?:[^\.]+\/)?)?/i;
   var rgxGi = /\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+)[^\n]+/i;
