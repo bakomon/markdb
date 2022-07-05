@@ -1284,7 +1284,7 @@ function mydb_bookmark() {
         } else {
           main_data = data;
           main_arr = genArray(data.list);
-          db_checkBookmarkOne(); //check if bookmark exist, single data
+          if (typeof bakomon_web === 'undefined') db_checkBookmarkOne(); //check if bookmark exist, single data
           db_showTotal();
         }
       });
@@ -1395,6 +1395,8 @@ function mydb_bookmark() {
     };
     
     el('.db_toggle').onclick = function() {
+      document.documentElement.classList.toggle('no-scroll');
+      document.body.classList.toggle('no-scroll');
       el('.db_search .db_s_help').classList.remove('db_danger');
       el('.db_s_help_note').classList.add('db_hidden');
       if (el('.db_paste_form')) {
