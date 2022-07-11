@@ -1101,7 +1101,7 @@ function mydb_comic_reader() {
   }
   // START reader
   
-  if (mydb_settings.mod_disqus) disqusMod();
+  if (mydb_settings.mod_disqus && typeof bakomon_web === 'undefined') disqusMod();
   
   mydb_info['reader_js'] = 'loaded';
   
