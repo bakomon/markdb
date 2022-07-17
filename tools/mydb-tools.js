@@ -96,7 +96,7 @@ function mydb_tools_fnc() {
       });
       
       window.addEventListener('message', function(e) {
-        if (e.origin == cross_url && e.data.match(/cross__/i) && e.data.indexOf('cross_test') == -1) {
+        if (e.origin == cross_url && e.data.toString().match(/cross__/i) && e.data.indexOf('cross_test') == -1) {
           var get_data = JSON.parse(e.data);
           clearTimeout(window[get_data.name]);
           get_data.key = get_data.key.replace(/^cross__/, '');
@@ -124,7 +124,7 @@ function mydb_tools_fnc() {
     set: function(key, data) {
       /* save data to subdomain localStorage */
       data = JSON.stringify(data);
-      var l_obj = '{"method":"set","key":"'+ key +'","origin":"'+ cross_origin +'","data":'+ data +'}';
+      var l_obj = '{"method":"set","key":"'+ key +'","origin":"cross__'+ cross_origin +'","data":'+ data +'}';
       crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
     },
     get: function(key, callback) {
@@ -138,13 +138,13 @@ function mydb_tools_fnc() {
       cross_callbacks[name] = {"key":key,"callback":callback};
       
       /* load saved data from subdomain localStorage */
-      var l_obj = '{"method":"get","name":"'+ name +'","key":"'+ key +'","origin":"'+ cross_origin +'"}';
+      var l_obj = '{"method":"get","name":"'+ name +'","key":"'+ key +'","origin":"cross__'+ cross_origin +'"}';
       crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
       crossStorage.check(name, key, function(res){callback(res)});
     },
     remove: function(key) {
       /* remove data from subdomain localStorage */
-      var l_obj = '{"method":"remove","key":"'+ key +'","origin":"'+ cross_origin +'"}';
+      var l_obj = '{"method":"remove","key":"'+ key +'","origin":"cross__'+ cross_origin +'"}';
       crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
     },
     check: function(name, key, callback) {
@@ -758,7 +758,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|7/5/2022, 11:43:08 AM';
+var local_interval = 'manual|7/17/2022, 11:08:27 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
