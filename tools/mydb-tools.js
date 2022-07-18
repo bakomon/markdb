@@ -147,6 +147,11 @@ function mydb_tools_fnc() {
       var l_obj = '{"method":"remove","key":"'+ key +'","origin":"cross__'+ cross_origin +'"}';
       crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
     },
+    clear: function() {
+      /* clear all localStorage from subdomain localStorage */
+      var l_obj = '{"method":"clear","origin":"cross__'+ cross_origin +'"}';
+      crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
+    },
     check: function(name, key, callback) {
       window[name] = setTimeout(function() {
         console.error(`!! Error crossStorage: [${name}] can\'t get "${key}" data from iframe.`);
@@ -458,9 +463,9 @@ function mydb_tools() {
     if (mydb_database || (mydb_type && note.search(/^error/) == -1)) {
       if (live_test_custom) {
         var x_chk = setInterval(function() {
-          if (typeof mydb_custom !== 'undefined') {
+          if (typeof mydb_ctm_fnc !== 'undefined') {
             clearInterval(x_chk);
-            mydb_custom();
+            mydb_ctm_fnc();
           }
         }, 100);
       } else {
@@ -489,9 +494,9 @@ function mydb_tools() {
         mydb_info['reader_js'] = 'wait';
         if (live_test_comic_r) {
           var cr_chk = setInterval(function() {
-            if (typeof mydb_comic_reader !== 'undefined') {
+            if (typeof mydb_cr_fnc !== 'undefined') {
               clearInterval(cr_chk);
-              mydb_comic_reader();
+              mydb_cr_fnc();
             }
           }, 100);
         } else {
@@ -520,9 +525,9 @@ function mydb_tools() {
               if (!mydb_fbase_app) fbaseLoad('bookmark');
               if (live_test_bookmark) {
                 var bm_chk = setInterval(function() {
-                  if (typeof mydb_bookmark !== 'undefined') {
+                  if (typeof mydb_bm_fnc !== 'undefined') {
                     clearInterval(bm_chk);
-                    mydb_bookmark();
+                    mydb_bm_fnc();
                   }
                 }, 100);
               } else {
@@ -540,6 +545,9 @@ function mydb_tools() {
             }
           }
         }, 100);
+      } else {
+        mydb_info['reader_js'] = 'false';
+        mydb_info['bookmark_js'] = 'false';
       }
     } else {
       mydb_info['support'] = false;
@@ -547,7 +555,10 @@ function mydb_tools() {
       mydb_spt_info = '{"support":"false","note":"'+ note +'"'+ (typeof mydb_type !== 'undefined' ? (',"type":"'+ mydb_type +'"') : '') +'}';
       localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
       console.log('mydb_support: false');
-      if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
+      if (el('#_loader')) {
+        el('#_loader .sl-info').innerHTML = '<span class="sl-not">⚠️</span>';
+        setTimeout(function() { el('#_loader').parentElement.removeChild(el('#_loader')); }, 2000);
+      }
     }
   }
   
@@ -633,9 +644,9 @@ function mydb_tools() {
   function startLoading() {
     var sl_html = document.createElement('div');
     sl_html.id = '_loader';
-    sl_html.style.cssText = 'display:-webkit-flex;display:flex;position:fixed;bottom:-1px;left:-1px;width:40px;height:40px;background:#252428;border:1px solid #3e3949;z-index:2147483642;'; //2147483647
-    sl_html.innerHTML = '<style>.sl-loader{margin:auto;border:4px solid #ddd;border-top:4px solid #3498db;border-radius:50%;width:20px;height:20px;-webkit-animation:sl-spin 2s linear infinite;animation:sl-spin 2s linear infinite;}@-webkit-keyframes sl-spin{0%{-webkit-transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);}}@keyframes sl-spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>';
-    sl_html.innerHTML += '<div class="sl-loader"></div>';
+    sl_html.style.cssText = 'position:fixed;bottom:-1px;left:-1px;z-index:2147483642;'; //2147483647
+    sl_html.innerHTML = '<style>.sl-info{display:-webkit-flex;display:flex;width:40px;height:40px;background:#252428;border:1px solid #3e3949;}.sl-not{font-size:20px;margin:0 auto;}.sl-loader{margin:auto;border:4px solid #ddd;border-top:4px solid #3498db;border-radius:50%;width:20px;height:20px;-webkit-animation:sl-spin 2s linear infinite;animation:sl-spin 2s linear infinite;}@-webkit-keyframes sl-spin{0%{-webkit-transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);}}@keyframes sl-spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>';
+    sl_html.innerHTML += '<div class="sl-info"><div class="sl-loader"></div></div>';
     document.body.appendChild(sl_html);
   }
   
@@ -758,7 +769,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|7/17/2022, 11:08:27 PM';
+var local_interval = 'manual|7/18/2022, 9:42:21 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
