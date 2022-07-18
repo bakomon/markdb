@@ -1,8 +1,7 @@
 // DATABASE CUSTOM
-function mydb_custom() {
+function mydb_ctm_fnc() {
   if (mydb_x_loaded) return;
   mydb_x_loaded = true;
-  if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
   
   // Cookies https://www.quirksmode.org/js/cookies.html
   function createCookie(name, value, timer) {
@@ -173,8 +172,14 @@ function mydb_custom() {
   webDarkMode();
   if (mydb_settings.remove_statically) removeStatically();
   if (wh.indexOf('mangaupdates') != -1 && wl.href.search(mu_rgx) != -1) copyMU();
+  var sl_wait = setInterval(function() {
+     if (mydb_info.reader_js != '' && mydb_info.bookmark_js != '') {
+       clearInterval(sl_wait);
+       if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
+    }
+  }, 100);
 }
 
 if ((typeof live_test_custom != 'undefined' && typeof mydb_x_loaded != 'undefined') && (!live_test_custom && !mydb_x_loaded)) {
-  mydb_custom();
+  mydb_ctm_fnc();
 }
