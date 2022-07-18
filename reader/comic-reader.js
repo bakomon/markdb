@@ -1,8 +1,7 @@
 // COMIC READER
-function mydb_comic_reader() {
+function mydb_cr_fnc() {
   if (mydb_cr_loaded) return;
   mydb_cr_loaded = true;
-  if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
   
   // check if string is number https://stackoverflow.com/a/175787/7598333
   function isNumeric(str) {
@@ -1096,6 +1095,7 @@ function mydb_comic_reader() {
     mydb_zoom = localStorage.getItem('mydb_zoom') ? JSON.parse(localStorage.getItem('mydb_zoom')) : {};
     window.onunload = function() { window.scrollTo(0,0); }; //prevent browsers auto scroll on reload/refresh
     if (typeof bakomon_web === 'undefined') checkAll();
+    if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
   } else {
     mydb_read = false;
   }
@@ -1120,7 +1120,7 @@ if ((typeof live_test_comic_r != 'undefined' && typeof mydb_cr_loaded != 'undefi
   var db_cr_check = setInterval(function() {
     if (mydb_loaded) {
       clearInterval(db_cr_check);
-      mydb_comic_reader();
+      mydb_cr_fnc();
     }
   }, 100);
 }
