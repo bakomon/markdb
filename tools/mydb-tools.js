@@ -463,9 +463,9 @@ function mydb_tools() {
     if (mydb_database || (mydb_type && note.search(/^error/) == -1)) {
       if (live_test_custom) {
         var x_chk = setInterval(function() {
-          if (typeof mydb_ctm_fnc !== 'undefined') {
+          if (typeof mydb_x_fnc !== 'undefined') {
             clearInterval(x_chk);
-            mydb_ctm_fnc();
+            mydb_x_fnc();
           }
         }, 100);
       } else {
@@ -769,7 +769,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|7/18/2022, 9:42:21 AM';
+var local_interval = 'manual|7/18/2022, 9:57:44 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
