@@ -1,8 +1,7 @@
 // DATABASE BOOKMARK
-function mydb_bookmark() {
+function mydb_bm_fnc() {
   if (mydb_bm_loaded) return;
   mydb_bm_loaded = true;
-  if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
   
   // RegExp.escape function in JavaScript https://stackoverflow.com/a/3561711/7598333
   function escapeRegex(str) {
@@ -1361,6 +1360,7 @@ function mydb_bookmark() {
   
   function db_startBookmark() {
     bookmarkHtml();
+    if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
     
     // Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102
     firebase.app(fbase_app).auth().onAuthStateChanged(function(user) {
@@ -1391,7 +1391,7 @@ function mydb_bookmark() {
         if (el('.db_set').classList.contains('db_hidden')) el('.db_btn_update').click();
         if (el('.db_btn_update').classList.contains('db_hidden')) el('.db_set').click();
       }
-      if ('TEXTAREA' !== document.activeElement.tagName && e.keyCode == 13) document.activeElement.blur();
+      if (document.activeElement.tagName !== 'TEXTAREA' && e.keyCode == 13) document.activeElement.blur();
     };
     
     el('.db_toggle').onclick = function() {
@@ -1583,10 +1583,9 @@ function mydb_bookmark() {
       db_startBookmark();
       
       if (!mydb_settings.server_check.source_bm) sourceCheck('after', JSON.stringify(mydb_source));
+      mydb_info['bookmark_js'] = 'loaded';
     }
   }, 100);
-  
-  mydb_info['bookmark_js'] = 'loaded';
   
   if (mydb_settings.remove_site.bookmark) {
     if (localStorage.getItem('bookmarkedKomik')) localStorage.removeItem('bookmarkedKomik'); //komikcast
@@ -1601,7 +1600,7 @@ if ((typeof live_test_bookmark != 'undefined' && typeof mydb_bm_loaded != 'undef
   var db_bm_check = setInterval(function() {
     if (mydb_loaded) {
       clearInterval(db_bm_check);
-      mydb_bookmark();
+      mydb_bm_fnc();
     }
   }, 100);
 }
