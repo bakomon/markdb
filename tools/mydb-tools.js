@@ -43,26 +43,26 @@ function mydb_tools_fnc() {
   }
   
   /* Add script to head https://codepen.io/sekedus/pen/QWKYpVR */
-  addScript = function(n,o,t,e,s) {
+  addScript = function(options, note) {
     /* if a <script> tag failed to load https://stackoverflow.com/a/44325793/7598333 */
     return new Promise(function (resolve, reject) {
       /* data, id, info, boolean, parent */
-      var js_async = e === true || t === true || o === true;
+      if (!('data' in options)) return;
       var js_new = document.createElement('script');
-      if (o && typeof o === 'string' && o.indexOf('#') != -1) js_new.id = o.replace(/#/, '');
-      js_new.async = js_async;
-      if (t == 'in' || o == 'in') {
+      if ('id' in options) js_new.id = options.id;
+      if ('async' in options) js_new.async = options.async;
+      if (note == 'in') {
         js_new.type = 'text/javascript';
-        js_new.innerHTML = n;
+        js_new.innerHTML = options.data;
       } else {
-        js_new.src = n;
+        if ('callback' in options) {
+          js_new.onerror = callback();
+          js_new.onload = callback();
+        }
+        js_new.src = options.data;
       }
-      var parent = s || e || t || o;
-      parent = parent && parent.tagName ? parent : document.querySelector('head');
+      var parent = 'parent' in options && parent.tagName ? options.parent : document.querySelector('head');
       parent.appendChild(js_new);
-      
-      js_new.addEventListener('load', resolve);
-      js_new.addEventListener('error', reject);
     });
   };
   
@@ -403,7 +403,7 @@ function mydb_tools() {
   function fbaseLoad(note) {
     if (typeof firebase == 'undefined') {
       mydb_fbase_app = true;
-      addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-app.js`).catch(() => {
+      addScript({data:`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-app.js`}).catch(() => {
         /* only use catch() :
         - https://stackoverflow.com/a/36213268/7598333
         - https://javascript.info/promise-basics#catch
@@ -421,12 +421,12 @@ function mydb_tools() {
         clearInterval(lf_chk);
         mydb_info['fbase_app'] = 'loaded';
         fbaseInit();
-        if (typeof firebase.database == 'undefined') addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-database.js`);
+        if (typeof firebase.database == 'undefined') addScript({data:`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-database.js`});
         var db2_chk = setInterval(function() {
           if (typeof firebase.database !== 'undefined') {
             clearInterval(db2_chk);
             mydb_info['fbase_database'] = 'loaded';
-            if (typeof firebase.auth == 'undefined') addScript(`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-auth.js`);
+            if (typeof firebase.auth == 'undefined') addScript({data:`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-auth.js`});
             var db3_chk = setInterval(function() {
               if (typeof firebase.auth !== 'undefined') {
                 clearInterval(db3_chk);
@@ -769,7 +769,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|7/23/2022, 9:04:20 PM';
+var local_interval = 'manual|7/23/2022, 10:45:32 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
