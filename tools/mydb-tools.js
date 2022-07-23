@@ -728,7 +728,7 @@ var fbase_config = {
 var cross_window;
 var cross_callbacks = {};
 var cross_origin = 'coreaz';
-var cross_url = 'https://bakomon.blogspot.com';
+var cross_url = 'https://readanimanga.blogspot.com';
 var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var wh_rgx = /^(w{3}|web|m(obile)?|read|data)\./i;
@@ -769,7 +769,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|7/18/2022, 9:57:44 AM';
+var local_interval = 'manual|7/23/2022, 9:04:20 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
