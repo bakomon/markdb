@@ -118,7 +118,7 @@ function mydb_cr_fnc() {
     el('#disqus_trigger').onclick = function() {
       this.style.display = 'none';
       el('.disqus_mod').id = 'disqus_thread';
-      addScript('//' + id + '.disqus.com/embed.js', true);
+      addScript({data:'//'+ id +'.disqus.com/embed.js', async:true});
     };
   }
   
