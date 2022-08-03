@@ -20,8 +20,9 @@ function firstUCase(str) {
 
 // Mengambil data dari hash berdasarkan kata tertentu example: "#/page/1" get "1"
 function getHash(k) {
-  var rex = new RegExp('#(.*)/' + k + '/([^/]+)(/(.*))?', 'gi');
-  var str = window.location.hash.replace(rex, '$2');
+  var rgx = new RegExp('#(?:.*)\\/' + k + '\\/([^\\/]+)', 'i');
+  var mtch = window.location.hash.match(rgx);
+  var str = mtch ? mtch[1] : null;
   return str;
 }
 
@@ -32,21 +33,36 @@ function getOffset(el, p) {
   return num;
 }
 
+// Get the last {n} data from Array https://stackoverflow.com/a/50930772/7598333
+function lastArray(array, length) {
+  return array.filter(function(el, index) {
+    return index < length;
+  });
+}
+
+function genArray(json) {
+  var arr = [];
+  for (var key in json) {
+    arr.push(json[key]);
+  }
+  return arr;
+}
+
+function genJSON(array, param) {
+  var json = {};
+  for (index in array) {
+    var name = param ? array[index][param] : index;
+    json[name] = array[index];
+  }
+  return json;
+}
+
 // Local Storage
 function local(prop, name, val) {
   var methods = prop == 'get' ? 'getItem' : prop == 'set' ? 'setItem' : prop == 'remove' ? 'removeItem' : 'clear';
   if (prop == 'set') return localStorage[methods](name, val);
   if (prop == 'get' || prop == 'remove') return localStorage[methods](name);
   if (prop == 'clear') return localStorage[methods]();
-}
-
-function genArray(json) {
-  var arr = [];
-  for (var key in json) {
-    if (key == 'check') continue;
-    arr.push(json[key]);
-  }
-  return arr;
 }
 
 function checkReadyState() {
@@ -56,6 +72,29 @@ function checkReadyState() {
     if (document.readyState == item) current = index;
   });
   return current;
+}
+  
+// Sorting JSON by values https://stackoverflow.com/a/9188211/7598333
+function sortBy(array, prop, asc) {
+  return array.sort(function(a, b) {
+    if (asc) {
+      return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+    } else {
+      return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+    }
+  });
+}
+
+// Date toLocaleString() with local format, ref: https://www.w3schools.com/jsref/jsref_tolocalestring.asp
+function dateLocal(date) {
+  var date_lang = 'id-ID';
+  var date_format = {
+    // timeZone: 'Asia/Jakarta', 
+    hour12: false, 
+    dateStyle: 'full', 
+    timeStyle: 'long'
+  };
+  return new Date(date).toLocaleString(date_lang, date_format);
 }
 
 // Simple querySelector https://codepen.io/sekedus/pen/oKYOEK
@@ -119,6 +158,30 @@ function addScript(n, o, t, e, s) {
   var parent = s || e || t || o;
   parent = parent && parent.tagName ? parent : document.querySelector('head');
   parent.appendChild(js_new);
+}
+
+// Timestamp to relative time https://stackoverflow.com/a/6109105/7598333
+function timeDifference(date) {
+  var msPerMinute = 60 * 1000;
+  var msPerHour = msPerMinute * 60;
+  var msPerDay = msPerHour * 24;
+  var msPerMonth = msPerDay * 30;
+  var msPerYear = msPerDay * 365;
+  var elapsed = new Date() - new Date(date);
+
+  if (elapsed < msPerMinute) {
+    return Math.round(elapsed / 1000) + ' seconds ago';
+  } else if (elapsed < msPerHour) {
+    return Math.round(elapsed / msPerMinute) + ' minutes ago';
+  } else if (elapsed < msPerDay) {
+    return Math.round(elapsed / msPerHour) + ' hours ago';
+  } else if (elapsed < msPerMonth) {
+    return Math.round(elapsed / msPerDay) + ' days ago';
+  } else if (elapsed < msPerYear) {
+    return Math.round(elapsed / msPerMonth) + ' months ago';
+  } else {
+    return Math.round(elapsed / msPerYear) + ' years ago';
+  }
 }
 
 // Remove element https://codepen.io/sekedus/pen/ZEYRyeY
@@ -229,7 +292,10 @@ function lazyLoad(elem, note) {
   function lazyLoadLegacy(img) {
     var lz_chk1 = (getOffset(img, 'top') + img.offsetHeight) > getOffset(lz_check_point, 'top');
     var lz_chk2 = (getOffset(img, 'bottom') - img.offsetHeight) < getOffset(lz_check_point, 'bottom');
-    if ((lz_chk1 && lz_chk2 && !img.classList.contains('lazyload3d')) || (note == 'single' || note == 'all')) {
+    var lz_chk3 = lz_chk1 && lz_chk2 && !img.classList.contains('lazyload3d');
+    var lz_chk4 = note == 'single' || note == 'all';
+    
+    if (lz_chk3 || lz_chk4) {
       var imgs = img.dataset.src;
       if (bmv_current == 'chapter') {
         if (bmv_load_cdn) imgs = imgs.replace(bmv_rgx_cdn, '').replace(/\/[fhwq]=[^\/]+/, '');
@@ -248,6 +314,7 @@ function lazyLoad(elem, note) {
       img.src = imgs;
       // img.removeAttribute('data-src');
       img.className = img.className.replace('la2yloading', 'lazyload3d');
+      img.parentElement.classList.add('lazy-loaded');
     }
   }
 
@@ -265,11 +332,12 @@ function bmf_emc(m, c) {
   el('meta[' + m + ']').setAttribute('content', c);
 }
 
-function bmf_meta_tags(data) {
+function bmf_meta_tags(note, data) {
   var d_desc = 'Baca dan download komik, manga, manhwa, manhua one shot bahasa indonesia online full page, terlengkap, gratis, loading cepat dan update setiap hari.';
   var d_key = 'baca komik, baca manga, baca manhwa, baca manhua, komik one piece, komik black clover, komik jujutsu kaisen, komik boruto, komik edens zero, baca manga android';
 
-  var mt_title = bmv_current == 'latest' ? 'Bakomon \u2013 Baca Komik Bahasa Indonesia Online' : el('h1').textContent +' | Bakomon';
+  var mt_page = getHash('page') ? ` \u2013 Laman ${getHash('page')}` : '';
+  var mt_title = bmv_current == 'latest' ? 'Bakomon'+ mt_page +' \u2013 Baca Komik Bahasa Indonesia Online' : el('h1').textContent +' | Bakomon';
   var mt_url = wl.href;
   var mt_img = 'https://'+ wl.hostname +'/images/cover.png';
   var mt_desc = 'Baca komik dan baca manga terbaru bahasa indonesia online, bisa full page, loading cepat dan update setiap hari.';
@@ -284,7 +352,7 @@ function bmf_meta_tags(data) {
     d_key = d_key + ', '+ data.title +' Chapter '+ data.current;
   }
 
-  document.title = bmv_current == 'latest' ? 'Bakomon \u2013 Baca Komik, Manga, Manhwa, Manhua Bahasa Indonesia Online' : mt_title;
+  document.title = bmv_current == 'latest' ? 'Bakomon'+ mt_page +' \u2013 Baca Komik, Manga, Manhwa, Manhua Bahasa Indonesia Online' : mt_title;
   bmf_emc('name="description"', d_desc);
   bmf_emc('name="keywords"', d_key);
   bmf_emc('itemprop="name"', mt_title);
@@ -325,7 +393,7 @@ function bmf_chapter_direction() {
   if (!el('.direction')) {
     var dir_el = document.createElement('div');
     dir_el.classList.add('direction', 'flex', 'f_perfect', dir);
-    dir_el.style.setProperty('z-index', '1');
+    dir_el.style.zIndex = '1';
     dir_el.innerHTML = '<div class="dir-info fp_content t_center radius"><div class="dir-image"><img class="full" alt="' + dir_txt + '" src="./images/read-' + dir + '.png" title="' + dir_txt + '" alt="' + dir_txt + '"></div><div class="dir-text">' + dir_txt + '</div></div>';
     document.body.appendChild(dir_el);
   }
@@ -475,7 +543,7 @@ function bmf_menu_fnc(img_list) {
       lazyLoad(img_list[Number(el('.cm_load .cm_all').value) - 1], 'single');
     } else {
       // "img_list" from bmf_menu_fnc() parameter
-      if (!bmv_chk_from) bmv_load_cdn = true;
+      if (!bmv_chk_from) bmv_load_img = true;
       el('.cm_load .cm_all').value = 'all';
       var ld_index = bmv_chk_from && el('.cm_load .cm_fr_min').value != '' ? (Number(el('.cm_load .cm_fr_min').value) - 1) : 0;
       var ld_length = bmv_chk_from && el('.cm_load .cm_fr_max').value != '' ? Number(el('.cm_load .cm_fr_max').value) : img_list.length;
@@ -584,32 +652,32 @@ function bmf_chapter_menu() {
   str_menu += '<div class="cm_load cm_line flex_wrap">';
   str_menu += '<div class="flex">';
   str_menu += '<button class="cm_ld_img cm_btn btn" title="alt + a">Load</button>';
-  str_menu += '<input class="cm_all cm_input btn" value="all" onclick="this.select()">';
-  str_menu += '<button class="cm_pause cm_btn btn cm_no_hover" title="Pause images from loading"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em" viewBox="0 0 24 24" version="1.1" x="0px" y="0px"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><path fill="currentColor" d="M15,18 L15,6 L17,6 L17,18 L15,18 Z M20,18 L20,6 L22,6 L22,18 L20,18 Z M2,5 L13,12 L2,19 L2,5 Z"></path></g></svg></button>';
+  str_menu += '<input class="cm_all cm_input" value="all" type="text" onclick="this.select()">';
+  str_menu += '<button class="cm_pause cm_btn btn no_hover" title="Pause images from loading"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em" viewBox="0 0 24 24" version="1.1" x="0px" y="0px"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><path fill="currentColor" d="M15,18 L15,6 L17,6 L17,18 L15,18 Z M20,18 L20,6 L22,6 L22,18 L20,18 Z M2,5 L13,12 L2,19 L2,5 Z"></path></g></svg></button>';
   str_menu += '</div>';
   str_menu += '<div class="flex f_middle">';
-  str_menu += '<button class="cm_from cm_btn btn cm_no_hover" title="Load images from [index]">From</button>';
-  str_menu += '<input class="cm_fr_min cm_input btn no_arrows" type="number" value="1" onclick="this.select()" disabled>';
+  str_menu += '<button class="cm_from cm_btn btn no_hover" title="Load images from [index]">From</button>';
+  str_menu += '<input class="cm_fr_min cm_input no_arrows" type="number" value="1" onclick="this.select()" disabled>';
   str_menu += '<span>-</span>';
-  str_menu += '<input class="cm_fr_max cm_input btn no_arrows" type="number" value="'+ bmv_dt_chapter.images.length +'" data-value="'+ bmv_dt_chapter.images.length +'" onclick="this.select()" disabled>';
+  str_menu += '<input class="cm_fr_max cm_input no_arrows" type="number" value="'+ bmv_dt_chapter.images.length +'" data-value="'+ bmv_dt_chapter.images.length +'" onclick="this.select()" disabled>';
   str_menu += '</div>';
   str_menu += '</div>';// .cm_load
-  str_menu += '<div class="cm_zoom w_100"><button class="cm_plus cm_btn btn" title="shift + up">+</button><button class="cm_less cm_btn btn" title="shift + down">-</button><input style="width:50px;" class="cm_input btn" value="'+ cm_size +'"></div>';
+  str_menu += '<div class="cm_zoom w_100"><button class="cm_plus cm_btn btn" title="shift + up">+</button><button class="cm_less cm_btn btn" title="shift + down">-</button><input style="width:50px;" class="cm_input" value="'+ cm_size +'" type="text"></div>';
   str_menu += '</div>';// .cm_tr1
   str_menu += '<div class="cm_tr2 '+ (is_mobile ? ' flex f_bottom' : '') +'">';
   str_menu += '<div class="cm_td1'+ (is_mobile ? '' : ' no_items') +'">';
   if (is_mobile) {
-    str_menu += '<div class="cm_prev2 cm_btn btn flex f_center f_middle no_items" onclick="window.location.href=document.querySelector(\'.cm_prev button\').dataset.href">&#9666;</div>';
     str_menu += '<div class="cm_next2 cm_btn btn flex f_center f_middle no_items" onclick="window.location.href=document.querySelector(\'.cm_next button\').dataset.href">&#9656;</div>';
+    str_menu += '<div class="cm_prev2 cm_btn btn flex f_center f_middle no_items" onclick="window.location.href=document.querySelector(\'.cm_prev button\').dataset.href">&#9666;</div>';
   }
   str_menu += '<div class="cm_load2 cm_btn btn flex f_center f_middle" onclick="document.querySelector(\'.cm_ld_img\').click()">&#671;</div>';
   str_menu += '</div>';// .cm_td1
   str_menu += '<div class="cm_td2">';
-  if (is_mobile) str_menu += '<div class="cm_pause2 cm_btn btn flex f_center f_middle cm_no_hover" onclick="document.querySelector(\'.cm_pause\').click()"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em" viewBox="0 0 24 24" version="1.1" x="0px" y="0px"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><path fill="currentColor" d="M15,18 L15,6 L17,6 L17,18 L15,18 Z M20,18 L20,6 L22,6 L22,18 L20,18 Z M2,5 L13,12 L2,19 L2,5 Z"></path></g></svg></div>';
+  if (is_mobile) str_menu += '<div class="cm_pause2 cm_btn btn flex f_center f_middle no_hover" onclick="document.querySelector(\'.cm_pause\').click()"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em" viewBox="0 0 24 24" version="1.1" x="0px" y="0px"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><path fill="currentColor" d="M15,18 L15,6 L17,6 L17,18 L15,18 Z M20,18 L20,6 L22,6 L22,18 L20,18 Z M2,5 L13,12 L2,19 L2,5 Z"></path></g></svg></div>';
   str_menu += '<div class="cm_rest"><div class="cm_reload cm_btn btn flex f_center f_middle no_items" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="cm_stop cm_btn btn flex f_center f_middle" title="alt + x">&#10007;</div></div>';
   str_menu += '<div class="cm_top cm_btn btn flex f_center f_middle">&#9652;</div>';
   str_menu += '<div class="cm_bottom cm_btn btn flex f_center f_middle">&#9662;</div>';
-  str_menu += '<div class="cm_toggle cm_btn btn flex f_center f_middle'+ (is_mobile ? ' cm_no_hover' : '') +'">&#174;</div>';
+  str_menu += '<div class="cm_toggle cm_btn btn flex f_center f_middle'+ (is_mobile ? ' no_hover' : '') +'">&#174;</div>';
   str_menu += '</div>';// .cm_td2
   str_menu += '</div>';// .cm_tr2
   str_menu += '</div>';// .ch_menu
@@ -623,6 +691,37 @@ function bmf_chapter_menu() {
   document.body.appendChild(cm_el);
 
   bmf_menu_fnc(el('#reader img', 'all'));
+}
+
+function bmf_chapter_fnc() {
+  // generate & send data to firebase realtime database
+  if (fbase_login) {
+    var c_path = bmf_fbase_path(`history/list/${bmv_dt_chapter.slug}`);
+
+    // check if series exist in bookmark
+    bmf_fbase_db_check('chapter/history', bmf_fbase_path(`bookmark/list/${bmv_dt_chapter.slug}`), function(res) {
+      // update history info (title, slug, cover)
+      var hs_info_data = bmf_fbase_gen('history|info|set', bmv_dt_chapter);
+      hs_info_data['bookmarked'] = res ? true : false;
+      bmf_fbase_db_change('chapter/history/info', c_path, 'update', hs_info_data);
+    })
+
+    // visited (number & time added)
+    var c_visited_path = `${c_path}/visited/${bmv_dt_chapter.current}`;
+    bmf_fbase_db_change('chapter/history/number', c_visited_path, 'set', {number: bmv_dt_chapter.current, added: new Date().getTime()});
+
+    // update history visited
+    bmf_fbase_db_get('chapter/history', `${c_path}/visited`, function(res) {
+      if (res.val()) {
+        var hs_visited = genArray(res.val()); //convert to Array
+        hs_visited = sortBy(hs_visited, 'added'); //sot by "added" (desc)
+        hs_visited = lastArray(hs_visited, bmv_max_hv); //get last "bmv_max_hv" data
+
+        var hs_data = genJSON(hs_visited, 'number'); //convert to JSON
+        bmf_fbase_db_change('chapter/history/visited', `${c_path}/visited`, 'set', hs_data);
+      }
+    });
+  }
 }
 
 function bmf_build_chapter(data) {
@@ -639,7 +738,7 @@ function bmf_build_chapter(data) {
   str_chapter += '<div id="reader" class="max_chapter flex_wrap">';
   for (var i = 0; i < images.length; i++) {
     var img_attr = ch_title +' - '+ (i + 1);
-    str_chapter += '<a class="ch-images full" href="'+ images[i] +'" target="_blank">';
+    str_chapter += '<a class="ch-images full" data-index="'+ (i + 1) +'" href="'+ images[i] +'" target="_blank">';
     str_chapter += '<img style="min-height:750px;" class="full_img loading loge lazy1oad" data-src="'+ images[i] +'" title="'+ img_attr +'" alt="'+ img_attr +'">';
     str_chapter += '<div class="ch-index"><div class="sticky"><div class="btn">'+ (i + 1) +'</div></div></div>';
     str_chapter += '</a>';
@@ -664,6 +763,7 @@ function bmf_build_chapter(data) {
   el('.post-content').classList.add('full_page');
   bmv_el_post.innerHTML = str_chapter;
 
+  bmf_chapter_fnc();
   document.addEventListener('scroll', bmf_chapter_middle);
   bmv_el_images = el('#reader');
   bmf_chapter_menu();
@@ -686,29 +786,67 @@ function bmf_series_chapter_list(data) {
 }
 
 function bmf_fbase_path(info) {
-  var p_info = info.split('|');
-  var path = `users/${fbase_user.uid}/`;
-  if (p_info[0] == 'bookmark') {
-    path += 'bookmark/list/';
-    if (p_info[1]) path += p_info[1];
-  }
+  var path = `users/${fbase_user.uid}`;
+  if (info) path += '/'+ info;
   return path;
 }
 
-function bmf_fbase_gen(data) {
-  return {
-    slug: data.slug,
-    title: data.title,
-    type: data.detail.type.toLowerCase(),
-    status: data.detail.status.replace(/berjalan/i, 'ongoing').replace(/tamat/i, 'completed'),
-    genre: data.detail.genre.toLowerCase(),
-    cover: data.cover,
-    added: new Date().getTime()
+function bmf_fbase_gen(info, data) {
+  var g_info = info.split('|');
+  var g_data = {};
+
+  if (g_info[0] == 'signup') {
+    g_data = {
+      uid: fbase_user.uid,
+      name: data.name,
+      email: data.email,
+      cover: '',
+      tier: 'lite'
+    };
   }
+
+  if (g_info[0] == 'bookmark') {
+    if (g_info[1] == 'check') {
+      g_data = {
+        length: data.length,
+        update: new Date().getTime()
+      };
+    }
+    if (g_info[1] == 'list') {
+      g_data = {
+        slug: data.slug,
+        title: data.title,
+        type: data.detail.type.toLowerCase(),
+        status: data.detail.status.replace(/berjalan/i, 'ongoing').replace(/tamat/i, 'completed'),
+        genre: data.detail.genre.toLowerCase(),
+        cover: data.cover
+      };
+      if (g_info[2] && g_info[2] == 'set') g_data['added'] = new Date().getTime();
+    }
+  }
+
+  if (g_info[0] == 'history') {
+    if (g_info[1] == 'check') {
+      g_data = {
+        length: data.length,
+        update: new Date().getTime()
+      };
+    }
+    if (g_info[1] == 'info') {
+      g_data = {
+        slug: data.slug,
+        title: data.title,
+        cover: data.cover,
+        update: new Date().getTime()
+      };
+    }
+  }
+
+  return g_data;
 }
 
 function bmf_fbase_db_check(note, path, callback) {
-  fbase.database().ref(path).get('value').then(function(snapshot) {
+  fbase.database().ref(path).once('value').then(function(snapshot) {
     callback(snapshot.exists() ? true : false);
   }).catch(function(error) {
     console.error('!! Error: Firebase '+ note +'|'+ path +' bmf_fbase_db_check, code: '+ error.code +', message: '+ error.message);
@@ -717,7 +855,7 @@ function bmf_fbase_db_check(note, path, callback) {
 }
 
 function bmf_fbase_db_get(note, path, callback) {
-  fbase.database().ref(path).get().then(function(snapshot) {
+  fbase.database().ref(path).once('value').then(function(snapshot) {
     callback(snapshot);
   }).catch(function(error) {
     console.error('!! Error: Firebase '+ note +'|'+ path +' bmf_fbase_db_get, code: '+ error.code +', message: '+ error.message);
@@ -737,19 +875,31 @@ function bmf_fbase_db_change(note, path, operation, data, callback) {
   });
 }
 
+function bmf_bookmark_change(note, total) {
+  var bm_path = bmf_fbase_path(`bookmark/check`);
+  bmf_fbase_db_get('series/bookmark', bm_path, function(res) {
+    var bm_length = res.val() ? Number(res.val().length) : 0;
+    if (note == 'remove') bm_length = bm_length > 0 ? (bm_length - 1) : bm_length;
+    if (note == 'set') bm_length = bm_length + 1;
+    if (total) bm_length = total;
+    var bm_chk_data = bmf_fbase_gen('bookmark|check', {length: bm_length});
+    bmf_fbase_db_change('series/bookmark/check', bm_path, 'set', bm_chk_data);
+  });
+}
+
 function bmf_series_fnc() {
   var s_bm = el('.info-left .bookmark');
 
   // init check bookmark
   if (fbase_login) {
-    var s_path = bmf_fbase_path(`bookmark|${bmv_dt_series.slug}`);
+    var s_path = bmf_fbase_path(`bookmark/list/${bmv_dt_series.slug}`);
     bmf_fbase_db_check('series/bookmark', s_path, function(res) {
       if (res) {
         s_bm.classList.remove('wait');
         s_bm.classList.add('marked', 'red');
 
         // update bookmark
-        var data = bmf_fbase_gen(bmv_dt_series);
+        var data = bmf_fbase_gen('bookmark|list|update', bmv_dt_series);
         bmf_fbase_db_change('series/bookmark', s_path, 'update', data);
       } else {
         s_bm.classList.remove('wait', 'marked', 'red');
@@ -763,20 +913,33 @@ function bmf_series_fnc() {
     var slug = this.dataset.slug;
 
     if (fbase_login) {
-      var s_path = bmf_fbase_path(`bookmark|${bmv_dt_series.slug}`);
+      var s_path = bmf_fbase_path(`bookmark/list/${bmv_dt_series.slug}`);
       this.classList.add('wait');
 
       if (this.classList.contains('marked')) {
-        if (confirm(`Hapus series >> ${slug} << dari bookmark?`)) {
+        if (confirm(`Hapus series ini dari bookmark?\n👉 ${slug}`)) {
           bmf_fbase_db_remove('series/bookmark', s_path, function() {
-            el('.info-left .bookmark').classList.remove('wait', 'marked', 'red');
+            s_bm.classList.remove('wait', 'marked', 'red');
           });
+
+          bmf_bookmark_change('remove');
         }
       } else {
-        var data = bmf_fbase_gen(bmv_dt_series);
-        bmf_fbase_db_change('series/bookmark', s_path, 'set', data, function() {
-          el('.info-left .bookmark').classList.remove('wait');
-          el('.info-left .bookmark').classList.add('marked', 'red');
+        var bm_path = bmf_fbase_path(`bookmark/check`);
+        bmf_fbase_db_get('series/bookmark', bm_path, function(res) {
+          var bm_length = res.val() ? Number(res.val().length) : 0;
+          if (bm_length >= bmv_max_bm) {
+            s_bm.classList.remove('wait');
+            alert(`Total bookmark telah melampaui kuota (${bmv_max_bm}), coba hapus bookmark lain.`);
+          } else {
+            var bm_data = bmf_fbase_gen('bookmark|list|set', bmv_dt_series);
+            bmf_fbase_db_change('series/bookmark', s_path, 'set', bm_data, function() {
+              s_bm.classList.remove('wait');
+              s_bm.classList.add('marked', 'red');
+            });
+    
+            bmf_bookmark_change('set');
+          }
         });
       }
     } else {
@@ -897,11 +1060,11 @@ function bmf_search_adv_param(info) {
 function bmf_build_search(data) {
   // Display "search" page
   bmv_dt_search = data;
-  var genres = ['4-koma','action','adult','adventure','comedy','cooking','crime','demons','doujinshi','drama','ecchi','fantasy','game','ghosts','gore','harem','historical','horror','isekai','josei','kingdom','loli','magic','magical-girls','martial-arts','mature','mecha','medical','military','monster-girls','monsters','music','mystery','one-shot','parody','philosophical','police','post-apocalyptic','psychological','reincarnation','revenge','romance','samurai','school','school-life','sci-fi','seinen','shotacon','shoujo','shounen','slice-of-life','sports','super-power','superhero','supernatural','survival','system','thriller','tragedy','vampires','video-games','villainess','webtoons','wuxia'];
+  var s_page = getHash('page') ? ` \u2013 Laman ${getHash('page')}` : '';
   var str_search = '';
 
   str_search += '<div class="adv-search layer2">';
-  str_search += '<div class="post-header flex"><h1 class="title">'+ (bmv_chk_query ? 'Hasil Pencarian: <span></span>' : 'Advanced Search') +'</h1><span class="toggle btn t_center'+ (wh.indexOf('params=') != -1 ? '' : ' no_items') +'">+</span></div>';
+  str_search += '<div class="post-header flex"><h1 class="title">'+ (bmv_chk_query ? 'Hasil Pencarian: <span></span>' : 'Advanced Search') + s_page +'</h1><span class="toggle btn t_center'+ (wh.indexOf('params=') != -1 ? '' : ' no_items') +'">+</span></div>';
   str_search += '<div class="filter'+ (wh.search(/(query|params)=/) != -1 ? ' no_items' : '') +'"><table class="full"><tbody>';
   str_search += '<tr><td>Judul</td><td><input type="text" class="s-title val" placeholder="Minimal 3 Karakter" minlength="3" value=""></td></tr>';
   str_search += '<tr><td>Status</td><td><ul class="status radio flex_wrap">';
@@ -917,8 +1080,8 @@ function bmf_build_search(data) {
   str_search += '<li><label class="radio"><input type="radio" class="s-order" name="s-order" value="" checked=""><span></span>All</label></li><li><label class="radio"><input type="radio" class="s-order" name="s-order" value="title"><span></span>A-Z</label></li><li><label class="radio"><input type="radio" class="s-order" name="s-order" value="titlereverse"><span></span>Z-A</label></li><li><label class="radio"><input type="radio" class="s-order" name="s-order" value="update"><span></span>Update</label></li><li><label class="radio"><input type="radio" class="s-order" name="s-order" value="latest"><span></span>Added</label></li><li><label class="radio"><input type="radio" class="s-order" name="s-order" value="popular"><span></span>Popular</label></li>';
   str_search += '</ul></td></tr>';
   str_search += '<tr><td>Genre</td><td><ul class="genres checkbox flex_wrap">';
-  for (var i = 0; i < genres.length; i++) {
-    str_search += '<li><label class="checkbox"><input type="checkbox" class="s-genre" value="' + genres[i] + '"><span></span>' + firstUCase(genres[i]) + '</label></li>';
+  for (var i in bmv_genres) {
+    str_search += '<li><label class="checkbox"><input type="checkbox" class="s-genre" value="' + bmv_genres[i] + '"><span></span>' + firstUCase(bmv_genres[i]) + '</label></li>';
   }
   str_search += '</ul></td></tr>';
   str_search += '<tr><td class="submit t_center" colspan="2"><button type="button" class="btn" id="search_btn">Search</button>&nbsp;&nbsp;<button type="button" class="btn" id="reset_btn"'+ (bmv_prm_slug ? '' : ' disabled') +'>Reset</button></td></tr>';
@@ -961,14 +1124,15 @@ function bmf_build_latest(data) {
   // Display "latest" page
   bmv_dt_latest = data;
   var series = data.lists;
+  var l_page = getHash('page') ? ` \u2013 Laman ${getHash('page')}` : '';
   var str_latest = '';
 
-  str_latest += '<div class="post-header layer2"><h2 class="title">Update Komik Terbaru</h2></div>';
+  str_latest += '<div class="post-header layer2"><h2 class="title">Update Komik Terbaru'+ l_page +'</h2></div>';
   str_latest += '<div class="post"><ul class="flex_wrap">';
   for (var i = 0; i < series.length; i++) {
     str_latest += '<li class="flex f_column">';
-    str_latest += '<div class="cover f_grow"><a href="#/series/' + series[i].slug + '"><img style="min-height:225px;" class="radius full_img loading loge lazy1oad" data-src="' + series[i].cover + '" alt="' + series[i].title + '" title="' + series[i].title + '"></a></div>';
-    str_latest += '<div class="title"><a href="#/series/' + series[i].slug + '"><h3 class="hd-title line_clamp">' + series[i].title + '</h3></a></div>';
+    str_latest += '<div class="cover f_grow"><a href="#/series/'+ series[i].slug +'"><img style="min-height:225px;" class="radius full_img loading loge lazy1oad" data-src="'+ series[i].cover +'" alt="'+ series[i].title +'" title="'+ series[i].title +'"></a></div>';
+    str_latest += '<div class="title"><a href="#/series/'+ series[i].slug +'"><h3 class="hd-title line_clamp">'+ series[i].title +'</h3></a></div>';
     str_latest += '</li>';
   }
   str_latest += '</ul></div>';
@@ -1088,7 +1252,6 @@ function bmf_profile_change(note, info, data, callback) {
   var c_data = note == 'email' || note == 'password' ? data : JSON.parse(`{"${c_info[1]}": "${data}"}`);
 
   fbase_user[c_info[0]](c_data).then(function() {
-    fbase_build = false;
     if (note == 'password') {
       callback();
     } else {
@@ -1125,19 +1288,64 @@ function bmf_profile_save(parent) {
   });
 }
 
+function bmf_member_history_fnc() {
+  var h_path = bmf_fbase_path('history/list');
+  bmf_fbase_db_get('member/history', h_path, function(res) {
+    el('.m-history .m-hs-list').classList.remove('loading', 'loge');
+    if (res.val()) {
+      var hs_data = genArray(res.val());
+      hs_data = sortBy(hs_data, 'update'); //sot by "update" (desc)
+      var str_hs = '';
+
+      str_hs += '<div class="post full-cover"><ul class="flex_wrap">';
+      for (var i = 0; i < hs_data.length; i++) {
+        str_hs += '<li class="flex f_between" data-slug="'+ hs_data[i].slug +'">';
+        str_hs += '<div class="cover">';
+        str_hs += '<a href="#/series/'+ hs_data[i].slug +'" target="_blank"><img style="min-height:130px;" class="radius full_img loading loge lazy1oad" data-src="'+ hs_data[i].cover +'" alt="'+ hs_data[i].title +'" title="'+ hs_data[i].title +'"></a>';
+        if (hs_data[i].bookmarked) str_hs += '<span class="bookmarked icon btn green" title="Bookmarked"><svg xmlns="http://www.w3.org/2000/svg" width="0.84em" height="1em" viewBox="0 0 1280 1536"><path fill="currentColor" d="M1164 0q23 0 44 9q33 13 52.5 41t19.5 62v1289q0 34-19.5 62t-52.5 41q-19 8-44 8q-48 0-83-32l-441-424l-441 424q-36 33-83 33q-23 0-44-9q-33-13-52.5-41T0 1401V112q0-34 19.5-62T72 9q21-9 44-9h1048z"/></svg></span>';
+        str_hs += '</div>'; //.cover
+        str_hs += '<div class="detail">';
+        str_hs += '<div class="title"><a href="#/series/'+ hs_data[i].slug +'" target="_blank"><h3 class="hd-title line_clamp lc1">'+ hs_data[i].title +'</h3></a></div>';
+        str_hs += '<ul class="">';
+        var hs_visited = genArray(hs_data[i].visited);
+        hs_visited = sortBy(hs_visited, 'added'); //desc
+        for (var j = 0; j < hs_visited.length; j++) {
+          str_hs += '<li class="flex"><a class="f_grow" href="#/chapter/'+ hs_data[i].slug +'/'+ hs_visited[j].number +'" target="_blank">Chapter '+ hs_visited[j].number +'</a><span class="time-ago" title="'+ dateLocal(hs_visited[j].added) +'">'+ timeDifference(hs_visited[j].added) +'</span></li>';
+        }
+        str_hs += '</ul>';
+        str_hs += '</div>'; //.detail
+        str_hs += '<div class="delete icon btn red no_items">Hapus</div>';
+        str_hs += '</li>';
+      }
+      str_hs += '</ul></div>';
+      el('.m-history .m-hs-list').innerHTML = str_hs;
+      el('.post-header h1 span').innerHTML = hs_data.length +'/100';
+      el('.post-header h1 span').classList.add('m-total', 'btn');
+  
+      bmf_member_fnc_wait('history');
+      lazyLoad(el('img.lazy1oad', 'all')); //first load
+      document.addEventListener('scroll', bmf_page_scroll);
+    } else { //empty
+      el('.m-history .m-hs-list').innerHTML = '<div class="flex f_middle f_center full" style="min-height:130px;">History Kosong</div>';
+    }
+  });
+}
+
 function bmf_member_bookmark_fnc() {
-  var m_path = bmf_fbase_path('bookmark');
-  bmf_fbase_db_get('member/bookmark', m_path, function(res) {
+  var b_path = bmf_fbase_path('bookmark/list');
+  bmf_fbase_db_get('member/bookmark', b_path, function(res) {
     el('.m-bookmark .m-bm-list').classList.remove('loading', 'loge');
     if (res.val()) {
       var bm_data = genArray(res.val());
+      bmf_bookmark_change('update', bm_data.length); //sot by "update"
       var str_bm = '';
 
       str_bm += '<div class="post"><ul class="flex_wrap">';
       for (var i = 0; i < bm_data.length; i++) {
-        str_bm += '<li class="flex f_column">';
-        str_bm += '<div class="cover f_grow"><a href="#/series/' + bm_data[i].slug + '" target="_blank"><img style="min-height:225px;" class="radius full_img loading loge lazy1oad" data-src="' + bm_data[i].cover + '" alt="' + bm_data[i].title + '" title="' + bm_data[i].title + '"></a></div>';
-        str_bm += '<div class="title"><a href="#/series/' + bm_data[i].slug + '" target="_blank"><h3 class="hd-title line_clamp">' + bm_data[i].title + '</h3></a></div>';
+        str_bm += '<li class="flex f_column" data-slug="'+ bm_data[i].slug +'">';
+        str_bm += '<div class="cover f_grow"><a href="#/series/'+ bm_data[i].slug +'" target="_blank"><img style="min-height:225px;" class="radius full_img loading loge lazy1oad" data-src="'+ bm_data[i].cover +'" alt="'+ bm_data[i].title +'" title="'+ bm_data[i].title +'"></a></div>';
+        str_bm += '<div class="title"><a href="#/series/'+ bm_data[i].slug +'" target="_blank"><h3 class="hd-title line_clamp">'+ bm_data[i].title +'</h3></a></div>';
+        str_bm += '<div class="delete icon btn red no_items">Hapus</div>';
         str_bm += '</li>';
       }
       str_bm += '</ul></div>';
@@ -1145,9 +1353,11 @@ function bmf_member_bookmark_fnc() {
       el('.post-header h1 span').innerHTML = bm_data.length +'/100';
       el('.post-header h1 span').classList.add('m-total', 'btn');
   
+      bmf_member_fnc_wait('bookmark');
       lazyLoad(el('img.lazy1oad', 'all')); //first load
       document.addEventListener('scroll', bmf_page_scroll);
-    } else {
+    } else { //empty
+      bmf_bookmark_change('remove', 0); //reset to default
       el('.m-bookmark .m-bm-list').innerHTML = '<div class="flex f_middle f_center full" style="min-height:225px;">Bookmark Kosong</div>';
     }
   });
@@ -1345,7 +1555,6 @@ function bmf_member_profile_fnc() {
             // remove from users list
             fbase_user.delete().then(function() {
               console.warn(`${fbase_user.email} user account removed`);
-              fbase_build = false;
               wl.href = '#/latest';
             }).catch(function(error) {
               console.error('!! Error: Firebase delete(), code: '+ error.code +', message: '+ error.message);
@@ -1391,7 +1600,6 @@ function bmf_member_form_fnc() {
         m_parent.classList.add('loading', 'loge');
         
         fbase.auth().signInWithEmailAndPassword(m_email.value, m_pass.value).then(function(user) {
-          fbase_build = false;
           if (wl.href.indexOf('continue') != -1) {
             var n_hash = getParam('continue', wl.href.replace(/\/#/, ''));
             wl.href = decodeURIComponent(n_hash);
@@ -1443,19 +1651,13 @@ function bmf_member_form_fnc() {
         
         fbase.auth().createUserWithEmailAndPassword(m_email.value, m_pass.value).then(function(res) {
           fbase_user = res.user;
-          fbase_build = false;
 
           fbase_user.updateProfile({ displayName: m_name.value }).catch(function(error) {
             console.error('!! Error: Firebase (signup) set name to displayName, code: '+ error.code +', message: '+ error.message);
             alert('!! Error: Firebase (signup) set name to displayName\n'+ error.message);
           });
-          
-          var m_profile = {
-            uid: fbase_user.uid,
-            name: m_name.value,
-            email: m_email.value,
-            cover: ""
-          };
+
+          var m_profile = bmf_fbase_gen('signup', {name: m_name.value, email: m_email.value});
           fbase.database().ref(`users/${fbase_user.uid}/profile`).set(m_profile, function(error) {
             if (error) {
               console.error('!! Error: Firebase (signup) set profile to database, code: '+ error.code +', message: '+ error.message);
@@ -1477,12 +1679,52 @@ function bmf_member_form_fnc() {
   }
 }
 
+function bmf_member_fnc_wait(note) {
+  el('.member .m-delete').classList.remove('no_items');
+  el('.member .m-nav').classList.remove('no_items');
+  
+  el('.member .m-delete').addEventListener('click', function() {
+    el('.m-delete-all').classList.toggle('no_items');
+    el('.member .m-list .delete', 'all').forEach(function(item) {
+      item.classList.toggle('no_items');
+    });
+  });
+
+  el('.m-delete-all').addEventListener('click', function() {
+    if (confirm(`Semua ${bmv_prm_slug} pada akun ini akan dihapus secara permanen dan tidak dapat dikembalikan. Apakah Kamu yakin?`)) {
+      el('.member .m-list').classList.add('loading', 'loge');
+
+      var m_path = bmf_fbase_path(`${bmv_prm_slug}/list/`);
+      bmf_fbase_db_remove(`member/${bmv_prm_slug}/all`, m_path, function() {
+        el('.member .m-nav').classList.add('no_items');
+        el('.member .m-list').classList.remove('loading', 'loge');
+        el('.member .m-list').innerHTML = `<div class="flex f_middle f_center full" style="min-height:230px;">${firstUCase(bmv_prm_slug)} Kosong</div>`;
+      });
+    }
+  });
+  
+  el('.member .m-list .delete', 'all').forEach(function(item) {
+    item.addEventListener('click', function() {
+      var h_slug = this.parentElement.dataset.slug;
+      if (confirm(`Hapus series ini dari ${bmv_prm_slug}?\n👉 ${h_slug}`)) {
+        this.parentElement.classList.add('loading', 'loge');
+
+        var h_path = bmf_fbase_path(`${bmv_prm_slug}/list/`+ h_slug);
+        bmf_fbase_db_remove('member/${bmv_prm_slug}', h_path, function() {
+          removeElem(el(`.member .m-list li[data-slug=${h_slug}]`));
+        });
+      }
+    });
+  });
+}
+
 function bmf_member_fnc() {
   if (fbase_login) {
-    // el('.member .logout').addEventListener('click', bmf_fbase_logout);
-  
     if (bmv_prm_slug == 'profile') bmf_member_profile_fnc();
     if (bmv_prm_slug == 'bookmark') bmf_member_bookmark_fnc();
+    if (bmv_prm_slug == 'history') bmf_member_history_fnc();
+    
+    // el('.member .m-logout').addEventListener('click', bmf_fbase_logout);
   } else {
     bmf_member_form_fnc();
   }
@@ -1494,12 +1736,35 @@ function bmf_build_member() {
 
   str_member += '<div class="post-header flex f_middle f_between">';
   str_member += '<h1 class="title">Member: '+ firstUCase(bmv_prm_slug) +' <span></span></h1>';
-  str_member += '<span class="m-nav"></span>';
-  // if (fbase_login) str_member += '<span class="logout btn t_center" title="Logout"><svg height="18" width="18" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M400 54.1c63 45 104 118.6 104 201.9 0 136.8-110.8 247.7-247.5 248C120 504.3 8.2 393 8 256.4 7.9 173.1 48.9 99.3 111.8 54.2c11.7-8.3 28-4.8 35 7.7L162.6 90c5.9 10.5 3.1 23.8-6.6 31-41.5 30.8-68 79.6-68 134.9-.1 92.3 74.5 168.1 168 168.1 91.6 0 168.6-74.2 168-169.1-.3-51.8-24.7-101.8-68.1-134-9.7-7.2-12.4-20.5-6.5-30.9l15.8-28.1c7-12.4 23.2-16.1 34.8-7.8zM296 264V24c0-13.3-10.7-24-24-24h-32c-13.3 0-24 10.7-24 24v240c0 13.3 10.7 24 24 24h32c13.3 0 24-10.7 24-24z"></path></svg></span>';
+  if (fbase_login) {
+    // str_member += '<span class="m-logout btn t_center" title="Logout"><svg width="18" height="18" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M400 54.1c63 45 104 118.6 104 201.9 0 136.8-110.8 247.7-247.5 248C120 504.3 8.2 393 8 256.4 7.9 173.1 48.9 99.3 111.8 54.2c11.7-8.3 28-4.8 35 7.7L162.6 90c5.9 10.5 3.1 23.8-6.6 31-41.5 30.8-68 79.6-68 134.9-.1 92.3 74.5 168.1 168 168.1 91.6 0 168.6-74.2 168-169.1-.3-51.8-24.7-101.8-68.1-134-9.7-7.2-12.4-20.5-6.5-30.9l15.8-28.1c7-12.4 23.2-16.1 34.8-7.8zM296 264V24c0-13.3-10.7-24-24-24h-32c-13.3 0-24 10.7-24 24v240c0 13.3 10.7 24 24 24h32c13.3 0 24-10.7 24-24z"></path></svg></span>';
+    str_member += '<span class="m-delete btn red no_items" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1408 1536"><path fill="currentColor" d="M512 608v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm256 0v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm256 0v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm128 724V384H256v948q0 22 7 40.5t14.5 27t10.5 8.5h832q3 0 10.5-8.5t14.5-27t7-40.5zM480 256h448l-48-117q-7-9-17-11H546q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5H288q-66 0-113-58.5T128 1336V384H32q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"/></svg></span>';
+  }
   str_member += '</div>'; //.post-header
   str_member += '<div class="content '+ (fbase_login ? 'login' : 'not-login bg2 layer radius') +'">';
   str_member += '<div class="m-notif m-text t_center'+ (fbase_login ? ' bg2 layer radius' : '') +' no_items"></div>';
   if (fbase_login) {
+    if (bmv_prm_slug == 'bookmark' || bmv_prm_slug == 'history') {
+      str_member += '<div class="m-nav flex_wrap full radius no_items">';
+      str_member += '<select class="m-sort mn-menu'+ (is_mobile ? ' f_grow' : '') +'"><option value="" selected disabled hidden>Sort by</option><option value="az">A-Z</option><option value="za">Z-A</option><option value="added">Added</option></select>';
+      str_member += '<select class="m-filter mn-menu'+ (is_mobile ? ' f_grow' : '') +'">';
+      str_member += '<option value="" selected disabled hidden>Filter by</option><option value="">All</option>';
+      if (bmv_prm_slug == 'bookmark') {
+        for (var i in bmv_genres) {
+          str_member += '<option value="' + bmv_genres[i] + '">' + firstUCase(bmv_genres[i]) + '</option>';
+        }
+      } else {
+        str_member += '<option value="bm">Bookmarked</option><option value="not-bm">Not Bookmarked</option>';
+      }
+      str_member += '</select>'; //.m-filter
+      str_member += '<div class="m-delete-all mn-menu btn red t_center no_items">Delete All</div>';
+      if (!is_mobile) str_member += '<span class="f_grow"></span>';
+      str_member += '<div class="ms-form flex f_middle">';
+      str_member += '<input class="ms-field radius f_grow" type="search" placeholder="Judul..." value=""/>';
+      str_member += '<span class="ms-search btn radius"><svg viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path fill-rule="evenodd" clip-rule="evenodd" d="M208 48c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S296.366 48 208 48zM0 208C0 93.125 93.125 0 208 0s208 93.125 208 208c0 48.741-16.765 93.566-44.843 129.024l133.826 134.018c9.366 9.379 9.355 24.575-.025 33.941-9.379 9.366-24.575 9.355-33.941-.025L337.238 370.987C301.747 399.167 256.839 416 208 416 93.125 416 0 322.875 0 208z"></path></svg></span>';
+      str_member += '</div>'; //.qs-form
+      str_member += '</div>'; //.m-nav
+    }
     str_member += '<div class="m-'+ bmv_prm_slug +' flex_wrap';
     if (bmv_prm_slug == 'profile') {
       str_member += ' f_between">';
@@ -1558,18 +1823,17 @@ function bmf_build_member() {
     } else if (bmv_prm_slug == 'bookmark') {
       str_member += '">';
       str_member += '<div class="full"><div class="m-text t_center bg2 layer radius">Kamu dapat menyimpan daftar series di sini hingga <b>100</b> judul</div></div>';
-      str_member += '<div class="m-bm-list full loading loge"><div class="flex f_middle f_center full" style="min-height:225px;">Loading</div></div>';
+      str_member += '<div class="m-bm-list m-list full loading loge"><div class="flex f_middle f_center full" style="min-height:225px;"></div></div>';
     } else if (bmv_prm_slug == 'history') {
-      str_member += 'test history';
-      str_member += '';
-      str_member += '';
+      str_member += '">';
+      str_member += '<div class="m-hs-list m-list full loading loge"><div class="flex f_middle f_center full" style="min-height:225px;"></div></div>';
     } else { //settings
       str_member += 'test settings';
       str_member += '';
       str_member += '';
     }
     str_member += '</div>';
-    str_member += '<div class="m-reauth flex f_perfect no_items"><div class="fp_content"><div class="fp_content"><input type="password" name="password" placeholder="Password" value=""><div class="flex full f_between m-space-v"><button class="r-save btn f_grow" data-active="">OK</button><button class="r-cancel btn selected f_grow" style="margin-left:15px;">Batal</button></div></div></div>';
+    if (bmv_prm_slug == 'profile') str_member += '<div class="m-reauth flex f_perfect no_items"><div class="fp_content"><div class="fp_content"><input type="password" name="password" placeholder="Password" value=""><div class="flex full f_between m-space-v"><button class="r-save btn f_grow" data-active="">OK</button><button class="r-cancel btn selected f_grow" style="margin-left:15px;">Batal</button></div></div></div>';
   } else {
     str_member += '<form class="m-form form-'+ bmv_prm_slug +'" onsubmit="return false">';
     str_member += '<div class="form-email">';
@@ -1600,7 +1864,7 @@ function bmf_build_member() {
   str_member += '</div>'; //.content
   bmv_el_post.innerHTML = str_member;
   el('.post-content').classList.add('full_page');
-  if (!fbase_login) el('.main').style.setProperty('max-width', '500px');
+  if (!fbase_login) el('.main').style.maxWidth = '500px';
 
   bmf_member_fnc();
 }
@@ -1661,8 +1925,8 @@ function bmf_build_header() {
     str_head += '</div>';
   }
   str_head += '<div class="qs-form flex f_middle'+ (is_mobile ? ' no_items' : '') +'">';
-  str_head += '<input type="search" class="qs-field radius" placeholder="Judul..." value=""/>';
-  str_head += '<button type="button" class="qs-search btn radius"><svg viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path fill-rule="evenodd" clip-rule="evenodd" d="M208 48c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S296.366 48 208 48zM0 208C0 93.125 93.125 0 208 0s208 93.125 208 208c0 48.741-16.765 93.566-44.843 129.024l133.826 134.018c9.366 9.379 9.355 24.575-.025 33.941-9.379 9.366-24.575 9.355-33.941-.025L337.238 370.987C301.747 399.167 256.839 416 208 416 93.125 416 0 322.875 0 208z"></path></svg></button>';
+  str_head += '<input class="qs-field radius" type="search" placeholder="Judul..." value=""/>';
+  str_head += '<button class="qs-search btn radius"><svg viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path fill-rule="evenodd" clip-rule="evenodd" d="M208 48c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S296.366 48 208 48zM0 208C0 93.125 93.125 0 208 0s208 93.125 208 208c0 48.741-16.765 93.566-44.843 129.024l133.826 134.018c9.366 9.379 9.355 24.575-.025 33.941-9.379 9.366-24.575 9.355-33.941-.025L337.238 370.987C301.747 399.167 256.839 416 208 416 93.125 416 0 322.875 0 208z"></path></svg></button>';
   str_head += '</div>'; //.qs-form
   str_head += '</div>'; //.quick-search
   str_head += '</div></div>';
@@ -1710,10 +1974,23 @@ function bmf_page_scroll() {
       
     // next background (mobile)
     if (is_mobile && (getOffset(el('#check-point'), 'bottom') + bmv_half_screen) >= getOffset(el('#reader'), 'bottom')) {
-      el('.cm_next button').style.background = 'rgba(0,0,0,.5)';
+      el('.cm_next').classList.add('cm_next_floating');
     } else {
-      el('.cm_next button').style.background = null;
+      el('.cm_next').classList.remove('cm_next_floating');
     }
+
+    // load next image
+    var r_imgs = el('#reader img', 'all');
+    r_imgs.forEach(function(item, index) {
+      var lz_chk1 = getOffset(item, 'top') < (getOffset(el('#check-point'), 'top') + el('#check-point').offsetHeight);
+      var lz_chk2 = getOffset(item, 'bottom') > getOffset(el('#check-point'), 'bottom');
+      var lz_chk3 = lz_chk1 && lz_chk2 && item.classList.contains('lazyload3d');
+      var lz_chk4 = r_imgs[index+1] && r_imgs[index+1].classList.contains('lazy1oad');
+      if (lz_chk3 && lz_chk4) {
+        item.classList.add('next-loaded');
+        lazyLoad(r_imgs[index+1], 'single');
+      }
+    });
   } else {
     lazyLoad(el('img.lazy1oad', 'all'));
   }
@@ -1730,7 +2007,7 @@ function bmf_build_page_direct(current) {
     bmf_build_member();
   }
   
-  bmf_meta_tags(); //Meta tags
+  bmf_meta_tags('direct'); //Meta tags
   document.body.classList.remove('loading', 'lody');
   
   bmv_page_loaded = true;
@@ -1761,7 +2038,7 @@ function bmf_build_page_api(json) {
     if (bmv_chk_nav) bmf_page_nav(json);
   
     setTimeout(function() { document.body.classList.remove('loading', 'lody') }, 500); //show page
-    bmf_meta_tags(json); //Meta tags
+    bmf_meta_tags('api', json); //Meta tags
   } else {
     bmv_el_post.innerHTML = `<div class="t_center">!! ERROR: ${json.status_code} ${json.message}</div>`;
   }
@@ -1771,19 +2048,17 @@ function bmf_build_page_api(json) {
 
 function bmf_build_page(note, json) {
   var fbase_wait = setInterval(function() {
-    if (fbase_loaded && fbase_init) {
+    if (fbase_loaded && fbase_init && fbase_observer) {
       clearInterval(fbase_wait);
-      bmf_check_login(note, function() {
-        if (note.indexOf('direct') != -1) {
-          if (bmv_current == 'member') {
-            bmf_param_member();
-          } else {
-            bmf_build_page_direct(bmv_current);
-          }
+      if (note.indexOf('direct') != -1) {
+        if (bmv_current == 'member') {
+          bmf_param_member();
         } else {
-          bmf_build_page_api(json);
+          bmf_build_page_direct(bmv_current);
         }
-      });
+      } else {
+        bmf_build_page_api(json);
+      }
     }
   }, 100);
 }
@@ -1859,10 +2134,6 @@ function bmf_reset_var() {
   document.removeEventListener('keyup', bmf_default_key);
   document.removeEventListener('keyup', bmf_menu_key);
   document.removeEventListener('keyup', bmf_chapter_key);
-
-  fbase_login = false;
-  fbase_build = true;
-  fbase_user = null;
 }
 
 function bmf_get_param() {
@@ -1878,7 +2149,7 @@ function bmf_get_param() {
   document.body.classList.add('loading', 'lody');
   if (is_mobile) document.documentElement.classList.add('mobile');
 
-  // jump to bmf_param_member()
+  // jump if "member" page
   if (bmv_current == 'member') {
     bmf_build_page('direct/member');
     return;
@@ -1927,7 +2198,6 @@ function bmf_fbase_db_remove(note, path, callback) {
 function bmf_fbase_logout() {
   if (confirm('Are you sure you want to logout?')) {
     fbase.auth().signOut().then(function() {
-      fbase_build = false;
       if (bmv_current == 'member') {
         wl.href = '#/latest';
       } else {
@@ -1940,7 +2210,12 @@ function bmf_fbase_logout() {
   }
 }
 
-function bmf_check_login(note, callback) {
+function bmf_fbase_observer() {
+  // Initialize new app with different name https://stackoverflow.com/a/37603526/7598333
+  firebase.initializeApp(fbase_config, fbase_app);
+  fbase = firebase.app(fbase_app);
+  fbase_init = true;
+
   // Check login https://firebase.google.com/docs/auth/web/manage-users#get_the_currently_signed-in_user
   fbase.auth().onAuthStateChanged(function(user) {
     if (user) { //User is signed in
@@ -1950,26 +2225,20 @@ function bmf_check_login(note, callback) {
       fbase_login = false;
       fbase_user = null;
     }
-    callback();
+    fbase_observer = true;
   });
 }
 
 function bmf_fbase_init() {
   if (firebase.apps.length == 0) {
-    // Initialize new app with different name https://stackoverflow.com/a/37603526/7598333
-    firebase.initializeApp(fbase_config, fbase_app);
-    fbase = firebase.app(fbase_app);
-    fbase_init = true;
+    bmf_fbase_observer();
   } else {
     var fbase_rgx = new RegExp(`\^${fbase_app}\$`, 'i');
     var fbase_chk = firebase.apps.map(item => { return item.name_.search(fbase_rgx) != -1 }).includes(true);
     if (fbase_chk) {
       console.warn(`Firebase: Firebase App named '${fbase_app}' already exists`);
     } else {
-      // Initialize new app with different name https://stackoverflow.com/a/37603526/7598333
-      firebase.initializeApp(fbase_config, fbase_app);
-      fbase = firebase.app(fbase_app);
-      fbase_init = true;
+      bmf_fbase_observer();
     }
   }
 }
@@ -1994,11 +2263,15 @@ var bmv_dt_latest, bmv_dt_search, bmv_dt_series, bmv_dt_chapter;
 var bmv_el_post, bmv_el_result, bmv_el_images;
 var bmv_str_cdn, bmv_str_gi;
 var bmv_start = false;
+var bmv_max_bm = 100; //bookmark
+var bmv_max_hs = 100; //history
+var bmv_max_hv = 5; //history visited
 var bmv_series_list = '#/search/?params=%3Forder%3Dlatest';
 var bmv_half_screen = Math.floor((window.screen.height / 2) + 30);
 var bmv_zoom = local('get', 'bmv_zoom') ? JSON.parse(local('get', 'bmv_zoom')) : {};
 var bmv_rgx_cdn = /(?:i\d+|cdn|img)\.(wp|statically|imagesimple)\.(?:com?|io)\/(?:img\/(?:[^\.]+\/)?)?/i;
 var bmv_rgx_gi = /\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+).*/i;
+var bmv_genres = ['4-koma','action','adult','adventure','comedy','cooking','crime','demons','doujinshi','drama','ecchi','fantasy','game','ghosts','gore','harem','historical','horror','isekai','josei','kingdom','loli','magic','magical-girls','martial-arts','mature','mecha','medical','military','monster-girls','monsters','music','mystery','one-shot','parody','philosophical','police','post-apocalyptic','psychological','reincarnation','revenge','romance','samurai','school','school-life','sci-fi','seinen','shotacon','shoujo','shounen','slice-of-life','sports','super-power','superhero','supernatural','survival','system','thriller','tragedy','vampires','video-games','villainess','webtoons','wuxia'];
 
 var bmv_settings = {
   "source": "bacakomik", //bacakomik|komikindo|komikav
@@ -2007,6 +2280,28 @@ var bmv_settings = {
   "text": {
     "next": "Next",
     "prev": "Prev"
+  },
+  "tier": {
+    "super_admin": {
+      "bookmark": 5000,
+      "history": 5000,
+      "visited": 500
+    },
+    "admin": {
+      "bookmark": 3000,
+      "history": 3000,
+      "visited": 100
+    },
+    "pro": {
+      "bookmark": 1000,
+      "history": 1000,
+      "visited": 50
+    },
+    "lite": {
+      "bookmark": 100,
+      "history": 100,
+      "visited": 5
+    }
   }
 };
 
@@ -2018,7 +2313,7 @@ var fbase_app = 'bakomon';
 var fbase_loaded = false;
 var fbase_init = false;
 var fbase_login = false;
-var fbase_build = true;
+var fbase_observer = false;
 var fbase_user = null;
 /* Firebase configuration for Firebase JS SDK v7.20.0 and later, measurementId is optional */
 var fbase_config = {

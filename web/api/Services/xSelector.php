@@ -87,6 +87,10 @@ class xSelector
                     'xpath' => ".//h1",
                     'regex' => '/(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series?)\s(.*)\sch(?:apter|\.)?.*/i',
                 ],
+                'cover' => [
+                    'xpath' => "//*[@id='content']//*[contains(@class, 'infoanime')]//*[contains(@class, 'thumb')]//img",
+                    'attr' => 'src',
+                ],
                 'next' => [
                     'xpath' => ".//*[contains(@class, 'nextprev')]//a[@rel='next']",
                     'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',

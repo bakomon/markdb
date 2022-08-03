@@ -284,6 +284,8 @@ class CController
                     if ($source['theme'] == 'themesia') :
                         preg_match('/(\{[^\;]+)\)\;/', $content->textContent, $ts_reader);
                         $ch_data = json_decode($ts_reader[1], true);
+
+                        $cover = '';
     
                         $next = $ch_data[$source['chapter']['next']];
                         $prev = $ch_data[$source['chapter']['prev']];
@@ -296,6 +298,10 @@ class CController
                             }
                         endif;
                     else :
+                        // cover selector without parent
+                        // $cover = preg_replace('/\?.*/', '', $xpath->query($source['chapter']['cover']['xpath'])[0]->getAttribute($source['chapter']['cover']['attr'])); //remove search parameter and push
+                        $cover = $xpath->query($source['chapter']['cover']['xpath'])[0]->getAttribute($source['chapter']['cover']['attr']);
+
                         $next_btn = $xpath->query($source['chapter']['next']['xpath'], $content);
                         if ($next_btn->length > 0) :
                             preg_match($source['chapter']['next']['regex'], $next_btn[0]->getAttribute($source['chapter']['next']['attr']), $next);
@@ -326,6 +332,7 @@ class CController
                         'status_code' => $source_xml::$status,
                         'title' => $title[1],
                         'slug' => $slug,
+                        'cover' => $cover,
                         'current' => $chapter,
                         'next' => $next,
                         'prev' => $prev,
@@ -340,6 +347,7 @@ class CController
                     'status_code' => 400,
                     'title' => '',
                     'slug' => '',
+                    'cover' => '',
                     'current' => '',
                     'next' => '',
                     'prev' => '',
