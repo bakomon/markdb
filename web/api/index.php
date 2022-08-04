@@ -10,7 +10,7 @@ require_once __DIR__ . '/CController.php';
 
 $param = new Param;
 $URI = $_SERVER['REQUEST_URI'];
-$allowedReferers = ['localhost', 'bakomon.epizy.com']; //https://stackoverflow.com/a/50684639/7598333
+$allowedReferers = ['localhost', 'bakomon.epizy.com', 'bakomon.blogspot.com']; //https://stackoverflow.com/a/50684639/7598333
 $rgx_escape = implode('|', array_map(function($value) { return preg_quote($value, '/'); }, $allowedReferers));
 
 if (isset($_SERVER['HTTP_REFERER'])) :

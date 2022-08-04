@@ -9,6 +9,7 @@ class Http
     private static $instance;
     public static $source;
     public static $status;
+    public static $link;
 
     public static function get(String $url)
     {
@@ -20,6 +21,7 @@ class Http
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         self::$source = curl_exec($ch);
         self::$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        self::$link = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
 
         curl_close($ch);
 
@@ -67,6 +69,7 @@ class Http
             'status' => strtoupper(str_replace(' ', '_', $error_message)),
             'status_code' => self::$status,
             'message' => $error_message,
+            'source' => self::$link,
         ];
     }
 }
