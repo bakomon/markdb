@@ -20,6 +20,12 @@ class xSelector
                 'series' => 'https://bacakomik.co/komik/{$slug}/',
                 'chapter' => 'https://bacakomik.co/chapter/{$slug}-chapter-{$chapter}-bahasa-indonesia/',
             ],
+            'latest' => [
+                'parent' => "//*[contains(@class, 'datech')]",
+                'date' => [
+                    'xpath' => ".//*[contains(@class, 'datech')]",
+                ],
+            ],
             'LS' => [
                 'parent' => "//*[contains(@class, 'animposx')]",
                 'title' => [
@@ -28,6 +34,14 @@ class xSelector
                 'cover' => [
                     'xpath' => ".//img",
                     'attr' => 'src',
+                ],
+                'type' => [
+                    'xpath' => ".//*[contains(@class, 'typeflag')]",
+                    'attr' => 'class',
+                    'regex' => '/\s(man(?:h[wu]|g)a)/i',
+                ],
+                'color' => [
+                    'xpath' => ".//*[contains(@class, 'warnalabel')]",
                 ],
                 'link' => [
                     'xpath' => ".//a[contains(@href, '/komik/')]",

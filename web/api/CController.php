@@ -34,11 +34,19 @@ class CController
                 $ls_lists = [];
     
                 foreach ($lists as $index) {
+                    $color = $xpath->query($source['LS']['color']['xpath'], $index);
+                    $color = $color->length > 0 ? true : false;
+
                     preg_match($source['LS']['slug']['regex'], $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source['LS']['slug']['attr']), $slug);
+                    preg_match($source['LS']['type']['regex'], $xpath->query($source['LS']['type']['xpath'], $index)[0]->getAttribute($source['LS']['type']['attr']), $type);
+                    
                     array_push($ls_lists, [
                         'title' => trim($xpath->query($source['LS']['title']['xpath'], $index)[0]->textContent),
                         // 'cover' => preg_replace('/\?.*/', '', $xpath->query($source['LS']['cover']['xpath'], $index)[0]->getAttribute($source['LS']['cover']['attr'])), //remove search parameter and push
                         'cover' => $xpath->query($source['LS']['cover']['xpath'], $index)[0]->getAttribute($source['LS']['cover']['attr']),
+                        'type' => $type[1],
+                        'color' => $color,
+                        'date' => trim($xpath->query($source['latest']['date']['xpath'], $index)[0]->textContent),
                         'url' => $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source['LS']['link']['attr']),
                         'slug' => $slug[1],
                     ]);
@@ -109,13 +117,19 @@ class CController
                 $ls_lists = [];
     
                 if ($lists->length > 0) :
-    
                     foreach ($lists as $index) {
+                        $color = $xpath->query($source['LS']['color']['xpath'], $index);
+                        $color = $color->length > 0 ? true : false;
+                        
                         preg_match($source['LS']['slug']['regex'], $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source['LS']['slug']['attr']), $slug);
+                        preg_match($source['LS']['type']['regex'], $xpath->query($source['LS']['type']['xpath'], $index)[0]->getAttribute($source['LS']['type']['attr']), $type);
+
                         array_push($ls_lists, [
                             'title' => trim($xpath->query($source['LS']['title']['xpath'], $index)[0]->textContent),
                             // 'cover' => preg_replace('/\?.*/', '', $xpath->query($source['LS']['cover']['xpath'], $index)[0]->getAttribute($source['LS']['cover']['attr'])), //remove search parameter and push
                             'cover' => $xpath->query($source['LS']['cover']['xpath'], $index)[0]->getAttribute($source['LS']['cover']['attr']),
+                            'type' => $type[1],
+                            'color' => $color,
                             'url' => $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source['LS']['link']['attr']),
                             'slug' => $slug[1],
                         ]);
