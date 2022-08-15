@@ -14,6 +14,7 @@ class xSelector
             'cms' => 'wordpress',
             'theme' => 'eastheme',
             'url' => [
+                'host' => 'https://bacakomik.co',
                 'latest' => 'https://bacakomik.co/komik-terbaru/page/{$page}/',
                 'search' => 'https://bacakomik.co/page/{$page}/?s={$value}',
                 'advanced' => 'https://bacakomik.co/daftar-manga/page/{$page}/{$value}',
@@ -67,6 +68,11 @@ class xSelector
             ],
             'series' => [
                 'parent' => "//article",
+                'shortlink' => [
+                    'xpath' => "//link[@rel='shortlink']",
+                    'attr' => 'href',
+                    'regex' => '/(?:\?p=|wp\.me\/)(.*)/i',
+                ],
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
@@ -94,7 +100,8 @@ class xSelector
                 ],
                 'chapter' => [
                     'xpath' => ".//*[@id='chapter_list']//*[contains(@class, 'lchx')]//a",
-                    'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                    'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                    'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
                 ],
             ],
@@ -102,7 +109,8 @@ class xSelector
                 'parent' => "//article//*[contains(@class, 'chapter-content')]",
                 'title' => [
                     'xpath' => ".//h1",
-                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\sch(?:apter|\.)?.*/i',
+                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\s\d+/i',
+                    'regex2' => '/\sch(?:apter|\.)?/i',
                 ],
                 'cover' => [ //no parent
                     'xpath' => "//*[@id='content']//*[contains(@class, 'infoanime')]//*[contains(@class, 'thumb')]//img",
@@ -110,12 +118,14 @@ class xSelector
                 ],
                 'next' => [
                     'xpath' => ".//*[contains(@class, 'nextprev')]//a[@rel='next']",
-                    'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                    'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                    'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
                 ],
                 'prev' => [
                     'xpath' => ".//*[contains(@class, 'nextprev')]//a[@rel='prev']",
-                    'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                    'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                    'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
                 ],
                 'images' => [
@@ -134,6 +144,7 @@ class xSelector
             'cms' => 'wordpress',
             'theme' => 'eastheme',
             'url' => [
+                'host' => 'https://manhwaindo.org',
                 'latest' => 'https://manhwaindo.org/komik-terbaru/page/{$page}/',
                 'search' => 'https://manhwaindo.org/page/{$page}/?s={$value}',
                 'advanced' => 'https://manhwaindo.org/daftar-komik/page/{$page}/{$value}',
@@ -187,6 +198,11 @@ class xSelector
             ],
             'series' => [
                 'parent' => "//article",
+                'shortlink' => [
+                    'xpath' => "//link[@rel='shortlink']",
+                    'attr' => 'href',
+                    'regex' => '/(?:\?p=|wp\.me\/)(.*)/i',
+                ],
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
@@ -214,7 +230,8 @@ class xSelector
                 ],
                 'chapter' => [
                     'xpath' => ".//*[@id='chapter_list']//*[contains(@class, 'lchx')]//a",
-                    'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                    'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                    'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
                 ],
             ],
@@ -222,7 +239,8 @@ class xSelector
                 'parent' => "//article//*[contains(@class, 'chapter-content')]",
                 'title' => [
                     'xpath' => ".//h1",
-                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\sch(?:apter|\.)?.*/i',
+                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\s\d+/i',
+                    'regex2' => '/\sch(?:apter|\.)?/i',
                 ],
                 'cover' => [ //no parent
                     'xpath' => "//*[@id='content']//*[contains(@class, 'infoanime')]//*[contains(@class, 'thumb')]//img",
@@ -230,12 +248,14 @@ class xSelector
                 ],
                 'next' => [
                     'xpath' => ".//*[contains(@class, 'nextprev')]//a[@rel='next']",
-                    'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                    'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                    'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
                 ],
                 'prev' => [
                     'xpath' => ".//*[contains(@class, 'nextprev')]//a[@rel='prev']",
-                    'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                    'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                    'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
                 ],
                 'images' => [
@@ -254,9 +274,10 @@ class xSelector
             'cms' => 'wordpress',
             'theme' => 'themesia',
             'url' => [
+                'host' => 'https://tukangkomik.com',
                 'latest' => 'https://tukangkomik.com/manga/?page={$page}&order=update',
                 'search' => 'https://tukangkomik.com/page/{$page}/?s={$value}',
-                'advanced' => 'https://tukangkomik.com/manga/page/{$page}/{$value}',
+                'advanced' => 'https://tukangkomik.com/manga/?page={$page}&{$value}',
                 'series' => 'https://tukangkomik.com/manga/{$slug}/',
                 'chapter' => 'https://tukangkomik.com/{$slug}-chapter-{$chapter}/',
             ],
@@ -314,6 +335,11 @@ class xSelector
             ],
             'series' => [
                 'parent' => "//article",
+                'shortlink' => [
+                    'xpath' => "//link[@rel='shortlink']",
+                    'attr' => 'href',
+                    'regex' => '/(?:\?p=|wp\.me\/)(.*)/i',
+                ],
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
@@ -341,7 +367,8 @@ class xSelector
                 ],
                 'chapter' => [
                     'xpath' => ".//*[@id='chapterlist']//*[contains(@class, 'eph-num')]//a",
-                    'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                    'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                    'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
                 ],
             ],
@@ -349,17 +376,20 @@ class xSelector
                 'parent' => "//article",
                 'title' => [
                     'xpath' => ".//h1",
-                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\sch(?:apter|\.)?.*/i',
+                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\s\d+/i',
+                    'regex2' => '/\sch(?:apter|\.)?/i',
                 ],
                 'nav' => [ //no parent
                     'xpath' => "//script[contains(text(), 'ts_reader.run')]",
                     'next' => [
                         'name' => 'nextUrl',
-                        'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                        'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                        'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     ],
                     'prev' => [
                         'name' => 'prevUrl',
-                        'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                        'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                        'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     ],
                 ],
                 'images' => [], //images from ts_reader
@@ -375,9 +405,10 @@ class xSelector
             'cms' => 'wordpress',
             'theme' => 'themesia',
             'url' => [
+                'host' => 'https://mangatale.co',
                 'latest' => 'https://mangatale.co/manga/?page={$page}&order=update',
                 'search' => 'https://mangatale.co/page/{$page}/?s={$value}',
-                'advanced' => 'https://mangatale.co/manga/page/{$page}/{$value}',
+                'advanced' => 'https://mangatale.co/manga/?page={$page}&{$value}',
                 'series' => 'https://mangatale.co/manga/{$slug}/',
                 'chapter' => 'https://mangatale.co/{$slug}-chapter-{$chapter}/',
             ],
@@ -435,6 +466,11 @@ class xSelector
             ],
             'series' => [
                 'parent' => "//article",
+                'shortlink' => [
+                    'xpath' => "//link[@rel='shortlink']",
+                    'attr' => 'href',
+                    'regex' => '/(?:\?p=|wp\.me\/)(.*)/i',
+                ],
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
@@ -462,7 +498,8 @@ class xSelector
                 ],
                 'chapter' => [
                     'xpath' => ".//*[@id='chapterlist']//*[contains(@class, 'eph-num')]//a",
-                    'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                    'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                    'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
                 ],
             ],
@@ -470,17 +507,20 @@ class xSelector
                 'parent' => "//article",
                 'title' => [
                     'xpath' => ".//h1",
-                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\sch(?:apter|\.)?.*/i',
+                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\s\d+/i',
+                    'regex2' => '/\sch(?:apter|\.)?/i',
                 ],
                 'nav' => [ //no parent
                     'xpath' => "//script[contains(text(), 'ts_reader.run')]",
                     'next' => [
                         'name' => 'nextUrl',
-                        'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                        'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                        'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     ],
                     'prev' => [
                         'name' => 'prevUrl',
-                        'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                        'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                        'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     ],
                 ],
                 'images' => [], //images from ts_reader
@@ -496,9 +536,10 @@ class xSelector
             'cms' => 'wordpress',
             'theme' => 'themesia',
             'url' => [
+                'host' => 'https://komiklab.com',
                 'latest' => 'https://komiklab.com/manga/?page={$page}&order=update',
                 'search' => 'https://komiklab.com/page/{$page}/?s={$value}',
-                'advanced' => 'https://komiklab.com/manga/page/{$page}/{$value}',
+                'advanced' => 'https://komiklab.com/manga/?page={$page}&{$value}',
                 'series' => 'https://komiklab.com/manga/{$slug}/',
                 'chapter' => 'https://komiklab.com/{$slug}-chapter-{$chapter}/',
             ],
@@ -556,6 +597,11 @@ class xSelector
             ],
             'series' => [
                 'parent' => "//article",
+                'shortlink' => [
+                    'xpath' => "//link[@rel='shortlink']",
+                    'attr' => 'href',
+                    'regex' => '/(?:\?p=|wp\.me\/)(.*)/i',
+                ],
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
@@ -584,7 +630,8 @@ class xSelector
                 ],
                 'chapter' => [
                     'xpath' => ".//*[@id='chapterlist']//*[contains(@class, 'eph-num')]//a",
-                    'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                    'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                    'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
                 ],
             ],
@@ -592,17 +639,20 @@ class xSelector
                 'parent' => "//article",
                 'title' => [
                     'xpath' => ".//h1",
-                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\sch(?:apter|\.)?.*/i',
+                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\s\d+/i',
+                    'regex2' => '/\sch(?:apter|\.)?/i',
                 ],
                 'nav' => [ //no parent
                     'xpath' => "//script[contains(text(), 'ts_reader.run')]",
                     'next' => [
                         'name' => 'nextUrl',
-                        'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                        'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                        'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     ],
                     'prev' => [
                         'name' => 'prevUrl',
-                        'regex' => '/.*chapter-(.*)(?:-bahasa-indonesia\/?|\/)/i',
+                        'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
+                        'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     ],
                 ],
                 'images' => [], //images from ts_reader

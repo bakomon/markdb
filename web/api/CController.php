@@ -120,15 +120,16 @@ class CController
             $page = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : '1';
             $data = [];
             
-            $params = isset($_GET['params']) ? 'params' : 'query';
-            $value = isset($_GET[$params]) && (!empty($_GET[$params]) || $_GET[$params] === '0') ?  $_GET[$params] : null;
+            $querams = isset($_GET['params']) ? 'params' : 'query';
+            $value = isset($_GET[$querams]) && (!empty($_GET[$querams]) || $_GET[$querams] === '0') ?  $_GET[$querams] : null;
     
             if ($value || $value === '0') :
-                $search = ['{$page}', '{$value}'];
-                $replace = [$page, urldecode($value)];
-                $full_url = isset($_GET['params']) ? $source['url']['advanced'] : $source['url']['search'];
                 $is_advanced = isset($_GET['params']) ? true : false;
-                $source_link = str_replace($search, $replace, $full_url);
+                $qs = $is_advanced && $source['theme'] == 'eastheme' ? '?' : '';
+                $search = ['{$page}', '{$value}'];
+                $replace = [$page, urldecode($qs . $value)];
+                $full_url = $is_advanced ? 'advanced' : 'search';
+                $source_link = str_replace($search, $replace, $source['url'][$full_url]);
                 $source_xml = Http::get($source_link);
     
                 if (!$source_xml->isSuccess()) {
@@ -206,9 +207,6 @@ class CController
                 $data = [
                     'status' => 'BAD_REQUEST',
                     'status_code' => 400,
-                    'next' => '',
-                    'prev' => '',
-                    'lists' => [],
                 ];
             endif;
     
@@ -238,8 +236,14 @@ class CController
                 }
     
                 $xpath = new DOMXpath($source_xml->responseParse());
+
+                $slink = $xpath->query($source['series']['shortlink']['xpath']);
+                if ($slink->length > 0) :
+                    preg_match($source['series']['shortlink']['regex'], $slink[0]->getAttribute($source['series']['shortlink']['attr']), $shortlink);
+                    $slink = $shortlink[1];
+                endif;
+
                 $article = $xpath->query($source['series']['parent']); //parent
-    
                 if ($article->length > 0) :
                     $article = $article[0];
                     
@@ -286,8 +290,20 @@ class CController
     
                     if ($chapters->length > 0) :
                         foreach ($chapters as $index) {
-                            $length = preg_match($source['series']['chapter']['regex'], $index->getAttribute($source['series']['chapter']['attr']), $chapter);
-                            array_push($ch_lists, $length > 0 ? $chapter[1] : '');
+                            $ch_url = $index->getAttribute($source['series']['chapter']['attr']);
+                            $sr_slug = $slink ? preg_replace('/^' . $slink . '\-/i', '', $slug) : $slug; //remove shortlink
+                            $ch_str = preg_replace('/' . $sr_slug . '/i', '', $ch_url);
+                            $ch_str = preg_replace($source['series']['chapter']['regex2'], '', $ch_str);
+                            $ch_check = preg_match($source['series']['chapter']['regex'], $ch_str, $chapter);
+                            if ($ch_check) :
+                                $ch_data = [
+                                    'number' => $chapter[1],
+                                    'url' => parse_url($ch_url, PHP_URL_PATH),
+                                ];
+                            else :
+                                $ch_data = [];
+                            endif;
+                            array_push($ch_lists, $ch_data);
                         }
                     endif;
     
@@ -310,11 +326,6 @@ class CController
                 $data = [
                     'status' => 'BAD_REQUEST',
                     'status_code' => 400,
-                    'title' => '',
-                    'slug' => '',
-                    'cover' => '',
-                    'desc' => '',
-                    'chapter' => [],
                 ];
             endif;
     
@@ -334,12 +345,13 @@ class CController
     
             $slug = isset($_GET['slug']) && !empty($_GET['slug']) ? $_GET['slug'] : null;
             $chapter = isset($_GET['chapter']) && (!empty($_GET['chapter']) || $_GET['chapter'] === '0') ? $_GET['chapter'] : null;
+            $url = isset($_GET['url']) && !empty($_GET['url']) ? $_GET['url'] : null;
             $data = [];
     
-            if ($chapter || $chapter === '0') :
+            if ($url || ($chapter || $chapter === '0')) :
                 $search = ['{$slug}', '{$chapter}'];
                 $replace = [$slug, $chapter];
-                $source_link = str_replace($search, $replace, $source['url']['chapter']);
+                $source_link = $url ? $source['url']['host'] . $url : str_replace($search, $replace, $source['url']['chapter']);
                 $source_xml = Http::get($source_link);
     
                 if (!$source_xml->isSuccess()) {
@@ -354,6 +366,7 @@ class CController
                     $img_lists = [];
     
                     preg_match($source['chapter']['title']['regex'], $xpath->query($source['chapter']['title']['xpath'])[0]->textContent, $title);
+                    $title = preg_replace($source['chapter']['title']['regex2'], '', $title);
     
                     if ($source['theme'] == 'themesia') :
                         $cover = '';
@@ -365,18 +378,28 @@ class CController
 
                             $next_url = $ch_data[$source['chapter']['nav']['next']['name']];
                             if ($next_url != '') :
-                                preg_match($source['chapter']['nav']['next']['regex'], $next_url, $next);
-                                $next = $next[1];
+                                $next_str = preg_replace('/' . $slug . '/i', '', $next_url);
+                                $next_str = preg_replace($source['chapter']['nav']['next']['regex2'], '', $next_str);
+                                preg_match($source['chapter']['nav']['next']['regex'], $next_str, $next);
+                                $next = [
+                                    'number' => $next[1],
+                                    'url' => parse_url($next_url, PHP_URL_PATH),
+                                ];
                             else :
-                                $next = '';
+                                $next = json_decode('{}');
                             endif;
 
                             $prev_url = $ch_data[$source['chapter']['nav']['prev']['name']];
                             if ($prev_url != '') :
-                                preg_match($source['chapter']['nav']['next']['regex'], $prev_url, $prev);
-                                $prev = $prev[1];
+                                $prev_str = preg_replace('/' . $slug . '/i', '', $prev_url);
+                                $prev_str = preg_replace($source['chapter']['nav']['prev']['regex2'], '', $prev_str);
+                                preg_match($source['chapter']['nav']['prev']['regex'], $prev_str, $prev);
+                                $prev = [
+                                    'number' => $prev[1],
+                                    'url' => parse_url($prev_url, PHP_URL_PATH),
+                                ];
                             else :
-                                $prev = '';
+                                $prev = json_decode('{}');
                             endif;
         
                             $images = $ch_data['sources'][0]['images']; //"sources" & "images" from ts_reader
@@ -397,18 +420,30 @@ class CController
 
                         $next_btn = $xpath->query($source['chapter']['next']['xpath'], $content);
                         if ($next_btn->length > 0) :
-                            preg_match($source['chapter']['next']['regex'], $next_btn[0]->getAttribute($source['chapter']['next']['attr']), $next);
-                            $next = $next[1];
+                            $next_url = $next_btn[0]->getAttribute($source['chapter']['next']['attr']);
+                            $next_str = preg_replace('/' . $slug . '/i', '', $next_url);
+                            $next_str = preg_replace($source['chapter']['next']['regex2'], '', $next_str);
+                            preg_match($source['chapter']['next']['regex'], $next_str, $next);
+                            $next = [
+                                'number' => $next[1],
+                                'url' => parse_url($next_url, PHP_URL_PATH),
+                            ];
                         else :
-                            $next = '';
+                            $next = json_decode('{}');
                         endif;
 
                         $prev_btn = $xpath->query($source['chapter']['prev']['xpath'], $content);
                         if ($prev_btn->length > 0) :
-                            preg_match($source['chapter']['prev']['regex'], $prev_btn[0]->getAttribute($source['chapter']['prev']['attr']), $prev);
-                            $prev = $prev[1];
+                            $prev_url = $prev_btn[0]->getAttribute($source['chapter']['prev']['attr']);
+                            $prev_str = preg_replace('/' . $slug . '/i', '', $prev_url);
+                            $prev_str = preg_replace($source['chapter']['prev']['regex2'], '', $prev_str);
+                            preg_match($source['chapter']['prev']['regex'], $prev_str, $prev);
+                            $prev = [
+                                'number' => $prev[1],
+                                'url' => parse_url($prev_url, PHP_URL_PATH),
+                            ];
                         else :
-                            $prev = '';
+                            $prev = json_decode('{}');
                         endif;
     
                         $images = $xpath->query($source['chapter']['images']['xpath'], $content);
@@ -439,13 +474,6 @@ class CController
                 $data = [
                     'status' => 'BAD_REQUEST',
                     'status_code' => 400,
-                    'title' => '',
-                    'slug' => '',
-                    'cover' => '',
-                    'current' => '',
-                    'next' => '',
-                    'prev' => '',
-                    'images' => [],
                 ];
             endif;
     

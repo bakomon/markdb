@@ -431,7 +431,7 @@ function lazyLoad(elem, note) {
 
 // Element selector meta tags
 function bmf_emc(m, c) {
-  el('meta[' + m + ']').setAttribute('content', c);
+  el('meta['+ m +']').setAttribute('content', c);
 }
 
 function bmf_meta_tags(note, data) {
@@ -450,7 +450,7 @@ function bmf_meta_tags(note, data) {
   }
 
   if (bmv_current == 'chapter') {
-    if (fbase_user && fbase_user.tier == 'pro') mt_title = `(${data.current.replace(/(-bahasa)?-indo(nesia)?/, '')}) `+ mt_title;
+    if (fbase_user && fbase_user.tier == 'pro') mt_title = `(${data.current.replace(/-((bahasa-)?indo(nesia)?|full)/, '')}) `+ mt_title;
     d_desc = mt_desc = 'Baca download komik '+ data.title +' volume batch bahasa indonesia pdf rar zip terlengkap.';
     d_key = d_key + ', '+ data.title +' Chapter '+ data.current;
   }
@@ -1117,6 +1117,7 @@ function bmf_member_settings_fnc() {
     el('.st-ch-menu input').checked = bmv_dt_settings.ch_menu;
     el('.st-ch-index input').checked = bmv_dt_settings.ch_index;
     el('.st-src-link input').checked = bmv_dt_settings.src_link;
+    el('.st-cm-load input').checked = bmv_dt_settings.cm_load;
 
     el('.st-ch-menu input').addEventListener('input', function() {
       var menu_chk = this.checked;
@@ -1145,6 +1146,7 @@ function bmf_member_settings_fnc() {
   });
 
   el('.st-history input').checked = bmv_dt_settings.hs_stop;
+  el('.st-ch-link input').checked = bmv_dt_settings.ch_url;
 
   
   el('.st-theme input', 'all').forEach(function(item) {
@@ -1174,10 +1176,12 @@ function bmf_member_settings_fnc() {
       bmv_dt_settings['ch_index'] = el('.st-ch-index input').checked;
       bmv_dt_settings['cdn'] = el('.st-cdn input:checked').value;
       bmv_dt_settings['src_link'] = el('.st-src-link input').checked;
+      bmv_dt_settings['cm_load'] = el('.st-cm-load input').checked;
     }
 
     bmv_dt_settings['theme'] = el('.st-theme input:checked').value;
     bmv_dt_settings['hs_stop'] = el('.st-history input').checked;
+    bmv_dt_settings['ch_url'] = el('.st-ch-link input').checked;
 
     var link_list = [];
     el('.st-link input:checked', 'all').forEach(function(item) {
@@ -1196,17 +1200,22 @@ function bmf_member_settings_fnc() {
         } else{
           local('set', 'bmv_theme', bmv_dt_settings.theme);
         }
+        var local_time = new Date().getTime();
+        bmv_dt_settings['update'] = local_time;
         local('set', 'bmv_user_settings', JSON.stringify(bmv_dt_settings));
         bmv_dt_settings = bmf_update_settings('update', bmv_dt_settings);
-        window.onbeforeunload = null;
+        bmf_fbase_db_change('settings|check', bmf_fbase_path('check/settings'), 'set', {update: local_time});
         bmf_member_notif('success/settings', {timer: 2000, message: 'Pengaturan telah disimpan.'});
+        window.onbeforeunload = null;
         document.body.scrollIntoView();
+        el('.st-save button').classList.remove('pulse');
       }
     });
   });
 
   el('.st-control input', 'all').forEach(function(item) {
     item.addEventListener('change', function(e) {
+      el('.st-save button').classList.add('pulse');
       window.onbeforeunload = function() { return 'Pengaturan belum disimpan, apakah kamu yakin ingin keluar?'; }
     });
   });
@@ -1216,7 +1225,7 @@ function bmf_member_settings_html() {
   // Display "settings" html
   var str_settings = '';
   if (fbase_user && fbase_user.tier == 'pro') {
-    str_settings += '<div class="st-pro">';
+    str_settings += '<div class="st-pro bg2 layer radius">';
     str_settings += '<div class="st-source st-list">';
     str_settings += '<h2>Sumber Komik</h2>';
     str_settings += '<label class="radio"><input type="radio" name="st-source" value="bacakomik"><span></span>bacakomik.co</label>';
@@ -1227,13 +1236,13 @@ function bmf_member_settings_html() {
     str_settings += '</div>'; //.st-source
     str_settings += '<div class="st-series st-list">';
     str_settings += '<h2>Advanced Series</h2>';
-    str_settings += '<label class="checkbox st-sr-copy"><input type="checkbox"><span></span>Show sr_copy</label>';
-    str_settings += '<label class="checkbox st-sr-list"><input type="checkbox"><span></span>Show sr_list (mobile)</label>';
+    str_settings += '<label class="checkbox st-sr-copy"><input type="checkbox"><span></span>Show <code>sr_copy</code></label>';
+    str_settings += '<label class="checkbox st-sr-list"><input type="checkbox"><span></span>Show <code>sr_list</code> (mobile)</label>';
     str_settings += '</div>'; //.st-series
     str_settings += '<div class="st-chapters st-list">';
     str_settings += '<h2>Advanced Chapter</h2>';
-    str_settings += '<label class="checkbox st-ch-menu"><input type="checkbox"><span></span>Show ch_menu</label>';
-    str_settings += '<label class="checkbox st-ch-index"><input type="checkbox"><span></span>Show ch_index</label>';
+    str_settings += '<label class="checkbox st-ch-menu"><input type="checkbox"><span></span>Show <code>ch_menu</code></label>';
+    str_settings += '<label class="checkbox st-ch-index"><input type="checkbox"><span></span>Show <code>ch_index</code></label>';
     str_settings += '</div>'; //.st-chapters
     str_settings += '<div class="st-cdn st-list">';
     str_settings += '<h2>CDN for chapter</h2>';
@@ -1244,8 +1253,12 @@ function bmf_member_settings_html() {
     str_settings += '</div>'; //.st-cdn
     str_settings += '<div class="st-src-link st-list">';
     str_settings += '<h2>Source Link</h2>';
-    str_settings += '<label class="checkbox st-ch-index"><input type="checkbox"><span></span>Show src_link</label>';
+    str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Show <code>src_link</code></label>';
     str_settings += '</div>'; //.st-src-link
+    str_settings += '<div class="st-comments st-list">';
+    str_settings += '<h2>Comments</h2>';
+    str_settings += '<label class="checkbox st-cm-load"><input type="checkbox"><span></span>Comments Auto Load (chapter)</label>';
+    str_settings += '</div>'; //.st-comments
     str_settings += '</div>'; //.st-pro
   }
   str_settings += '<div class="st-theme st-list">';
@@ -1269,7 +1282,10 @@ function bmf_member_settings_html() {
   str_settings += '<h2>Histori Bacaan</h2>';
   str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Berhenti merekam histori bacaan</label>';
   str_settings += '</div>'; //.st-history
-  str_settings += '<div class="st-save t_right"><button class="btn">Simpan</button></div>';
+  str_settings += '<div class="st-ch-link st-list">';
+  str_settings += '<h2>Chapter URL (series)</h2>';
+  str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Gunakan <code>url</code> pada Series di <code>chapter-list</code></label>';
+  str_settings += '</div>'; //.st-ch-link
   el('.st-control').innerHTML = str_settings;
 
   bmf_fbase_db_get('member/settings', bmf_fbase_path('settings'), function(res) {
@@ -1413,7 +1429,8 @@ function bmf_build_member() {
   str_member += '<h1 class="title">Member: '+ firstUCase(bmv_prm_slug) +' <span></span></h1>';
   if (fbase_login) {
     // str_member += '<span class="m-logout btn t_center" title="Logout"><svg width="18" height="18" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M400 54.1c63 45 104 118.6 104 201.9 0 136.8-110.8 247.7-247.5 248C120 504.3 8.2 393 8 256.4 7.9 173.1 48.9 99.3 111.8 54.2c11.7-8.3 28-4.8 35 7.7L162.6 90c5.9 10.5 3.1 23.8-6.6 31-41.5 30.8-68 79.6-68 134.9-.1 92.3 74.5 168.1 168 168.1 91.6 0 168.6-74.2 168-169.1-.3-51.8-24.7-101.8-68.1-134-9.7-7.2-12.4-20.5-6.5-30.9l15.8-28.1c7-12.4 23.2-16.1 34.8-7.8zM296 264V24c0-13.3-10.7-24-24-24h-32c-13.3 0-24 10.7-24 24v240c0 13.3 10.7 24 24 24h32c13.3 0 24-10.7 24-24z"></path></svg></span>';
-    str_member += '<span class="m-delete btn red no_items" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="0.94em" height="1.2em" viewBox="0 0 1408 1536"><path fill="currentColor" d="M512 608v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm256 0v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm256 0v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm128 724V384H256v948q0 22 7 40.5t14.5 27t10.5 8.5h832q3 0 10.5-8.5t14.5-27t7-40.5zM480 256h448l-48-117q-7-9-17-11H546q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5H288q-66 0-113-58.5T128 1336V384H32q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"/></svg></span>';
+    if (bmv_prm_slug == 'bookmark' || bmv_prm_slug == 'history') str_member += '<span class="m-delete btn red no_items" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="0.94em" height="1.2em" viewBox="0 0 1408 1536"><path fill="currentColor" d="M512 608v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm256 0v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm256 0v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm128 724V384H256v948q0 22 7 40.5t14.5 27t10.5 8.5h832q3 0 10.5-8.5t14.5-27t7-40.5zM480 256h448l-48-117q-7-9-17-11H546q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5H288q-66 0-113-58.5T128 1336V384H32q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"/></svg></span>';
+    if (bmv_prm_slug == 'settings') str_member += '<div class="st-save"><span class="st-content"><button class="btn">Simpan</button></span></div>';
   }
   str_member += '</div>'; //.post-header
   str_member += '<div class="content '+ (fbase_login ? 'login' : 'not-login bg2 layer radius') +'">';
@@ -1553,7 +1570,6 @@ function bmf_build_member() {
   }
   str_member += '</div>'; //.content
   bmv_el_post.innerHTML = str_member;
-  el('.post-content').classList.add('full_page');
   if (!fbase_login) el('.main').style.maxWidth = '500px';
 
   bmf_member_fnc();
@@ -1645,16 +1661,20 @@ function bmf_menu_chapter_cdn(elem) {
 }
 
 function bmf_menu_fnc(img_list) {
-  if (bmv_dt_chapter.prev != '') {
-    el('.cm_prev button').dataset.href = '#/chapter/'+ bmv_dt_chapter.slug +'/'+ bmv_dt_chapter.prev;
+  if (el('.cm_prev button')) {
     el('.cm_prev').classList.remove('no_items');
     if (is_mobile) el('.cm_prev2').classList.remove('no_items');
+    el('.cm_prev button').onclick = function() {
+      wl.href = this.dataset.href;
+    };
   }
 
-  if (bmv_dt_chapter.next != '') {
-    el('.cm_next button').dataset.href = '#/chapter/'+ bmv_dt_chapter.slug +'/'+ bmv_dt_chapter.next;
+  if (el('.cm_next button')) {
     el('.cm_next').classList.remove('no_items');
     if (is_mobile) el('.cm_next2').classList.remove('no_items');
+    el('.cm_next button').onclick = function() {
+      wl.href = this.dataset.href;
+    };
   }
 
   el('.cm_toggle').onclick = function() {
@@ -1662,10 +1682,12 @@ function bmf_menu_fnc(img_list) {
     el('.ch_menu').classList.toggle('cm_shide');
     if (is_mobile) {
       el('.cm_bg').classList.toggle('no_items');
-      el('.cm_next button').classList.toggle('no_hover');
       el('.cm_pause2').classList.toggle('no_items');
-      if (el('.cm_prev button').dataset.href) el('.cm_prev2').classList.toggle('no_items');
-      if (el('.cm_next button').dataset.href) el('.cm_next2').classList.toggle('no_items');
+      if (el('.cm_prev button')) el('.cm_prev2').classList.toggle('no_items');
+      if (el('.cm_next button')) {
+        el('.cm_next button').classList.toggle('no_hover');
+        el('.cm_next2').classList.toggle('no_items');
+      }
     }
     el('.cm_tr2 .cm_td1').classList.toggle('no_items');
   };
@@ -1812,10 +1834,12 @@ function bmf_chapter_menu() {
   str_menu += '<button class="cdn_not cm_cdn cm_btn btn">not</button>';
   if (bmv_chk_gi) str_menu += '<div class="cm_size cm_btn btn">'+ bmv_str_gi +'</div>';
   str_menu += '</div>'; //.cm_others
-  str_menu += '<div class="cm_nav cm_line w_100 flex'+ (bmv_dt_chapter.prev != '' || bmv_dt_chapter.next != '' ? '' : ' no_items') +'">';
-  str_menu += '<div class="cm_prev no_items"><button class="cm_btn btn" title="arrow left &#x25C0;" onclick="window.location.href=this.dataset.href">&#9666; Prev</button></div>';
-  str_menu += '<div class="cm_next no_items"><button class="cm_btn btn'+ (is_mobile ? ' no_hover' : '') +'" title="arrow right &#x25B6;" onclick="window.location.href=this.dataset.href">Next &#9656;</button></div>';
-  str_menu += '</div>'; //.cm_nav
+  if (el('.ch-nav .prev') || el('.ch-nav .next')) {
+    str_menu += '<div class="cm_nav cm_line w_100 flex">';
+    if (el('.ch-nav .prev')) str_menu += '<div class="cm_prev no_items"><button class="cm_btn btn" title="arrow left &#x25C0;" data-href="'+ el('.ch-nav .prev').href +'">&#9666; Prev</button></div>';
+    if (el('.ch-nav .next')) str_menu += '<div class="cm_next no_items"><button class="cm_btn btn'+ (is_mobile ? ' no_hover' : '') +'" title="arrow right &#x25B6;" data-href="'+ el('.ch-nav .next').href +'">Next &#9656;</button></div>';
+    str_menu += '</div>'; //.cm_nav
+  }
   str_menu += '<div class="cm_home cm_line w_100"><a class="cm_btn btn" href="./">Homepage</a></div>';
   str_menu += '<div class="cm_load cm_line flex_wrap">';
   str_menu += '<div class="flex">';
@@ -1879,47 +1903,31 @@ function bmf_chapter_middle() {
 
 function bmf_chapter_nav(note, data) {
   var json = JSON.parse(data);
+  bmv_dt_series = json;
   if (json.status_code == 200) {
     // Chapter navigation
     bmf_chapter_zoom(json.slug, json.detail.type);
     bmv_el_post.setAttribute('data-type', json.detail.type);
-    var np_newtab = bmv_dt_settings.link.indexOf(`${bmv_current}-np`) != -1;
 
     var lists = json.chapter; //JSON data
     var str_ch_nav = '';
-    str_ch_nav += '<select class="ch-number" name="index">';
+    str_ch_nav += '<select name="index">';
     for (var i = 0; i < lists.length; i++) {
-      str_ch_nav += '<option value="' + lists[i] + '"';
-      if (lists[i] == bmv_dt_chapter.current) { str_ch_nav += ' selected="selected"'; }
-      str_ch_nav += '>Chapter ' + lists[i].replace(/(-bahasa)?-indo(nesia)?/, '') + '</option>';
+      str_ch_nav += '<option value="'+ lists[i].number +'"';
+      if (lists[i].number == bmv_dt_chapter.current) { str_ch_nav += ' selected="selected"'; }
+      str_ch_nav += '>Chapter '+ lists[i].number.replace(/-((bahasa-)?indo(nesia)?|full)/, '') +'</option>';
     }
     str_ch_nav += '</select>';
-    str_ch_nav += '<span class="f_grow"></span>';
-    if (bmv_dt_chapter.prev != '') {
-      str_ch_nav += '<a class="prev ctrl btn radius" href="'+ '#/chapter/'+ bmv_dt_chapter.slug +'/'+ bmv_dt_chapter.prev;
-      if (np_newtab) str_ch_nav += '" target="_blank';
-      str_ch_nav += '">&#x25C0;&#160;&#160;'+ bmv_settings.l10n.prev +'</a>';
-    }
-    if (bmv_dt_chapter.next != '') {
-      str_ch_nav += '<a class="next ctrl btn radius" href="'+ '#/chapter/'+ bmv_dt_chapter.slug +'/'+ bmv_dt_chapter.next;
-      if (np_newtab) str_ch_nav += '" target="_blank';
-      str_ch_nav += '">'+ bmv_settings.l10n.next +'&#160;&#160;&#x25B6;</a>';
-    }
   
-    // Display chapter navigation 
-    el('.chapter .ch-nav', 'all')[0].innerHTML = str_ch_nav;
-    el('.chapter .ch-nav', 'all')[1].innerHTML = str_ch_nav;
-    
-    // if (bmv_settings.direction && !cookies.get(bmv_zoom_id)) bmf_chapter_direction(); //rtl or ltr
-    
-    // Left and right keyboard navigation
-    document.addEventListener('keyup', bmf_chapter_key);
-  
+    // Display chapter navigation
+    el('.ch-nav .ch-number', 'all')[0].innerHTML = str_ch_nav;
+    el('.ch-nav .ch-number', 'all')[1].innerHTML = str_ch_nav;
+
     // Select option navigation
     el('.chapter select', 'all').forEach(item => {
       item.addEventListener('change', function() {
         var num = this.selectedIndex;
-        wl.hash = '#/chapter/'+ json.slug +'/'+ this.options[num].value;
+        wl.hash = '#/chapter/'+ bmf_series_chapter_link('nav/select', this.options[num].value);
       });
     });
   }
@@ -1955,6 +1963,31 @@ function bmf_chapter_fnc() {
       bmf_fbase_db_change('chapter/history/set', c_path, 'update', ch_data); //use "update" to keep "other data" from being deleted
     });
   }
+    
+  // if (bmv_settings.direction && !cookies.get(bmv_zoom_id)) bmf_chapter_direction(); //rtl or ltr
+  
+  // Left and right keyboard navigation
+  document.addEventListener('keyup', bmf_chapter_key);
+}
+
+function bmf_build_chapter_nav(data) {
+  var np_newtab = bmv_dt_settings.link.indexOf(`${bmv_current}-np`) != -1;
+  var str_ch_nav = '';
+
+  str_ch_nav += '<span class="ch-number">Loading..</span>';
+  str_ch_nav += '<span class="f_grow"></span>';
+  if ('number' in bmv_dt_chapter.prev) {
+    str_ch_nav += '<a class="prev ctrl btn radius" href="'+ '#/chapter/'+ bmf_series_chapter_link('nav/prev', bmv_dt_chapter.prev, bmv_dt_chapter.slug);
+    if (np_newtab) str_ch_nav += '" target="_blank';
+    str_ch_nav += '">&#x25C0;&#160;&#160;'+ bmv_settings.l10n.prev +'</a>';
+  }
+  if ('number' in bmv_dt_chapter.next) {
+    str_ch_nav += '<a class="next ctrl btn radius" href="'+ '#/chapter/'+ bmf_series_chapter_link('nav/next', bmv_dt_chapter.next, bmv_dt_chapter.slug);
+    if (np_newtab) str_ch_nav += '" target="_blank';
+    str_ch_nav += '">'+ bmv_settings.l10n.next +'&#160;&#160;&#x25B6;</a>';
+  }
+
+  return str_ch_nav;
 }
 
 function bmf_build_chapter(data) {
@@ -1962,7 +1995,7 @@ function bmf_build_chapter(data) {
   bmv_dt_chapter = Object.assign({}, data);
   bmv_zoom_id = data.slug;
   var images = data.images;
-  var ch_current = data.current.replace(/(-bahasa)?-indo(nesia)?/, '');
+  var ch_current = data.current.replace(/-((bahasa-)?indo(nesia)?|full)/, '');
   var ch_title = data.title +' Chapter '+ ch_current;
   var bc_newtab = bmv_dt_settings.link.indexOf(`${bmv_current}-bc`) != -1;
   var img_newtab = bmv_dt_settings.link.indexOf(`${bmv_current}-img`) != -1;
@@ -1976,7 +2009,7 @@ function bmf_build_chapter(data) {
   str_chapter += '">Series</a> &#62; <a href="#/series/'+ data.slug +'" title="'+ data.title;
   if (bc_newtab) str_chapter += '" target="_blank';
   str_chapter += '"><span class="bc-title'+ (is_mobile ? '' : ' nowrap') +'">'+ data.title +'</span></a> &#62; Chapter '+ ch_current +'</div></div>';
-  str_chapter += '<div class="ch-nav flex layer"><span class="f_grow t_center" style="height:34px;">Loading..</span></div>';
+  str_chapter += '<div class="ch-nav flex layer">'+ bmf_build_chapter_nav(bmv_dt_chapter) +'</div>';
   str_chapter += '<div id="reader" class="max_chapter flex_wrap';
   if (images.length > 0) {
     str_chapter += '">';
@@ -2013,10 +2046,9 @@ function bmf_build_chapter(data) {
     str_chapter += ' f_middle f_center" style="height:50vh;">Tidak ada Chapter';
   }
   str_chapter += '</div>';
-  str_chapter += '<div class="ch-nav flex layer"><span class="f_grow t_center" style="height:34px;">Loading..</span></div>';
+  str_chapter += '<div class="ch-nav flex layer">'+ bmf_build_chapter_nav(bmv_dt_chapter) +'</div>';
   str_chapter += '<div id="disqus_thread"><div class="full t_center"><button class="disqus-trigger btn selected">'+ bmv_settings.l10n.comment_btn +'</button></div></div>';
   str_chapter += '<div class="_reader" style="position: relative;"></div>';
-  el('.post-content').classList.add('full_page');
   bmv_el_post.innerHTML = str_chapter;
 
   bmf_chapter_fnc();
@@ -2030,6 +2062,21 @@ function bmf_build_chapter(data) {
 
 // #===========================================================================================#
 
+function bmf_series_chapter_number(check) {
+  var ch_arr = bmv_dt_series.chapter;
+  for (var i = 0; i < ch_arr.length; i++) {
+    if (ch_arr[i].number == check) return ch_arr[i];
+  }
+  return false;
+}
+
+function bmf_series_chapter_link(note, data, slug) {
+  data = note.search(/visited|\/select/i) != -1 ? bmf_series_chapter_number(data) : data;
+  var ch_link = (slug || bmv_dt_series.slug) + '/' + data.number;
+  if (bmv_dt_settings.ch_url) ch_link += '/'+ encodeURIComponent('url='+ data.url);
+  return ch_link;
+}
+
 function bmf_series_chapter_list(note, data) {
   // Display chapter list
   var s_newtab = bmv_dt_settings.link.indexOf(bmv_current) != -1;
@@ -2039,9 +2086,10 @@ function bmf_series_chapter_list(note, data) {
     if (note == 'visited') str_lists += '<div class="ch-title">'+ bmv_settings.l10n.series_visited +'</div>';
     str_lists += '<ul class="flex_wrap">';
     for (var i in data) {
-      str_lists += '<li><a class="full radius" href="#/chapter/'+ bmv_prm_slug + '/' + data[i];
+      str_lists += '<li><a class="full radius" href="#/chapter/'+ bmf_series_chapter_link(note, data[i]);
       if (s_newtab) str_lists += '" target="_blank';
-      str_lists += '">Chapter '+ data[i].replace(/(-bahasa)?-indo(nesia)?/, '') +'</a></li>';
+      var ch_number = note == 'chapter' ? data[i].number : data[i];
+      str_lists += '">Chapter '+ ch_number.replace(/-((bahasa-)?indo(nesia)?|full)/, '') +'</a></li>';
     }
     str_lists += '</ul>';
   } else {
@@ -2085,7 +2133,8 @@ function bmf_series_fnc() {
           var hs_list = [];
           for (var i in hs_data) {
             hs_list.push(hs_data[i].number);
-            var ch_visited = el(`.chapter-list a[href$="/${hs_data[i].number}"]`);
+            var ch_number = bmv_dt_settings.ch_url ? `*="/${hs_data[i].number}/` : `$="/${hs_data[i].number}`;
+            var ch_visited = el(`.chapter-list a[href${ch_number}"]`);
             if (ch_visited) ch_visited.classList.add('visited');
           }
           
@@ -2195,12 +2244,12 @@ function bmf_build_series(data) {
   str_series += '<div class="visited-list"></div>';
   if (data.chapter.length > 1) {
     str_series += '<div class="last-end flex f_between">';
-    str_series += '<a class="btn t_center radius" href="#/chapter/'+ data.slug + '/' + data.chapter[data.chapter.length-1];
+    str_series += '<a class="btn t_center radius" href="#/chapter/'+ bmf_series_chapter_link('ch_first', data.chapter[data.chapter.length-1]);
     if (s_newtab) str_series += '" target="_blank';
-    str_series += '"><div>'+ bmv_settings.l10n.series_first +'</div><div class="char">Chapter '+ data.chapter[data.chapter.length-1].replace(/-[a-zA-Z\-]+/, '') +'</div></a>';
-    str_series += '<a class="btn t_center radius" href="#/chapter/'+ data.slug + '/' + data.chapter[0];
+    str_series += '"><div>'+ bmv_settings.l10n.series_first +'</div><div class="char">Chapter '+ data.chapter[data.chapter.length-1].number.replace(/-[a-zA-Z\-]+/, '') +'</div></a>';
+    str_series += '<a class="btn t_center radius" href="#/chapter/'+ bmf_series_chapter_link('ch_last', data.chapter[0]);
     if (s_newtab) str_series += '" target="_blank';
-    str_series += '"><div>'+ bmv_settings.l10n.series_last +'</div><div class="char">Chapter '+ data.chapter[0].replace(/-[a-zA-Z\-]+/, '') +'</div></a>';
+    str_series += '"><div>'+ bmv_settings.l10n.series_last +'</div><div class="char">Chapter '+ data.chapter[0].number.replace(/-[a-zA-Z\-]+/, '') +'</div></a>';
     str_series += '</div>'; //.last-end
   }
   str_series += '<div class="chapter-list ch-list bg2 radius"><div class="loading loge" style="height:25vh;"></div></div>';
@@ -2291,8 +2340,7 @@ function bmf_search_adv_param(info) {
   }
 
   var s_param = s_title + s_status + s_format + s_type + s_order + s_genre_val;
-  
-  if (s_param != '') wl.hash = '#/search/?params='+ encodeURIComponent(s_param.replace(/^&/, '?'));
+  if (s_param != '') wl.hash = '#/search/?params='+ encodeURIComponent(s_param.replace(/^[&\?]/, ''));
 }
 
 function bmf_build_search(data) {
@@ -2328,7 +2376,6 @@ function bmf_build_search(data) {
   str_search += '</tbody></table></div>'; //.filter
   str_search += '</div>'; //.adv-search
   str_search += '<div class="result no_items"></div>';
-  el('.post-content').classList.add('full_page');
   bmv_el_post.innerHTML = str_search;
 
   bmv_el_result = el('.search .result');
@@ -2385,7 +2432,6 @@ function bmf_build_contact() {
   str_contact += '</div>'; //.contact-form
   str_contact += '<div class="contact-status bg2 layer radius t_center no_items"></div>';
   str_contact += '</div>';
-  el('.post-content').classList.add('full_page');
   bmv_el_post.innerHTML = str_contact;
   el('.main').style.maxWidth = '500px';
   
@@ -2490,7 +2536,7 @@ function bmf_build_footer() {
 function bmf_build_main() {
   var main_layer = bmv_current.search(/series|member|contact/i) != -1? ' layer' : '';
   var str_main = '<div class="main '+ bmv_current +' max flex_wrap'+ main_layer +'">';
-  str_main += '<div class="post-content">';
+  str_main += '<div class="post-content full">';
   str_main += '<div class="post-info"></div>';
   if (bmv_chk_nav) str_main += '<div class="page-nav t_center"></div>';
   str_main += '</div>'; //.post-content
@@ -2511,7 +2557,8 @@ function bmf_build_header() {
     str_head += '</div>'; //.nav-toggle
     str_head += '<span class="f_grow"></span>';
   }
-  str_head += '<div class="title"><a href="./" title="Bakomon - Baca Komik Online"><'+ tag_head +' class="text">Bakomon</' + tag_head +'><img alt="Bakomon" src="./images/logo-text.png" title="Bakomon - Baca Komik Indonesia Online"></a></div>'; //blogger
+  var logo_img = blogger_mode ? 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEidppqaJ1cThfdVj6XvIV9B0Hj3XfCGX40y-D0fGNMonhaNnFqQYCAaslgSyRIk1AJmmXdcRNYg5W_lMsAh-vNbCxcjZbJ7S0_ly-QXuesV2NIQiQBRhxbRvGyXUbtQLJbaYGh4PkqzLLsJiTvaBPZm9W2Melk44ELIiBL-pipg1yd2ekFfEgBZZlmMfg/s200/logo-text.png' : './images/logo-text.png';
+  str_head += '<div class="title"><a href="./" title="Bakomon - Baca Komik Online"><'+ tag_head +' class="text">Bakomon</'+ tag_head +'><img alt="Bakomon" src="'+ logo_img +'" title="Bakomon - Baca Komik Indonesia Online"></a></div>'; //blogger
   str_head += '<span class="f_grow"></span>';
   str_head += '<div class="navigation"><ul class="'+ (is_mobile ? 'bg2' : 'flex') +'">';
   str_head += '<li><a href="#/latest">'+ bmv_settings.l10n.homepage +'</a></li><li><a href="'+ bmv_series_list +'">'+ bmv_settings.l10n.all_series +'</a></li><li><a href="#/search" title="Advanced Search">Adv Search</a></li><li><a href="#/contact">Contact</a></li>';
@@ -2684,21 +2731,36 @@ function bmf_page_scroll() {
       });
     }
     
-    if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.ch_menu) {
+    if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.ch_menu && el('.cm_nav .cm_next')) {
       // next background (mobile)
       if (is_mobile && (getOffset(check_point, 'bottom') + bmv_half_screen) >= getOffset(el('#reader'), 'bottom')) {
-        el('.cm_next').classList.add('cm_next_floating');
+        el('.cm_nav .cm_next').classList.add('cm_next_floating');
       } else {
-        el('.cm_next').classList.remove('cm_next_floating');
+        el('.cm_nav .cm_next').classList.remove('cm_next_floating');
       }
     }
     
     // auto show disqus
-    if (el('.disqus-trigger') && (getOffset(check_point, 'bottom') + window.screen.height) >= getOffset(el('.disqus-trigger'), 'bottom')) {
+    if (bmv_dt_settings.cm_load && el('.disqus-trigger') && (getOffset(check_point, 'bottom') + window.screen.height) >= getOffset(el('.disqus-trigger'), 'bottom')) {
       el('.disqus-trigger').click();
     }
   } else {
     if (el('img.lazy1oad')) lazyLoad(el('img.lazy1oad', 'all'));
+  }
+  
+  if (bmv_current == 'member' && bmv_prm_slug == 'settings') {
+    var st_save = el('.member .st-save .st-content');
+    var st_parent = st_save.parentElement;
+    if (getOffset(check_point, 'top') > (getOffset(st_parent, 'top') + st_parent.offsetHeight)) {
+      st_parent.classList.add('floating');
+      st_parent.style.width = st_save.offsetWidth +'px';
+      var st_pos = is_mobile ? '0;bottom' : (getOffset(st_parent, 'left') +'px;top');
+      st_save.style.cssText = 'left:'+ st_pos +':0;';
+    } else {
+      st_parent.classList.remove('floating');
+      st_parent.style.removeProperty('width');
+      st_save.removeAttribute('style');
+    }
   }
 }
 
@@ -2744,7 +2806,6 @@ function bmf_build_page_api(json) {
     }
   } else {
     document.body.classList.remove('loading', 'lody');
-    el('.main .post-content').classList.add('full_page');
     var str_error = json.status_code;
     if ('message' in json) str_error += ' '+ json.message;
     bmv_el_post.innerHTML = `<div class="flex f_middle f_center" style="min-height:50vh;">!! ERROR: ${str_error}</div>`;
@@ -2815,6 +2876,22 @@ function bmf_gen_url() {
   loadXMLDoc(`xhr/${bmv_current}`, `${api_url}/api/${url_param}`, bmf_build_page);
 }
 
+function bmf_build_load(note) {
+  if (!fbase_login) {
+    if (blogger_mode && getHash('member') != 'login') {
+      wl.href = '#/member/login';
+      return;
+    }
+    local('remove', 'bmv_user_settings');
+    bmv_dt_settings = bmv_settings.default;
+  }
+  if (note.indexOf('direct') != -1) {
+    bmf_build_page(note);
+  } else {
+    bmf_gen_url();
+  }
+}
+
 function bmf_build_wait(note) {
   var fbase_wait = setInterval(function() {
     if (fbase_loaded && fbase_init && fbase_observer) {
@@ -2822,19 +2899,7 @@ function bmf_build_wait(note) {
       var tier_wait = setInterval(function() {
         if (!fbase_login || fbase_login && 'tier' in fbase_user && bmv_dt_settings.from != 'default') {
           clearInterval(tier_wait);
-          if (!fbase_login) {
-            if (blogger_mode && getHash('member') != 'login') {
-              wl.href = '#/member/login';
-              return;
-            }
-            local('remove', 'bmv_user_settings');
-            bmv_dt_settings = bmv_settings.default;
-          }
-          if (note.indexOf('direct') != -1) {
-            bmf_build_page(note);
-          } else {
-            bmf_gen_url();
-          }
+          bmf_build_load(note);
         }
       }, 100);
     }
@@ -2888,7 +2953,7 @@ function bmf_get_param() {
   bmf_reset_var();
   bmv_start = true;
   wh = wl.hash;
-  document.title.innerHTML = 'Loading... \u2013 Bakomon';
+  document.title = 'Loading... \u2013 Bakomon';
   bmv_dt_settings = local('get', 'bmv_user_settings') ? bmf_update_settings('local', JSON.parse(local('get', 'bmv_user_settings'))) : bmv_settings.default;
 
   var list_wh = wh.replace(/\/page\/\d+/, '').split('/');
@@ -2924,6 +2989,7 @@ function bmf_get_param() {
 
   if (bmv_current == 'chapter' && list_wh[3] && list_wh[3] != '') {
     bmv_prm_chapter = list_wh[3].match(/([^\/#\?]+)/)[1];
+    if (list_wh[4]) bmv_prm_chapter += '&'+ decodeURIComponent(list_wh[4]); //url
     window.onunload = function() { window.scrollTo(0,0); }; //prevent browsers auto scroll on reload/refresh
   }
 
@@ -3131,7 +3197,7 @@ var bmv_str_cdn, bmv_str_gi, bmv_str_cdn_link;
 var bmv_start = false;
 var bmv_deleted_all = false;
 var bmv_deleted_list = [];
-var bmv_series_list = '#/search/?params=%3Forder%3Dlatest';
+var bmv_series_list = '#/search/?params=order%3Dlatest';
 var bmv_half_screen = Math.floor((window.screen.height / 2) + 30);
 var bmv_zoom = local('get', 'bmv_zoom') ? JSON.parse(local('get', 'bmv_zoom')) : {};
 var bmv_rgx_cdn = /((?:i\d+|cdn|img)\.(wp|statically|imagesimple)\.(?:com?|io)\/(?:img\/(?:[^\.]+\/)?)?)/i;
@@ -3152,10 +3218,12 @@ var bmv_settings = {
     "ch_menu": true,
     "ch_index": true,
     "src_link": true,
+    "cm_load": true,
     "cdn": 'default',
     "theme": "dark",
     "link": "search, chapter-img, bookmark, history",
-    "hs_stop": false
+    "hs_stop": false,
+    "ch_url": false
   },
   "source": {
     "bacakomik": {
@@ -3182,7 +3250,7 @@ var bmv_settings = {
   "tier": {
     "pro": {
       "bmhs": 1000,
-      "visited": 50
+      "visited": 10
     },
     "basic": {
       "bmhs": 100,
