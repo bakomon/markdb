@@ -1600,7 +1600,9 @@ if ((typeof live_test_bookmark != 'undefined' && typeof mydb_bm_loaded != 'undef
   var db_bm_check = setInterval(function() {
     if (mydb_loaded) {
       clearInterval(db_bm_check);
+      clearTimeout(db_bm_wait);
       mydb_bm_fnc();
     }
   }, 100);
+  var db_bm_wait = setTimeout(function() { clearInterval(db_bm_check); }, 60000);
 }
