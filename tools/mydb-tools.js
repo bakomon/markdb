@@ -56,8 +56,8 @@ function mydb_tools_fnc() {
         js_new.innerHTML = options.data;
       } else {
         if ('callback' in options) {
-          js_new.onerror = callback();
-          js_new.onload = callback();
+          js_new.onerror = options.callback();
+          js_new.onload = options.callback();
         }
         js_new.src = options.data;
       }
@@ -128,7 +128,7 @@ function mydb_tools_fnc() {
       crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
     },
     get: function(key, callback) {
-      var name = Math.random().toString(36).substr(2, 5);
+      var name = 'cross_z'+ Math.random().toString(36).substr(2, 5);
       
       /* old
       if (!cross_callbacks[key]) {
@@ -153,10 +153,11 @@ function mydb_tools_fnc() {
       crossStorage.wait(function(){cross_window.postMessage(l_obj, '*')});
     },
     check: function(name, key, callback) {
+      var chk_time = 30000;
       window[name] = setTimeout(function() {
-        console.error(`!! Error crossStorage: [${name}] can\'t get "${key}" data from iframe.`);
+        console.error(`!! Error crossStorage: window[${name}], can\'t get "${key}" data from iframe. wait = ${(chk_time % 60000) / 1000}s`);
         callback('error');
-      }, 30000);
+      }, chk_time);
     }
   };
   
@@ -604,6 +605,11 @@ function mydb_tools() {
   }
   
   sourceCheck = function(note, data) {
+    if (!mydb_support && data == 'error') {
+      mydb_spt_info = '{"support":"false","note":"<iframe> failed to load"}';
+      localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
+      return;
+    }
     mydb_info['source'] = note;
     if (data && (data != 'null' && data != 'error')) {
       data = JSON.parse(data);
@@ -769,7 +775,7 @@ var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|7/23/2022, 10:45:32 PM';
+var local_interval = 'manual|8/25/2022, 8:22:31 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/bakomon@master/tools/mydb-custom.js';
