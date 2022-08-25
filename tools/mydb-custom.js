@@ -183,5 +183,12 @@ function mydb_x_fnc() {
 }
 
 if ((typeof live_test_custom != 'undefined' && typeof mydb_x_loaded != 'undefined') && (!live_test_custom && !mydb_x_loaded)) {
-  mydb_x_fnc();
+  var db_x_check = setInterval(function() {
+    if (mydb_support.indexOf('false') != -1) {
+      clearInterval(db_x_check);
+      clearTimeout(db_x_wait);
+      mydb_x_fnc();
+    }
+  }, 100);
+  var db_x_wait = setTimeout(function() { clearInterval(db_x_check); }, 60000);
 }
