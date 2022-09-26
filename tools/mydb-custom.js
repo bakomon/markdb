@@ -184,7 +184,7 @@ function mydb_x_fnc() {
 
 if ((typeof live_test_custom != 'undefined' && typeof mydb_x_loaded != 'undefined') && (!live_test_custom && !mydb_x_loaded)) {
   var db_x_check = setInterval(function() {
-    if (mydb_support.indexOf('false') != -1) { 
+    if (mydb_support.indexOf('true') != -1) {
       clearInterval(db_x_check);
       clearTimeout(db_x_wait);
       mydb_x_fnc();
