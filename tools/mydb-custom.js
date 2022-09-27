@@ -105,7 +105,7 @@ function mydb_x_fnc() {
   
   function webDarkMode() {
     // Dark mode
-    if (el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch') || el('.theme.switchmode') || el('#quickswitcher')) {
+    if (document.body.classList.contains('themesia') || el('#thememode .switch') || el('.theme.quickswitcher') || el('.theme-mode .switch') || el('.theme.switchmode') || el('#quickswitcher')) {
       // theme enduser.id|themesia.com || theme eastheme.com || komikcast.com
       localStorage.setItem('thememode', 'darkmode');
       localStorage.setItem('theme-mode', 'dark');
