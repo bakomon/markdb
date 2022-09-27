@@ -479,6 +479,7 @@ function mydb_tools() {
         mydb_type_bkp = mydb_type;
         mydb_spt_info = '{"support":"true","note":"'+ mydb_spt_message +'"}';
         localStorage.setItem('mydb_tools_support', mydb_spt_info);
+        mydb_support = mydb_spt_info;
         
         /* add class to body from source: status, tag, theme */
         var s_data = mydb_source[mydb_type][w_host];
@@ -555,6 +556,7 @@ function mydb_tools() {
       mydb_info['error'] = JSON.parse('{"mydb_type":"'+ mydb_type +'","note":"'+ note +'"}');
       mydb_spt_info = '{"support":"false","note":"'+ note +'"'+ (typeof mydb_type !== 'undefined' ? (',"type":"'+ mydb_type +'"') : '') +'}';
       localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
+      mydb_support = mydb_spt_info;
       console.log('mydb_support: false');
       if (el('#_loader')) {
         el('#_loader .sl-info').innerHTML = '<span class="sl-not">⚠️</span>';
@@ -608,6 +610,7 @@ function mydb_tools() {
     if (!mydb_support && data == 'error') {
       mydb_spt_info = '{"support":"false","note":"<iframe> failed to load"}';
       localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
+      mydb_support = mydb_spt_info;
       return;
     }
     mydb_info['source'] = note;
@@ -775,7 +778,7 @@ var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmar
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|9/27/2022, 7:49:04 AM';
+var local_interval = 'manual|9/27/2022, 10:03:40 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/tools/mydb-custom.js';
@@ -794,6 +797,7 @@ var live_test_custom = false;
 if (typeof el !== 'undefined' && typeof bakomon_web === 'undefined') {
   mydb_spt_info = '{"support":"false","note":"el( function exist"}';
   localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
+  mydb_support = mydb_spt_info;
 } else {
   /* global variables */
   var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','sourceGen','sourceChange','localSave','getId','sourceCheck'];
