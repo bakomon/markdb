@@ -761,7 +761,7 @@ var mydb_spt_message = '🎉 supported site 🎉';
 var mydb_db_list = ['mangadex','mangaupdates','myanimelist','anilist','anidb'];
 var mydb_info = {"error":{},"support":"","source":"","type":"","fbase_app":"","fbase_database":"","fbase_auth":"","fbase_auto_login":"","reader_js":"","bookmark_js":""};
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
-var mydb_settings = {"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"source_bm":false,"source_cr":false,"bm_list":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true,"mod_disqus":true,"read_project":false,"remove_statically":false};
+var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"source_bm":false,"source_cr":false,"bm_list":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true,"mod_disqus":true,"read_project":false,"remove_statically":false};
 /* 
 - bmark_reader = show bookmark on comic reader
 - new_tab.bm_list = open link in new tab on bookmark list (bm_list)
