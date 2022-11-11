@@ -100,6 +100,7 @@ class xSelector
                 ],
                 'chapter' => [
                     'xpath' => ".//*[@id='chapter_list']//*[contains(@class, 'lchx')]//a",
+                    'num' => ".//chapter",
                     'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
                     'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
@@ -230,6 +231,7 @@ class xSelector
                 ],
                 'chapter' => [
                     'xpath' => ".//*[@id='chapter_list']//*[contains(@class, 'lchx')]//a",
+                    'num' => ".//chapter",
                     'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
                     'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
@@ -367,6 +369,7 @@ class xSelector
                 ],
                 'chapter' => [
                     'xpath' => ".//*[@id='chapterlist']//*[contains(@class, 'eph-num')]//a",
+                    'num' => ".//*[contains(@class, 'chapternum')]",
                     'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
                     'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
@@ -498,6 +501,7 @@ class xSelector
                 ],
                 'chapter' => [
                     'xpath' => ".//*[@id='chapterlist']//*[contains(@class, 'eph-num')]//a",
+                    'num' => ".//*[contains(@class, 'chapternum')]",
                     'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
                     'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',
@@ -630,6 +634,7 @@ class xSelector
                 ],
                 'chapter' => [
                     'xpath' => ".//*[@id='chapterlist']//*[contains(@class, 'eph-num')]//a",
+                    'num' => ".//*[contains(@class, 'chapternum')]",
                     'regex' => '/(?:-ch(?:[ap][ap]ter?)?)?-(\d(?:[\w\-]+)?)$/i',
                     'regex2' => '/(-(bahasa-)?indo(nesia)?\/?|\/$)/i',
                     'attr' => 'href',

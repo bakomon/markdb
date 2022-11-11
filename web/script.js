@@ -221,8 +221,8 @@ function addScript(options, note) {
     js_new.innerHTML = options.data;
   } else {
     if ('callback' in options) {
-      js_new.onerror = callback();
-      js_new.onload = callback();
+      js_new.onerror = options.callback(true);
+      js_new.onload = options.callback(false);
     }
     js_new.src = options.data;
   }
@@ -1140,13 +1140,14 @@ function bmf_member_settings_fnc() {
   }
   el(`.st-theme input[value="${th_current}"]`).checked = true;
 
+  el('.st-history input').checked = bmv_dt_settings.hs_stop;
+  el('.st-ch-link input').checked = bmv_dt_settings.ch_url;
+  el('.st-ch-reload input').checked = bmv_dt_settings.ch_reload;
+
   var link_list = bmv_dt_settings.link.split(', ');
   link_list.forEach(function(item) {
     el(`.st-link input[value="${item}"]`).checked = true;
   });
-
-  el('.st-history input').checked = bmv_dt_settings.hs_stop;
-  el('.st-ch-link input').checked = bmv_dt_settings.ch_url;
 
   
   el('.st-theme input', 'all').forEach(function(item) {
@@ -1182,6 +1183,7 @@ function bmf_member_settings_fnc() {
     bmv_dt_settings['theme'] = el('.st-theme input:checked').value;
     bmv_dt_settings['hs_stop'] = el('.st-history input').checked;
     bmv_dt_settings['ch_url'] = el('.st-ch-link input').checked;
+    bmv_dt_settings['ch_reload'] = el('.st-ch-reload input').checked;
 
     var link_list = [];
     el('.st-link input:checked', 'all').forEach(function(item) {
@@ -1225,9 +1227,9 @@ function bmf_member_settings_html() {
   // Display "settings" html
   var str_settings = '';
   if (fbase_user && fbase_user.tier == 'pro') {
-    str_settings += '<div class="st-pro bg2 layer radius">';
+    str_settings += '<div class="st-adv bg2 layer">';
     str_settings += '<div class="st-source st-list">';
-    str_settings += '<h2>Sumber Komik</h2>';
+    str_settings += '<h2>Series Sources</h2>';
     str_settings += '<label class="radio"><input type="radio" name="st-source" value="bacakomik"><span></span>bacakomik.co</label>';
     str_settings += '<label class="radio"><input type="radio" name="st-source" value="manhwaindo"><span></span>manhwaindo.org</label>';
     str_settings += '<label class="radio"><input type="radio" name="st-source" value="tukangkomik"><span></span>tukangkomik.com</label>';
@@ -1257,16 +1259,29 @@ function bmf_member_settings_html() {
     str_settings += '</div>'; //.st-src-link
     str_settings += '<div class="st-comments st-list">';
     str_settings += '<h2>Comments</h2>';
-    str_settings += '<label class="checkbox st-cm-load"><input type="checkbox"><span></span>Comments Auto Load (chapter)</label>';
+    str_settings += '<label class="checkbox st-cm-load"><input type="checkbox"><span></span>Auto Load (chapter)</label>';
     str_settings += '</div>'; //.st-comments
-    str_settings += '</div>'; //.st-pro
+    str_settings += '</div>'; //.st-adv
   }
+  str_settings += '<div class="st-general bg2 layer radius">';
   str_settings += '<div class="st-theme st-list">';
   str_settings += '<h2>Tema Situs</h2>';
   str_settings += '<label class="radio"><input type="radio" name="st-theme" value="default"><span></span>Default</label>';
   str_settings += '<label class="radio"><input type="radio" name="st-theme" value="light"><span></span>Terang</label>';
   str_settings += '<label class="radio"><input type="radio" name="st-theme" value="dark"><span></span>Gelap</label>';
   str_settings += '</div>'; //.st-theme
+  str_settings += '<div class="st-history st-list">';
+  str_settings += '<h2>Histori Bacaan</h2>';
+  str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Berhenti merekam histori bacaan</label>';
+  str_settings += '</div>'; //.st-history
+  str_settings += '<div class="st-ch-link st-list">';
+  str_settings += '<h2>Chapter URL (series)</h2>';
+  str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Gunakan <code>url</code> pada Series di <code>chapter-list</code></label>';
+  str_settings += '</div>'; //.st-ch-link
+  str_settings += '<div class="st-ch-reload st-list">';
+  str_settings += '<h2>Chapter URL (series)</h2>';
+  str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Muat halaman chapter dengan <code>window.reload()</code></label>';
+  str_settings += '</div>'; //.st-ch-reload
   str_settings += '<div class="st-link st-list">';
   str_settings += '<h2>Buka link di tab baru</h2>';
   str_settings += '<label class="checkbox"><input type="checkbox" value="latest"><span></span>Link di Beranda</label>';
@@ -1278,15 +1293,9 @@ function bmf_member_settings_html() {
   str_settings += '<label class="checkbox"><input type="checkbox" value="bookmark"><span></span>Link di Bookmark (member)</label>';
   str_settings += '<label class="checkbox"><input type="checkbox" value="history"><span></span>Link di History (member)</label>';
   str_settings += '</div>'; //.st-link
-  str_settings += '<div class="st-history st-list">';
-  str_settings += '<h2>Histori Bacaan</h2>';
-  str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Berhenti merekam histori bacaan</label>';
-  str_settings += '</div>'; //.st-history
-  str_settings += '<div class="st-ch-link st-list">';
-  str_settings += '<h2>Chapter URL (series)</h2>';
-  str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Gunakan <code>url</code> pada Series di <code>chapter-list</code></label>';
-  str_settings += '</div>'; //.st-ch-link
+  str_settings += '</div>'; //.st-general
   el('.st-control').innerHTML = str_settings;
+  if (fbase_user && fbase_user.tier == 'pro') el('.m-settings').classList.add('m-pro');
 
   bmf_fbase_db_get('member/settings', bmf_fbase_path('settings'), function(res) {
     if (res.exists()) bmv_dt_settings = bmf_update_settings('member/database', res.val());
@@ -1535,7 +1544,7 @@ function bmf_build_member() {
       str_member += '<div class="m-hs-list m-list full loading loge"><div class="flex f_middle f_center full" style="min-height:225px;"></div></div>';
     } else { //settings
       str_member += '">';
-      str_member += '<div class="st-control full in-check bg2 layer radius loading loge">';
+      str_member += '<div class="st-control full in-check loading loge">';
       str_member += '<div style="min-height:'+ bmv_half_screen +'px;"></div>';
       str_member += '</div>'; //.st-control
     }
@@ -1721,7 +1730,7 @@ function bmf_menu_fnc(img_list) {
     }
   };
   
-  el('.cm_load .cm_from').onclick = function() {
+  el('.cm_load .cm_fr_btn').onclick = function() {
     var ld_from = this.classList.contains('cm_active');
     el('.cm_load .cm_all').value = 'all';
     el('.cm_load .cm_all').disabled = ld_from && !bmv_chk_pause ? false : true;
@@ -1741,8 +1750,8 @@ function bmf_menu_fnc(img_list) {
     bmv_chk_pause = bmv_chk_pause ? false : true;
     el('.cm_ld_img').disabled = bmv_chk_pause ? true : false;
     el('.cm_load .cm_all').disabled = bmv_chk_pause ? true : false;
-    if (el('.cm_load .cm_from').classList.contains('cm_active')) el('.cm_load .cm_from').click();
-    el('.cm_load .cm_from').disabled = bmv_chk_pause ? true : false;
+    if (el('.cm_load .cm_fr_btn').classList.contains('cm_active')) el('.cm_load .cm_fr_btn').click();
+    el('.cm_load .cm_fr_btn').disabled = bmv_chk_pause ? true : false;
   };
   
   if (bmv_chk_gi) {
@@ -1847,12 +1856,14 @@ function bmf_chapter_menu() {
   str_menu += '<input class="cm_all cm_input" value="all" type="text" onclick="this.select()">';
   str_menu += '<button class="cm_pause cm_btn btn no_hover" title="Pause images from loading"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em" viewBox="0 0 24 24" version="1.1" x="0px" y="0px"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><path fill="currentColor" d="M15,18 L15,6 L17,6 L17,18 L15,18 Z M20,18 L20,6 L22,6 L22,18 L20,18 Z M2,5 L13,12 L2,19 L2,5 Z"></path></g></svg></button>';
   str_menu += '</div>';
-  str_menu += '<div class="flex f_middle">';
-  str_menu += '<button class="cm_from cm_btn btn no_hover" title="Load images from [index]">From</button>';
+  str_menu += '<div class="cm_from flex f_middle w_100">';
+  str_menu += '<button class="cm_fr_btn cm_btn btn no_hover" title="Load images from [index]">From</button>';
+  str_menu += '<div class="cm_fr_num">';
   str_menu += '<input class="cm_fr_min cm_input no_arrows" type="number" value="1" onclick="this.select()" disabled>';
   str_menu += '<span>-</span>';
   str_menu += '<input class="cm_fr_max cm_input no_arrows" type="number" value="'+ bmv_dt_chapter.images.length +'" data-value="'+ bmv_dt_chapter.images.length +'" onclick="this.select()" disabled>';
-  str_menu += '</div>';
+  str_menu += '</div>';// .cm_fr_num
+  str_menu += '</div>';// .cm_from
   str_menu += '</div>';// .cm_load
   str_menu += '<div class="cm_zoom w_100"><button class="cm_plus cm_btn btn" title="shift + up">+</button><button class="cm_less cm_btn btn" title="shift + down">-</button><input style="width:50px;" class="cm_input" value="'+ cm_size +'" type="text"></div>';
   str_menu += '</div>';// .cm_tr1
@@ -1992,7 +2003,7 @@ function bmf_build_chapter_nav(data) {
 
 function bmf_build_chapter(data) {
   // Display "chapter" page
-  bmv_dt_chapter = Object.assign({}, data);
+  bmv_dt_chapter = data;
   bmv_zoom_id = data.slug;
   var images = data.images;
   var ch_current = data.current.replace(/-((bahasa-)?indo(nesia)?|full)/, '');
@@ -2275,6 +2286,7 @@ function bmf_search_result(data) {
     var str_result = '';
     str_result += '<div class="post post-list"><ul class="flex_wrap">';
     for (var i = 0; i < series.length; i++) {
+      if (bmv_dt_settings.source.site == 'tukangkomik') series[i]['slug'] = series[i].slug.replace(/(7695725157(\d+)?-|-w{1,3}1)/, '');
       str_result += '<li class="flex f_column">';
       str_result += '<div class="cover f_grow">';
       str_result += '<a href="#/series/' + series[i].slug;
@@ -2481,6 +2493,7 @@ function bmf_build_latest(data) {
   str_latest += '<div class="post-header layer2"><h2 class="title">'+ bmv_settings.l10n.latest_h2 + l_page +'</h2></div>';
   str_latest += '<div class="post post-list"><ul class="flex_wrap">';
   for (var i = 0; i < series.length; i++) {
+    if (bmv_dt_settings.source.site == 'tukangkomik') series[i]['slug'] = series[i].slug.replace(/(7695725157(\d+)?-|-w{1,3}1)/, '');
     str_latest += '<li class="flex f_column">';
     str_latest += '<div class="cover f_grow">';
     str_latest += '<a href="#/series/'+ series[i].slug;
@@ -2893,17 +2906,23 @@ function bmf_build_load(note) {
 }
 
 function bmf_build_wait(note) {
-  var fbase_wait = setInterval(function() {
+  var tier_from, fbase_wait = setInterval(function() {
     if (fbase_loaded && fbase_init && fbase_observer) {
       clearInterval(fbase_wait);
-      var tier_wait = setInterval(function() {
+      tier_from = setInterval(function() {
         if (!fbase_login || fbase_login && 'tier' in fbase_user && bmv_dt_settings.from != 'default') {
-          clearInterval(tier_wait);
+          clearInterval(tier_from);
+          clearTimeout(fbase_close);
           bmf_build_load(note);
         }
       }, 100);
     }
   }, 100);
+
+  var fbase_close = setTimeout(function() {
+    clearInterval(tier_from);
+    alert(`bmf_build_wait:\nfbase_login = ${fbase_login}\nfbase_user.tier = ${'tier' in fbase_user}\nbmv_dt_settings.from = ${bmv_dt_settings.from}`);
+  }, 60000);
 }
 
 // #===========================================================================================#
@@ -3091,7 +3110,7 @@ function bmf_fbase_db_get(note, path, callback, adv) {
     callback(snapshot);
   }).catch(function(error) {
     console.error('!! Error: Firebase '+ note +'|'+ path +' bmf_fbase_db_get, code: '+ error.code +', message: '+ error.message);
-    // alert('!! Error: Firebase '+ note +'|'+ path +' bmf_fbase_db_get(\n'+ error.message);
+    if (is_mobile) alert('!! Error: Firebase '+ note +'|'+ path +' bmf_fbase_db_get(\n'+ error.message);
   });
 }
 
@@ -3150,7 +3169,9 @@ function bmf_fbase_observer() {
       bmf_fbase_db_get('observer/settings', bmf_fbase_path('settings'), function(res) {
         if (res.exists()) {
           bmv_dt_settings = bmf_update_settings('observer/database', res.val());
-          local('set', 'bmv_user_settings', JSON.stringify(bmv_dt_settings));
+          var local_settings = Object.assign({}, bmv_dt_settings);
+          local_settings.from = 'local';
+          local('set', 'bmv_user_settings', JSON.stringify(local_settings));
         }
       });
     } else {
@@ -3221,9 +3242,10 @@ var bmv_settings = {
     "cm_load": true,
     "cdn": 'default',
     "theme": "dark",
-    "link": "search, chapter-img, bookmark, history",
     "hs_stop": false,
-    "ch_url": false
+    "ch_url": false,
+    "ch_reload": false,
+    "link": "search, chapter-img, bookmark, history"
   },
   "source": {
     "bacakomik": {
@@ -3317,12 +3339,12 @@ window.addEventListener('load', function() {
 });
 
 window.addEventListener('hashchange', function() {
-  if (getHash('#') != 'chapter') {
-    document.body.scrollIntoView(); //Scroll to top
-    bmf_get_param();
-  } else {
+  if (bmv_dt_settings.ch_reload && getHash('#') == 'chapter') {
     wl.reload();
     window.onunload = function() { window.scrollTo(0, 0); }; //prevent browsers auto scroll on reload/refresh
+  } else {
+    document.body.scrollIntoView(); //Scroll to top
+    bmf_get_param();
   }
 });
 

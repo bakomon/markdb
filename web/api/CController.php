@@ -290,19 +290,16 @@ class CController
     
                     if ($chapters->length > 0) :
                         foreach ($chapters as $index) {
+                            $ch_num = preg_replace('/chapter\s+/i', '', $xpath->query($source['series']['chapter']['num'], $index)[0]->textContent);
                             $ch_url = $index->getAttribute($source['series']['chapter']['attr']);
-                            $sr_slug = $slink ? preg_replace('/^' . $slink . '\-/i', '', $slug) : $slug; //remove shortlink
+                            $sr_slug = $slink ? preg_replace('/^' . $slink . '(\d+)?\-/i', '', $slug) : $slug; //remove shortlink
                             $ch_str = preg_replace('/' . $sr_slug . '/i', '', $ch_url);
                             $ch_str = preg_replace($source['series']['chapter']['regex2'], '', $ch_str);
-                            $ch_check = preg_match($source['series']['chapter']['regex'], $ch_str, $chapter);
-                            if ($ch_check) :
-                                $ch_data = [
-                                    'number' => $chapter[1],
-                                    'url' => parse_url($ch_url, PHP_URL_PATH),
-                                ];
-                            else :
-                                $ch_data = [];
-                            endif;
+                            preg_match($source['series']['chapter']['regex'], $ch_str, $chapter);
+                            $ch_data = [
+                                'number' => count($chapter) > 0 ? $chapter[1] : $ch_num,
+                                'url' => parse_url($ch_url, PHP_URL_PATH),
+                            ];
                             array_push($ch_lists, $ch_data);
                         }
                     endif;
