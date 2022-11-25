@@ -12,6 +12,18 @@ function checkContentType() {
   return xhr.getResponseHeader('content-type');
 }
 
+function loadListener(event, callback) {
+  event = event == 'dom' ? 1 : 2;
+  var load_chk = setInterval(function() {
+    var ready = document.readyState;
+    var state = ready == 'loading' ? 0 : ready == 'interactive' ? 1 : 2;
+    if (state >= event) {
+      clearInterval(load_chk);
+      callback();
+    }
+  }, 100);
+}
+
 function mydb_tools_fnc() {
   /* Simple querySelector https://codepen.io/pen/oKYOEK */
   el = function(e,l,m) {
@@ -778,7 +790,7 @@ var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmar
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|9/27/2022, 10:03:40 PM';
+var local_interval = 'manual|11/25/2022, 6:25:00 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/tools/mydb-custom.js';
@@ -806,11 +818,7 @@ if (typeof el !== 'undefined' && typeof bakomon_web === 'undefined') {
   }
 }
 
-if (isMobile()) {
-  /* mobile browser support custom javascript */
-  document.documentElement.classList.add('is-mobile');
-  window.addEventListener('DOMContentLoaded', mydb_tools);
-} else {
-  mydb_tools(); /* "DOMContentLoaded" already on extension "User JavaScript and CSS" */
-  /* window.addEventListener('DOMContentLoaded', mydb_tools); */
-}
+loadListener('dom', function() {
+  if (isMobile()) document.documentElement.classList.add('is-mobile');
+  mydb_tools();
+});
