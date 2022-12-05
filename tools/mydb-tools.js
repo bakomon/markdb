@@ -13,10 +13,10 @@ function checkContentType() {
 }
 
 function loadListener(event, callback) {
-  event = event == 'dom' ? 1 : 2;
+  event = event == 'dom' ? 2 : 3; //3 = complete
   var load_chk = setInterval(function() {
     var ready = document.readyState;
-    var state = ready == 'loading' ? 0 : ready == 'interactive' ? 1 : 2;
+    var state = ready == 'uninitialized' ? 0 : ready == 'loading' ? 1 : ready == 'interactive' ? 2 : 3;
     if (state >= event) {
       clearInterval(load_chk);
       callback();
@@ -790,7 +790,7 @@ var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmar
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|11/25/2022, 6:25:00 PM';
+var local_interval = 'manual|12/5/2022, 11:31:05 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/tools/mydb-custom.js';
