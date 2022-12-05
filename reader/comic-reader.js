@@ -450,7 +450,7 @@ function mydb_cr_fnc() {
     
     // auto stop page after html and js _reader loaded
     // if (el('.rc_reload').classList.contains('rc_hidden') && wh.indexOf('mangadex') == -1 && !autoLike) el('.rc_stop').click();
-    if (wh.indexOf('mangadex') == -1 && !autoLike) loadListener('load', function() { el('.rc_stop').click(); });
+    if (wh.indexOf('mangadex') == -1 && !autoLike) loadListener('dom', function() { el('.rc_stop').click(); });
   }
   
   function startImage(note, prnt, imgs) {
