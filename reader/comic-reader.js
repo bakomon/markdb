@@ -9,15 +9,6 @@ function mydb_cr_fnc() {
     return !isNaN(str) && !isNaN(parseFloat(str));
   }
   
-  function checkReadyState() {
-    var current;
-    var state = ['uninitialized','loading','interactive','complete'];
-    state.forEach(function(item, index) {
-      if (document.readyState == item) current = index;
-    });
-    return current;
-  }
-  
   // Fix Issues With CSS Position Sticky Not Working https://www.designcise.com/web/tutorial/how-to-fix-issues-with-css-position-sticky-not-working#checking-if-an-ancestor-element-has-overflow-property-set
   function overflowUnset(elem) {
     var parent = elem.parentElement;
@@ -458,7 +449,8 @@ function mydb_cr_fnc() {
     };
     
     // auto stop page after html and js _reader loaded
-    if (el('.rc_reload').classList.contains('rc_hidden') && wh.indexOf('mangadex') == -1 && !autoLike) el('.rc_stop').click();
+    // if (el('.rc_reload').classList.contains('rc_hidden') && wh.indexOf('mangadex') == -1 && !autoLike) el('.rc_stop').click();
+    if (wh.indexOf('mangadex') == -1 && !autoLike) loadListener('load', function() { el('.rc_stop').click(); });
   }
   
   function startImage(note, prnt, imgs) {
@@ -602,19 +594,16 @@ function mydb_cr_fnc() {
     //webtoons auto like
     if (wh.indexOf('webtoons') != -1 && autoLike) {
       isPause = true;
-      var wt_like = setInterval(function() {
-        if (checkReadyState() == 3) { //complete
-          clearInterval(wt_like);
-          el('#likeItButton').scrollIntoView();
-          var e_like = setInterval(function() {
-            if (el('#footer_favorites.on')) {
-              clearInterval(e_like);
-              if (!el('#likeItButton ._btnLike.on')) el('#likeItButton').click();
-              setTimeout(function() { el('.paginate a[class*="pg_next"]').click(); }, 1200);
-            }
-          }, 100);
-        }
-      }, 100);
+      loadListener('load', function() {
+        el('#likeItButton').scrollIntoView();
+        var e_like = setInterval(function() {
+          if (el('#footer_favorites.on')) {
+            clearInterval(e_like);
+            if (!el('#likeItButton ._btnLike.on')) el('#likeItButton').click();
+            setTimeout(function() { el('.paginate a[class*="pg_next"]').click(); }, 1200);
+          }
+        }, 100);
+      });
     }
   }
   
