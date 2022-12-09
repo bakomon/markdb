@@ -1,3 +1,4 @@
-# API
+# Bakomon (Baca Komik Online)
 
-API code from [`Manganya`](https://github.com/vnxx/manganya)
+## Source
+- API: [`Manganya`](https://github.com/vnxx/manganya)
