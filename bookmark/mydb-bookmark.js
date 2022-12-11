@@ -1,7 +1,7 @@
 // DATABASE BOOKMARK
 function mydb_bm_fnc() {
-  if (mydb_bm_loaded) return;
-  mydb_bm_loaded = true;
+  if (mydb_bmjs_loaded) return;
+  mydb_bmjs_loaded = true;
   
   // RegExp.escape function in JavaScript https://stackoverflow.com/a/3561711/7598333
   function escapeRegex(str) {
@@ -114,7 +114,7 @@ function mydb_bm_fnc() {
   function db_listChange() {
     var lc_obj = '{"length":"'+ main_arr.length +'", "update":'+ new Date().getTime() +'}';
     lc_obj = JSON.parse(lc_obj);
-    firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}/check`).update(lc_obj, (error) => {
+    firebase.app(myfbase_app).database().ref(`bookmark/${mydb_type}/check`).update(lc_obj, (error) => {
       if (error) {
         console.log('!! Error: '+ error);
         alert('!! Error: db_listChange(');
@@ -123,7 +123,7 @@ function mydb_bm_fnc() {
   };
   
   function db_checkData(note, path) {
-    var fb_ref = firebase.app(fbase_app).database().ref(path);
+    var fb_ref = firebase.app(myfbase_app).database().ref(path);
     if (mydb_select == 'list' && note == 'bmdb') fb_ref = fb_ref.orderByChild('bmdb').equalTo(el('.db_form .db_bmdb').value);
     return fb_ref.once('value').then(function(snapshot) {
       if (mydb_select == 'list') {
@@ -150,7 +150,7 @@ function mydb_bm_fnc() {
   function db_deleteData(path) {
     db_info('Loading..');
     
-    firebase.app(fbase_app).database().ref(path).remove()
+    firebase.app(myfbase_app).database().ref(path).remove()
       .then(function() {
         if (mydb_type == mydb_type_bkp && mydb_select == 'list') db_mainData('remove');
         if (is_index) db_startIndex('remove');
@@ -206,7 +206,7 @@ function mydb_bm_fnc() {
   
   // Firebase update vs set https://stackoverflow.com/a/38924648
   function db_changeData(note) {
-    firebase.app(fbase_app).database().ref(db_pathId(true))[note](db_genData(note), (error) => {
+    firebase.app(myfbase_app).database().ref(db_pathId(true))[note](db_genData(note), (error) => {
       if (error) {
         console.log('!! Error: '+ error);
         db_info('Error!!', 'danger', true);
@@ -454,11 +454,6 @@ function mydb_bm_fnc() {
         var cover_tag = gen_cover.tagName == 'IMG' ? gen_cover.src : el('meta[property="og:image"]').getAttribute('content');
         el('.db_image').value = cover_tag.replace(/i\d+\.wp\.com\//, '');
       }
-      
-      /* old: Mangadex image format, temporary
-      - https://mangadex.org/images/manga/58050.jpg
-      - https://mangadex.org/images/manga/58050.large.jpg
-      */
     }
   }
   
@@ -760,9 +755,9 @@ function mydb_bm_fnc() {
         i_txt += '<div class="db_ihost"><a href="//'+ i_host +'" target="_blank">'+ i_host + (data[i].language != 'id' ? ('&#160;&#160;&#40;'+ data[i].language +'&#41;') : '') +'</a></div>';
         i_txt += '</div>';
         i_txt += '<div class="db_idetail db_100">';
-        i_txt += '<div class="db_istatus">Status: <span class="db_text">'+ data[i].status +'</span></div>';
+        i_txt += '<div class="db_istatus">Status: <span class="db_text">'+ data[i].status.replace('discontinued', 'discontinued 🚩') +'</span></div>';
         if (data[i].theme != '' && data[i].theme != 'none') i_txt += '<div class="db_itheme">Theme: <span class="db_text">'+ data[i].theme +'</span></div>';
-        if (data[i].tag != '') i_txt += '<div class="db_itag">Tag: <span class="db_text">'+ data[i].tag +'</span></div>';
+        if (data[i].tag != '') i_txt += '<div class="db_itag">Tag: <span class="db_text">'+ data[i].tag.replace('not_support', '🟨 not_support 🟨') +'</span></div>';
         i_txt += '<div class="db_ibtn flex" data-id="'+ data[i].host.replace(/\./g, '-') +'">';
         if (data[i].project != '') i_txt += '<span class="db_iproject _db"><a href="'+ data[i].project +'" target="_blank">Project</a></span>';
         i_txt += '<span class="db_iedit _db" data-id="source">Edit</span>';
@@ -805,7 +800,7 @@ function mydb_bm_fnc() {
   }
   
   function db_indexData(note, param) {
-    firebase.app(fbase_app).database().ref(db_pathId()).once('value').then(function(snapshot) {
+    firebase.app(myfbase_app).database().ref(db_pathId()).once('value').then(function(snapshot) {
       index_data = snapshot.val();
       index_arr = genArray(snapshot.val());
       
@@ -1083,7 +1078,7 @@ function mydb_bm_fnc() {
     is_exist = true;
     var smlr_note = 'similar';
     db_showHtml(data, 'main');
-    if (mydb_settings.number_title) el('title').innerHTML = '('+ data.number +') '+ el('title').innerHTML.replace(/^\([^\)]+\)\s/, '');
+    if (mydb_settings.number_title) el('title').innerHTML = '['+ data.number +'] '+ el('title').innerHTML.replace(/^\([^\)]+\)\s/, '');
     el('.db_bm_show').classList.remove('db_hidden');
     console.log(`${mydb_type} data from: ${note}`);
     
@@ -1195,7 +1190,7 @@ function mydb_bm_fnc() {
       id = id.title; //from <title>
     }
     
-    var ref = firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}/list`).orderByChild(child);
+    var ref = firebase.app(myfbase_app).database().ref(`bookmark/${mydb_type}/list`).orderByChild(child);
     var dataRef = chk == 1 ? ref.equalTo(id) : ref.startAt(id).endAt(id+'\uf8ff');
     
     dataRef.once('value').then(function(snapshot) {
@@ -1241,7 +1236,7 @@ function mydb_bm_fnc() {
   }*/
   
   function db_mainData(note, query) {
-    firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}`).once('value').then(function(snapshot) {
+    firebase.app(myfbase_app).database().ref(`bookmark/${mydb_type}`).once('value').then(function(snapshot) {
       main_data = snapshot.val();
       main_arr = genArray(main_data.list); //only data from "list"
       crossStorage.set(`mydb_${mydb_type}_data`, JSON.stringify(main_data));
@@ -1275,7 +1270,7 @@ function mydb_bm_fnc() {
   function listCheck(data) {
     if (data && (data != 'null' && data != 'error')) {
       data = JSON.parse(data);
-      firebase.app(fbase_app).database().ref(`bookmark/${mydb_type}/check`).once('value').then(function(snapshot) {
+      firebase.app(myfbase_app).database().ref(`bookmark/${mydb_type}/check`).once('value').then(function(snapshot) {
         var res = snapshot.val();
         if ((data.check['length'] != res['length']) || (data.check.update != res.update) && mydb_settings.server_check.bm_list) {
           console.log(`mydb: update mydb_${mydb_type}_data`);
@@ -1299,7 +1294,7 @@ function mydb_bm_fnc() {
     // css bookmark
     b_txt += '<style>';
     b_txt += '._bmark ::-webkit-scrollbar{-webkit-appearance:none;}._bmark ::-webkit-scrollbar:vertical{width:10px;}._bmark ::-webkit-scrollbar:horizontal{height:10px;}._bmark ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.5);border:2px solid #757575;}._bmark ::-webkit-scrollbar-track{background-color:#757575;}._bmark ::-webkit-input-placeholder{color:#757575;}._bmark ::placeholder{color:#757575;}._bmark a,._bmark a:hover,._bmark a:visited{color:#ddd;text-shadow:none;}._bmark .db_100{width:100%;}._bmark .db_50{width:50%;}.bmark_db{position:fixed;top:0;bottom:0;left:0;width:350px;padding:10px;/*flex-direction:column;*/background:#17151b;color:#ddd;border-right:1px solid #333;}.bmark_db.db_shide{left:-350px;}._bmark ._db{background:#252428;color:#ddd;padding:4px 8px;margin:4px;font:14px Arial;text-transform:initial;cursor:pointer;outline:0 !important;border:1px solid #3e3949;}._bmark svg{width:1em;height:1em;}._bmark ul{padding:0;margin:0;list-style:none;}._bmark input[type="text"],._bmark input[type="search"]{display:initial;cursor:text;height:auto;background:#252428 !important;color:#ddd !important;border:1px solid #3e3949;}._bmark input[type="text"],._bmark input[type="search"]:hover{border-color:#3e3949;}._bmark label [type="radio"],._bmark label [type="checkbox"]{display:initial;margin:-2px 6px 0 0;vertical-align:middle;}._bmark input[readonly]{cursor:default;background:#333 !important;}._bmark select{-webkit-appearance:menulist-button;color:#ddd;}._bmark select:invalid{color:#757575;}._bmark select option{color:#ddd;}.bmark_db .db_line{margin-bottom:10px;padding-bottom:10px;border-bottom:5px solid #333;}.bmark_db .db_line_top{margin-top:10px;padding-top:10px;border-top:5px solid #333;}.bmark_db .db_space{margin:10px 0;}.bmark_db .db_text{padding:4px 8px;margin:4px;color:#ddd;}.bmark_db .db_border{padding:1px 6px;border:1px solid #ddd;}._bmark .db_btn_radio input[type="radio"]{display:none;}._bmark .db_btn_radio input[type="radio"]+label:before{content:none;}._bmark .db_btn_radio input[type="radio"]:checked+label,._bmark .db_selected,._bmark:not(.db_mobile) button:not(.db_no_hover):hover{background:#4267b2;border-color:#4267b2;}._bmark .db_active{background:#238636;border-color:#238636;}._bmark .db_danger{background:#d7382d;border-color:#d7382d;}.bmark_db .db_form .db_next{padding:2px 4px;background:transparent;}.bmark_db .db_notif .fp_content{margin:auto;}';
-    b_txt += '.bmark_db .db_account{position:relative;}.bmark_db .db_account .db_act_email{position:absolute;top:-35px;right:0;}.bmark_db .db_account .db_act_out{padding:4px;}.bmark_db:not(.db_s_shide) .db_bm_show .bm_list{max-height:25vh !important;}.bmark_db .db_bm_show .bm_similar .bm_main{margin:5px;border:4px solid #4267b2;}.bmark_db .db_bm_show .bm_similar .bm_main .bm_edit{background:#4267b2;border:0;}.bmark_db .db_bm_show .bm_list,.bmark_db .db_result .bs_list{overflow-y:auto;}.bmark_db .db_result li,.bmark_db .db_bm_show li{border-width:1px;}.bmark_db .db_data .db_s_help_note{padding-bottom:8px;}';
+    b_txt += '.bmark_db .db_account{position:relative;}.bmark_db .db_account .db_act_email{position:absolute;top:-35px;right:0;}.bmark_db .db_account .db_act_out{padding:4px;}.bmark_db:not(.db_s_shide) .db_bm_show .bm_list{max-height:25vh !important;}.bmark_db .db_bm_show .bm_similar .bm_main{margin:5px;border:4px solid #4267b2;}.bmark_db .db_bm_show .bm_similar .bm_main .bm_edit{background:#4267b2;border:0;}.bmark_db .db_bm_show .bm_list,.bmark_db .db_result .bs_list{overflow-y:auto;}.bmark_db .db_result li,.bmark_db .db_bm_show li{border-top-width:1px;}.bmark_db .db_data .db_s_help_note{padding-bottom:8px;}';
     b_txt += '.bmark_db .db_toggle{position:absolute;bottom:0;right:-40px;align-items:center;width:40px;height:40px;font-size:30px !important;padding:0;margin:0;line-height:0;}._bmark .db_bg,._bmark .db_ibg{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);}.bmark_db .db_cover img{max-width:100px;}.bmark_db .db_radio label,.bmark_db .db_cbox label{display:inline-block;margin:5px 10px 5px 0;}._bmark ._db[disabled],._bmark ._db[disabled]:hover,._bmark .db_disabled{background:#252428;color:#555;border-color:#252428;cursor:not-allowed;}.bmark_db.db_s_shide .db_result,.db_hidden{display:none;height:0;width:0;visibility:hidden;position:fixed;margin-left:-9999px;}';
     b_txt += '</style>';
     // css mobile
@@ -1360,18 +1355,15 @@ function mydb_bm_fnc() {
   
   function db_startBookmark() {
     bookmarkHtml();
-    if (el('#_loader')) el('#_loader').parentElement.removeChild(el('#_loader'));
+    if (el('#_loader')) removeElem('#_loader');
     
-    // Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102
-    firebase.app(fbase_app).auth().onAuthStateChanged(function(user) {
-      if (user) { //User is signed in
-        mydb_login = true;
+    fbaseObserver(function() {
+      if (mydb_login) { //User is signed in
         crossStorage.get(`mydb_${mydb_type}_data`, function(res){ listCheck(res); }); //Check & update list data
         db_info('RESET');
         el('.db_login').classList.add('db_hidden');
         el('.db_data').classList.remove('db_hidden');
       } else {
-        mydb_login = false;
         el('.db_login').classList.remove('db_hidden');
         el('.db_data').classList.add('db_hidden');
       }
@@ -1420,7 +1412,7 @@ function mydb_bm_fnc() {
       el('.lg_notif').innerHTML = 'Loading..';
       el('.lg_notif').classList.remove('db_hidden');
       
-      firebase.app(fbase_app).auth().signInWithEmailAndPassword(userEmail, userPass).then((user) => {
+      firebase.app(myfbase_app).auth().signInWithEmailAndPassword(userEmail, userPass).then((user) => {
         el('.lg_notif').classList.add('db_hidden');
       }).catch(function(error) {
         console.error('!! Error: Firebase login, code: '+ error.code +', message: '+ error.message);
@@ -1430,13 +1422,13 @@ function mydb_bm_fnc() {
     };
     
     el('.db_account .db_act_icon').onclick = function() {
-      el('.db_bm_menu .db_act_email').innerHTML = firebase.app(fbase_app).auth().currentUser.email;
+      el('.db_bm_menu .db_act_email').innerHTML = firebase.app(myfbase_app).auth().currentUser.email;
       el('.db_bm_menu .db_act_email').classList.toggle('db_hidden');
     };
     
     el('.db_account .db_act_out').onclick = function() {
       if (confirm('Are you sure you want to log out?')) {
-        firebase.app(fbase_app).auth().signOut();
+        firebase.app(myfbase_app).auth().signOut();
       }
     };
     
@@ -1596,7 +1588,7 @@ function mydb_bm_fnc() {
   }
 }
 
-if ((typeof live_test_bookmark != 'undefined' && typeof mydb_bm_loaded != 'undefined') && (!live_test_bookmark && !mydb_bm_loaded)) {
+if ((typeof live_test_bookmark != 'undefined' && typeof mydb_bmjs_loaded != 'undefined') && (!live_test_bookmark && !mydb_bmjs_loaded)) {
   var db_bm_check = setInterval(function() {
     if (mydb_loaded) {
       clearInterval(db_bm_check);

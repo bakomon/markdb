@@ -4,7 +4,7 @@ function isMobile() {
   return /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(ua)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(ua.substr(0, 4));
 }
 
-// content-type of current loaded page https://stackoverflow.com/a/12256451/7598333
+/* content-type of current loaded page https://stackoverflow.com/a/12256451/7598333 */
 function checkContentType() {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', document.location, false);
@@ -13,10 +13,10 @@ function checkContentType() {
 }
 
 function loadListener(event, callback) {
-  event = event == 'dom' ? 2 : 3; //3 = complete
+  event = event == 'dom' ? 2 : 3;
   var load_chk = setInterval(function() {
     var ready = document.readyState;
-    var state = ready == 'uninitialized' ? 0 : ready == 'loading' ? 1 : ready == 'interactive' ? 2 : 3;
+    var state = ready == 'uninitialized' ? 0 : ready == 'loading' ? 1 : ready == 'interactive' ? 2 : 3; /* 3 = complete */
     if (state >= event) {
       clearInterval(load_chk);
       callback();
@@ -24,15 +24,81 @@ function loadListener(event, callback) {
   }, 100);
 }
 
+/* DOM parents() https://github.com/ziggi/dom-parents */
+function getParents(element, selector) {
+  var isWithSelector = selector !== undefined;
+  var parents = [];
+  var elem = element.parentElement;
+  while (elem !== null) {
+    if (elem.nodeType === Node.ELEMENT_NODE) {
+      if (!isWithSelector || elem.matches(selector)) {
+        parents.push(elem);
+      }
+    }
+    elem = elem.parentElement;
+  }
+  return parents;
+}
+
+function thirdPartyCheck(callback) {
+  var url = 'https://readanimanga.blogspot.com/p/3rd.html';
+  var iframe = document.createElement('iframe');
+  iframe.id = 'third-party-frame';
+  iframe.style.cssText = 'height:0;width:0;border:none;';
+  iframe.onerror = () => callback('fail');
+  iframe.src = url;
+  document.body.appendChild(iframe);
+  
+  var chk = false;
+  window.addEventListener('message', function(e) {
+    if (url.indexOf(e.origin) != -1 && e.data.toString().search(/^3rd_/i) != -1) {
+      if (e.data === '3rd_supported') chk = true;
+      clearTimeout(wait);
+      callback(chk);
+    }
+  });
+  
+  var wait = setTimeout(() => callback('fail'), 30000);
+}
+
+/* Remove element https://codepen.io/sekedus/pen/ZEYRyeY */
+function removeElem(elem, index) {
+  var elmn = typeof elem === 'string' ? document.querySelectorAll(elem) : elem;
+  if (!elmn || (elmn && elmn.length == 0)) {
+    console.error('!! ERROR: removeElem(), elem = '+ elem);
+    return;
+  }
+  // if match 1 element & have specific index
+  if (elmn && !elmn.length && index) {
+    console.error('!! ERROR: use querySelectorAll() for specific index');
+    return;
+  }
+  
+  elmn = index ? (index == 'all' ? elmn : elmn[index]) : (typeof elem == 'string' || elmn.length ? elmn[0] : elmn);
+  
+  if (elmn.length && index == 'all') {
+    for (var i = 0; i < elmn.length; i++) {
+      elmn[i].parentElement.removeChild(elmn[i]);
+    }
+  } else {
+    elmn.parentElement.removeChild(elmn);
+  }
+}
+
 function mydb_tools_fnc() {
   /* Simple querySelector https://codepen.io/pen/oKYOEK */
   el = function(e,l,m) {
-    var elem, parent = l != 'all' && (l || l === null) ? l : document;
+    var elem, parent = l != 'all' && l != 'xpath' && (l || l === null) ? l : document;
     if (parent === null) {
       elem = parent;
       console.error('selector: '+ e +' => parent: '+ parent);
     } else {
-      elem = (m || l == 'all') ? parent.querySelectorAll(e) : parent.querySelector(e);
+      if ((m || l) == 'xpath') {
+        /* https://stackoverflow.com/a/14284815/7598333 */
+        elem = document.evaluate(e, parent, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+      } else {
+        elem = ((m || l) == 'all') ? parent.querySelectorAll(e) : parent.querySelector(e);
+      }
     }
     return elem;
   };
@@ -125,7 +191,7 @@ function mydb_tools_fnc() {
       }, 100);
     },
     write: function(name, key, data) {
-      /* old
+      /* old, temporary
       cross_callbacks[key].forEach(function(callback) {
         callback(data);
         cross_callbacks[key].splice(callback, 1); //remove value from array after callback
@@ -142,7 +208,7 @@ function mydb_tools_fnc() {
     get: function(key, callback) {
       var name = 'cross_z'+ Math.random().toString(36).substr(2, 5);
       
-      /* old
+      /* old, temporary
       if (!cross_callbacks[key]) {
         cross_callbacks[key] = [];
       }
@@ -290,11 +356,11 @@ function mydb_tools_fnc() {
     
     var wpId = window.location.pathname.match(id_w_rgx)[1].replace(/-((bahasa|sub(title)?)-)?indo(nesia)?(-online-terbaru)?/i, '').replace(/-batch/i, '').replace(/([-_])+/g, '$1').replace(/^[\W]+/, '').replace(/(\.html?|[-_]+)$/i, '').toLowerCase();
     
-    if (note == 'reader') { //id from title, bug: if title is project and contains "episode" or "chapter"
+    if (note == 'reader') { /* id from title, bug: if title is project and contains "episode" or "chapter" */
       titleId = titleId.replace(/[^\s\w]/g, '').replace(/\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
       id = window.location.hostname.search(/webtoons|softkomik/i) != -1 ? wpId : titleId;
-    } else if (note == 'bookmark') { //id from url
-      titleId = titleId.replace(/\s+$/g, '').replace(/\|/g, '').replace(/[\n"\&\r\t\b\f]/g, '\\$&'); //JSON.escape
+    } else if (note == 'bookmark') { /* id from url */
+      titleId = titleId.replace(/\s+$/g, '').replace(/\|/g, '').replace(/[\n"\&\r\t\b\f]/g, '\\$&'); /* JSON.escape */
       id = '{"url":"'+ wpId +'","title":"'+ titleId +'"}';
       id = JSON.parse(id);
     }
@@ -319,7 +385,7 @@ function mydb_tools() {
     /* css main 2 */
     s_str += '.mangainfo li a:visited,.komikinfo li a:visited,.animeinfo li a:visited,.animeinfo .episodelist a:visited,.wp-manga-chapter a:visited,.bixbox li a:visited,.bxcl li a:visited,#scans a:visited h3,#latestchapters .updates a:visited,#list .chapter a:visited,.chapter-container .chapter-row a:visited,.elementor-icon-list-item a:visited,.epxs a:visited,.chapter-item a:visited,.fixyear a:visited,.fixyear a:visited .year .ytps a:visited,.chli .cli a:visited,.Manga_Chapter a:visited .viewind{color:#d7382d !important;}#reader-mod,#wrap:not(.no-css) p:not([class="logo"]){background:#151515;max-width:750px !important;min-width:inherit;height:auto !important;margin:0 auto !important;display:block;float:none !important;}#reader-mod img,#wrap:not(.no-css) p:not([class="logo"]) img{width:auto;max-width:100% !important;height:auto;position:initial !important;display:block;margin:0 auto;}#content .carousel,.darex .carousel,.vezone .carousel{height:auto;max-height:100%;}#content .carousel-cell,.darex .carousel-cell,.vezone .carousel-cell{float:left;position:relative;}#content .carousel-cell img,.darex .carousel-cell img,.vezone .carousel-cell img{height:100%;}#menu li,#main-menu li{float:none;display:inline-block;}.episode-table tr td[width="100"]{width:100%;}body.manga-page .main-col .listing-chapters_wrap ul.version-chap{max-height:none;overflow:initial;}/* madara theme */.text-ui-light .site-header .c-sub-header-nav,.text-ui-light [class*="c-sidebar c-top"],.text-ui-light .profile-manga{background:#151515 !important;border-color:#3e3949 !important;}/* komikgo.com */.chapter-type-manga .c-blog-post .entry-content .entry-content_wrap .reading-content::before{position:relative;}/* manhwa-san.xyz | katakomik.site */.manhwa-san-xyz #outer-wrapper,.katakomik-site #outer-wrapper,.katakomik-site .header-header{background:#151515 !important;}.manhwa-san-xyz .blog-post.item-post h1.post-title{color:#999;}.manhwa-san-xyz .alphanx,.katakomik-site .naviarea1 .awnavi1,.funmanga-com .prev-next-post{display:flex;justify-content:space-between;}/* mangaku.club */body[class*="mangaku-"] .owl-carousel{display:block;}/* manhuaid.com */.manhuaid-com#darkbody{background:#151515 !important;}/* readcmic.blogspot.com */.readcmic-blogspot-com #outer-wrapper{background:#151515 !important;}/* komikcast.me */.is-mobile .komikcast-me .list-update_items-wrapper{display:flex;flex-wrap:wrap;}.is-mobile .komikcast-me .list-update_item{flex:initial;max-width:100%;width:50%;}/* mangabat.com */.mangabat-com .container-header-lineone,.mangabat-com .container-header-lineone a,.mangabat-com .container-silder,.mangabat-com .panel-advanced-search-tool,.mangabat-com .advanced-search-tool-genres-item,.mangabat-com .panel-breadcrumb,.mangabat-com .panel-content-homepage,.mangabat-com .panel-content-homepage a,.mangabat-com .panel-list-story,.mangabat-com .panel-list-story a,.mangabat-com .panel-story-info,.mangabat-com .panel-story-chapter-list,.mangabat-com .panel-story-chapter-list a,.mangabat-com .panel-comment,.mangabat-com .panel-topview,.mangabat-com .panel-topview a,.mangabat-com .panel-newest,.mangabat-com .panel-newest-content,.mangabat-com .panel-category,.mangabat-com .pn-category-row,.mangabat-com .pn-category-row a,.mangabat-com .panel-navigation,.mangabat-com .panel-chapter-comment,.mangabat-com .panel-chapter-info-bot,.mangabat-com .container-footer-content,.mangabat-com .container-footer-content a{background-color:#222 !important;color:#ccc !important;}.mangabat-com #panel-story-info-description{max-height:none !important;}/* nyanfm.com */.nyanfm-com.elementor-kit-12{--e-global-color-48d087d:#eee;--e-global-color-14c8a14:#ccc;--e-global-color-eb4b41d:#151515;}.nyanfm-com .container,.nyanfm-com .elementor-section{background-color:#151515 !important;}.nyanfm-com .bdt-navbar-dropdown.bdt-open,.nyanfm-com .bdt-post-block-tag-wrap span{background-color:#222 !important;}.nyanfm-com .elementor-column-wrap{background:transparent !important;}.nyanfm-com .elementor-heading-title,.nyanfm-com .bdt-navbar-nav > li > a,.nyanfm-com .bdt-social-share-text{color:#eee !important;}.nyanfm-com .elementor-button{color:#222;}.nyanfm-com .elementor-alert{border:0;}.nyanfm-com .elementor-alert-title,.nyanfm-com .elementor-alert-description{color:#333 !important;text-shadow:none !important;}/* komiku.id */.komiku-id img.lazy{opacity:.5;}.komiku-id a,.komiku-id .logo a span,.komiku-id section h2,.komiku-id .konten > section h3,.komiku-id .perapih .daftar h3{color:#ccc !important;}.komiku-id #header .hd2,.komiku-id #header nav,.komiku-id .konten > section[id],.komiku-id .ls2,.komiku-id .ls4,.komiku-id #Trending .perapih,.komiku-id #Trending .ls123m,.komiku-id #Trending .tr23,.komiku-id #Terbaru .lnn,.komiku-id #Terbaru .ls24,.komiku-id #Komik_Hot .ls2,.komiku-id #Komik_Hot .ls2l,.komiku-id #Genre .ls3,.komiku-id #Genre .ls3 a,.komiku-id #Genre .ls3 h4,.komiku-id #Mirip .mirip1,.komiku-id #Mirip .ls5b h4,.komiku-id section,.komiku-id #Judul,.komiku-id.series #Spoiler .grd,.komiku-id.series #Spoiler h4,.komiku-id #sosmed,.komiku-id #Komentar,.komiku-id #Navbawah,.komiku-id #Footer,.komiku-id.loading{background-color:#222 !important;border-color:#393939 !important;color:#ccc !important;box-shadow:none !important;}.komiku-id nav ul li a,.komiku-id .perapih .ntah,.komiku-id .perapih .daftar,.komiku-id .loop-nav.pag-nav,.komiku-id select,.komiku-id #Terbaru .vw,.komiku-id #Berita .brt,.komiku-id #Menu_Tambahan a,.komiku-id #Peringkat .ls7nm,.komiku-id.series #Judul .new1,.komiku-id.series #Informasi table.inftable td:nth-child(1),.komiku-id.series #Informasi ul.genre li,.komiku-id.series .mnu button.tab:not(.curr),.komiku-id.series #Chapter #Daftar_Chapter tbody th,.komiku-id.chapter #Judul table.tbl tr:nth-child(1) td,.komiku-id .pagination a,.komiku-id #rakbuku .rakbuku,.komiku-id .ls2 .nani{background-color:#343434 !important;border-color:#393939 !important;color:#ccc !important;box-shadow:none !important;}.komiku-id .perapih .daftar .new1 a,.komiku-id .loop-nav.pag-nav a,.komiku-id #genr li a{color:#333 !important;}.komiku-id ::-webkit-scrollbar-track{background:#343434 !important;}.komiku-id ::-webkit-scrollbar-thumb{background:#b8b8b8 !important;}/* webtoons.com */.webtoons-com:not(.read-mode) img,#mainBannerList,.webtoons-com .detail_bg{opacity:0.9 !important;}.webtoons-com #wrap a,.webtoons-com #wrap p,#wrap .main_hotnew h2,#wrap .title_area h2,#wrap .grade_num{color:#838383 !important;}#wrap #header,#wrap .main_ad_area,#wrap .snb_wrap,#wrap #container.bg,#wrap .detail_body .detail_lst,#wrap .detail_body .detail_install_app,#wrap .detail_body .detail_lst li,#wrap .detail_body .aside.detail,#wrap .detail_body .detail_paywall,#wrap .main_daily_wrap,#wrap .daily_tab_wrap,#wrap .main_hotnew_wrap,#wrap .main_genre_wrap,#wrap .main_challenge,#wrap .lst_type1 li,#wrap #footer,#wrap .notice_area,#wrap .foot_app,#wrap .discover_lst li,#wrap .ranking_tab,#wrap .ranking_tab li,#wrap .lst_type1,#wrap .daily_head,#wrap .daily_card_item,#wrap .daily_card,#wrap .daily_card li,#wrap #cbox_module,#wrap .u_cbox .u_cbox_comment_box,#wrap .u_cbox a,#wrap footer,.is-mobile #wrap .lst_item,.is-mobile #wrap .challenge_list,.is-mobile #wrap .my_loading_wrap,.is-mobile #wrap .loader_wrap,.is-mobile #wrap .main_notice,.is-mobile #wrap .detail_white li,.is-mobile #wrap .detail_white .num{background-color:#151515 !important;border-color:#000 !important;color:#838383 !important;}#wrap .card_item .card_back,#wrap .daily_tab li.on .btn_daily,#wrap .main_challenge .title_area .btnarea a,#wrap .snb li.on a,#wrap .ranking_tab li.on a,#wrap .daily_section.on,#wrap .episode_area{background-color:#2f2f2f !important;color:#838383 !important;}.is-mobile #wrap header{background-color:#f5f5f5;}.is-mobile .webtoons-com #reader-mod{padding-top:50px;}/* display none */a[href*="agacelebir.com"][style*="fixed"],.themesia #teaser3,.themesia #wp-bottom-menu,.themesia .readingnav,.pemudanolep #tombolNextPrev,center a[href*="mangatoon"],.kln:not(.blox),.kln.mlb,html body [class*="iklan"],#footer2,noscript,#ftads,.c-sub-header-nav.sticky,#navkanan[class*="scroll"],#bottom-banner-ads,footer.perapih.chf,.restrictcontainer,.adult-content #adult_modal,.adult-content .modal-backdrop,#Notifikasi,.komikcast-me [class*="komik_info-alert"],.manhuaid-com img[alt^="Aplikasi"],.mangayu-com .swal2-container,body[class*="komiku-"] #continue,body[class*="komiku-"] #history2,.is-mobile .webtoons-com #_appDownloadPopup,.is-mobile .webtoons-com #toolbarEpisodeListArea,.is-mobile .webtoons-com #loadingDiv,.mangabat-com #panel-description-linear{display:none !important;visibility:hidden !important;opacity:0 !important;}.hidden-items{position:fixed;top:-9999px;left:-9999px;}/* exception */.judulseries .iklan{display:block !important;visibility:visible !important;opacity:1 !important;}';
     
-    // replace chatango z-index
+    /* replace chatango z-index */
     s_str += 'iframe[src*="chatango.com"]{z-index:214748364 !important}';
     
     //if (el('.preloader .loading')) alert('test'), el('.preloader .loading').parentElement.style.cssText = 'display:none !important';
@@ -343,7 +409,7 @@ function mydb_tools() {
   
   sourceChange = function() {
     var sc_obj = {update: new Date().getTime()}; /* name: value */
-    firebase.app(fbase_app).database().ref('bookmark/source').update(sc_obj, (error) => {
+    firebase.app(myfbase_app).database().ref('bookmark/source').update(sc_obj, (error) => {
       if (error) {
         alert('!! Error: sourceChange(');
       } else {
@@ -357,7 +423,7 @@ function mydb_tools() {
     if (!mydb_change) return;
     mydb_change = false;
     
-    firebase.app(fbase_app).database().ref('bookmark/source').once('value').then(function(snapshot) {
+    firebase.app(myfbase_app).database().ref('bookmark/source').once('value').then(function(snapshot) {
       var data = snapshot.val();
       /*var sc_txt = '{"anime":'+ genObject(genArray(data.anime)) +',"comic":'+ genObject(genArray(data.comic)) +',"novel":'+ genObject(genArray(data.novel)) +'}';*/
       var sc_txt = JSON.stringify(data);
@@ -371,20 +437,15 @@ function mydb_tools() {
   function autoLogin() {
     mydb_info['fbase_auto_login'] = 'true';
     
-    /* Check login source: https://youtube.com/watch?v=iKlWaUszxB4&t=102 */
-    firebase.app(fbase_app).auth().onAuthStateChanged(function(user) {
-      mydb_login = user ? true : false;
-    });
-    
     var al_chk = setInterval(function() {
       if (typeof mydb_login !== 'undefined') {
         clearInterval(al_chk);
         if (mydb_login === false) {
           if (mydb_settings.login_data.email == '' || mydb_settings.login_data.password == '') {
-            alert('!! Error: firebase login\nlogin_email or login_pass is empty');
+            alert('!! Error: firebase auto login\nlogin_email or login_pass is empty');
           } else {
             /* auto login firebase */
-            firebase.app(fbase_app).auth().signInWithEmailAndPassword(mydb_settings.login_data.email, mydb_settings.login_data.password).then((user) => {
+            firebase.app(myfbase_app).auth().signInWithEmailAndPassword(mydb_settings.login_data.email, mydb_settings.login_data.password).then((user) => {
               console.log('Firebase: logged-in');
             }).catch(function(error) {
               console.error('!! Error: function autoLogin(, code: '+ error.code +', message: '+ error.message);
@@ -397,56 +458,77 @@ function mydb_tools() {
     }, 100);
   }
   
+  fbaseObserver = function(callback) {
+    if (mydb_fbase_observer) {
+      mydb_fbase_callbacks.push(callback);
+      if (typeof mydb_login !== 'undefined') callback(), console.warn('callback');
+    } else {  
+      /* Initialize new app with different name https://stackoverflow.com/a/37603526/7598333 */
+      firebase.initializeApp(myfbase_config, myfbase_app);
+    
+      /* Check login https://firebase.google.com/docs/auth/web/manage-users#get_the_currently_signed-in_user */
+      firebase.app(myfbase_app).auth().onAuthStateChanged(function(user) {
+        mydb_login = user ? true : false;
+        if (mydb_fbase_callbacks.length > 0) {
+          for (var i = 0; i < mydb_fbase_callbacks.length; i++) {
+            mydb_fbase_callbacks[i]();
+          }
+        }
+      });
+      
+      if (mydb_settings.auto_login) autoLogin();
+      
+      mydb_fbase_observer = true;
+    }
+  }
+  
   function fbaseInit() {
     if (firebase.apps.length == 0) {
-      /* Initialize new app with different name https://stackoverflow.com/a/37603526/7598333 */
-      firebase.initializeApp(fbase_config, fbase_app);
+      fbaseObserver();
     } else {
-      var fbase_rgx = new RegExp(`\^${fbase_app}\$`, 'i');
+      var fbase_rgx = new RegExp(`\^${myfbase_app}\$`, 'i');
       var fbase_chk = firebase.apps.map(item => { return item.name_.search(fbase_rgx) != -1 }).includes(true);
       if (fbase_chk) {
-        console.warn(`Firebase: Firebase App named '${fbase_app}' already exists`);
+        console.warn(`Firebase: Firebase App named '${myfbase_app}' already exists`);
       } else {
-      /* Initialize new app with different name https://stackoverflow.com/a/37603526/7598333 */
-      firebase.initializeApp(fbase_config, fbase_app);
+        fbaseObserver();
       }
     }
   }
   
-  function fbaseLoad(note) {
+  function fbaseJS(note) {
     if (typeof firebase == 'undefined') {
-      mydb_fbase_app = true;
-      addScript({data:`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-app.js`}).catch(() => {
+      mydb_fbase_js = true;
+      addScript({data:`https://www.gstatic.com/firebasejs/${myfbase_ver}/firebase-app.js`}).catch(() => {
         /* only use catch() :
         - https://stackoverflow.com/a/36213268/7598333
         - https://javascript.info/promise-basics#catch
         */
         clearInterval(lf_chk);
         console.error('!! Error: can\'t load firebase.');
-        if (!mydb_support || (mydb_support && mydb_support.indexOf(mydb_spt_message) == -1)) callScript('error fbaseLoad(');
+        if (!mydb_support || (mydb_support && mydb_support.indexOf(mydb_spt_message) == -1)) callScript('error fbaseJS(');
       });
     } else {
-      mydb_fbase_app = true;
+      mydb_fbase_js = true;
     }
     
     var lf_chk = setInterval(function() {
       if (typeof firebase !== 'undefined') {
         clearInterval(lf_chk);
         mydb_info['fbase_app'] = 'loaded';
-        fbaseInit();
-        if (typeof firebase.database == 'undefined') addScript({data:`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-database.js`});
+        if (typeof firebase.database == 'undefined') addScript({data:`https://www.gstatic.com/firebasejs/${myfbase_ver}/firebase-database.js`});
         var db2_chk = setInterval(function() {
           if (typeof firebase.database !== 'undefined') {
             clearInterval(db2_chk);
             mydb_info['fbase_database'] = 'loaded';
-            if (typeof firebase.auth == 'undefined') addScript({data:`https://www.gstatic.com/firebasejs/${fbase_ver}/firebase-auth.js`});
+            if (typeof firebase.auth == 'undefined') addScript({data:`https://www.gstatic.com/firebasejs/${myfbase_ver}/firebase-auth.js`});
             var db3_chk = setInterval(function() {
               if (typeof firebase.auth !== 'undefined') {
                 clearInterval(db3_chk);
                 mydb_info['fbase_auth'] = 'loaded';
                 mydb_fbase_loaded = true;
                 console.log('Firebase: all loaded');
-                if (mydb_settings.auto_login && typeof bakomon_web === 'undefined') autoLogin();
+                fbaseInit();
               }
             }, 100);
           }
@@ -518,7 +600,7 @@ function mydb_tools() {
             var cr_id = `mydb_tools_${mydb_type}_reader`;
             var cr_type = 'js';
             
-            /* old
+            /* old, temporary
             localSave.load(url_js_comic_reader, cr_id, cr_type, local_interval); */
             
             /* new */
@@ -536,7 +618,7 @@ function mydb_tools() {
             var is_cf = chk_cf ? true : false;
             if (!is_cf && (!mydb_read || mydb_settings.bmark_reader)) {
               mydb_info['bookmark_js'] = 'wait';
-              if (!mydb_fbase_app) fbaseLoad('bookmark');
+              if (!mydb_fbase_js) fbaseJS('bookmark');
               if (live_test_bookmark) {
                 var bm_chk = setInterval(function() {
                   if (typeof mydb_bm_fnc !== 'undefined') {
@@ -548,7 +630,7 @@ function mydb_tools() {
                 var bm_id = 'mydb_tools_bookmark';
                 var bm_type = 'js';
                 
-                /* old
+                /* old, temporary
                 localSave.load(url_js_bookmark, bm_id, bm_type, local_interval); */
                 
                 /* new */
@@ -572,7 +654,7 @@ function mydb_tools() {
       console.log('mydb_support: false');
       if (el('#_loader')) {
         el('#_loader .sl-info').innerHTML = '<span class="sl-not">⚠️</span>';
-        setTimeout(function() { el('#_loader').parentElement.removeChild(el('#_loader')); }, 2000);
+        setTimeout(function() { removeElem('#_loader'); }, 2000);
       }
     }
   }
@@ -629,7 +711,7 @@ function mydb_tools() {
     if (data && (data != 'null' && data != 'error')) {
       data = JSON.parse(data);
       if (note == 'fbase' || note == 'after') {
-        firebase.app(fbase_app).database().ref('bookmark/source/update').once('value').then(function(snapshot) {
+        firebase.app(myfbase_app).database().ref('bookmark/source/update').once('value').then(function(snapshot) {
           if (data.update != snapshot.val()) {
             console.log('mydb: update new source');
             var sc_note = note == 'after' ? 'change' : 'new';
@@ -649,7 +731,7 @@ function mydb_tools() {
       var sc_note = note == 'after' ? 'change' : 'start';
       mydb_change = true;
       if (note == 'fast_mode') {
-        fbaseLoad('start');
+        fbaseJS('start');
         var sc_check = setInterval(function() {
           if (mydb_fbase_loaded) {
             clearInterval(sc_check);
@@ -665,7 +747,7 @@ function mydb_tools() {
   function startLoading() {
     var sl_html = document.createElement('div');
     sl_html.id = '_loader';
-    sl_html.style.cssText = 'position:fixed;bottom:-1px;left:-1px;z-index:2147483642;'; //2147483647
+    sl_html.style.cssText = 'position:fixed;bottom:-1px;left:-1px;z-index:2147483642;'; /* 2147483647 */
     sl_html.innerHTML = '<style>.sl-info{display:-webkit-flex;display:flex;width:40px;height:40px;background:#252428;border:1px solid #3e3949;}.sl-not{font-size:20px;margin:0 auto;}.sl-loader{margin:auto;border:4px solid #ddd;border-top:4px solid #3498db;border-radius:50%;width:20px;height:20px;-webkit-animation:sl-spin 2s linear infinite;animation:sl-spin 2s linear infinite;}@-webkit-keyframes sl-spin{0%{-webkit-transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);}}@keyframes sl-spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>';
     sl_html.innerHTML += '<div class="sl-info"><div class="sl-loader"></div></div>';
     document.body.appendChild(sl_html);
@@ -691,21 +773,37 @@ function mydb_tools() {
   mydb_info['support'] = 'true';
   startLoading();
   mydb_tools_fnc();
-  mydb_reader = wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || el('title') && el('title').innerHTML.search(number_t_rgx) != -1;
   
-  /* START - check source via crossStorage */
-  crossStorage.load(); /* init */
-  if ((!mydb_reader && mydb_settings.server_check.source_bm) || mydb_settings.server_check.source_cr) {
-    fbaseLoad('start');
-    var sc_check = setInterval(function() {
-      if (mydb_fbase_loaded) {
-        clearInterval(sc_check);
-        crossStorage.get('mydb_source_data', function(res){ sourceCheck('fbase', res); });
+  var reader_chk2 = wh.search(/mangacanblog|sellaworks/) != -1 && el('#readerarea');
+  mydb_reader = wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || el('title') && el('title').innerHTML.search(number_t_rgx) != -1 || reader_chk2;
+  
+  
+  /* START */
+  thirdPartyCheck(function(res) {
+    if (res && res != 'fail') {
+      /* check source via crossStorage */
+      crossStorage.load(); /* init */
+      if ((!mydb_reader && mydb_settings.server_check.source_bm) || (mydb_reader && mydb_settings.server_check.source_cr)) {
+        fbaseJS('start');
+        var sc_check = setInterval(function() {
+          if (mydb_fbase_loaded) {
+            clearInterval(sc_check);
+            crossStorage.get('mydb_source_data', function(res){ sourceCheck('fbase', res); });
+          }
+        }, 100);
+      } else {
+        crossStorage.get('mydb_source_data', function(res){ sourceCheck('fast_mode', res); });
       }
-    }, 100);
-  } else {
-    crossStorage.get('mydb_source_data', function(res){ sourceCheck('fast_mode', res); });
-  }
+    } else {
+      if (el('#_loader')) removeElem('#_loader');
+      if (res == 'fail') {
+        sourceCheck('thirdPartyCheck', 'error');
+        console.log('!! Error: <iframe> (thirdPartyCheck) failed to load');
+      } else {
+        alert('!! Error: Third-party bloked');
+      }
+    }
+  });
 }
 
 
@@ -732,10 +830,10 @@ if (document.cookie.match(RegExp('(?:^|;\\s*)reader-zoom=([^;]*)'))) document.co
 
 
 /* ============================================================ */
-var fbase_app = 'bakomon';
-var fbase_ver = '8.10.0';
+var myfbase_app = 'mydb';
+var myfbase_ver = '8.10.0';
 /* Firebase configuration for Firebase JS SDK v7.20.0 and later, measurementId is optional */
-var fbase_config = {
+var myfbase_config = {
   apiKey: "AIzaSyBma6cWOGzwSE4sv8SsSewIbCjTPhm7qi0",
   authDomain: "bakomon99.firebaseapp.com",
   databaseURL: "https://bakomon99.firebaseio.com",
@@ -752,20 +850,25 @@ var cross_origin = 'coreaz';
 var cross_url = 'https://readanimanga.blogspot.com';
 var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
-var wh_rgx = /^(w{3}|web|m(obile)?|read|data)\./i;
-var number_t_rgx = /\s(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s?[-\.]\s?\d+)?|\s)/gi; /* check id from <title> */
+var wh_rgx = /^(w{3}|web|m(obile)?|\w{1}|read|data|en|beta)\./i;
+var number_t_rgx = /\s?(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s?[-\.]\s?\d+)?|\s)/gi; /* check id from <title> */
 var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|epi?(sodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
 var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
-var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|(my)?bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
+var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|(my)?bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register|settings?)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
 var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|list|release|author|artist)\/.*\/?$/i;
+var batoto_rgx = /(ba|m|d|h|w)to\.to|((manga|bat)(window|t?o?t[ow]o?)|comiko)\.(net|com?|org)/i;
 /* ============================================================ */
 /* mydb is for global variable */
-var mydb_reader, mydb_login, mydb_source, mydb_type, mydb_type_bkp, mydb_read, mydb_zoom, mydb_support, mydb_spt_info;
+var mydb_reader, mydb_login, mydb_user, mydb_source, mydb_type, mydb_type_bkp, mydb_read, mydb_zoom, mydb_support, mydb_spt_info;
 var mydb_loaded = false;
-var mydb_fbase_app = false; //check if firebase function has been called
+var mydb_fbase_js = false; /* check if firebase function has been called */
 var mydb_fbase_loaded = false;
-var mydb_bm_loaded = false;
+var mydb_fbase_observer = false;
+var mydb_fbase_callbacks = [];
+var mydb_crjs_loaded = false;
 var mydb_cr_loaded = false;
+var mydb_bmjs_loaded = false;
+var mydb_bm_loaded = false;
 var mydb_x_loaded = false;
 var mydb_change = false;
 var mydb_project = false;
@@ -773,7 +876,7 @@ var mydb_database = false;
 var mydb_content_type = checkContentType();
 var mydb_select = 'list';
 var mydb_spt_message = '🎉 supported site 🎉';
-var mydb_db_list = ['mangadex','mangaupdates','myanimelist','anilist','anidb'];
+var mydb_db_list = ['mangaupdates','myanimelist','anilist']; /* mangadex, anidb */
 var mydb_info = {"error":{},"support":"","source":"","type":"","fbase_app":"","fbase_database":"","fbase_auth":"","fbase_auto_login":"","reader_js":"","bookmark_js":""};
 var mydb_blocked = ['\x6a\x6f\x73\x65\x69','\x79\x61\x6f\x69','\x79\x75\x72\x69','\x73\x68\x6f\x75\x6a\x6f\x5f\x61\x69','\x73\x68\x6f\x75\x6e\x65\x6e\x5f\x61\x69','\x65\x63\x63\x68\x69','\x76\x69\x6f\x6c\x65\x6e\x63\x65','\x73\x6d\x75\x74','\x68\x65\x6e\x74\x61\x69','\x67\x65\x6e\x64\x65\x72\x5f\x62\x65\x6e\x64\x65\x72','\x67\x65\x6e\x64\x65\x72\x5f\x73\x77\x61\x70','\x6f\x6e\x65\x5f\x73\x68\x6f\x74'];
 var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmark_reader":false,"auto_login":true,"login_data":{"email":"","password":""},"new_tab":{"bm_list":true,"bs_list":true},"number_title":false,"server_check":{"source_bm":false,"source_cr":false,"bm_list":false},"remove_site":{"bookmark":true,"history":true},"number_reader":true,"mod_disqus":true,"read_project":false,"remove_statically":false};
@@ -781,16 +884,16 @@ var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmar
 - bmark_reader = show bookmark on comic reader
 - new_tab.bm_list = open link in new tab on bookmark list (bm_list)
 - new_tab.bs_list = open link in new tab on search list (bs_list)
-- number_title = add [number] chapter/episode to <title>
-- server_check.source_bm = check if source data updated on bookmark
-- server_check.source_cr = check if source data updated on comic reader
+- number_title = add [number] chapter/episode to <title> on bookmark
+- server_check.source_bm = always check if source data is updated on bookmark
+- server_check.source_cr = always check if source data is updated on comic reader
 - server_check.bm_list = check if bm_list data updated (date)
 - remove_site.bookmark = remove localStorage bookmark
 - remove_site.history = remove localStorage history
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|12/5/2022, 11:31:05 AM';
+var local_interval = 'manual|12/11/2022, 9:48:57 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/tools/mydb-custom.js';
@@ -806,13 +909,13 @@ var live_test_custom = false;
 - gitcdn last commit: https://gitcdn.herokuapp.com/cdn/USER/YOUR_PACKAGE/LATEST_COMMIT/foo/bar
 */
 
-if (typeof el !== 'undefined' && typeof bakomon_web === 'undefined') {
+if (typeof el !== 'undefined' && el && typeof bakomon_web === 'undefined') {
   mydb_spt_info = '{"support":"false","note":"el( function exist"}';
   localStorage.setItem('mydb_tools_support', mydb_spt_info); /* not support */
   mydb_support = mydb_spt_info;
 } else {
   /* global variables */
-  var global_arr = ['el','openInNewTab','addScript','isMobile','crossStorage','genArray','sourceGen','sourceChange','localSave','getId','sourceCheck'];
+  var global_arr = ['el','openInNewTab','addScript','crossStorage','genArray','sourceGen','sourceChange','localSave','getId','sourceCheck','fbaseObserver'];
   for (var g = 0; g < global_arr.length; g++) {
     window[global_arr[g]];
   }
