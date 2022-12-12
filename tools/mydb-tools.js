@@ -916,9 +916,7 @@ if (typeof el !== 'undefined' && el && typeof bakomon_web === 'undefined') {
 } else {
   /* global variables */
   var global_arr = ['el','openInNewTab','addScript','crossStorage','genArray','sourceGen','sourceChange','localSave','getId','sourceCheck','fbaseObserver'];
-  for (var g = 0; g < global_arr.length; g++) {
-    window[global_arr[g]];
-  }
+  for (var mydb_num = 0; mydb_num < global_arr.length; mydb_num++) window[global_arr[mydb_num]];
 }
 
 loadListener('dom', function() {
