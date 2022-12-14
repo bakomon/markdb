@@ -676,12 +676,17 @@ function mydb_bm_fnc() {
     
     if (n_start < 1) n_start = 1;
     
+    if (nav_total == (nav_max+4)) {
+      n_start = 1;
+      n_end = bmhs_length;
+    }
+    
     n_txt += '<ul class="flex">';
     
     // "prev" button
     n_txt += '<li';
     if (nav_current != 1) n_txt += ' data-page="'+ (nav_current-1) +'"';
-    n_txt += '><div class="_db db_iprev '+ (nav_current == 1 ? 'db_disabled' : 'db_inav') +'">&#10094;</div></li>';
+    n_txt += '><div class="_db db_iprev '+ (nav_current == 1 ? 'db_disabled' : 'db_inav') +'" title="Prev">&#10094;</div></li>';
     
     // add '...'
     if (n_start > 1) {
@@ -704,10 +709,10 @@ function mydb_bm_fnc() {
     // "next" button
     n_txt += '<li';
     if (nav_current != nav_total) n_txt += ' data-page="'+ (nav_current+1) +'"';
-    n_txt += '><div class="_db db_inext '+ (nav_current == nav_total ? 'db_disabled' : 'db_inav') +'">&#10095;</div></li>';
+    n_txt += '><div class="_db db_inext '+ (nav_current == nav_total ? 'db_disabled' : 'db_inav') +'" title="Next">&#10095;</div></li>';
     
     n_txt += '</ul>';
-    n_txt += '<div class="db_count db_text">Page '+ nav_current +' of '+ nav_total +'</div>';
+    if (!is_mobile) n_txt += '<div class="db_count db_text">Page '+ nav_current +' of '+ nav_total +'</div>';
     
     nav_elem.innerHTML = n_txt;
     
@@ -823,8 +828,8 @@ function mydb_bm_fnc() {
       }
       
       db_indexChange(nav_current); //generate catalog & pagination
-      el('.db_imenu .db_inote').innerHTML = is_isearch ? ('Search Result <span class="_db db_active"><b>'+ index_arr.length +'</b></span>') : 
-      ((mydb_select == 'source' ? 'Source' : 'All') +' '+ mydb_type +' ('+ index_arr.length +')');
+      
+      el('.db_imenu .db_inote').innerHTML = is_isearch ? ('Search Result <span class="_db db_active"><b>'+ index_arr.length +'</b></span>') : ((mydb_select == 'source' ? 'Source' : 'All') +' '+ mydb_type +' ('+ index_arr.length +')');
       if (mydb_select == 'source') {
         el('.db_inote').classList.add('db_100', 't_center');
         el('.db_ifilter').classList.add('db_hidden');
@@ -842,7 +847,7 @@ function mydb_bm_fnc() {
     // css
     b_txt += '<style>.bm_index{position:fixed;top:0;bottom:0;left:0;right:0;padding:25px;}.db_idata,.db_iloading{position:relative;}.db_idata{background:#17151b;padding:10px;}.db_idata .db_ihelp_note{padding:8px 10px 10px;cursor:default;}.db_imenu{margin-top:10px;}.db_icatalog{max-height:calc(100vh - 230px);overflow-y:auto;margin:15px 0;}.db_icatalog .db_ipost{padding:10px;}.db_icatalog.db_ilist .db_ipost{width:33.3%;}.db_icatalog.db_isource .db_ipost{width:25%;}.db_ipost .db_icover{width:25%;margin-right:10px;}.db_icover a{height:100%;}.db_iclose{position:fixed;bottom:0;left:0;}.db_image_bg{position:relative;height:115px;}.db_image_bg:before{content:\x27\x27;position:absolute;top:0;left:0;width:100%;height:100%;text-indent:-9999px;background:#252428;}.db_image_bg:after{content:\x27no image\x27;position:absolute;top:0;left:0;color:#ddd;font-size:14px;}.db_pagination .db_count{margin-left:20px;}.db_icon img{height:30px;width:30px;margin-right:10px;padding:5px;background:#ddd;}</style>';
     // mobile
-    b_txt += '<style>.bm_index.db_mobile{padding:0;}.db_mobile .db_icatalog{max-height:calc(100vh - 210px);}.db_mobile .db_icatalog .db_ipost{width:100%;}.db_mobile .db_ipost .db_icover{width:30%;}.db_mobile .db_ifilter .db_text,.db_mobile .db_pagination .db_count{display:none;}</style>';
+    b_txt += '<style>.bm_index.db_mobile{padding:0;}.db_mobile .db_icatalog{max-height:calc(100vh - 210px);}.db_mobile .db_icatalog .db_ipost{width:100%;}.db_mobile .db_ipost .db_icover{width:30%;}.db_mobile .db_ifilter .db_text{display:none;}</style>';
     // html
     b_txt += '<div class="db_ibg"></div>';
     b_txt += '<div class="db_idata flex_wrap db_hidden">';
