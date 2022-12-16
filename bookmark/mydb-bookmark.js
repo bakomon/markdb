@@ -676,9 +676,9 @@ function mydb_bm_fnc() {
     
     if (n_start < 1) n_start = 1;
     
-    if (nav_total == (nav_max+4)) {
+    if (nav_total <= (nav_max+4)) {
       n_start = 1;
-      n_end = bmhs_length;
+      n_end = nav_total;
     }
     
     n_txt += '<ul class="flex">';
