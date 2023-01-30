@@ -105,20 +105,21 @@ function mydb_tools_fnc() {
   
   /* Restore native window.open https://stackoverflow.com/a/48006884/7598333 */
   openInNewTab = function(url, note) {
-    var _iframe = document.createElement('iframe');
-    document.documentElement.appendChild(_iframe);
+    if (!('nativeOpen' in window)) {
+      var _iframe = document.createElement('iframe');
+      document.documentElement.appendChild(_iframe);
     
-    var _window = _iframe.contentWindow;
-    window.nativeOpen = _window.open;
+      var _window = _iframe.contentWindow;
+      window.nativeOpen = _window.open;
+      _iframe.parentElement.removeChild(_iframe);
+    }
     
     if (note in mydb_settings.new_tab && !mydb_settings.new_tab[note]) {
       window.nativeOpen(url, '_self');
     } else {
       window.nativeOpen(url);
     }
-    
-    _iframe.parentElement.removeChild(_iframe);
-  }
+  };
   
   /* Add script to head https://codepen.io/sekedus/pen/QWKYpVR */
   addScript = function(options, note) {
@@ -376,7 +377,7 @@ function mydb_tools() {
     
     if (typeof bakomon_web === 'undefined') {
       /* css control 2 */
-      s_str += '.cbr_mod *,.cbr_mod *:before,.cbr_mod *:after{outline:0;-webkit-box-sizing:border-box;box-sizing:border-box;}.line_text{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}.flex{display:-webkit-flex;display:flex;}.flex_wrap{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;}.f_perfect{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);}/* Perfect Centering: parent */.f_perfect .fp_content{margin:auto;}/* Perfect Centering: content */.f_top{-webkit-align-items:flex-start;align-items:flex-start;-webkit-align-content:flex-start;align-content:flex-start;}.f_middle{-webkit-align-items:center;align-items:center;-webkit-align-content:center;align-content:center;}.f_bottom{-webkit-align-items:flex-end;align-items:flex-end;-webkit-align-content:flex-end;align-content:flex-end;}.f_center{-webkit-justify-content:center;justify-content:center;}.f_left{-webkit-justify-content:flex-start;justify-content:flex-start;}.f_right{-webkit-justify-content:flex-end;justify-content:flex-end;}.f_grow{-webkit-flex-grow:1;flex-grow:1;}.f_between{-webkit-justify-content:space-between;justify-content:space-between;}.t_center{text-align:center;}.t_left{text-align:left;}.t_right{text-align:right;}.t_justify{text-align:justify;}.line_clamp{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}.disabled,[disabled]{cursor:not-allowed !important;}.line_clamp.lc1{-webkit-line-clamp:1}';
+      s_str += '.cbr_mod *,.cbr_mod *:before,.cbr_mod *:after{outline:0;-webkit-box-sizing:border-box;box-sizing:border-box;}.line_text{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}.flex{display:-webkit-flex;display:flex;}.flex_wrap{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;}.f_perfect{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.7);}/* Perfect Centering: parent */.f_perfect .fp_content{margin:auto;}/* Perfect Centering: content */.f_top{-webkit-align-items:flex-start;align-items:flex-start;-webkit-align-content:flex-start;align-content:flex-start;}.f_middle{-webkit-align-items:center;align-items:center;-webkit-align-content:center;align-content:center;}.f_bottom{-webkit-align-items:flex-end;align-items:flex-end;-webkit-align-content:flex-end;align-content:flex-end;}.f_center{-webkit-justify-content:center;justify-content:center;}.f_left{-webkit-justify-content:flex-start;justify-content:flex-start;}.f_right{-webkit-justify-content:flex-end;justify-content:flex-end;}.f_grow{-webkit-flex-grow:1;flex-grow:1;}.f_between{-webkit-justify-content:space-between;justify-content:space-between;}.t_center{text-align:center;}.t_left{text-align:left;}.t_right{text-align:right;}.t_justify{text-align:justify;}.line_clamp{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}.disabled,[disabled]{cursor:not-allowed !important;}.line_clamp.lc1{-webkit-line-clamp:1}';
       
       /* css main */
       s_str += '/* Custom Scrollbar */body::-webkit-scrollbar{width:15px;}body::-webkit-scrollbar-track{background:#312f40;}body::-webkit-scrollbar-thumb{background:#151515;}html,body,article{background:#151515 !important;color:#b8b8b8;-webkit-user-select:text;user-select:text;}body{position:relative !important;overflow:visible !important;}html.no-scroll,body.no-scroll{overflow:hidden !important;}';
@@ -480,7 +481,7 @@ function mydb_tools() {
       
       mydb_fbase_observer = true;
     }
-  }
+  };
   
   function fbaseInit() {
     if (firebase.apps.length == 0) {
@@ -893,7 +894,7 @@ var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmar
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|12/11/2022, 9:48:57 PM';
+var local_interval = 'manual|1/31/2023, 7:08:09 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/tools/mydb-custom.js';
