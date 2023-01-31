@@ -202,7 +202,7 @@ function mydb_x_fnc() {
       el('.isdark').setAttribute('id', 'darkmode');
       el('nav').classList.add('bg-dark');
       el('nav').classList.remove('bg-success', 'fixed-top');
-    } else if (document.body.classList.contains('emissionhex')) {
+    } else if (document.body.classList.contains('emissionhex') || document.body.classList.contains('pemudanolep')) {
       localStorage.setItem('mode', 'darkmode');
       el('#modeSwitch').classList.add('dark-mode');
     } else if (wh.indexOf('mangayu') != -1) {
