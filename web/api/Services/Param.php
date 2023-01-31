@@ -9,7 +9,7 @@ class Param
         http_response_code($data->status_code);
         $new_data = json_encode($data);
         
-        // if (!isset($_GET['dev']) && isset($_SERVER['HTTP_ORIGIN'])) header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']); //for plugin
+        // if (!isset($_GET['dev']) && isset($_SERVER['HTTP_ORIGIN'])) header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']); //🟥 for plugin
         
         // https://stackoverflow.com/a/1678243/7598333
         if (isset($_GET['callback'])) :

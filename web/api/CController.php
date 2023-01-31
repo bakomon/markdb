@@ -35,7 +35,7 @@ class CController
                 $ls_lists = [];
     
                 foreach ($lists as $index) {
-                    if ($source['theme'] == 'themesia') :
+                    if ($source['theme'] == 'themesia' || $source['theme'] == 'enduser') :
                         $color = '';
                         $date = '';
                     else :
@@ -142,7 +142,7 @@ class CController
     
                 if ($lists->length > 0) :
                     foreach ($lists as $index) {
-                        if ($source['theme'] == 'themesia') :
+                        if ($source['theme'] == 'themesia' || $source['theme'] == 'enduser') :
                             $color = '';
                         else :
                             $color = $xpath->query($source['LS']['color']['xpath'], $index);
@@ -290,7 +290,8 @@ class CController
     
                     if ($chapters->length > 0) :
                         foreach ($chapters as $index) {
-                            $ch_num = preg_replace('/chapter\s+/i', '', $xpath->query($source['series']['chapter']['num'], $index)[0]->textContent);
+                            $ch_el = $source['theme'] == 'enduser' ? $index : $xpath->query($source['series']['chapter']['num'], $index)[0];
+                            $ch_num = preg_replace('/chapter\s+/i', '', $ch_el->textContent);
                             $ch_url = $index->getAttribute($source['series']['chapter']['attr']);
                             $sr_slug = $slink ? preg_replace('/^' . $slink . '(\d+)?\-/i', '', $slug) : $slug; //remove shortlink
                             $ch_str = preg_replace('/' . $sr_slug . '/i', '', $ch_url);
@@ -410,10 +411,14 @@ class CController
                             echo '"ts_reader" not found.';
                         endif;
                     else :
-                        // cover selector without parent
-                        // $cover = preg_replace('/\?.*/', '', $xpath->query($source['chapter']['cover']['xpath'])[0]->getAttribute($source['chapter']['cover']['attr'])); //remove search parameter and push
-                        $cover = $xpath->query($source['chapter']['cover']['xpath']);
-                        $cover = $cover->length > 0 ? $cover[0]->getAttribute($source['chapter']['cover']['attr']) : '';
+                        if ($source['theme'] == 'enduser') :
+                            $cover = '';
+                        else :
+                            // cover selector without parent
+                            // $cover = preg_replace('/\?.*/', '', $xpath->query($source['chapter']['cover']['xpath'])[0]->getAttribute($source['chapter']['cover']['attr'])); //remove search parameter and push
+                            $cover = $xpath->query($source['chapter']['cover']['xpath']);
+                            $cover = $cover->length > 0 ? $cover[0]->getAttribute($source['chapter']['cover']['attr']) : '';
+                        endif;
 
                         $next_btn = $xpath->query($source['chapter']['next']['xpath'], $content);
                         if ($next_btn->length > 0) :

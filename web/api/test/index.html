@@ -177,7 +177,7 @@ a.btn{color:var(--color3);}
       <div class="scrap-result t_center no_items">
         <div class="result-url">
           <div class="result-top">Url:</div>
-          <div class="result-bottom"><a href="" target="_blank"></a></div>
+          <div class="result-bottom"><a href="" rel="nofollow" target="_blank"></a></div>
         </div>
         <div class="result-code">
           <div class="result-top">Status Code:</div>
@@ -234,7 +234,7 @@ function loadXMLDoc(url, callback, info) {
 function scrap_show(res) {
   var data = JSON.parse(res);
   el('.post-content').classList.remove('loading', 'loge');
-  el('.result-url a').href = data.url;
+  el('.result-url a').href = data.url.search(/(https?:)?\/\//) == -1 ? ('//'+ data.url) : data.url;
   el('.result-url a').innerHTML = data.url;
   el('.result-code strong').innerHTML = data.status_code;
   if (data.status_code == 200) el('.result-code .result-bottom').classList.add('result-ok');
