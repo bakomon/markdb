@@ -86,6 +86,11 @@ body.manga-page .main-col .listing-chapters_wrap ul.version-chap {
   background: #151515 !important;
   border-color: #3e3949 !important;
 }
+/* blogger */
+.emissionhex svg, .pemudanolep svg {
+  width: initial;
+  height: initial;
+}
 /* komikgo.com */
 .chapter-type-manga .c-blog-post .entry-content .entry-content_wrap .reading-content::before {
   position: relative;
