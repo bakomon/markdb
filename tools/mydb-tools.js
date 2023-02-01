@@ -148,7 +148,10 @@ function mydb_tools_fnc() {
   /* Cross Domain LocalStorage */
   crossStorage = {
     /* 
-    - bug on Firefox (CORS) https://wp.me/pVzR8-9X#:~:text=in%20firefox,on%20iframe
+    - Doesn't work on (CORS):
+      - Firefox: https://wp.me/pVzR8-9X#:~:text=in%20firefox,on%20iframe
+      - Safari: https://wp.me/pVzR8-9X#:~:text=This%20doesn%E2%80%99t,security%20problem
+    
     rel:
     - Cross-Domain LocalStorage https://wp.me/pVzR8-9X
     - https://github.com/jcubic/sysend.js/blob/master/sysend.js
@@ -776,7 +779,7 @@ function mydb_tools() {
   mydb_tools_fnc();
   
   var reader_chk2 = wh.search(/mangacanblog|sellaworks/) != -1 && el('#readerarea');
-  mydb_reader = wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || el('title') && el('title').innerHTML.search(number_t_rgx) != -1 || reader_chk2;
+  mydb_reader = wp.search(number_w_rgx) != -1 || wl.search.search(number_w_rgx) != -1 || (el('title') && el('title').innerHTML.search(number_t_rgx) != -1) || reader_chk2;
   
   
   /* START */
@@ -852,10 +855,10 @@ var cross_url = 'https://readanimanga.blogspot.com';
 var cross_frame = cross_url.replace(/\/$/, '') +'/p/bakomon.html';
 /* ============================================================ */
 var wh_rgx = /^(w{3}|web|m(obile)?|\w{1}|read|data|en|beta)\./i;
-var number_t_rgx = /\s?(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s?[-\.]\s?\d+)?|\s)/gi; /* check id from <title> */
+var number_t_rgx = /(^|[^a-z0-9])(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s?[-\.]\s?\d+)?|\s)/gi; /* check id from <title> */
 var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|epi?(sodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
 var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
-var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|(my)?bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register|settings?)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
+var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account|advanced)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|(my)?bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register|settings?)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
 var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|list|release|author|artist)\/.*\/?$/i;
 var batoto_rgx = /(ba|m|d|h|w)to\.to|((manga|bat)(window|t?o?t[ow]o?)|comiko)\.(net|com?|org)/i;
 /* ============================================================ */
@@ -894,11 +897,11 @@ var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmar
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|1/31/2023, 7:08:09 AM';
-var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/bookmark/mydb-bookmark.js';
-var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/reader/comic-reader.js';
-var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/tools/mydb-custom.js';
-var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/mydb@master/update.txt';
+var local_interval = 'manual|2/1/2023, 8:40:08 AM';
+var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/bookmark/mydb-bookmark.js';
+var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/reader/comic-reader.js';
+var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/tools/mydb-custom.js';
+var url_update = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/update.txt';
 var live_test_bookmark = false;
 var live_test_comic_r = false;
 var live_test_custom = false;
