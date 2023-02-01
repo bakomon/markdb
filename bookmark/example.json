@@ -1,0 +1,1392 @@
+{
+  "bookmark": {
+    "anime": {
+      "check": {
+        "length": "1",
+        "update": 1643032297000
+      },
+      "list": {
+        "shingeki-no-kyojin": {
+          "alternative": "Shingeki no Kyojin: The Final Season | Attack on Titan Final Season",
+          "bmdb": "mal|40028",
+          "host": "oploverz.asia",
+          "id": "shingeki-no-kyojin",
+          "image": "https://cdn.myanimelist.net/images/anime/1000/110531.jpg",
+          "note": "",
+          "number": "28",
+          "similar": "",
+          "title": "Shingeki no Kyojin Season 4",
+          "update": 1652227200000,
+          "url": "//oploverz.asia/anime/shingeki-no-kyojin-season-4/"
+        }
+      }
+    },
+    "comic": {
+      "check": {
+        "length": "5",
+        "update": 1661125431609
+      },
+      "list": {
+        "1-second": {
+          "alternative": "",
+          "bmdb": "mu|16632594365",
+          "host": "masterkomik.com",
+          "id": "1-second",
+          "image": "https://cdn.mangaupdates.com/image/i363952.jpg",
+          "note": "",
+          "number": "belum",
+          "read": "",
+          "similar": "",
+          "title": "1 Second",
+          "type": "manhwa",
+          "update": 1590624000000,
+          "url": "//masterkomik.com/manga/1-second/"
+        },
+        "goblin-slayer": {
+          "alternative": "",
+          "bmdb": "mu|74074058344",
+          "host": "komikmpus.blogspot.com",
+          "id": "goblin-slayer",
+          "image": "https://cdn.mangaupdates.com/image/i369713.jpg",
+          "note": "",
+          "number": "71",
+          "read": "//mangadex.org/title/18935/goblin-slayer",
+          "similar": "goblin-slayer-brand-new-day, goblin-slayer-side-story-year-one, goblin-slayer-gaiden-2-tsubanari-no-daikatana",
+          "title": "Goblin Slayer",
+          "type": "manga",
+          "update": 1654387200000,
+          "url": "//komikmpus.blogspot.com/2021/06/goblin-slayer-komik.html"
+        },
+        "goblin-slayer-brand-new-day": {
+          "alternative": "",
+          "bmdb": "mu|70310800592",
+          "host": "komikcast.me",
+          "id": "goblin-slayer-brand-new-day",
+          "image": "https://cdn.mangaupdates.com/image/i293157.png",
+          "note": "",
+          "number": "6",
+          "read": "",
+          "similar": "goblin-slayer, goblin-slayer-side-story-year-one, goblin-slayer-gaiden-2-tsubanari-no-daikatana",
+          "title": "Goblin Slayer: Brand New Day",
+          "type": "manga",
+          "update": 1574812800000,
+          "url": "//komikcast.me/komik/goblin-slayer-brand-new-day/"
+        },
+        "goblin-slayer-gaiden-2-tsubanari-no-daikatana": {
+          "alternative": "",
+          "bmdb": "mu|64670432565",
+          "host": "ngomik.net",
+          "id": "goblin-slayer-gaiden-2-tsubanari-no-daikatana",
+          "image": "https://cdn.mangaupdates.com/image/i371445.jpg",
+          "note": "",
+          "number": "belum",
+          "read": "",
+          "similar": "goblin-slayer, goblin-slayer-brand-new-day, goblin-slayer-side-story-year-one",
+          "title": "Goblin Slayer Gaiden 2: Tsubanari no Daikatana",
+          "type": "manga",
+          "update": 1550361600000,
+          "url": "//ngomik.net/manga/goblin-slayer-gaiden-2-tsubanari-no-daikatana/"
+        },
+        "goblin-slayer-side-story-year-one": {
+          "alternative": "",
+          "bmdb": "mu|74253291537",
+          "host": "komikcast.me",
+          "id": "goblin-slayer-side-story-year-one",
+          "image": "https://cdn.mangaupdates.com/image/i371446.jpg",
+          "note": "",
+          "number": "34",
+          "read": "",
+          "similar": "goblin-slayer, goblin-slayer-brand-new-day, goblin-slayer-gaiden-2-tsubanari-no-daikatana",
+          "title": "Goblin Slayer Side Story: Year One",
+          "type": "manga",
+          "update": 1616630400000,
+          "url": "//komikcast.me/komik/goblin-slayer-side-story-year-one/"
+        }
+      },
+      "update": 1643032297000
+    },
+    "novel": {
+      "check": {
+        "length": "4",
+        "update": 1649683607760
+      },
+      "list": {
+        "solo-leveling": {
+          "alternative": "Only I Level Up | 나 혼자만 레벨업",
+          "bmdb": "mu0|155691",
+          "host": "semaunya-aja.blogspot.com",
+          "id": "solo-leveling",
+          "image": "https://4.bp.blogspot.com/-3y7PwJ7MFBc/XHmz0e7Or-I/AAAAAAAABFo/1BuSfN7k0EYIBHG508EgZprNGzkQGNSfACLcBGAs/s240/solo%2Bleveling.jpg",
+          "note": "",
+          "number": "247",
+          "similar": "",
+          "title": "Solo Leveling",
+          "type": "mtl",
+          "update": 1557331200000,
+          "url": "//semaunya-aja.blogspot.com/2018/12/Solo-Leveling.html"
+        },
+        "sss-class-suicide-hunter": {
+          "alternative": "SSS급 자살헌터",
+          "bmdb": "mu0|175841",
+          "host": "meionovel.id",
+          "id": "sss-class-suicide-hunter",
+          "image": "https://www.mangaupdates.com/image/i332961.jpg",
+          "note": "",
+          "number": "81",
+          "similar": "",
+          "title": "SSS-Class Suicide Hunter",
+          "type": "mtl",
+          "update": 1613577600000,
+          "url": "//meionovel.id/novel/sss-class-suicide-hunter/"
+        },
+        "tales-of-demons-and-gods": {
+          "alternative": "Yaoshenji | 妖神记",
+          "bmdb": "mu0|124072",
+          "host": "yukinovel.id",
+          "id": "tales-of-demons-and-gods",
+          "image": "https://www.mangaupdates.com/image/i226212.jpg",
+          "note": "",
+          "number": "487",
+          "similar": "",
+          "title": "Tales of Demons and Gods",
+          "type": "htl",
+          "update": 1634688000000,
+          "url": "//yukinovel.id/novel/tales-of-demons-and-gods/"
+        },
+        "the-failed-swordsman-who-became-the-strongest-after-spamming-the-100-million-years-button": {
+          "alternative": "",
+          "bmdb": "mu0|191391",
+          "host": "sakuranovel.id",
+          "id": "the-failed-swordsman-who-became-the-strongest-after-spamming-the-100-million-years-button",
+          "image": "https://cdn.mangaupdates.com/image/i367305.jpg",
+          "note": "",
+          "number": "8.2",
+          "similar": "",
+          "title": "The Failed Swordsman Who Became the Strongest After Spamming the 100 Million Years Button",
+          "type": "mtl",
+          "update": 1585958400000,
+          "url": "//sakuranovel.id/series/the-failed-swordsman-who-became-the-strongest-after-spamming-the-100-million-years-button/"
+        }
+      }
+    },
+    "source": {
+      "anime": {
+        "animeindo-web-id": {
+          "domain": "animeindo.asia",
+          "host": "animeindo.web.id",
+          "icon": "https://i.postimg.cc/L8hrt5Wc/animeindo.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "oploverz-net": {
+          "domain": "oploverz.in | oploverz.bz | oploverz.biz | oploverz.fan | oploverz.asia | oploverz.cx | oploverz.co.in",
+          "host": "oploverz.net",
+          "icon": "https://i.postimg.cc/RVgkJKg1/oploverz.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "samehadaku-net": {
+          "domain": "samehadaku.tv | samehadaku.vip | samehadaku.to | samehadaku.sbs | 194.163.183.129",
+          "host": "samehadaku.net",
+          "icon": "https://i.postimg.cc/XNkS3TFz/samehadaku.jpg",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "eastheme"
+        },
+        "wardhanime-net": {
+          "domain": "awsubs.me | awsubs.tv | awsubs.id | awsubs.co",
+          "host": "wardhanime.net",
+          "icon": "https://i.postimg.cc/g251NdFn/wardhanime.png",
+          "language": "id",
+          "project": "",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "none"
+        }
+      },
+      "comic": {
+        "ainzscans-my-id": {
+          "domain": "",
+          "host": "ainzscans.my.id",
+          "icon": "https://i.postimg.cc/Y2nts9xj/ainzscans.png",
+          "language": "id",
+          "project": "//ainzscans.my.id/search/label/Project",
+          "status": "active",
+          "tag": "",
+          "theme": "pemudanolep"
+        },
+        "alceascan-my-id": {
+          "domain": "",
+          "host": "alceascan.my.id",
+          "icon": "https://i.postimg.cc/BZKkKTLn/alceascan.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "pemudanolep"
+        },
+        "animesc-kun-blogspot-com": {
+          "domain": "",
+          "host": "animesc-kun.blogspot.com",
+          "icon": "",
+          "language": "id",
+          "project": "//animesc-kun.blogspot.com/p/daftar-project-animesc-kun.html",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "none"
+        },
+        "asurascans-com": {
+          "domain": "asura.gg",
+          "host": "asurascans.com",
+          "icon": "https://i.postimg.cc/D089fTkW/asurascans.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "bacakomik-co": {
+          "domain": "",
+          "host": "bacakomik.co",
+          "icon": "https://i.postimg.cc/0j5jT5tm/bacakomik.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "not_support",
+          "theme": "eastheme"
+        },
+        "bacamanga-co": {
+          "domain": "",
+          "host": "bacamanga.co",
+          "icon": "",
+          "language": "id",
+          "project": "//bacamanga.co/proyek/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "bacamanga-org": {
+          "domain": "mangatale.co",
+          "host": "bacamanga.org",
+          "icon": "https://i.postimg.cc/cJYYVZVp/bacamanga.jpg",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "bakomon-epizy-com": {
+          "domain": "bakomon.blogspot.com",
+          "host": "bakomon.epizy.com",
+          "icon": "",
+          "language": "raw",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "bato-to": {
+          "domain": "batotoo.com",
+          "host": "bato.to",
+          "icon": "https://i.postimg.cc/Xvm3qB1y/batoto.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "not_support",
+          "theme": "none"
+        },
+        "bookscanlation-blogspot-com": {
+          "domain": "",
+          "host": "bookscanlation.blogspot.com",
+          "icon": "",
+          "language": "id",
+          "project": "",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "none"
+        },
+        "boosei-com": {
+          "domain": "boosei.net",
+          "host": "boosei.com",
+          "icon": "https://i.postimg.cc/MHXMcKyw/boosei.png",
+          "language": "id",
+          "project": "//boosei.com/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "campmanga-blogspot-com": {
+          "domain": "",
+          "host": "campmanga.blogspot.com",
+          "icon": "https://i.postimg.cc/hP1cSX63/campmanga.png",
+          "language": "id",
+          "project": "//campmanga.blogspot.com/search/label/Series",
+          "status": "active",
+          "tag": "",
+          "theme": "emissionhex"
+        },
+        "comicdom-org": {
+          "domain": "",
+          "host": "comicdom.org",
+          "icon": "https://i.postimg.cc/vmzD8Kfg/comicdom.png",
+          "language": "en",
+          "project": "",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "madara"
+        },
+        "comicfx-net": {
+          "domain": "",
+          "host": "comicfx.net",
+          "icon": "https://i.postimg.cc/FKsLtZ71/comicfx.png",
+          "language": "id",
+          "project": "//comicfx.net/latest-project",
+          "status": "active",
+          "tag": "not_support,_rightclick",
+          "theme": "reader_cms"
+        },
+        "comicnimee-blogspot-com": {
+          "domain": "comicnime.xyz",
+          "host": "comicnimee.blogspot.com",
+          "icon": "",
+          "language": "id",
+          "project": "//comicnime.xyz/search/label/Series",
+          "status": "active",
+          "tag": "",
+          "theme": "emissionhex"
+        },
+        "daveyscans-com": {
+          "domain": "",
+          "host": "daveyscans.com",
+          "icon": "https://i.postimg.cc/mZjrn2kj/daveyscans.png",
+          "language": "id",
+          "project": "//daveyscans.com/project/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "flamescans-org": {
+          "domain": "",
+          "host": "flamescans.org",
+          "icon": "https://i.postimg.cc/XNF37LMw/flamescans.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "freeroms-my-id": {
+          "domain": "",
+          "host": "freeroms.my.id",
+          "icon": "",
+          "language": "id",
+          "project": "//freeroms.my.id/search/label/Update",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "emissionhex"
+        },
+        "funmanga-com": {
+          "domain": "",
+          "host": "funmanga.com",
+          "icon": "https://i.postimg.cc/0j9z6Vgb/funmanga.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "gabutscans-com": {
+          "domain": "duniakomik.id",
+          "host": "gabutscans.com",
+          "icon": "https://i.postimg.cc/rpGTtQtj/gabutscans.png",
+          "language": "id",
+          "project": "//gabutscans.com/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "gc-mangaindo-blogspot-com": {
+          "domain": "furion-scanlation.blogspot.com",
+          "host": "gc-mangaindo.blogspot.com",
+          "icon": "http://furion-scanlation.blogspot.com/favicon.ico",
+          "language": "id",
+          "project": "//furion-scanlation.blogspot.com/p/project.html",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "none"
+        },
+        "gurukomik-com": {
+          "domain": "",
+          "host": "gurukomik.com",
+          "icon": "https://i.postimg.cc/VL6SRcKT/gurukomik.png",
+          "language": "id",
+          "project": "//gurukomik.com/project-update/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "hatigarmscans-net": {
+          "domain": "hatigarmscans.eu | hatigarmscanz.net",
+          "host": "hatigarmscans.net",
+          "icon": "https://i.postimg.cc/qqmWZNhx/hatigarmscans.png",
+          "language": "en",
+          "project": "",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "new_cms"
+        },
+        "hayatoscans-blogspot-com": {
+          "domain": "",
+          "host": "hayatoscans.blogspot.com",
+          "icon": "",
+          "language": "id",
+          "project": "",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "emissionhex"
+        },
+        "inazumanga-com": {
+          "domain": "",
+          "host": "inazumanga.com",
+          "icon": "https://i.postimg.cc/8CWMXMv1/inazumanga.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "irregularmanhwa-my-id": {
+          "domain": "manhwalist.my.id | manhwalist.com",
+          "host": "irregularmanhwa.my.id",
+          "icon": "https://i.postimg.cc/8kv4DfRy/irregularmanhwa.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "jscanla-blogspot-com": {
+          "domain": "",
+          "host": "jscanla.blogspot.com",
+          "icon": "https://i.postimg.cc/3rbbZVmR/jtranslation.png",
+          "language": "id",
+          "project": "//jscanla.blogspot.com/search/label/project",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "kaisarkomik-com": {
+          "domain": "",
+          "host": "kaisarkomik.com",
+          "icon": "https://i.postimg.cc/SQXR2GjF/kaisarkomik.png",
+          "language": "id",
+          "project": "//kaisarkomik.com/project/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "kakaopage-co-id": {
+          "domain": "id.kakaowebtoon.com",
+          "host": "kakaopage.co.id",
+          "icon": "https://i.postimg.cc/8Pdy2T6G/kakaopage.png",
+          "language": "id",
+          "project": "//id.kakaowebtoon.com/content/keyword?keyword=%23Aksi",
+          "status": "active",
+          "tag": "not_support",
+          "theme": "none"
+        },
+        "katakomik-blogspot-com": {
+          "domain": "katakomik.site | katakomik.my.id | katakomik.online",
+          "host": "katakomik.blogspot.com",
+          "icon": "https://i.postimg.cc/wBSPWH5k/katakomik.png",
+          "language": "id",
+          "project": "//katakomik.my.id/project/",
+          "status": "active",
+          "tag": "ads_newtab",
+          "theme": "themesia"
+        },
+        "klankomik-com": {
+          "domain": "",
+          "host": "klankomik.com",
+          "icon": "https://i.postimg.cc/L4v3nJFc/klankomik.png",
+          "language": "id",
+          "project": "//klankomik.com/project/",
+          "status": "discontinued",
+          "tag": "not_support",
+          "theme": "themesia"
+        },
+        "klikmanga-com": {
+          "domain": "klikmanga.id",
+          "host": "klikmanga.com",
+          "icon": "https://i.postimg.cc/L8WPjPxW/klikmanga.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "ads_newtab",
+          "theme": "madara"
+        },
+        "kombatch-com": {
+          "domain": "",
+          "host": "kombatch.com",
+          "icon": "https://i.postimg.cc/bNG2qbLB/kombatch.png",
+          "language": "id",
+          "project": "//kombatch.com/project/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "komikav-com": {
+          "domain": "",
+          "host": "komikav.com",
+          "icon": "https://i.postimg.cc/dVb6Rg1r/komikav.png",
+          "language": "id",
+          "project": "//komikav.com/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "komikcast-com": {
+          "domain": "komikcast.me | komikcast.site",
+          "host": "komikcast.com",
+          "icon": "https://i.postimg.cc/sX8DLGYF/komikcast.webp",
+          "language": "id",
+          "project": "//komikcast.me/project-list/",
+          "status": "active",
+          "tag": "ads_newtab",
+          "theme": "none"
+        },
+        "komikempus-wordpress-com": {
+          "domain": "komikmpus.blogspot.com | manganeko.my.id",
+          "host": "komikempus.wordpress.com",
+          "icon": "https://i.postimg.cc/XqJxkzGb/manganeko.png",
+          "language": "id",
+          "project": "//manganeko.my.id/p/garapan-manga-neko.html",
+          "status": "active",
+          "tag": "not_support",
+          "theme": "none"
+        },
+        "komikgan-com": {
+          "domain": "",
+          "host": "komikgan.com",
+          "icon": "https://i.postimg.cc/3ryVFFgV/komikgan.png",
+          "language": "id",
+          "project": "//komikgan.com/project-list/",
+          "status": "active",
+          "tag": "",
+          "theme": "koidezign"
+        },
+        "komikgo-com": {
+          "domain": "",
+          "host": "komikgo.com",
+          "icon": "https://i.postimg.cc/LXsthFQc/komikgo.png",
+          "language": "id",
+          "project": "",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "madara"
+        },
+        "komikhit-com": {
+          "domain": "",
+          "host": "komikhit.com",
+          "icon": "https://i.postimg.cc/G3fYwYGj/komikhit.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "komikid-com": {
+          "domain": "",
+          "host": "komikid.com",
+          "icon": "https://i.postimg.cc/4NhBKJ4s/komikid.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "reader_cms"
+        },
+        "komikindo-co": {
+          "domain": "",
+          "host": "komikindo.co",
+          "icon": "https://i.postimg.cc/14hwTCC2/komikindo.png",
+          "language": "id",
+          "project": "//komikindo.co/project/",
+          "status": "active",
+          "tag": "ads_newtab",
+          "theme": "themesia"
+        },
+        "komikindo-web-id": {
+          "domain": "",
+          "host": "komikindo.web.id",
+          "icon": "https://i.postimg.cc/yNvhdTx3/komikindo.png",
+          "language": "id",
+          "project": "//komikindo.web.id/project-komikindo/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "komiklab-com": {
+          "domain": "",
+          "host": "komiklab.com",
+          "icon": "https://i.postimg.cc/h4VgBCgm/komiklab.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "komiknesia-com": {
+          "domain": "",
+          "host": "komiknesia.com",
+          "icon": "https://i.postimg.cc/0Nc3sDqc/komiknesia.png",
+          "language": "id",
+          "project": "//komiknesia.com/latest-project/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "eastheme"
+        },
+        "komikra-me": {
+          "domain": "",
+          "host": "komikra.me",
+          "icon": "https://i.postimg.cc/cLyxVR2K/komikrame.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "komikru-com": {
+          "domain": "",
+          "host": "komikru.com",
+          "icon": "https://i.postimg.cc/Gt9yH0NZ/komikru.png",
+          "language": "id",
+          "project": "//komikru.com/project/",
+          "status": "discontinued",
+          "tag": "_rightclick",
+          "theme": "themesia"
+        },
+        "komikstation-com": {
+          "domain": "komikstation.co",
+          "host": "komikstation.com",
+          "icon": "https://i.postimg.cc/ry5fHX5K/komikstation.png",
+          "language": "id",
+          "project": "//komikstation.co/project-list",
+          "status": "active",
+          "tag": "ads_newtab",
+          "theme": "themesia"
+        },
+        "kumamanga-my-id": {
+          "domain": "",
+          "host": "kumamanga.my.id",
+          "icon": "https://i.postimg.cc/sgGb5v72/kumamanga.png",
+          "language": "id",
+          "project": "//kumamanga.my.id/project-kuma/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "koidezign"
+        },
+        "leviatanscans-com": {
+          "domain": "",
+          "host": "leviatanscans.com",
+          "icon": "https://i.postimg.cc/fWK3RMQ7/leviatanscans.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "luminousscans-com": {
+          "domain": "",
+          "host": "luminousscans.com",
+          "icon": "https://i.postimg.cc/4xYpQpwN/luminousscans.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "maid-my-id": {
+          "domain": "",
+          "host": "maid.my.id",
+          "icon": "https://i.postimg.cc/Ghn6HDZt/maid.png",
+          "language": "id",
+          "project": "//maid.my.id/project-list/",
+          "status": "active",
+          "tag": "_rightclick",
+          "theme": "koidezign"
+        },
+        "mangabat-com": {
+          "domain": "readmangabat.com",
+          "host": "mangabat.com",
+          "icon": "https://i.postimg.cc/kGJTQY3F/mangabat.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "mangacanblog-com": {
+          "domain": "",
+          "host": "mangacanblog.com",
+          "icon": "https://i.postimg.cc/1tfz97G7/mangacan.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "_rightclick",
+          "theme": "none"
+        },
+        "mangadex-org": {
+          "domain": "",
+          "host": "mangadex.org",
+          "icon": "https://i.postimg.cc/jSP6WXxh/mangadex.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "not_support",
+          "theme": "none"
+        },
+        "mangaindo-web-id": {
+          "domain": "mangacdn.my.id",
+          "host": "mangaindo.web.id",
+          "icon": "https://i.postimg.cc/cLvXP2Lk/mangaindo.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "mangakane-com": {
+          "domain": "komikplay.com | komikita.org",
+          "host": "mangakane.com",
+          "icon": "https://i.postimg.cc/hP1NrH3k/mangakane.png",
+          "language": "id",
+          "project": "//komikita.org/project-list/",
+          "status": "active",
+          "tag": "",
+          "theme": "koidezign"
+        },
+        "mangakita-net": {
+          "domain": "",
+          "host": "mangakita.net",
+          "icon": "https://i.postimg.cc/Bv769CGZ/mangakita.png",
+          "language": "id",
+          "project": "//mangakita.net/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "mangaku-web-id": {
+          "domain": "mangaku.cc | mangaku.in | mangaku.pro | mangaku.pw | mangaku.nl | mangaku.club | mangaku.live | mangaku.site | mangaku.vip",
+          "host": "mangaku.web.id",
+          "icon": "https://i.postimg.cc/25Hvn6WL/mangaku.gif",
+          "language": "id",
+          "project": "//mangaku.site/?s=&label=project",
+          "status": "active",
+          "tag": "_rightclick",
+          "theme": "none"
+        },
+        "mangakyo-net": {
+          "domain": "mangakyo.com | mangakyo.me | mangakyo.id",
+          "host": "mangakyo.net",
+          "icon": "https://i.postimg.cc/cCf0Hprh/mangakyo.png",
+          "language": "id",
+          "project": "//mangakyo.me/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "mangapark-net": {
+          "domain": "",
+          "host": "mangapark.net",
+          "icon": "https://i.postimg.cc/xT4m0tyf/mangapark.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "mangashiro-net": {
+          "domain": "mangashiro.org | mangashiro.co",
+          "host": "mangashiro.net",
+          "icon": "https://i.postimg.cc/tJJ44SFm/mangashiro.png",
+          "language": "id",
+          "project": "//mangashiro.co/project/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "mangasushi-net": {
+          "domain": "mangasushi.org",
+          "host": "mangasushi.net",
+          "icon": "https://i.postimg.cc/zGKyMGM5/mangasushi.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "mangavy-com": {
+          "domain": "kiryuu.co | kiryuu.id",
+          "host": "mangavy.com",
+          "icon": "https://i.postimg.cc/59SswcVV/kiryuu.png",
+          "language": "id",
+          "project": "//kiryuu.id/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "mangayaro-com": {
+          "domain": "mangayaro.net",
+          "host": "mangayaro.com",
+          "icon": "https://i.postimg.cc/Vv4XDR35/mangayaro.png",
+          "language": "id",
+          "project": "//mangayaro.com/project-list/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "mangayu-com": {
+          "domain": "",
+          "host": "mangayu.com",
+          "icon": "https://i.postimg.cc/c44TmQc1/mangayu.png",
+          "language": "id",
+          "project": "//mangayu.com/manga?project=true",
+          "status": "discontinued",
+          "tag": "not_support",
+          "theme": "none"
+        },
+        "mangkomik-com": {
+          "domain": "mangkomik.net",
+          "host": "mangkomik.com",
+          "icon": "https://i.postimg.cc/y6QGTJyj/mangkomik.png",
+          "language": "id",
+          "project": "//mangkomik.com/project-list/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "manhuaid-com": {
+          "domain": "",
+          "host": "manhuaid.com",
+          "icon": "https://i.postimg.cc/XJd9jvcz/manhuaid.png",
+          "language": "id",
+          "project": "//manhuaid.com/project",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "none"
+        },
+        "manhwa-san-blogspot-com": {
+          "domain": "manhwa-san.blogspot.com | manhwa-san.xyz | manhwa-san.com",
+          "host": "manhwa-san.blogspot.com",
+          "icon": "https://i.postimg.cc/Xq5dvYfP/manhwa-san.png",
+          "language": "id",
+          "project": "//manhwa-san.com/search/label/manhwa-info",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "emissionhex"
+        },
+        "manhwaindo-com": {
+          "domain": "manhwaindo.id",
+          "host": "manhwaindo.com",
+          "icon": "https://i.postimg.cc/zvVSgH6D/manhwaindo.png",
+          "language": "id",
+          "project": "//manhwaindo.id/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "masterkomik-com": {
+          "domain": "",
+          "host": "masterkomik.com",
+          "icon": "https://i.postimg.cc/CKYScGF1/masterkomik.png",
+          "language": "id",
+          "project": "//masterkomik.com/project-list/",
+          "status": "active",
+          "tag": "ads_newtab",
+          "theme": "themesia"
+        },
+        "matakomik-com": {
+          "domain": "",
+          "host": "matakomik.com",
+          "icon": "https://i.postimg.cc/BnmL4FW6/matakomik.png",
+          "language": "id",
+          "project": "//matakomik.com/project/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "merakiscans-com": {
+          "domain": "azuremanga.com",
+          "host": "merakiscans.com",
+          "icon": "https://i.postimg.cc/59nctR7Q/merakiscans.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "mgkomik-my-id": {
+          "domain": "mgkomik.com",
+          "host": "mgkomik.my.id",
+          "icon": "https://i.postimg.cc/d3n5KKCp/mgkomik.png",
+          "language": "id",
+          "project": "//mgkomik.com/genre/project/",
+          "status": "active",
+          "tag": "_rightclick",
+          "theme": "madara"
+        },
+        "miraiscans-com": {
+          "domain": "",
+          "host": "miraiscans.com",
+          "icon": "https://i.postimg.cc/y62D4D95/miraiscans.png",
+          "language": "id",
+          "project": "//miraiscans.com/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "nekomik-com": {
+          "domain": "",
+          "host": "nekomik.com",
+          "icon": "https://i.postimg.cc/vmtzFs5y/nekomik.png",
+          "language": "id",
+          "project": "//nekomik.com/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "neumanga-com": {
+          "domain": "neumanga.tv",
+          "host": "neumanga.com",
+          "icon": "https://i.postimg.cc/pXKDMzsJ/neumanga.jpg",
+          "language": "id",
+          "project": "",
+          "status": "discontinued",
+          "tag": "ads_newtab",
+          "theme": "none"
+        },
+        "nextscanid-blogspot-com": {
+          "domain": "nextscanid.my.id",
+          "host": "nextscanid.blogspot.com",
+          "icon": "",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "emissionhex"
+        },
+        "nimanga-com": {
+          "domain": "",
+          "host": "nimanga.com",
+          "icon": "https://i.postimg.cc/Vsn1bcX0/nimanga.png",
+          "language": "id",
+          "project": "//nimanga.com/project/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "ninkomik-blogspot-com": {
+          "domain": "",
+          "host": "ninkomik.blogspot.com",
+          "icon": "https://i.postimg.cc/X7mXCGQN/ninkomik.png",
+          "language": "id",
+          "project": "//ninkomik.blogspot.com/p/manga-list.html",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "none"
+        },
+        "nonsense-v1-blogspot-com": {
+          "domain": "",
+          "host": "nonsense-v1.blogspot.com",
+          "icon": "https://i.postimg.cc/Jn63k0Lp/nonsense.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "nyanfm-com": {
+          "domain": "",
+          "host": "nyanfm.com",
+          "icon": "https://i.postimg.cc/k4J3d6vw/nyanfm.png",
+          "language": "id",
+          "project": "",
+          "status": "discontinued",
+          "tag": "not_support",
+          "theme": "none"
+        },
+        "otakuindo-net": {
+          "domain": "komiku.co | komiku.co.id | komiku.id",
+          "host": "otakuindo.net",
+          "icon": "https://i.postimg.cc/D0S4MypZ/komiku.png",
+          "language": "id",
+          "project": "//komiku.id/pustaka/?tipe=projek",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "pecintakomik-com": {
+          "domain": "pecintakomik.net",
+          "host": "pecintakomik.com",
+          "icon": "https://i.postimg.cc/h4k9Yp1G/pecintakomik.png",
+          "language": "id",
+          "project": "",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "none"
+        },
+        "pikiran-wibu-com": {
+          "domain": "",
+          "host": "pikiran-wibu.com",
+          "icon": "",
+          "language": "id",
+          "project": "//pikiran-wibu.com/tags/projects/",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "piscans-my-id": {
+          "domain": "piscans.com | piscans.in",
+          "host": "piscans.my.id",
+          "icon": "https://i.postimg.cc/L6z54Qzk/piscans.png",
+          "language": "id",
+          "project": "//piscans.in/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "pojokmanga-com": {
+          "domain": "pojokmanga.net",
+          "host": "pojokmanga.com",
+          "icon": "https://i.postimg.cc/4xV79gDv/pojokmanga.png",
+          "language": "id",
+          "project": "//pojokmanga.com/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "rawdevart-com": {
+          "domain": "",
+          "host": "rawdevart.com",
+          "icon": "https://i.postimg.cc/28Dqz3tS/rawdevart.png",
+          "language": "raw",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "readcmic-blogspot-com": {
+          "domain": "",
+          "host": "readcmic.blogspot.com",
+          "icon": "",
+          "language": "id",
+          "project": "//readcmic.blogspot.com/search/label/PROJECT",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "none"
+        },
+        "readmanga-today": {
+          "domain": "readmng.com",
+          "host": "readmanga.today",
+          "icon": "https://i.postimg.cc/dV64DxzT/readmanga.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "readmanhua-net": {
+          "domain": "",
+          "host": "readmanhua.net",
+          "icon": "https://i.postimg.cc/4NrKB9WB/readmanhua.jpg",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "realmscans-com": {
+          "domain": "",
+          "host": "realmscans.com",
+          "icon": "https://i.postimg.cc/qRzPmCs5/realmscans.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "reaperscans-com": {
+          "domain": "",
+          "host": "reaperscans.com",
+          "icon": "https://i.postimg.cc/3R0BHWcZ/reaperscans.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "reaperscans-id": {
+          "domain": "",
+          "host": "reaperscans.id",
+          "icon": "https://i.postimg.cc/3R0BHWcZ/reaperscans.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "reset-scans-com": {
+          "domain": "",
+          "host": "reset-scans.com",
+          "icon": "https://i.postimg.cc/rFKbzpLV/reset-scans.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "_rightclick",
+          "theme": "madara"
+        },
+        "rrscans-my-id": {
+          "domain": "",
+          "host": "rrscans.my.id",
+          "icon": "https://i.postimg.cc/fLp61T5T/rrscans.png",
+          "language": "id",
+          "project": "//rrscans.my.id/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "secretscans-co": {
+          "domain": "lynxscans.com",
+          "host": "secretscans.co",
+          "icon": "https://i.postimg.cc/KYzfJ07w/lynxscans.gif",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "new_cms"
+        },
+        "sektekomik-com": {
+          "domain": "",
+          "host": "sektekomik.com",
+          "icon": "https://i.postimg.cc/Dm3fvVpB/sektekomik.webp",
+          "language": "id",
+          "project": "//sektekomik.com/project/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "koidezign"
+        },
+        "sellaworks-com": {
+          "domain": "",
+          "host": "sellaworks.com",
+          "icon": "https://i.postimg.cc/6pngdvHH/sellaworks.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "sheamangaindo-blogspot-com": {
+          "domain": "sheamanga.my.id | 62.171.176.78 | sheakomik.com",
+          "host": "sheamangaindo.blogspot.com",
+          "icon": "https://i.postimg.cc/FFb0w7Kf/sheamanga.png",
+          "language": "id",
+          "project": "//sheakomik.com/project/",
+          "status": "active",
+          "tag": "ads_newtab",
+          "theme": "themesia"
+        },
+        "softkomik-site": {
+          "domain": "softkomik.com",
+          "host": "softkomik.site",
+          "icon": "https://i.postimg.cc/vT7pgjVt/softkomik.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "_rightclick",
+          "theme": "none"
+        },
+        "subapics-com": {
+          "domain": "ngomik.in | ngomik.net",
+          "host": "subapics.com",
+          "icon": "https://i.postimg.cc/qq3MHBwN/ngomik.png",
+          "language": "id",
+          "project": "//ngomik.net/pj/",
+          "status": "active",
+          "tag": "ads_newtab",
+          "theme": "themesia"
+        },
+        "sunandmoonkomikid-blogspot-com": {
+          "domain": "",
+          "host": "sunandmoonkomikid.blogspot.com",
+          "icon": "https://i.postimg.cc/JzbBTgws/sunandmoonkomikid.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "not_support",
+          "theme": "none"
+        },
+        "tenseiscans-blogspot-com": {
+          "domain": "tenseiscans.xyz",
+          "host": "tenseiscans.blogspot.com",
+          "icon": "https://i.postimg.cc/nLGscVdd/tenseiscans.jpg",
+          "language": "id",
+          "project": "//tenseiscans.xyz/p/list-project.html",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "none"
+        },
+        "toonily-com": {
+          "domain": "",
+          "host": "toonily.com",
+          "icon": "https://i.postimg.cc/Y00gdtR1/toonily.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "tukangkomik-com": {
+          "domain": "",
+          "host": "tukangkomik.com",
+          "icon": "https://i.postimg.cc/Dzn4RgFB/tukangkomik.png",
+          "language": "id",
+          "project": "//tukangkomik.com/project/",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "webtoons-com": {
+          "domain": "",
+          "host": "webtoons.com",
+          "icon": "https://i.postimg.cc/1R0KH0ZF/webtoons.png",
+          "language": "id",
+          "project": "//webtoons.com/id/dailySchedule",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "westmanga-info": {
+          "domain": "",
+          "host": "westmanga.info",
+          "icon": "https://i.postimg.cc/vHSLzb2p/westmanga.png",
+          "language": "id",
+          "project": "//westmanga.info/project/",
+          "status": "active",
+          "tag": "ads_newtab",
+          "theme": "themesia"
+        },
+        "wib-my-id": {
+          "domain": "",
+          "host": "wib.my.id",
+          "icon": "https://i.postimg.cc/7hkTnBBL/wib.png",
+          "language": "id",
+          "project": "//wib.my.id/search/label/Series",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "pemudanolep"
+        },
+        "wordhero-my-id": {
+          "domain": "",
+          "host": "wordhero.my.id",
+          "icon": "https://i.postimg.cc/Y9z4X2Kc/wordhero.png",
+          "language": "id",
+          "project": "//wordhero.my.id/project/",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "wrt-my-id": {
+          "domain": "",
+          "host": "wrt.my.id",
+          "icon": "https://i.postimg.cc/cLqMvHmZ/wrt.png",
+          "language": "id",
+          "project": "//wrt.my.id/project-wrt/",
+          "status": "active",
+          "tag": "ads_newtab",
+          "theme": "themesia"
+        },
+        "yuumanga-blogspot-com": {
+          "domain": "",
+          "host": "yuumanga.blogspot.com",
+          "icon": "https://i.postimg.cc/VkW3L38f/yuumanga.png",
+          "language": "id",
+          "project": "//yuumanga.blogspot.com/p/project-list.html",
+          "status": "discontinued",
+          "tag": "",
+          "theme": "none"
+        },
+        "zeroscans-com": {
+          "domain": "",
+          "host": "zeroscans.com",
+          "icon": "https://i.postimg.cc/d1FM7Pcr/zeroscans.png",
+          "language": "en",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "new_cms"
+        }
+      },
+      "novel": {
+        "bukubaca-com": {
+          "domain": "",
+          "host": "bukubaca.com",
+          "icon": "https://i.postimg.cc/jjgVQh7f/bukubaca.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "themesia"
+        },
+        "meionovel-id": {
+          "domain": "",
+          "host": "meionovel.id",
+          "icon": "https://i.postimg.cc/B6vY0VGd/meionovel.png",
+          "language": "id",
+          "project": "//meionovel.id/novel/",
+          "status": "active",
+          "tag": "",
+          "theme": "madara"
+        },
+        "sakuranovel-id": {
+          "domain": "",
+          "host": "sakuranovel.id",
+          "icon": "https://i.postimg.cc/85ZDqyyd/sakuranovel.png",
+          "language": "id",
+          "project": "",
+          "status": "active",
+          "tag": "",
+          "theme": "koidezign"
+        },
+        "semaunya-aja-blogspot-com": {
+          "domain": "",
+          "host": "semaunya-aja.blogspot.com",
+          "icon": "https://i.postimg.cc/FKkzB9Yq/semaunya-aja.png",
+          "language": "id",
+          "project": "//semaunya-aja.blogspot.com/p/blog-page_27.html",
+          "status": "active",
+          "tag": "",
+          "theme": "none"
+        },
+        "yukinovel-id": {
+          "domain": "",
+          "host": "yukinovel.id",
+          "icon": "https://i.postimg.cc/hjqDZVWz/yukinovel.png",
+          "language": "id",
+          "project": "//yukinovel.id/daftar-novel/",
+          "status": "active",
+          "tag": "",
+          "theme": "yuukithemes"
+        }
+      },
+      "update": 1675125056313
+    }
+  }
+}
