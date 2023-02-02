@@ -783,6 +783,7 @@ function mydb_tools() {
   
   
   /* START */
+  addScript({data:"https://cdn.jsdelivr.net/gh/Joe12387/detectIncognito@main/detectIncognito.min.js"});
   thirdPartyCheck(function(res) {
     if (res && res != 'fail') {
       /* check source via crossStorage */
@@ -804,7 +805,13 @@ function mydb_tools() {
         sourceCheck('thirdPartyCheck', 'error');
         console.log('!! Error: <iframe> (thirdPartyCheck) failed to load');
       } else {
-        alert('!! Error: Third-party bloked');
+        detectIncognito().then(function(res) {
+          if (res.isPrivate) {
+            console.log('!! Error: Third-party bloked - Incognito/Private window');
+          } else {
+            alert('!! Error: Third-party bloked');
+          }
+        });
       }
     }
   });
