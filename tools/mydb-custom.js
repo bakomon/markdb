@@ -131,7 +131,7 @@ function mydb_x_fnc() {
     el('#disqus_trigger').onclick = function() {
       this.style.display = 'none';
       el('.disqus_mod').id = 'disqus_thread';
-      addScript({data:'//'+ id +'.disqus.com/embed.js', async:true});
+      mydb_add_script({data:'//'+ id +'.disqus.com/embed.js', async:true});
     };
   }
   
@@ -392,12 +392,12 @@ function mydb_x_fnc() {
       el('i[data-href]', 'all').forEach(function(item) {
         item.addEventListener('click', function(e) {
           //e.preventDefault();
-          //openInNewTab(item.dataset.href);
+          //mydb_open_new_tab(item.dataset.href);
           wl.href = item.dataset.href;
         });
         // right click
         item.addEventListener('contextmenu', function(e) {
-          openInNewTab(item.dataset.href);
+          mydb_open_new_tab(item.dataset.href);
         });
       });*/
     }
