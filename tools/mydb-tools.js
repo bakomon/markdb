@@ -104,7 +104,7 @@ function mydb_tools_fnc() {
   };
   
   /* Restore native window.open https://stackoverflow.com/a/48006884/7598333 */
-  openInNewTab = function(url, note) {
+  mydb_open_new_tab = function(url, note) {
     if (!('nativeOpen' in window)) {
       var _iframe = document.createElement('iframe');
       document.documentElement.appendChild(_iframe);
@@ -122,7 +122,7 @@ function mydb_tools_fnc() {
   };
   
   /* Add script to head https://codepen.io/sekedus/pen/QWKYpVR */
-  addScript = function(options, note) {
+  mydb_add_script = function(options, note) {
     /* if a <script> tag failed to load https://stackoverflow.com/a/44325793/7598333 */
     return new Promise(function (resolve, reject) {
       /* data, id, info, boolean, parent */
@@ -503,7 +503,7 @@ function mydb_tools() {
   function fbaseJS(note) {
     if (typeof firebase == 'undefined') {
       mydb_fbase_js = true;
-      addScript({data:`https://www.gstatic.com/firebasejs/${myfbase_ver}/firebase-app.js`}).catch(() => {
+      mydb_add_script({data:`https://www.gstatic.com/firebasejs/${myfbase_ver}/firebase-app.js`}).catch(() => {
         /* only use catch() :
         - https://stackoverflow.com/a/36213268/7598333
         - https://javascript.info/promise-basics#catch
@@ -520,12 +520,12 @@ function mydb_tools() {
       if (typeof firebase !== 'undefined') {
         clearInterval(lf_chk);
         mydb_info['fbase_app'] = 'loaded';
-        if (typeof firebase.database == 'undefined') addScript({data:`https://www.gstatic.com/firebasejs/${myfbase_ver}/firebase-database.js`});
+        if (typeof firebase.database == 'undefined') mydb_add_script({data:`https://www.gstatic.com/firebasejs/${myfbase_ver}/firebase-database.js`});
         var db2_chk = setInterval(function() {
           if (typeof firebase.database !== 'undefined') {
             clearInterval(db2_chk);
             mydb_info['fbase_database'] = 'loaded';
-            if (typeof firebase.auth == 'undefined') addScript({data:`https://www.gstatic.com/firebasejs/${myfbase_ver}/firebase-auth.js`});
+            if (typeof firebase.auth == 'undefined') mydb_add_script({data:`https://www.gstatic.com/firebasejs/${myfbase_ver}/firebase-auth.js`});
             var db3_chk = setInterval(function() {
               if (typeof firebase.auth !== 'undefined') {
                 clearInterval(db3_chk);
@@ -783,7 +783,7 @@ function mydb_tools() {
   
   
   /* START */
-  addScript({data:"https://cdn.jsdelivr.net/gh/Joe12387/detectIncognito@main/detectIncognito.min.js"});
+  mydb_add_script({data:"https://cdn.jsdelivr.net/gh/Joe12387/detectIncognito@main/detectIncognito.min.js"});
   thirdPartyCheck(function(res) {
     if (res && res != 'fail') {
       /* check source via crossStorage */
@@ -904,7 +904,7 @@ var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmar
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/1/2023, 8:40:08 AM';
+var local_interval = 'manual|2/4/2023, 1:20:13 PM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/tools/mydb-custom.js';
@@ -926,7 +926,7 @@ if (typeof el !== 'undefined' && el && typeof bakomon_web === 'undefined') {
   mydb_support = mydb_spt_info;
 } else {
   /* global variables */
-  var global_arr = ['el','openInNewTab','addScript','crossStorage','genArray','sourceGen','sourceChange','localSave','getId','sourceCheck','fbaseObserver'];
+  var global_arr = ['el','mydb_open_new_tab','mydb_add_script','crossStorage','genArray','sourceGen','sourceChange','localSave','getId','sourceCheck','fbaseObserver'];
   for (var mydb_num = 0; mydb_num < global_arr.length; mydb_num++) window[global_arr[mydb_num]];
 }
 
