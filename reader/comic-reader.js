@@ -314,7 +314,7 @@ function mydb_cr_fnc() {
     if (chcdn) r_txt += '<div class="rc_cdn rc_btn _rc" title="'+ cdnName +'">CDN</div>';
     if (chgi) r_txt += '<div class="rc_size rc_btn _rc">'+ imgGi +'</div>';
     r_txt += '</div>'; //.rc_others
-    r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" oncontextmenu="openInNewTab(this.dataset.href)" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
+    r_txt += '<div class="rc_next rc_line rc_100 rc_hidden"><button class="rc_btn _rc" title="arrow right &#9656;" oncontextmenu="mydb_open_new_tab(this.dataset.href)" onclick="window.location.href=this.dataset.href">Next Chapter</button></div>';
     r_txt += '<div class="rc_home rc_line rc_100"><button class="rc_btn _rc" onclick="window.location.href=\'//\'+window.location.hostname">Homepage</button></div>';
     r_txt += '<div class="rc_load rc_line flex_wrap">';
     r_txt += '<div class="flex">';
@@ -424,7 +424,7 @@ function mydb_cr_fnc() {
         imgGi = imgGi == 0 || imgGi > 800 ? 's'+ imgGi : 's1600';
       }
       
-      reader_html += '<div class="reader_images" onclick="var img'+ (i+1) +'=this.querySelector(\'img\');openInNewTab(img'+ (i+1) +'.src?img'+ (i+1) +'.src:img'+ (i+1) +'.dataset.readImg)" title="'+ (i+1) +' - '+ imgList[i] +'">';
+      reader_html += '<div class="reader_images" onclick="var img'+ (i+1) +'=this.querySelector(\'img\');mydb_open_new_tab(img'+ (i+1) +'.src?img'+ (i+1) +'.src:img'+ (i+1) +'.dataset.readImg)" title="'+ (i+1) +' - '+ imgList[i] +'">';
       reader_html += '<img style="min-height:750px;" class="rc_lazy1oad" data-read-img="'+ imgList[i] +'" alt="'+ (i+1) +'">';
       if (mydb_settings.number_reader) reader_html += '<div class="reader_index"><div class="rc_sticky"><div class="_rc">'+ (i+1) +'</div></div></div>';
       reader_html += '</div>'; //.reader_images
