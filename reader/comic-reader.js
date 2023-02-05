@@ -149,6 +149,7 @@ function mydb_cr_fnc() {
       item.oninput = function() {
         // "imglistMod" from readerBtnFnc() parameter
         if (this.value > imglistMod.length) this.value = imglistMod.length;
+        if (this.classList.contains('rc_all') && !isNumeric(this.value) && this.value != 'all') this.value = 'all';
       };
     });
     
@@ -159,7 +160,6 @@ function mydb_cr_fnc() {
       } else {
         // "imglistMod" from readerBtnFnc() parameter
         if (!isFrom) loadImage = true;
-        el('.rc_load .rc_all').value = 'all';
         var ld_index = isFrom && el('.rc_load .rc_fr_min').value != '' ? (Number(el('.rc_load .rc_fr_min').value) - 1) : 0;
         var ld_length = isFrom && el('.rc_load .rc_fr_max').value != '' ? Number(el('.rc_load .rc_fr_max').value) : imglistMod.length;
         for (var i = ld_index; i < ld_length; i++) {
