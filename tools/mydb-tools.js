@@ -845,14 +845,13 @@ var myfbase_app = 'mydb';
 var myfbase_ver = '8.10.0';
 /* Firebase configuration for Firebase JS SDK v7.20.0 and later, measurementId is optional */
 var myfbase_config = {
-  apiKey: "AIzaSyBma6cWOGzwSE4sv8SsSewIbCjTPhm7qi0",
-  authDomain: "bakomon99.firebaseapp.com",
-  databaseURL: "https://bakomon99.firebaseio.com",
-  projectId: "bakomon99",
-  storageBucket: "bakomon99.appspot.com",
-  messagingSenderId: "894358128479",
-  appId: "1:894358128479:web:6fbf2d52cf76da755918ea",
-  measurementId: "G-Z4YQS31CXM"
+  apiKey: "AIzaSyAwIAVVB_LAdTP_uCHn_hxkE0FQ54Ygx2k",
+  authDomain: "markdb99.firebaseapp.com",
+  databaseURL: "https://markdb99-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "markdb99",
+  storageBucket: "markdb99.appspot.com",
+  messagingSenderId: "987460410034",
+  appId: "1:987460410034:web:ae9f96c3cc7bd6772647ab"
 };
 /* ============================================================ */
 var cross_window;
@@ -904,7 +903,7 @@ var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmar
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/4/2023, 1:20:13 PM';
+var local_interval = 'manual|2/7/2023, 10:00:09 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/tools/mydb-custom.js';
