@@ -42,6 +42,6 @@ Works on all PC & Mobile devices, using a modern browser that supports custom sc
 5. Copy & Paste [mydb-tools.js](https://github.com/bakomon/mydb/blob/master/tools/mydb-tools.js) to `JS textarea`
    - Open [project settings](https://console.firebase.google.com/project/_/settings/general) and choose a project
    - Copy [Firebase config object](https://www.youtube.com/embed/13eja_RYimU?start=88&end=111&rel=0)
-   - Replace [mydb-tools.js#L841-L848](https://github.com/bakomon/mydb/blob/master/tools/mydb-tools.js#L848-L854)
+   - Replace [mydb-tools.js](https://github.com/bakomon/mydb/blob/master/tools/mydb-tools.js#L848-L854)
 6. Click `Save`
 7. Open comic site, eg. `mangatale.co`
