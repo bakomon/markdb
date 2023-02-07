@@ -864,7 +864,7 @@ var wh_rgx = /^(w{3}|web|m(obile)?|\w{1}|read|data|en|beta)\./i;
 var number_t_rgx = /(^|[^a-z0-9])(ch\.?(ap(ter)?)?|eps?\.?(isodes?)?)(\s?\d+(\s?[-\.]\s?\d+)?|\s)/gi; /* check id from <title> */
 var number_w_rgx = /(\/|\-|\_|\d+)((ch|\/c)(ap(ter)?)?|epi?(sodes?)?)(\/|\-|\_|\d+)/i; /* check id from window.location */
 var id_w_rgx = /\/(?:(?:baca-)?(?:man(?:ga|hwa|hua)|baca|read|novel|anime|tv|download|[a-z]{2}\/[^\/]+|(?:title|series|[kc]omi[kc]s?)(?:\/\d+)?|(?:\d{4}\/\d{2})|p)[\/\-])?([^\/\n]+)\/?(?:list)?/i; /* id from window.location */
-var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account|advanced)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|(my)?bookmarks?|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register|settings?)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
+var skip1_rgx = /^\/(p\/)?((daftar|search(\/label)?|type|latest|list|baca|all|account|advanced)[-\/])?(\w{1,2}|pro[yj]e(k|ct)|[kc]omi[kc]s?|man(ga|hwa|hua)|popul[ea]r|genres?|type|release|az|staff|update|series?|profile?|(my)?bookmarks?|history|apps?|[kc]onta(k|ct)|blog|pustaka|search|about|tentang|register|settings?)([-\.\/](lists?|terbaru|berwarna|author|artist|us|kami|page\/\d+|html|wrt))?\/?$/i;
 var skip2_rgx = /^\/(([kc]omi[kc]s?|man(ga|hwa|hua))-)?(genres?|tag|category|list|release|author|artist)\/.*\/?$/i;
 var batoto_rgx = /(ba|m|d|h|w)to\.to|((manga|bat)(window|t?o?t[ow]o?)|comiko)\.(net|com?|org)/i;
 /* ============================================================ */
