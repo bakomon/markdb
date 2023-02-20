@@ -867,10 +867,19 @@ function mydb_cr_fnc() {
       var ts_chk = setInterval(function() {
         if (getImageScript(ts_rgx)) {
           clearInterval(ts_chk);
+          ts_chk = false;
           var ts_data = JSON.parse(getImageScript(ts_rgx).match(/(\{[^\;]+)\)\;/)[1].replace(/:\s?\'/g, ':"').replace(/\',/g, '",'));
           ts_data.sources[0].images.length == 0 ? alert('!! NO CHAPTER !!') : genImageApi(ts_data);
         }
       }, 100);
+      
+      // use element
+      loadListener('dom', function() {
+        if (ts_chk) {
+          clearInterval(ts_chk);
+          genImageDef();
+        }
+      });
     }
     
     if (wh.indexOf('mangadropout') != -1) {
@@ -905,7 +914,7 @@ function mydb_cr_fnc() {
       genImageApi(imgMS);
     }
     
-    if (document.body.className.search(rgxApi) == -1 || document.body.className.search(rgxTS) != -1 || (wh.indexOf('webtoons') != -1 && !isMobile)) genImageDef();
+    if (document.body.className.search(rgxApi) == -1 || (wh.indexOf('webtoons') != -1 && !isMobile)) genImageDef();
   }
   
   
@@ -926,7 +935,6 @@ function mydb_cr_fnc() {
   var rgxCdn = /(?:i\d+|cdn|img)\.(wp|statically|imagesimple)\.(?:com?|io)\/(?:img\/(?:[^\.]+\/)?)?/i;
   var rgxGi = /\/([swh]\d+)(?:-[\w]+[^\/]+)?\/|=([swh]\d+)[^\w]+(.*)/i;
   var rgxApi = /new_cms|reader_cms|themesia|kyuroku|merakiscans|mangapark|softkomik|webtoons|zeroscans/i;
-  var rgxTS = /komikstation|nekomik|mangkomik/i; //themesia, use element
   var checkPoint, imgArea, imgList, cdnName, zoomID;
   
   // START reader
