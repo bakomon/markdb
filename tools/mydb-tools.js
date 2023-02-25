@@ -12,6 +12,7 @@ function checkContentType() {
   return xhr.getResponseHeader('content-type');
 }
 
+// Check document (DOM) status https://codepen.io/sekedus/pen/ZEMzorv
 function loadListener(event, callback) {
   event = event == 'dom' ? 2 : 3;
   var load_chk = setInterval(function() {
@@ -783,7 +784,7 @@ function mydb_tools() {
   
   
   /* START */
-  mydb_add_script({data:"https://cdn.jsdelivr.net/gh/Joe12387/detectIncognito@main/detectIncognito.min.js"});
+  mydb_add_script({data:"https://cdn.jsdelivr.net/gh/Joe12387/detectIncognito@main/dist/es5/detectIncognito.min.js"});
   thirdPartyCheck(function(res) {
     if (res && res != 'fail') {
       /* check source via crossStorage */
@@ -903,7 +904,7 @@ var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmar
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/7/2023, 10:00:09 AM';
+var local_interval = 'manual|2/25/2023, 9:03:27 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/tools/mydb-custom.js';
