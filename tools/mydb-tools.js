@@ -612,6 +612,8 @@ function mydb_tools() {
             crossStorage.get(cr_id, function(res) {
               localJSDataMOD(res, url_js_comic_reader, cr_id, cr_type, local_interval);
             });
+          } else {
+            mydb_read = false;
           }
         }
         
@@ -904,7 +906,7 @@ var mydb_settings = typeof mydb_via !== 'undefined' ? mydb_via_settings : {"bmar
 - number_reader = show index number on comic reader
 */
 /* ============================================================ */
-var local_interval = 'manual|2/25/2023, 9:03:27 AM';
+var local_interval = 'manual|3/4/2023, 7:22:02 AM';
 var url_js_bookmark = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/bookmark/mydb-bookmark.js';
 var url_js_comic_reader = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/reader/comic-reader.js';
 var url_js_custom = 'https://cdn.jsdelivr.net/gh/bakomon/markdb@master/tools/mydb-custom.js';
