@@ -4,6 +4,36 @@ namespace Api\Services;
 
 class Param
 {
+    public function param_check($name, $arr = null)
+    {
+        if ($arr == null) $arr = $_GET;
+        return isset($arr[$name]) && (!empty($arr[$name]) || $arr[$name] != '');
+    }
+
+    // Delete files older than a given age https://gist.github.com/tdebatty/9412259
+    private function delete($dir, $max_age) {
+        $list = array();
+        $limit = time() - $max_age;
+        $dir = realpath($dir);
+        
+        if (!is_dir($dir)) return;
+        
+        $dh = opendir($dir);
+        if ($dh === false) return;
+        
+        while (($file = readdir($dh)) !== false) {
+          $file = $dir . '/' . $file;
+          if (!is_file($file)) continue;
+          
+          if (filemtime($file) < $limit) {
+            $list[] = $file;
+            unlink($file);
+          }
+          
+        }
+        closedir($dh);
+    }
+
     public function show($data)
     {
         http_response_code($data->status_code);
@@ -12,7 +42,7 @@ class Param
         // if (!isset($_GET['dev']) && isset($_SERVER['HTTP_ORIGIN'])) header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']); //🟥 for plugin
         
         // https://stackoverflow.com/a/1678243/7598333
-        if (isset($_GET['callback'])) :
+        if ($this->param_check('callback')) :
             header('Content-Type: text/javascript; charset=utf8');
             if (isset($_SERVER['HTTP_REFERER'])) header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_REFERER']); //optional
             // header('Access-Control-Allow-Methods: GET'); //optional
@@ -26,7 +56,31 @@ class Param
 
     public function get($info = null, $callback, $target)
     {
-        $controller = new $callback;
-        $this->show($controller->$target());
+        $day = 86400; //24 hours in seconds
+        $path = __DIR__ . '/../../.cache/';
+        $this->delete($path, $day); //delete cached file after 24 hours
+
+        $super = $_GET;
+        unset($super['url']);
+        unset($super['site']);
+        unset($super['cache']);
+
+        $timer = $this->param_check('cache') ? $_GET['cache'] : 30; //minutes
+        $cachedTime = $timer * 60; //minutes to seconds
+        $fileName = $path . implode('-', $super) . '.json';
+        if (file_exists($fileName) && (filemtime($fileName) > (time() - $cachedTime)) && $super['index'] != 'search') :
+            $file = file_get_contents($fileName, true);
+            $file = json_decode($file);
+        else :
+            $controller = new $callback;
+            $file = $controller->$target();
+
+            if ($super['index'] != 'search' && $file->status_code == 200) :
+                if (!is_dir($path)) mkdir($path, 0777, true);
+                file_put_contents($fileName, json_encode($file));
+            endif;
+        endif;
+
+        $this->show($file);
     }
 }

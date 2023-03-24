@@ -31,6 +31,26 @@ class Http
         return self::$instance;
     }
 
+    public static function post(String $url, $fields = null, $headers = null)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+        if ($fields) curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        if ($headers) curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        self::$source = curl_exec($ch);
+        self::$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        self::$link = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+
+        curl_close($ch);
+
+        if (is_null(self::$instance)) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
     public static function response()
     {
         return self::$source;

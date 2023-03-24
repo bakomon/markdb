@@ -1,13 +1,12 @@
-// Escape
-function escape(note, str) {
-  if (note == 'json') return str.replace(/["\&\t\b\f\r\n]/g, '\\$&');
-  if (note == 'regex') return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-  if (note == 'html') return str.replace(/&/g, '&#38;').replace(/</g, '&#60;').replace(/>/g, '&#62;').replace(/\'/g, '&#39;').replace(/\"/g, '&#34;');
-}
-
 // Generate random number between two numbers https://stackoverflow.com/a/7228322/7598333
 function getRndInteger(min, max) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#examples
+function beforeUnloadListener(event) {
+  event.preventDefault();
+  return event.returnValue = '';
 }
 
 // Check if string is number https://stackoverflow.com/a/175787/7598333
@@ -24,15 +23,26 @@ function isChromium() {
 // Toggle multiple classes
 function toggleClass(elem, array) {
   // example: toggleClass(document.body, ['mobile', 'no_js']);
-  array.forEach(item => {
-    elem.classList.toggle(item);
-  });
+  array.forEach(function(item){ elem.classList.toggle(item); });
 }
 
 // Uppercase first character
 function firstUCase(str) {
   var text = str.replace(str.substring(1, 0), str.substring(1, 0).toUpperCase());
   return text;
+}
+
+function modArray(note, array, str) {
+  if (note == 'add') array.push(str);
+  if (note == 'remove') return array.filter(function(item) { return item !== str });
+  return array;
+}
+
+// Escape
+function escape(note, str) {
+  if (note == 'json') return str.replace(/["\&\t\b\f\r\n]/g, '\\$&');
+  if (note == 'regex') return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  if (note == 'html') return str.replace(/&/g, '&#38;').replace(/</g, '&#60;').replace(/>/g, '&#62;').replace(/\'/g, '&#39;').replace(/\"/g, '&#34;');
 }
 
 // Extract data from hash, example: "#/page/1" use "getHash('page')" to get "1"
@@ -42,6 +52,15 @@ function getHash(k) {
   var mtch = window.location.hash.match(rgx);
   var str = mtch ? mtch[1] : null;
   return str;
+}
+
+// Trigger "input" event https://stackoverflow.com/a/35659572/7598333
+function triggerEvent(evnt, elem) {
+  var event = new Event(evnt, {
+    bubbles: true,
+    cancelable: true,
+  });
+  elem.dispatchEvent(event);
 }
   
 // Position (X,Y) element https://stackoverflow.com/a/28222246
@@ -55,20 +74,15 @@ function getOffset(element) {
   return pos;
 }
 
-// Trigger "input" event https://stackoverflow.com/a/35659572/7598333
-function triggerEvent(evnt, elem) {
-  var event = new Event(evnt, {
-    bubbles: true,
-    cancelable: true,
-  });
-  
-  elem.dispatchEvent(event);
-}
-
-function modArray(note, array, str) {
-  if (note == 'add') array.push(str);
-  if (note == 'remove') return array.filter(function(item) { return item !== str });
-  return array;
+// Check if an image is loaded (no errors) https://stackoverflow.com/a/1977898/7598333
+function isImageLoaded(img) {
+  if (!img.complete) {
+    return false;
+  }
+  if (img.naturalWidth === 0) {
+    return false;
+  }
+  return true;
 }
 
 // Get first {n} data from Array https://stackoverflow.com/a/50930772/7598333
@@ -130,6 +144,21 @@ function dateLocal(date) {
   return new Date(date).toLocaleString(date_lang, date_format);
 }
 
+function keyEvent(event, code) {
+  // Based on the US standard 101 keyboard https://www.toptal.com/developers/keycode/table
+  var list = {"Enter":13,"Shift":16,"Control":17,"Alt":18,"ArrowLeft":37,"ArrowUp":38,"ArrowRight":39,"ArrowDown":40,"a":65,"c":67,"i":73,"j":74,"r":82,"s":83,"u":85,"v":86,"x":88,"F12":123};
+  
+  var key, prop = '';
+  if (event.code) {
+    prop = event.code in list ? event.code : event.key;
+    key = list[prop];
+  } else {
+    key = event.keyCode;
+  }
+  
+  return key == code || prop.toLowerCase() == String(code).toLowerCase() || new RegExp(`^${prop}$`).test(code);
+}
+
 // Simple querySelector https://codepen.io/sekedus/pen/oKYOEK
 function el(e, l, m) {
   var elem, parent = l != 'all' && l != 'xpath' && (l || l === null) ? l : document;
@@ -147,12 +176,13 @@ function el(e, l, m) {
   return elem;
 }
 
-function loadListener(event, callback) {
-  event = event == 'dom' ? 2 : 3; //3 = complete
+// Check document (DOM) status https://codepen.io/sekedus/pen/ZEMzorv
+function loadListener(type, callback) {
+  type = type == 'initial' ? 0 : type == 'dom' ? 3 : 4; //4 = complete/load
   var load_chk = setInterval(function() {
     var ready = document.readyState;
-    var state = ready == 'uninitialized' ? 0 : ready == 'loading' ? 1 : ready == 'interactive' ? 2 : 3;
-    if (state >= event) {
+    var state = ready == 'uninitialized' ? 0 : ready == 'loading' ? 1 : ready == 'loaded' ? 2 : ready == 'interactive' ? 3 : 4;
+    if (state >= type) {
       clearInterval(load_chk);
       callback();
     }
@@ -176,25 +206,6 @@ function fileValidate(elem, accept) {
     }
   }
   return true;
-}
-
-function connectionNotif(e) {
-  if (e.type == 'online' && !el('#connection')) return;
-
-  var c_el;
-  if (el('#connection')) {
-    c_el = el('#connection');
-  } else {
-    c_el = document.createElement('div');
-    c_el.id = 'connection';
-    document.body.appendChild(c_el);
-  }
-
-  var c_msg = e.type == 'online' ? 'Kembali Online.' : 'Tidak ada koneksi internet. Pastikan Wi-Fi atau kuota internet aktif, lalu muat ulang halaman.';
-  // var c_msg = e.type == 'online' ? 'Internet connected.' : 'No internet connection. Make sure Wi-Fi or cellular data is turned on, then reload the page.';
-  c_el.className = e.type == 'online' ? 'green' : 'red';
-  c_el.innerHTML = c_msg;
-  if (e.type == 'online') setTimeout(function() { removeElem(c_el) }, 1500);
 }
 
 // Add script to head https://codepen.io/sekedus/pen/QWKYpVR
@@ -237,24 +248,6 @@ function copyToClipboard(text, elem) {
 
   elm.removeChild(copyTextarea);
   return msg;
-}
-
-// Restore native window.open https://stackoverflow.com/a/48006884/7598333
-function openInNewTab(url, self) {
-  if (!('nativeOpen' in window)) {
-    var _iframe = document.createElement('iframe');
-    document.documentElement.appendChild(_iframe);
-  
-    var _window = _iframe.contentWindow;
-    window.nativeOpen = _window.open;
-    _iframe.parentElement.removeChild(_iframe);
-  }
-
-  if (self) {
-    window.nativeOpen(url, '_self');
-  } else {
-    window.nativeOpen(url);
-  }
 }
 
 // Timestamp to relative time https://stackoverflow.com/a/6109105/7598333
@@ -349,68 +342,6 @@ var cookies = {
   },
 };
 
-// Lazy Loading Images
-function lazyLoad(elem, note) {
-  if (!elem) return;
-  var lz_check_point, lz_images = elem;
-  
-  if (!el('#lz_check_point')) {
-    lz_check_point = document.createElement('div');
-    lz_check_point.id = 'lz_check_point';
-    lz_check_point.style.cssText = 'position:fixed;top:0;bottom:0;left:-2px;';
-    document.body.appendChild(lz_check_point);
-  } else {
-    lz_check_point = el('#lz_check_point');
-  }
-
-  function lazyLoadLegacy(img) {
-    var lz_chk1 = (getOffset(img).top + img.offsetHeight) > getOffset(lz_check_point).top;
-    var lz_chk2 = (getOffset(img).bottom - img.offsetHeight) < getOffset(lz_check_point).bottom;
-    var lz_chk3 = lz_chk1 && lz_chk2 && !img.classList.contains('lazyload3d');
-    var lz_chk4 = note == 'single' || note == 'all';
-    
-    if (lz_chk3 || lz_chk4) {
-      var imgs = img.dataset.src;
-      if (bmv_current == 'chapter') {
-        imgs = imgs.replace(/^(https?:)?\/\//, '');
-        if (bmv_chk_cdn) imgs = imgs.replace(bmv_rgx_cdn, '').replace(/\/[fhwq]=[^\/]+/, '');
-        imgs = bmv_load_cdn ? (bmv_str_cdn_link + imgs) : imgs;
-        imgs = '//'+ imgs;
-        if (imgs.search(/(pending\-load|cdn\.statically\.io|cdn\.imagesimple\.co)/) != -1) {
-          imgs = imgs.replace(/\?(.*)/g, ''); //remove location.search ?=
-        }
-        if (bmv_load_gi) {
-          var sNum = el('.cm_size').innerHTML;
-          imgs = imgs.replace(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\//, '/'+ sNum +'/');
-          imgs = imgs.replace(/=[swh](\d+).*/, '='+ sNum);
-          if (imgs.indexOf('docs.google') != -1) imgs = 'https://lh3.googleusercontent.com/d/'+ imgs.match(/.*id=([^&]+)/)[1] +'='+ sNum;
-        }
-      }
-      img.className = img.className.replace('lazy1oad', 'la2yloading');
-      img.onload = function() {
-        img.classList.remove('loading', 'loge');
-        img.classList.remove('no-image');
-        img.style.removeProperty('min-height');
-      };
-      img.onerror = function() {
-        img.classList.remove('loading', 'loge');
-        img.classList.add('no-image');
-        if (bmv_current == 'chapter') img.style.removeProperty('min-height');
-      };
-      img.src = imgs;
-      // img.removeAttribute('data-src');
-      img.className = img.className.replace('la2yloading', 'lazyload3d');
-      img.parentElement.classList.add('lazy-loaded');
-    }
-  }
-
-  if ('length' in lz_images) {
-    lz_images.forEach(lazyLoadLegacy);
-  } else {
-    lazyLoadLegacy(lz_images);
-  }
-}
-
 // #===========================================================================================#
 
 // Filter Array data with multiple value https://stackoverflow.com/a/10870500/7598333
@@ -443,6 +374,28 @@ function bmf_getParam(param, url) {
   return result.length == 0 ? false : result;
 }
 
+function bmf_connectionNotif(e) {
+  if (e.type == 'online' && !el('#connection')) return;
+
+  var c_el;
+  if (el('#connection')) {
+    c_el = el('#connection');
+  } else {
+    c_el = document.createElement('div');
+    c_el.id = 'connection';
+    document.body.appendChild(c_el);
+  }
+
+  var c_msg = e.type == 'online' ? 'Kembali Online.' : 'Tidak ada koneksi internet. Pastikan Wi-Fi atau data seluler aktif, lalu muat ulang halaman.';
+  // var c_msg = e.type == 'online' ? 'Internet connected.' : 'No internet connection. Make sure Wi-Fi or mobile data is turned on, then reload the page.';
+  c_el.className = e.type == 'online' ? 'green' : 'red';
+  c_el.innerHTML = c_msg;
+  if (e.type == 'online') {
+    setTimeout(function() { removeElem(c_el); }, 1500);
+    if (!bmv_page_loaded) window.location.reload();
+  }
+}
+
 // loadXMLDoc (XMLHttpRequest) https://codepen.io/sekedus/pen/vYGYBNP
 function bmf_loadXMLDoc(note, url, callback, info) {
   var xhr = new XMLHttpRequest();
@@ -464,6 +417,129 @@ function bmf_loadXMLDoc(note, url, callback, info) {
   };
   xhr.open('GET', url, true);
   xhr.send();
+}
+
+// Lazy Loading Images
+function bmf_lazyLoad(elem, note) {
+  if (!elem) return;
+  var lz_check_point, lz_images = elem;
+  
+  if (!el('#lz_check_point')) {
+    lz_check_point = document.createElement('div');
+    lz_check_point.id = 'lz_check_point';
+    lz_check_point.style.cssText = 'position:fixed;top:0;bottom:0;left:-2px;';
+    document.body.appendChild(lz_check_point);
+  } else {
+    lz_check_point = el('#lz_check_point');
+  }
+
+  function lazyQueue() {
+    if (bmv_chk_lazy) return;
+    var lz_elem = bmv_dt_lazy[0].elem;
+    var lz_img = new Image();
+    var lz_2nd = 'la2yloading';
+
+    if (bmv_current == 'chapter') {
+      lz_img = lz_elem;
+      lz_2nd = 'lazyload3d lazyshow';
+      lz_elem.style.removeProperty('min-height');
+    }
+
+    lz_elem.className = lz_elem.className.replace('lazy1oad', lz_2nd);
+    lz_img.onerror = function() { bmv_lazy_error = true; };
+    lz_img.src = bmv_dt_lazy[0].img;
+    bmv_chk_lazy = true;
+    var skip_img = setTimeout(function() { bmv_lazy_skip = true; }, 5000);
+
+    var wait_img = setInterval(function() {
+      if (isImageLoaded(lz_img) || bmv_lazy_error || bmv_lazy_skip) {
+        clearInterval(wait_img);
+        clearTimeout(skip_img);
+
+        if (bmv_lazy_error && lz_img.src.match(bmv_rgx_cdn)) {
+          bmv_dt_lazy[0].img = lz_img.src.replace(bmv_rgx_cdn, '');
+          bmv_lazy_error = false;
+          bmv_chk_lazy = false;
+          lazyQueue();
+        } else {
+          lz_elem.className = lz_elem.className.replace('la2yloading', 'lazyload3d');
+          lz_elem.classList.remove('loading', 'loge');
+          lz_elem.classList[bmv_lazy_error ? 'add' : 'remove']('no-image');
+          if (!bmv_lazy_error) lz_elem.style.removeProperty('min-height');
+  
+          if (bmv_current != 'chapter') {
+            lz_elem.src = lz_img.src;
+            // lz_elem.removeAttribute('data-src');
+            setTimeout(function() { lz_elem.classList.add('lazyshow'); }, 100); //transition
+          }
+          lz_elem.parentElement.classList.add('lazy-loaded');
+  
+          bmv_chk_lazy = false;
+          bmv_lazy_error = false;
+          bmv_lazy_skip = false;
+          bmv_dt_lazy.splice(0, 1); //remove image after loaded
+          if (bmv_dt_lazy.length > 0) lazyQueue();
+        }
+      }
+    }, 100);
+  }
+
+  function lazyPos(img) {
+    var lz_top = (getOffset(img).top + img.offsetHeight) > getOffset(lz_check_point).top;
+    var lz_bottom = (getOffset(img).bottom - img.offsetHeight) < getOffset(lz_check_point).bottom;
+    return lz_top && lz_bottom;
+  }
+
+  function lazyLegacy(img, index = 0) {
+    var lz_chk1 = lazyPos(img) && !img.classList.contains('lazyload3d');
+
+    var lz_next = false;
+    if (bmv_current == 'chapter' && 'length' in lz_images) {
+      // load next image, top to bottom
+      var lz_chk3 = lazyPos(lz_images[index]) && lz_images[index].classList.contains('lazyload3d');
+      var lz_chk4 = lz_images[index+1] && !lazyPos(lz_images[index+1]) && lz_images[index+1].classList.contains('lazy1oad');
+      if (lz_chk3 && lz_chk4) {
+        lz_images[index].parentElement.classList.add('load-next');
+        img = lz_images[index+1];
+        lz_next = true;
+      }
+    }
+    
+    if (lz_chk1 || note == 'single' || lz_next) {
+      img.classList.remove('lazyload3d', 'lazyshow', 'no-image');
+      img.classList.add('loading', 'loge', 'lazy1oad');
+      var imgs = img.dataset.src;
+
+      if (bmv_current == 'chapter') {
+        imgs = bmv_load_cdn && bmv_str_cdn == 'imagecdn' ? encodeURIComponent(imgs) : imgs.replace(/^(https?:)?\/\//, '');
+        if (bmv_chk_cdn) imgs = imgs.replace(bmv_rgx_cdn, '').replace(/\/[fhwq]=[^\/]+/, '');
+        if (bmv_load_cdn) imgs = bmv_str_cdn_url + imgs;
+        imgs = '//'+ imgs;
+
+        // remove location.search ?=
+        if (imgs.search(/(pending\-load|cdn\.statically\.io|cdn\.imagesimple\.co)/) != -1) imgs = imgs.replace(/\?(.*)/g, '');
+
+        // google images (blogger, gdrive, gphotos)
+        if (bmv_load_gi) {
+          var sNum = el('.cm_size').innerHTML;
+          imgs = imgs.replace(/\/([swh]\d+)(?:-[\w]+[^\/]*)?\//, '/'+ sNum +'/');
+          imgs = imgs.replace(/=[swh](\d+).*/, '='+ sNum);
+          if (imgs.indexOf('docs.google') != -1) imgs = 'https://lh3.googleusercontent.com/d/'+ imgs.match(/.*id=([^&]+)/)[1] +'='+ sNum;
+        }
+      }
+
+      if (!bmv_dt_lazy.some(function(item) {return item.elem == img})) {
+        bmv_dt_lazy.push({"elem": img, "img": imgs});
+        lazyQueue();
+      }
+    }
+  }
+
+  if ('length' in lz_images) {
+    lz_images.forEach(lazyLegacy);
+  } else {
+    lazyLegacy(lz_images);
+  }
 }
 
 // #===========================================================================================#
@@ -489,7 +565,7 @@ function bmf_meta_tags(note, data) {
   }
 
   if (bmv_current == 'chapter') {
-    if (fbase_user && fbase_user.tier == 'pro') mt_title = `[${data.current.replace(/[-\s]((bahasa[-\s])?indo(nesia)?|full)/, '')}] `+ mt_title;
+    if (fbase_user && fbase_user.tier == 'pro') mt_title = `[${data.current.replace(/[-\s]((bahasa[-\s])?indo(nesiaa?)?|full)/, '')}] `+ mt_title;
     d_desc = mt_desc = 'Baca download komik '+ data.title +' volume batch bahasa indonesia pdf rar zip terlengkap.';
     d_key = d_key + ', '+ data.title +' Chapter '+ data.current;
   }
@@ -579,7 +655,7 @@ function bmf_member_valid(note, elem, elem_c) {
 function bmf_email_verification(note, user, callback) {
   fbase.auth().languageCode = 'id';
   user.sendEmailVerification({
-    url: `${bmv_hp_url}#/member/profile`
+    url: `${bmv_homepage}#/member/profile`
   }).then(() => {
     bmf_member_notif(`success/${note}/email-verification`);
     if (callback) callback();
@@ -592,7 +668,10 @@ function bmf_email_verification(note, user, callback) {
 }
 
 function bmf_bmhs_key(e) {
-  if (e.keyCode == 13) el('.ms-form .ms-search').click();
+  if (keyEvent(e, 13)) {
+    if (el('.ms-form .ms-field') == e.target) el('.ms-form .ms-search').click();
+    if (el('.m-pagination .bmhs-goto') == e.target) bmf_bmhs_nav_goto(el('.m-pagination .bmhs-goto').value);
+  }
 }
 
 function bmf_bmhs_change(info, total) {
@@ -643,10 +722,12 @@ function bmf_bmhs_remove_split(data) {
 
 function bmf_bmhs_remove(note) {
   if (note.indexOf('reset') != -1) {
-    bmv_deleted_all = false;
-    bmv_deleted_list = [];
-    if (note.indexOf('toggle') == -1) el('.nav-delete').classList.add('no_items');
-    el('.m-delete-all input').checked = false;
+    bmv_dt_delete = [];
+    if (note.indexOf('toggle') == -1) {
+      el('.m-delete-all').classList.add('no_items');
+      el('.nav-delete').classList.add('no_items');
+    }
+    el('.m-select-all input').checked = false;
   } else {
     var m_note = `member/${bmv_prm_slug}/${note}`;
     var m_path = bmf_fbase_path(note);
@@ -671,13 +752,20 @@ function bmf_bmhs_remove(note) {
         el('.member .m-total').innerHTML = m_length +'/'+ bmv_max_bmhs;
   
         if (m_length > 0) {
-          removeElem(el(`.member .m-list li[data-slug="${series.slug}"]`));
-        } else {
+          if (bmv_dt_delete.length == 1) {
+            removeElem(el(`.member .m-list li[data-slug="${series.slug}"]`));
+            bmv_dt_delete = [];
+          } else {
+            bmf_bmhs_remove('reset');
+            bmf_member_bmhs_data(`${bmv_prm_slug}/delete-all`);
+          }
+        } else { //empty
           el('.member .m-total').classList.add('no_items');
           el('.member .m-delete').classList.add('no_items');
           el('.member .m-nav').classList.add('no_items');
           el('.member .m-list').classList.remove('loading', 'loge');
           el('.member .m-list').innerHTML = `<div class="flex f_middle f_center full" style="min-height:230px;">${firstUCase(bmv_prm_slug)} Kosong</div>`;
+          el('.member .m-pagination').classList.add('no_items');
         }
       });
     });
@@ -687,11 +775,14 @@ function bmf_bmhs_remove(note) {
 function bmf_bmhs_fnc(note) {
   if (note == 'first') {
     el('.post-header h1 span').classList.add('m-total', 'btn');
+    if (is_mobile) el('.member .m-delete').classList.add('m-space-v', 'full');
     el('.member .m-delete').classList.remove('no_items');
     el('.member .m-nav').classList.remove('no_items');
   
-    el('.member .m-delete').addEventListener('click', function() {
+    el('.member .m-delete-btn').addEventListener('click', function() {
       bmf_bmhs_remove('reset/toggle');
+      this.classList.toggle('sh-close');
+      el('.m-delete-all').classList.toggle('no_items');
       el('.nav-delete').classList.toggle('no_items');
       el('.member .m-list .delete', 'all').forEach(function(item) {
         item.classList.toggle('no_items');
@@ -711,32 +802,22 @@ function bmf_bmhs_fnc(note) {
     });
   
     el('.m-delete-select').addEventListener('click', function() {
-      if (bmv_deleted_list.length == 0) return;
+      if (bmv_dt_delete.length == 0) return;
       var str_confirm = '';
-
-      if (bmv_deleted_all && el('.member .m-filter').dataset.value == '') {
-        str_confirm = `Semua ${bmv_prm_slug} pada akun ini akan dihapus secara permanen dan tidak dapat dikembalikan. Apakah Kamu yakin?`;
-        if (confirm(str_confirm)) {
-          el('.member .m-list').classList.add('loading', 'loge');
-          bmf_bmhs_remove('series');
-        }
-      } else {
-        var m_slug = '';
-        for (var i in bmv_deleted_list) {
-          m_slug += '\n👉 '+ bmv_deleted_list[i];
-        }
-        str_confirm = `Hapus series ini dari ${bmv_prm_slug}?${m_slug}`;
-        if (confirm(str_confirm)) {
-          for (var j in bmv_deleted_list) {
-            el(`.member .m-list li[data-slug="${bmv_deleted_list[j]}"]`).classList.add('loading', 'loge');
-            bmf_bmhs_remove(`series/${bmv_deleted_list[j]}`);
-          }
+      var m_slug = '';
+      for (var i in bmv_dt_delete) {
+        m_slug += '\n👉 '+ bmv_dt_delete[i];
+      }
+      str_confirm = `Hapus series ini dari ${bmv_prm_slug}?${m_slug}`;
+      if (confirm(str_confirm)) {
+        for (var j in bmv_dt_delete) {
+          el(`.member .m-list li[data-slug="${bmv_dt_delete[j]}"]`).classList.add('loading', 'loge');
+          bmf_bmhs_remove(`series/${bmv_dt_delete[j]}`);
         }
       }
     });
   
-    el('.m-delete-all input').addEventListener('input', function() {
-      bmv_deleted_all = this.checked && el('.member .m-filter').dataset.value == '' ? true : false;
+    el('.m-select-all input').addEventListener('input', function() {
       var all_chk = this.checked;
       el('.member .m-list .delete input', 'all').forEach(function(item) {
         item.checked = all_chk ? true : false;
@@ -758,6 +839,24 @@ function bmf_bmhs_fnc(note) {
       el('.member .m-filter').disabled = true;
       bmf_member_bmhs_data(`${bmv_prm_slug}/search`);
     });
+  
+    // bmhs: delete all
+    el('.m-delete-all').addEventListener('click', function() {
+      el('.m-delete-confirm').classList.remove('no_items');
+      el('.m-delete-confirm input').focus();
+    });
+  
+    el('.m-delete-confirm .dc-remove').addEventListener('click', function() {
+      if (el('.m-delete-confirm input').value == `delete-all-${bmv_prm_slug}`) {
+        el('.m-delete-confirm').classList.add('no_items');
+        el('.member .m-list').classList.add('loading', 'loge');
+        bmf_bmhs_remove('series');
+      }
+    });
+  
+    el('.m-delete-confirm .dc-cancel').addEventListener('click', function() {
+      el('.m-delete-confirm').classList.add('no_items');
+    });
   }
 
   if (bmv_prm_slug == 'history') {
@@ -770,12 +869,12 @@ function bmf_bmhs_fnc(note) {
     item.addEventListener('change', function(e) {
       var m_slug = this.parentElement.dataset.slug;
       var m_note = el('input', this).checked ? 'add' : 'remove';
-      bmv_deleted_list = modArray(m_note, bmv_deleted_list, m_slug);
+      bmv_dt_delete = modArray(m_note, bmv_dt_delete, m_slug);
       
       if (e.isTrusted) {
-        var all_chk = bmv_deleted_list.length == el('.member .m-list .delete', 'all').length;
-        el('.m-delete-all input').checked = all_chk ? true : false;
-        bmv_deleted_all = all_chk ? true : false;
+        this.parentElement.classList.add('highlighted');
+        var all_chk = bmv_dt_delete.length == el('.member .m-list .delete', 'all').length;
+        el('.m-select-all input').checked = all_chk ? true : false;
       }
     });
   });
@@ -793,6 +892,13 @@ function bmf_bmhs_sort(note, data, value) {
   var m_val = value.split('|');
   var m_chk = m_val[1] && m_val[1] == 'asc' ? true : false;
   return sortBy(data, m_val[0], m_chk);
+}
+
+function bmf_bmhs_nav_goto(page) {
+  if (page == bmhs_current) return;
+  document.body.scrollIntoView();
+  bmhs_current = Number(page);
+  bmf_bmhs_set(`page-${bmhs_current}`);
 }
 
 function bmf_bmhs_nav_html() {
@@ -853,23 +959,28 @@ function bmf_bmhs_nav_html() {
   str_nav += '><div class="btn bmhs-next '+ (bmhs_current == bmhs_length ? 'disabled' : 'bmhs-nav') +'" title="Next">&#10095;</div></li>';
   
   str_nav += '</ul>';
-  if (!is_mobile) str_nav += '<div class="bmhs-count">Page '+ bmhs_current +' of '+ bmhs_length +'</div>';
+  str_nav += '<div class="bmhs-pagestats flex f_middle f_center"><span class="bmhs-count">Page '+ bmhs_current +' of '+ bmhs_length +'</span><input class="bmhs-goto no_arrow" type="number" min="1" max="'+ bmhs_length +'" title="Goto.."></div>';
   
   el('.member .m-pagination').innerHTML = str_nav;
   
   el('.m-pagination .bmhs-nav', 'all').forEach(function(item) {
     item.addEventListener('click', function() {
-      document.body.scrollIntoView();
-      bmhs_current = Number(this.parentElement.dataset.page);
-      bmf_bmhs_set(`page-${bmhs_current}`);
+      bmf_bmhs_nav_goto(this.parentElement.dataset.page);
     });
+  });
+
+  el('.m-pagination .bmhs-goto').addEventListener('input', function(e) {
+    if (this.value == '') return;
+    var goto = Number(this.value);
+    if (goto < Number(e.target.min)) this.value = e.target.min;
+    if (goto > Number(e.target.max)) this.value = e.target.max;
   });
 }
 
 function bmf_bmhs_html(note) {
   var m_empty = `<div class="flex f_middle f_center full" style="min-height:130px;">${firstUCase(bmv_prm_slug)} Kosong</div>`;
 
-  if (bmhs_arr.length == 0 || note == 'empty') {
+  if ((bmhs_arr && bmhs_arr.length == 0) || note == 'empty') {
     el('.member .m-list').innerHTML = m_empty;
   } else {
     bmhs_arr = bmf_bmhs_sort(note, bmhs_arr, el('.member .m-sort').value);
@@ -888,7 +999,13 @@ function bmf_bmhs_html(note) {
         if (m_newtab) str_bmhs += '" target="_blank';
         str_bmhs += '"><img style="min-height:225px;" class="radius full_img loading loge lazy1oad" data-src="'+ bmhs_arr[i].cover +'" alt="'+ bmhs_arr[i].title +'" title="'+ bmhs_arr[i].title +'"></a>';
         str_bmhs += '<span class="type m-icon btn radius '+ bmhs_arr[i].type +'"></span>';
-        str_bmhs += '</div>';
+        if (bmhs_arr[i].status == 'completed') str_bmhs += '<span class="completed m-icon btn red radius">completed</span>';
+        if (bmhs_arr[i].history == 'true') {
+          var m_visited = genArray(bmhs_arr[i].hs_visited);
+          m_visited = sortBy(m_visited, 'added'); //descanding
+          str_bmhs += '<span class="last-read m-icon btn green clamp lc1" title="Last Read">ch. '+ m_visited[0].number +'</span>';
+        }
+        str_bmhs += '</div>'; //.cover
         str_bmhs += '<div class="title"><a href="#/series/'+ bmhs_arr[i].slug;
         if (m_newtab) str_bmhs += '" target="_blank';
         str_bmhs += '"><h3 class="hd-title clamp">'+ bmhs_arr[i].title +'</h3></a></div>';
@@ -898,7 +1015,8 @@ function bmf_bmhs_html(note) {
         str_bmhs += '<a href="#/series/'+ bmhs_arr[i].slug;
         if (m_newtab) str_bmhs += '" target="_blank';
         str_bmhs += '"><img style="min-height:130px;" class="radius full_img loading loge lazy1oad" data-src="'+ bmhs_arr[i].cover +'" alt="'+ bmhs_arr[i].title +'" title="'+ bmhs_arr[i].title +'"></a>';
-        if (bmhs_arr[i].bookmarked == 'true') str_bmhs += '<span class="bookmarked m-icon btn green" title="Bookmarked"><svg xmlns="http://www.w3.org/2000/svg" width="0.84em" height="1em" viewBox="0 0 1280 1536"><path fill="currentColor" d="M1164 0q23 0 44 9q33 13 52.5 41t19.5 62v1289q0 34-19.5 62t-52.5 41q-19 8-44 8q-48 0-83-32l-441-424l-441 424q-36 33-83 33q-23 0-44-9q-33-13-52.5-41T0 1401V112q0-34 19.5-62T72 9q21-9 44-9h1048z"/></svg></span>';
+        if (bmhs_arr[i].bookmarked == 'true') str_bmhs += '<span class="bookmarked m-icon btn green" title="Bookmarked"><svg data-name="fa/bookmark" xmlns="http://www.w3.org/2000/svg" width="0.84em" height="1em" viewBox="0 0 1280 1536"><path fill="currentColor" d="M1164 0q23 0 44 9q33 13 52.5 41t19.5 62v1289q0 34-19.5 62t-52.5 41q-19 8-44 8q-48 0-83-32l-441-424l-441 424q-36 33-83 33q-23 0-44-9q-33-13-52.5-41T0 1401V112q0-34 19.5-62T72 9q21-9 44-9h1048z"/></svg></span>';
+        if (bmhs_arr[i].status && bmhs_arr[i].status.search(/completed?|tamat/i) != -1) str_bmhs += '<span class="completed m-icon btn red radius">completed</span>';
         str_bmhs += '</div>'; //.cover
         str_bmhs += '<div class="detail">';
         str_bmhs += '<div class="title"><a href="#/series/'+ bmhs_arr[i].slug;
@@ -906,9 +1024,12 @@ function bmf_bmhs_html(note) {
         str_bmhs += '"><h3 class="hd-title clamp lc1">'+ bmhs_arr[i].title +'</h3></a></div>';
         str_bmhs += '<ul class="">';
         var m_visited = genArray(bmhs_arr[i].hs_visited);
-        m_visited = sortBy(m_visited, 'added'); //desc
+        m_visited = sortBy(m_visited, 'added'); //descanding
         for (var j = 0; j < m_visited.length; j++) {
-          str_bmhs += '<li class="flex"><a class="f_grow" href="#/chapter/'+ bmhs_arr[i].slug +'/'+ m_visited[j].number;
+          var m_url = bmhs_arr[i].slug +'/'+ m_visited[j].number +'/';
+          if (bmv_dt_settings.ch_url) m_url = m_url + encodeURIComponent('url='+ m_visited[j].url +'&');
+          m_url = m_url + encodeURIComponent('site='+ m_visited[j].site);
+          str_bmhs += '<li class="flex"><a class="f_grow f_clamp" href="#/chapter/'+ m_url;
           if (m_newtab) str_bmhs += '" target="_blank';
           str_bmhs += '">Chapter '+ m_visited[j].number +'</a><span class="time-ago" title="'+ dateLocal(m_visited[j].added) +'">'+ timeDifference(m_visited[j].added) +'</span></li>';
         }
@@ -925,11 +1046,11 @@ function bmf_bmhs_html(note) {
 
     bmf_bmhs_fnc(note);
     if (note == 'first') bmf_bmhs_length(`member/${bmv_prm_slug}/check`); //if length more than {bmv_max_bmhs}, remove
-    lazyLoad(el('img.lazy1oad', 'all')); //first load
+    bmf_lazyLoad(el('img.lazy1oad', 'all')); //first load
     document.addEventListener('scroll', bmf_page_scroll);
   }
 }
-  
+
 function bmf_bmhs_set(note) {
   bmhs_length = Math.ceil(bmhs_arr.length / bmhs_max);
   bmhs_current = note.search(/page-\d/) == -1 || bmhs_current < 1 ? 1 : bmhs_current;
@@ -1015,9 +1136,9 @@ function bmf_member_profile_fnc() {
 
       var parent = this.parentElement;
       var pr_data = parent.dataset.edit;
-      this.classList.add('no_items');
+      if (pr_data != 'backup') this.classList.add('no_items');
       el('.m-profile .m-'+ pr_data).classList.add('edit');
-      if (pr_data != 'cover') el('.m-save', parent).parentElement.classList.remove('no_items');
+      if (pr_data != 'cover' && el('.m-save', parent)) el('.m-save', parent).parentElement.classList.remove('no_items');
 
       if (pr_data == 'cover') {
         el('.m-upload', parent).classList.remove('no_items');
@@ -1043,12 +1164,35 @@ function bmf_member_profile_fnc() {
         el('.m-pass-n', parent).focus();
       }
 
+      if (pr_data == 'backup' && fbase_user && fbase_user.tier == 'pro') {
+        this.disabled = true;
+        el('.m-profile .m-detail').classList.add('loading', 'loge');
+        bmf_loadXMLDoc(`xhr/${bmv_current}/backup`, `${api_url}/firebase/backup.php?uid=${fbase_user.uid}&manual`, function(n, res) {
+          el('.m-edit', parent).disabled = false;
+          el('.m-profile .m-detail').classList.remove('loading', 'loge');
+
+          if (res.indexOf('Error:') != -1) {
+            console.error(res);
+            alert(res);
+          } else {
+            console.log(res);
+            bmf_member_notif(`success/profile/backup`, {timer: 2000, message: 'Backup data berhasil.'});
+          }
+        });
+      }
+
       if (pr_data == 'delete') {
-        parent.classList.add('f_center', 'active', 'layer');
+        parent.classList.add('wBox', 'active', 'layer');
         el('.m-delete .m-label').classList.add('no_items');
-        el('.m-text', parent).classList.remove('no_items');
+        el('.m-dl-notif', parent).classList.remove('no_items');
+        el('.m-dl-export', parent).classList.remove('no_items');
+        el('.m-dl-export a', parent).classList.remove('disabled');
       }
     });
+  });
+
+  el('.m-delete .m-dl-export a').addEventListener('click', function() {
+    this.classList.add('disabled');
   });
 
   // member: cancel button
@@ -1083,9 +1227,10 @@ function bmf_member_profile_fnc() {
       }
 
       if (pr_data == 'delete') {
-        parent.classList.remove('f_center', 'active', 'layer');
+        parent.classList.remove('wBox', 'active', 'layer');
         el('.m-delete .m-label').classList.remove('no_items');
-        el('.m-text', parent).classList.add('no_items');
+        el('.m-dl-notif', parent).classList.add('no_items');
+        el('.m-dl-export', parent).classList.add('no_items');
       }
     });
   });
@@ -1234,66 +1379,122 @@ function bmf_settings_sh(chk, elem) {
   }
 }
 
+function bmf_settings_changed(elem) {
+  // note: 'theme' is excluded
+  var st_changed;
+  var st_id = (elem.id || elem.name).replace(/^st-/, '').replace(/-/g, '_');
+  var st = bmv_dt_settings[st_id];
+  
+  if (elem.type == 'radio') {
+    el(`#${elem.name} input`, 'all').forEach(function(item){ item.parentElement.classList.remove('highlighted'); });
+    elem = el(`#${elem.name} input:checked`);
+    if (st_id == 'source') st = bmv_dt_settings.source.site;
+    st_changed = elem.value != st;
+  } else if (elem.type == 'checkbox') {
+    if (st_id == 'link') {
+      st_changed = elem.checked && st.indexOf(elem.value) == -1 || !elem.checked && st.indexOf(elem.value) != -1;
+    } else {
+      st_changed = elem.checked !== st;
+    }
+  } else {
+    st_changed = elem.value != st;
+  }
+  return st_changed;
+}
+
+function bmf_settings_fill(settings) {
+  if (fbase_user && fbase_user.tier == 'pro') {
+    el(`.st-source input[value="${settings.source.site}"]`).checked = true;
+    el('.st-sr-copy input').checked = settings.sr_copy;
+    el('.st-sr-list input').checked = settings.sr_list;
+    el('.st-ch-menu input').checked = settings.ch_menu;
+    el('.st-ch-index input').checked = settings.ch_index;
+    el('.st-src-link input').checked = settings.src_link;
+    el('.st-cm-load input').checked = settings.cm_load;
+
+    el('.st-cdn input', 'all').forEach(function(item) {
+      bmf_settings_sh(el('.st-ch-menu input').checked, item);
+      if (item.value == settings.cdn) item.checked = true;
+    });
+  }
+  
+  el('.st-theme input', 'all').forEach(function(item) {
+    if (item.value == settings.theme) item.checked = true;
+  });
+
+  el('.st-cache input').value = settings.cache;
+  el('.st-history input').checked = settings.hs_stop;
+  el('.st-ch-url input').checked = settings.ch_url;
+
+  var link_list = settings.link.split(', ');
+  link_list.forEach(function(item) {
+    el(`.st-link input[value="${item}"]`).checked = true;
+  });
+}
+
 function bmf_member_settings_fnc() {
+  el('.st-reset button').disabled = false;
+  el('.st-save button').disabled = false;
   el('.st-control').classList.remove('loading', 'loge');
+
+  if (!(bmv_dt_settings.source.site in bmv_settings.source)) bmv_dt_settings.source = bmv_settings.default.source;
+  bmf_settings_fill(bmv_dt_settings);
   
   if (fbase_user && fbase_user.tier == 'pro') {
-    el(`.st-source input[value="${bmv_dt_settings.source.site}"]`).checked = true;
-    el('.st-sr-copy input').checked = bmv_dt_settings.sr_copy;
-    el('.st-sr-list input').checked = bmv_dt_settings.sr_list;
-    el('.st-ch-menu input').checked = bmv_dt_settings.ch_menu;
-    el('.st-ch-index input').checked = bmv_dt_settings.ch_index;
-    el('.st-src-link input').checked = bmv_dt_settings.src_link;
-    el('.st-cm-load input').checked = bmv_dt_settings.cm_load;
-
     el('.st-ch-menu input').addEventListener('input', function() {
       var menu_chk = this.checked;
       el('.st-cdn input', 'all').forEach(function(item) {
         bmf_settings_sh(menu_chk, item);
       });
     });
-
-    el('.st-cdn input', 'all').forEach(function(item) {
-      bmf_settings_sh(el('.st-ch-menu input').checked, item);
-      if (item.value == bmv_dt_settings.cdn) item.checked = true;
-    });
   }
-
-  var th_current;
-  if (local('get', 'bmv_theme')) {
-    th_current = local('get', 'bmv_theme');
-  } else {
-    th_current = bmv_dt_settings.theme;
-  }
-  el(`.st-theme input[value="${th_current}"]`).checked = true;
-
-  el('.st-history input').checked = bmv_dt_settings.hs_stop;
-  el('.st-ch-link input').checked = bmv_dt_settings.ch_url;
-  el('.st-cache input').checked = bmv_dt_settings.cache;
-
-  var link_list = bmv_dt_settings.link.split(', ');
-  link_list.forEach(function(item) {
-    el(`.st-link input[value="${item}"]`).checked = true;
-  });
-
   
   el('.st-theme input', 'all').forEach(function(item) {
-    item.addEventListener('input', function() {
-      var th_dark;
-      if (this.value == 'default') {
-        var browser_theme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        th_dark = browser_theme ? 'dark' : 'light';
-      } else {
-        th_dark = this.value;
-      }
-      bmf_toggle_dark('setting', th_dark);
+    item.addEventListener('input', function(event) {
+      bmv_dt_settings.theme = this.value;
+      bmf_toggle_dark(event);
     });
+  });
+
+  el('.st-cache input').addEventListener('input', function(e) {
+    var cache = Number(this.value);
+    if (cache < Number(e.target.min)) this.value = e.target.min;
+    if (cache > Number(e.target.max)) this.value = e.target.max;
+  });
+
+  el('.st-control input', 'all').forEach(function(item) {
+    item.addEventListener('change', function(e) {
+      if (bmf_settings_changed(e.target)) {
+        el('.st-save button').classList.add('pulse');
+        this.parentElement.classList.add('highlighted');
+        window.addEventListener('beforeunload', beforeUnloadListener);
+      } else {
+        this.parentElement.classList.remove('highlighted');
+        if (!el('.st-control .highlighted')) {
+          el('.st-save button').classList.remove('pulse');
+          window.removeEventListener('beforeunload', beforeUnloadListener);
+        }
+      }
+    });
+  });
+
+  el('.st-reset button').addEventListener('click', function() {
+    if (confirm('Are you sure you want to RESET all settings to default?')) {
+      this.disabled = true;
+      var st_new = bmf_update_settings('reset', bmv_settings.default);
+      bmf_settings_fill(st_new);
+      
+      el('.st-save button').classList.add('pulse');
+      el('.st-control').classList.add('loading', 'loge');
+      window.addEventListener('beforeunload', beforeUnloadListener);
+    }
   });
 
   el('.st-save button').addEventListener('click', function() {
     this.disabled = true;
     this.classList.remove('pulse');
     bmf_member_notif('reset');
+    el('.st-reset button').disabled = true;
     el('.st-control').classList.add('loading', 'loge');
   
     if (fbase_user && fbase_user.tier == 'pro') {
@@ -1310,9 +1511,9 @@ function bmf_member_settings_fnc() {
     }
 
     bmv_dt_settings['theme'] = el('.st-theme input:checked').value;
+    bmv_dt_settings['cache'] = el('.st-cache input').value;
     bmv_dt_settings['hs_stop'] = el('.st-history input').checked;
-    bmv_dt_settings['ch_url'] = el('.st-ch-link input').checked;
-    bmv_dt_settings['cache'] = el('.st-cache input').checked;
+    bmv_dt_settings['ch_url'] = el('.st-ch-url input').checked;
 
     var link_list = [];
     el('.st-link input:checked', 'all').forEach(function(item) {
@@ -1326,7 +1527,7 @@ function bmf_member_settings_fnc() {
         console.error('!! Error: Firebase "save" bmf_member_settings_fnc, code: '+ error.code +', message: '+ error.message);
         alert('!! Error: Firebase "save" bmf_member_settings_fnc(\n'+ error.message);
       } else {
-        if (bmv_dt_settings.theme == 'default') {
+        if (bmv_dt_settings.theme == 'system') {
           local('remove', 'bmv_theme');
         } else{
           local('set', 'bmv_theme', bmv_dt_settings.theme);
@@ -1337,17 +1538,12 @@ function bmf_member_settings_fnc() {
         bmv_dt_settings = bmf_update_settings('update', bmv_dt_settings);
         bmf_fbase_db_change('settings|check', bmf_fbase_path('check/settings'), 'set', {update: local_time});
         bmf_member_notif('success/settings', {timer: 2000, message: 'Pengaturan telah disimpan.'});
-        window.onbeforeunload = null;
+        el('.st-control .highlighted', 'all').forEach(function(item){ item.classList.remove('highlighted'); });
+        window.removeEventListener('beforeunload', beforeUnloadListener);
         document.body.scrollIntoView();
         el('.st-save button').disabled = false;
+        el('.st-reset button').disabled = false;
       }
-    });
-  });
-
-  el('.st-control input', 'all').forEach(function(item) {
-    item.addEventListener('change', function(e) {
-      el('.st-save button').classList.add('pulse');
-      window.onbeforeunload = function() { return 'Pengaturan belum disimpan, apakah kamu yakin ingin keluar?'; }
     });
   });
 }
@@ -1357,68 +1553,70 @@ function bmf_member_settings_html() {
   var str_settings = '';
   if (fbase_user && fbase_user.tier == 'pro') {
     str_settings += '<div class="st-adv bg2 layer">';
-    str_settings += '<div class="st-source st-list">';
-    str_settings += '<h2>Series Sources</h2>';
+    str_settings += '<div class="st-source st-list" id="st-source">';
+    str_settings += '<h2>API Sources</h2>';
     for (var site in bmv_settings.source) {
       str_settings += `<label class="radio"><input type="radio" name="st-source" value="${site}"><span></span>${site}</label>`;
     }
     str_settings += '</div>'; //.st-source
     str_settings += '<div class="st-series st-list">';
     str_settings += '<h2>Advanced Series</h2>';
-    str_settings += '<label class="checkbox st-sr-copy"><input type="checkbox"><span></span>Show <code>sr_copy</code></label>';
-    str_settings += '<label class="checkbox st-sr-list"><input type="checkbox"><span></span>Show <code>sr_list</code> (mobile)</label>';
+    str_settings += '<label class="checkbox st-sr-copy"><input type="checkbox" id="st-sr-copy"><span></span>Show <code>sr_copy</code></label>';
+    str_settings += '<label class="checkbox st-sr-list"><input type="checkbox" id="st-sr-list"><span></span>Show <code>sr_list</code> (mobile)</label>';
     str_settings += '</div>'; //.st-series
     str_settings += '<div class="st-chapters st-list">';
     str_settings += '<h2>Advanced Chapter</h2>';
-    str_settings += '<label class="checkbox st-ch-menu"><input type="checkbox"><span></span>Show <code>ch_menu</code></label>';
-    str_settings += '<label class="checkbox st-ch-index"><input type="checkbox"><span></span>Show <code>ch_index</code></label>';
+    str_settings += '<label class="checkbox st-ch-menu"><input type="checkbox" id="st-ch-menu"><span></span>Show <code>ch_menu</code></label>';
+    str_settings += '<label class="checkbox st-ch-index"><input type="checkbox" id="st-ch-index"><span></span>Show <code>ch_index</code></label>';
     str_settings += '</div>'; //.st-chapters
-    str_settings += '<div class="st-cdn st-list">';
+    str_settings += '<div class="st-cdn st-list" id="st-cdn">';
     str_settings += '<h2>CDN for chapter</h2>';
     str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="default"><span></span>Default</label>';
     str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="not"><span></span>Remove CDN</label>';
-    str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="wp"><span></span>wp.com</label>';
     str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="statically"><span></span>statically.io</label>';
+    str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="wp"><span></span>wp.com</label>';
+    str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="imagecdn"><span></span>imagecdn.app</label>';
+    str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="imageoptim"><span></span>imageoptim.com</label>';
     str_settings += '</div>'; //.st-cdn
     str_settings += '<div class="st-src-link st-list">';
     str_settings += '<h2>Source Link</h2>';
-    str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Show <code>src_link</code></label>';
+    str_settings += '<label class="checkbox"><input type="checkbox" id="st-src-link"><span></span>Show <code>src_link</code></label>';
     str_settings += '</div>'; //.st-src-link
     str_settings += '<div class="st-comments st-list">';
     str_settings += '<h2>Comments</h2>';
-    str_settings += '<label class="checkbox st-cm-load"><input type="checkbox"><span></span>Auto Load (chapter)</label>';
+    str_settings += '<label class="checkbox st-cm-load"><input type="checkbox" id="st-cm-load"><span></span>Auto Load (chapter)</label>';
     str_settings += '</div>'; //.st-comments
     str_settings += '</div>'; //.st-adv
   }
   str_settings += '<div class="st-general bg2 layer radius">';
-  str_settings += '<div class="st-theme st-list">';
+  str_settings += '<div class="st-theme st-list" id="st-theme">';
   str_settings += '<h2>Tema Situs</h2>';
-  str_settings += '<label class="radio"><input type="radio" name="st-theme" value="default"><span></span>Default</label>';
+  str_settings += '<label class="radio"><input type="radio" name="st-theme" value="system"><span></span>System</label>';
   str_settings += '<label class="radio"><input type="radio" name="st-theme" value="light"><span></span>Terang</label>';
   str_settings += '<label class="radio"><input type="radio" name="st-theme" value="dark"><span></span>Gelap</label>';
   str_settings += '</div>'; //.st-theme
-  str_settings += '<div class="st-history st-list">';
-  str_settings += '<h2>Histori Bacaan</h2>';
-  str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Berhenti merekam histori bacaan</label>';
-  str_settings += '</div>'; //.st-history
-  str_settings += '<div class="st-ch-link st-list">';
-  str_settings += '<h2>Chapter URL (series)</h2>';
-  str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Gunakan <code>url</code> pada Series di <code>chapter-list</code></label>';
-  str_settings += '</div>'; //.st-ch-link
   str_settings += '<div class="st-cache st-list">';
-  str_settings += '<h2>Page Cache</h2>';
-  str_settings += '<label class="checkbox"><input type="checkbox"><span></span>Muat halaman <code>sebelum/setelah</code> dengan cache (1 halaman)</label>';
+  str_settings += '<h2>Cache Timer</h2>';
+  str_settings += '<div><input type="number" id="st-cache" min="10" max="60" step="5" placeholder="30"> minutes (api data)</div>';
   str_settings += '</div>'; //.st-cache
+  str_settings += '<div class="st-history st-list">';
+  str_settings += '<h2>Histori Bacaan (chapter)</h2>';
+  str_settings += '<label class="checkbox"><input type="checkbox" id="st-hs-stop"><span></span>Berhenti merekam histori bacaan</label>';
+  str_settings += '</div>'; //.st-history
+  str_settings += '<div class="st-ch-url st-list">';
+  str_settings += '<h2>Chapter URL</h2>';
+  str_settings += '<label class="checkbox"><input type="checkbox" id="st-ch-url"><span></span>Gunakan <code>url</code> pada link chapter</label>';
+  str_settings += '</div>'; //.st-ch-url
   str_settings += '<div class="st-link st-list">';
   str_settings += '<h2>Buka link di tab baru</h2>';
-  str_settings += '<label class="checkbox"><input type="checkbox" value="latest"><span></span>Link di Beranda</label>';
-  str_settings += '<label class="checkbox"><input type="checkbox" value="search"><span></span>Link di Pencarian</label>';
-  str_settings += '<label class="checkbox"><input type="checkbox" value="series"><span></span>Link di Series</label>';
-  str_settings += '<label class="checkbox"><input type="checkbox" value="chapter-bc"><span></span>Link di Chapter (breadcrumb)</label>';
-  str_settings += '<label class="checkbox"><input type="checkbox" value="chapter-img"><span></span>Link di Chapter (gambar)</label>';
-  str_settings += '<label class="checkbox"><input type="checkbox" value="chapter-np"><span></span>Link di Chapter (next-prev)</label>';
-  str_settings += '<label class="checkbox"><input type="checkbox" value="bookmark"><span></span>Link di Bookmark (member)</label>';
-  str_settings += '<label class="checkbox"><input type="checkbox" value="history"><span></span>Link di History (member)</label>';
+  str_settings += '<label class="checkbox"><input type="checkbox" id="st-link" value="latest"><span></span>Link di Beranda</label>';
+  str_settings += '<label class="checkbox"><input type="checkbox" id="st-link" value="search"><span></span>Link di Pencarian</label>';
+  str_settings += '<label class="checkbox"><input type="checkbox" id="st-link" value="series"><span></span>Link di Series</label>';
+  str_settings += '<label class="checkbox"><input type="checkbox" id="st-link" value="chapter-bc"><span></span>Link di Chapter (breadcrumb)</label>';
+  str_settings += '<label class="checkbox"><input type="checkbox" id="st-link" value="chapter-img"><span></span>Link di Chapter (gambar)</label>';
+  str_settings += '<label class="checkbox"><input type="checkbox" id="st-link" value="chapter-np"><span></span>Link di Chapter (next-prev)</label>';
+  str_settings += '<label class="checkbox"><input type="checkbox" id="st-link" value="bookmark"><span></span>Link di Bookmark (member)</label>';
+  str_settings += '<label class="checkbox"><input type="checkbox" id="st-link" value="history"><span></span>Link di History (member)</label>';
   str_settings += '</div>'; //.st-link
   str_settings += '</div>'; //.st-general
   el('.st-control').innerHTML = str_settings;
@@ -1477,7 +1675,7 @@ function bmf_member_form_fnc() {
         m_parent.classList.add('loading', 'loge');
         
         fbase.auth().languageCode = 'id';
-        fbase.auth().sendPasswordResetEmail(m_email.value, {url:`${bmv_hp_url}#/member/login`}).then(function() {
+        fbase.auth().sendPasswordResetEmail(m_email.value, {url:`${bmv_homepage}#/member/login`}).then(function() {
           m_parent.classList.remove('loading', 'loge');
           bmf_member_notif('success/forgot/password-reset', {message:'<span class="success">Link reset password terkirim ke <b>'+ m_email.value +'</b></span>\nSilahkan cek folder "Kotak Masuk" atau "Spam" di email.'});
         }).catch(function(error) {
@@ -1549,8 +1747,6 @@ function bmf_member_fnc() {
         }
       }, 100);
     }
-    
-    // el('.member .m-logout').addEventListener('click', bmf_fbase_logout);
   } else {
     bmf_member_form_fnc();
   }
@@ -1560,12 +1756,22 @@ function bmf_build_member() {
   // Display "member" page
   var str_member = '';
 
-  str_member += '<div class="post-header flex f_middle f_between">';
+  str_member += '<div class="post-header flex_wrap f_middle">';
   str_member += '<h1 class="title">Member: '+ firstUCase(bmv_prm_slug) +' <span></span></h1>';
+  str_member += '<span class="f_grow"></span>';
   if (fbase_login) {
-    // str_member += '<span class="m-logout btn t_center" title="Logout"><svg width="18" height="18" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M400 54.1c63 45 104 118.6 104 201.9 0 136.8-110.8 247.7-247.5 248C120 504.3 8.2 393 8 256.4 7.9 173.1 48.9 99.3 111.8 54.2c11.7-8.3 28-4.8 35 7.7L162.6 90c5.9 10.5 3.1 23.8-6.6 31-41.5 30.8-68 79.6-68 134.9-.1 92.3 74.5 168.1 168 168.1 91.6 0 168.6-74.2 168-169.1-.3-51.8-24.7-101.8-68.1-134-9.7-7.2-12.4-20.5-6.5-30.9l15.8-28.1c7-12.4 23.2-16.1 34.8-7.8zM296 264V24c0-13.3-10.7-24-24-24h-32c-13.3 0-24 10.7-24 24v240c0 13.3 10.7 24 24 24h32c13.3 0 24-10.7 24-24z"></path></svg></span>';
-    if (bmv_prm_slug == 'bookmark' || bmv_prm_slug == 'history') str_member += '<span class="m-delete btn red no_items" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="0.94em" height="1.2em" viewBox="0 0 1408 1536"><path fill="currentColor" d="M512 608v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm256 0v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm256 0v576q0 14-9 23t-23 9h-64q-14 0-23-9t-9-23V608q0-14 9-23t23-9h64q14 0 23 9t9 23zm128 724V384H256v948q0 22 7 40.5t14.5 27t10.5 8.5h832q3 0 10.5-8.5t14.5-27t7-40.5zM480 256h448l-48-117q-7-9-17-11H546q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5H288q-66 0-113-58.5T128 1336V384H32q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"/></svg></span>';
-    if (bmv_prm_slug == 'settings') str_member += '<div class="st-save"><span class="st-content"><button class="btn">Simpan</button></span></div>';
+    if (bmv_prm_slug == 'bookmark' || bmv_prm_slug == 'history') {
+      str_member += '<div class="m-delete flex f_middle no_items">';
+      str_member += '<span class="m-delete-btn btn btn-icon red" title="Delete"><svg data-name="bx/trash" xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24"><path fill="currentColor" d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"/><path fill="currentColor" d="M9 10h2v8H9zm4 0h2v8h-2z"/></svg></span>';
+      str_member += '<span class="m-delete-all m-space-h btn red no_items">'+ bmv_settings.l10n.member.delete_all +'</span>';
+      str_member += '</div>'; //.m-delete
+    }
+    if (bmv_prm_slug == 'settings') {
+      str_member += '<div class="flex f_middle">';
+      str_member += '<div class="st-reset m-space-h" title="Reset all settings to default"><button class="btn btn-icon" disabled><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12 16c1.671 0 3-1.331 3-3s-1.329-3-3-3s-3 1.331-3 3s1.329 3 3 3z"/><path fill="currentColor" d="M20.817 11.186a8.94 8.94 0 0 0-1.355-3.219a9.053 9.053 0 0 0-2.43-2.43a8.95 8.95 0 0 0-3.219-1.355a9.028 9.028 0 0 0-1.838-.18V2L8 5l3.975 3V6.002c.484-.002.968.044 1.435.14a6.961 6.961 0 0 1 2.502 1.053a7.005 7.005 0 0 1 1.892 1.892A6.967 6.967 0 0 1 19 13a7.032 7.032 0 0 1-.55 2.725a7.11 7.11 0 0 1-.644 1.188a7.2 7.2 0 0 1-.858 1.039a7.028 7.028 0 0 1-3.536 1.907a7.13 7.13 0 0 1-2.822 0a6.961 6.961 0 0 1-2.503-1.054a7.002 7.002 0 0 1-1.89-1.89A6.996 6.996 0 0 1 5 13H3a9.02 9.02 0 0 0 1.539 5.034a9.096 9.096 0 0 0 2.428 2.428A8.95 8.95 0 0 0 12 22a9.09 9.09 0 0 0 1.814-.183a9.014 9.014 0 0 0 3.218-1.355a8.886 8.886 0 0 0 1.331-1.099a9.228 9.228 0 0 0 1.1-1.332A8.952 8.952 0 0 0 21 13a9.09 9.09 0 0 0-.183-1.814z"/></svg></button></div>';
+      str_member += '<div class="st-save"><span class="st-content"><button class="btn" disabled>'+ bmv_settings.l10n.member.save +'</button></span></div>';
+      str_member += '</div>';
+    }
   }
   str_member += '</div>'; //.post-header
   str_member += '<div class="content '+ (fbase_login ? 'login' : 'not-login bg2 layer radius') +'">';
@@ -1584,6 +1790,7 @@ function bmf_build_member() {
       str_member += '<select class="m-filter mn-menu'+ (is_mobile ? ' f_grow' : '') +'" data-value="">';
       str_member += '<option value="" selected disabled>Filter by</option><option value="">All</option>';
       if (bmv_prm_slug == 'bookmark') {
+        str_member += '<option value="status|ongoing">Ongoing</option><option value="status|completed">Completed</option><option disabled>---------------</option>';
         for (var i in bmv_genres) {
           str_member += '<option value="genre|'+ bmv_genres[i] +'">'+ firstUCase(bmv_genres[i]) +'</option>';
         }
@@ -1592,14 +1799,14 @@ function bmf_build_member() {
       }
       str_member += '</select>'; //.m-filter
       str_member += '<div class="nav-delete flex no_items">';
-      str_member += '<div class="m-delete-select mn-menu btn red t_center">Hapus</div>';
-      str_member += '<div class="m-delete-all mn-menu flex f_middle"><label><input type="checkbox">Pilih Semua</label></div>';
+      str_member += '<div class="m-delete-select mn-menu btn red t_center">'+ bmv_settings.l10n.member.delete +'</div>';
+      str_member += '<div class="m-select-all mn-menu flex f_middle"><label><input type="checkbox">'+ bmv_settings.l10n.member.select_all +'</label></div>';
       str_member += '</div>'; //.nav-delete
       if (!is_mobile) str_member += '<span class="f_grow"></span>';
       str_member += '<div class="ms-form flex f_middle">';
-      str_member += '<span class="ms-reset btn red radius mn-menu no_items">Reset</span>';
-      str_member += '<input class="ms-field radius f_grow" type="search" placeholder="'+ bmv_settings.l10n.member.title +'..." value=""/>';
-      str_member += '<span class="ms-search btn radius"><svg viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path fill-rule="evenodd" clip-rule="evenodd" d="M208 48c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S296.366 48 208 48zM0 208C0 93.125 93.125 0 208 0s208 93.125 208 208c0 48.741-16.765 93.566-44.843 129.024l133.826 134.018c9.366 9.379 9.355 24.575-.025 33.941-9.379 9.366-24.575 9.355-33.941-.025L337.238 370.987C301.747 399.167 256.839 416 208 416 93.125 416 0 322.875 0 208z"></path></svg></span>';
+      str_member += '<span class="ms-reset btn red radius mn-menu no_items">'+ bmv_settings.l10n.member.reset +'</span>';
+      str_member += '<input class="ms-field radius f_grow" type="search" placeholder="'+ bmv_settings.l10n.title +'..." value=""/>';
+      str_member += '<span class="ms-search btn"><svg data-name="zondicons/search" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="currentColor" d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33l-1.42 1.42l-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg></span>';
       str_member += '</div>'; //.ms-form
       str_member += '</div>'; //.m-nav
     }
@@ -1608,68 +1815,81 @@ function bmf_build_member() {
       str_member += ' f_between">';
       str_member += '<div class="m-cover" data-edit="cover">';
       str_member += '<img class="full_img loading loge radius" src="'+ (fbase_user.photoURL ? fbase_user.photoURL : 'https://www.gravatar.com/avatar/?d=mp&s=160') +'" alt="Profile Picture">';
-      str_member += '<button class="m-edit btn full m-space-v">Edit</button>';
+      str_member += '<button class="m-edit btn full m-space-v">'+ bmv_settings.l10n.member.edit +'</button>';
       str_member += '<div class="m-upload flex_wrap no_items">';
       str_member += '<label class="m-space-v full"><input class="m-file no_items" type="file" name="avatar" accept="image/png, image/jpeg, image/gif" required><span class="clamp lc1">Choose File...</span></label>';
-      str_member += '<button class="m-save btn">Simpan</button>';
-      str_member += '<button class="m-cancel btn selected">Batal</button>';
+      str_member += '<button class="m-save btn">'+ bmv_settings.l10n.member.save +'</button>';
+      str_member += '<button class="m-cancel btn selected">'+ bmv_settings.l10n.member.cancel +'</button>';
       str_member += '</div>'; //.m-upload
       str_member += '</div>'; //.m-cover
       str_member += '<div class="m-detail bg2 layer radius">';
-      str_member += '<div class="m-name flex_wrap">';
-      str_member += '<div class="m-label">Nama</div>';
-      str_member += '<div class="m-input flex_wrap f_grow" data-edit="name">';
+      str_member += '<div class="m-id mp-list flex_wrap">';
+      str_member += '<div class="m-label f_grow">UID</div>';
+      str_member += '<div class="m-input"><div class="m-id-i">'+ fbase_user.uid +'</div></div>';
+      str_member += '</div>'; //.m-id
+      str_member += '<div class="m-name mp-list flex_wrap">';
+      str_member += '<div class="m-label f_grow">'+ bmv_settings.l10n.form.name +'</div>';
+      str_member += '<div class="m-input flex_wrap" data-edit="name">';
       str_member += '<div class="m-name-i f_grow">';
       var m_name = fbase_user.displayName ? fbase_user.displayName : '';
       str_member += '<input class="full" type="text" name="log" placeholder="Name" value="'+ m_name +'" data-value="'+ m_name +'" required readonly>';
       if (fbase_user && fbase_user.tier == 'pro') str_member += '<span class="m-pro">pro</span>';
       str_member += '</div>'; //.m-name-i
-      str_member += '<button class="m-edit btn">Edit</button>';
-      str_member += '<div class="flex no_items"><button class="m-save btn m-space-h">Simpan</button><button class="m-cancel btn selected">Batal</button></div>';
+      str_member += '<button class="m-edit btn">'+ bmv_settings.l10n.member.edit +'</button>';
+      str_member += '<div class="flex no_items"><button class="m-save btn m-space-h">'+ bmv_settings.l10n.member.save +'</button><button class="m-cancel btn selected">'+ bmv_settings.l10n.member.cancel +'</button></div>';
       str_member += '</div>'; //.m-input
       str_member += '</div>'; //.m-name
-      str_member += '<div class="m-email flex_wrap m-space-v'+ (fbase_user.emailVerified ? ' verified' : '') +'">';
-      str_member += '<div class="m-label">Email</div>';
-      str_member += '<div class="m-input flex_wrap f_grow'+ (fbase_user.emailVerified ? '' : ' f_top') +'" data-edit="email">';
+      str_member += '<div class="m-email mp-list mp-list flex_wrap'+ (fbase_user.emailVerified ? ' verified' : '') +'">';
+      str_member += '<div class="m-label f_grow">'+ bmv_settings.l10n.form.email +'</div>';
+      str_member += '<div class="m-input flex_wrap'+ (fbase_user.emailVerified ? '' : ' f_top') +'" data-edit="email">';
       str_member += '<div class="m-email-i f_grow">';
       str_member += '<input class="full" type="email" name="email" placeholder="Email" value="'+ fbase_user.email +'" data-value="'+ fbase_user.email +'" required readonly>';
       if (fbase_user.emailVerified) {
         str_member += '<span class="m-verified" title="Email Verified">&#10004;</span>';
       } else {
-        str_member += '<div class="m-verified not">Email belum diverifikasi. <b>Verifikasi sekarang</b></div>';
+        str_member += '<div class="m-verified not">'+ bmv_settings.l10n.profile.verified_not +'</div>';
       }
       str_member += '</div>'; //.m-email-i
-      str_member += '<button class="m-edit btn">Edit</button>';
-      str_member += '<div class="flex no_items"><button class="m-save btn m-space-h">Simpan</button><button class="m-cancel btn selected">Batal</button></div>';
+      str_member += '<button class="m-edit btn">'+ bmv_settings.l10n.member.edit +'</button>';
+      str_member += '<div class="flex no_items"><button class="m-save btn m-space-h">'+ bmv_settings.l10n.member.save +'</button><button class="m-cancel btn selected">'+ bmv_settings.l10n.member.cancel +'</button></div>';
       str_member += '</div>'; //.m-input
       str_member += '</div>'; //.m-email
-      str_member += '<div class="m-password flex_wrap m-space-v">';
-      str_member += '<div class="m-label">Password</div>';
-      str_member += '<div class="m-input flex_wrap f_top f_grow" data-edit="password">';
+      str_member += '<div class="m-password mp-list flex_wrap">';
+      str_member += '<div class="m-label f_grow">'+ bmv_settings.l10n.form.password +'</div>';
+      str_member += '<div class="m-input flex_wrap f_top" data-edit="password">';
       str_member += '<input class="f_grow" type="text" placeholder="••••••••" value="" readonly>';
       str_member += '<div class="f_grow no_items"><input class="m-pass-n full" type="password" name="password" placeholder="New Password" value="" minlength="8" required><input class="m-pass-c m-space-v full" type="password" name="password" placeholder="Confirm New Password" value="" minlength="8" required></div>';
-      str_member += '<button class="m-edit btn">Edit</button>';
-      str_member += '<div class="flex no_items"><button class="m-save btn m-space-h">Simpan</button><button class="m-cancel btn selected">Batal</button></div>';
+      str_member += '<button class="m-edit btn">'+ bmv_settings.l10n.member.edit +'</button>';
+      str_member += '<div class="flex no_items"><button class="m-save btn m-space-h">'+ bmv_settings.l10n.member.save +'</button><button class="m-cancel btn selected">'+ bmv_settings.l10n.member.cancel +'</button></div>';
       str_member += '</div>'; //.m-input
       str_member += '</div>'; //.m-password
-      str_member += '<div class="m-delete flex_wrap">';
-      str_member += '<div class="m-label">Hapus Akun</div>';
-      str_member += '<div class="m-input flex_wrap f_grow" data-edit="delete">';
-      str_member += '<button class="m-edit btn selected">Hapus Permanen</button>';
-      str_member += '<div class="m-text t_center no_items">Semua data Bookmark, History, dan Pengaturan pada akun ini akan dihapus secara permanen dan tidak dapat dikembalikan, apakah Kamu yakin?</div>';
-      str_member += '<div class="flex no_items"><button class="m-save btn red m-space-h">Ya</button><button class="m-cancel btn selected">Batal</button></div>';
+      if (fbase_user && fbase_user.tier == 'pro') {
+        str_member += '<div class="m-backup mp-list m-trigger flex_wrap">';
+        str_member += '<div class="m-label f_grow">'+ bmv_settings.l10n.profile.backup_account +'</div>';
+        str_member += '<div class="m-input flex_wrap" data-edit="backup">';
+        str_member += '<button class="m-edit btn selected">'+ bmv_settings.l10n.profile.backup_all +'</button>';
+        str_member += '</div>'; //.m-input
+        str_member += '</div>'; //.m-backup
+      }
+      str_member += '<div class="m-delete mp-list m-trigger flex_wrap">';
+      str_member += '<div class="m-label f_grow">'+ bmv_settings.l10n.profile.delete_account +'</div>';
+      str_member += '<div class="m-input flex_wrap" data-edit="delete">';
+      str_member += '<button class="m-edit btn red selected">'+ bmv_settings.l10n.profile.delete_permanent +'</button>';
+      str_member += '<div class="m-dl-notif full t_center no_items">'+ bmv_settings.l10n.profile.delete_notif +'</div>';
+      str_member += '<div class="m-dl-export full t_center m-space-v no_items">'+ bmv_settings.l10n.profile.export_account +', <a href="'+ api_url +'/firebase/backup.php?uid='+ fbase_user.uid +'&export" download>'+ bmv_settings.l10n.profile.export_all +'</a></div>';
+      str_member += '<div class="flex f_center full no_items"><button class="m-save btn red m-space-h">'+ bmv_settings.l10n.member.delete +'</button><button class="m-cancel btn selected">'+ bmv_settings.l10n.member.cancel +'</button></div>';
       str_member += '</div>'; //.m-input
       str_member += '</div>'; //.m-delete
       str_member += '</div>'; //.m-detail
     } else if (bmv_prm_slug == 'bookmark') {
       str_member += '">';
-      str_member += '<div class="full"><div class="m-text t_center bg2 layer radius">Kamu dapat menyimpan daftar series di sini hingga <b>'+ bmv_max_bmhs +'</b> judul</div></div>';
+      str_member += '<div class="full"><div class="m-text t_center bg2 layer radius">'+ firstUCase(bmv_prm_slug) +' '+ bmv_settings.l10n.bmhs.info +' <b>'+ bmv_max_bmhs +'</b></div></div>';
       str_member += '<div class="m-bm-list m-list full loading loge"><div class="flex f_middle f_center full" style="min-height:225px;"></div></div>';
-      str_member += '<div class="m-bm-pagination m-pagination flex f_center f_middle full"></div>';
+      str_member += '<div class="m-bm-pagination m-pagination flex_wrap f_center f_middle full"></div>';
     } else if (bmv_prm_slug == 'history') {
       str_member += '">';
       str_member += '<div class="m-hs-list m-list full loading loge"><div class="flex f_middle f_center full" style="min-height:225px;"></div></div>';
-      str_member += '<div class="m-hs-pagination m-pagination flex f_center f_middle full"></div>';
+      str_member += '<div class="m-hs-pagination m-pagination flex_wrap f_center f_middle full"></div>';
     } else { //settings
       str_member += '">';
       str_member += '<div class="st-control full in-check loading loge">';
@@ -1677,37 +1897,38 @@ function bmf_build_member() {
       str_member += '</div>'; //.st-control
     }
     str_member += '</div>';
-    if (bmv_prm_slug == 'profile') str_member += '<div class="m-reauth flex f_perfect no_items"><div class="fp_content"><div class="fp_content"><input type="password" name="password" placeholder="Password" value=""><div class="flex full f_between m-space-v"><button class="r-save btn f_grow" data-active="">OK</button><button class="r-cancel btn selected f_grow" style="margin-left:15px;">Batal</button></div></div></div>';
+    if (bmv_prm_slug == 'profile') str_member += '<div class="m-reauth flex f_perfect no_items"><div class="fp_content"><div class="fp_content"><input type="password" name="password" placeholder="Password" autocomplete="off"><div class="flex full f_between m-space-v"><button class="r-save btn red f_grow" data-active="">'+ bmv_settings.l10n.member.delete +'</button><button class="r-cancel btn selected f_grow" style="margin-left:15px;">'+ bmv_settings.l10n.member.cancel +'</button></div></div></div>';
+    if (bmv_prm_slug == 'bookmark' || bmv_prm_slug == 'history') str_member += '<div class="m-delete-confirm flex f_perfect no_items"><div class="fp_content wBox bg2 layer"><div class="fp_content"><p><b>Are you absolutely sure?</b></p><p class="m-space-v">This action will <b>permanently</b> delete all '+ bmv_prm_slug +' data and <b>cannot</b> be undone.</p><p>Please type <b>delete-all-'+ bmv_prm_slug +'</b> to confirm.</p><input class="full m-space-v" type="text" name="verify" placeholder="delete-all-'+ bmv_prm_slug +'" autocomplete="off"><div class="flex full f_between"><button class="dc-remove btn red f_grow">'+ bmv_settings.l10n.member.delete +'</button><button class="dc-cancel btn selected f_grow" style="margin-left:15px;">'+ bmv_settings.l10n.member.cancel +'</button></div></div></div>';
   } else {
     str_member += '<form class="m-form form-'+ bmv_prm_slug +'" onsubmit="return false">';
     str_member += '<div class="form-email">';
-    if (bmv_prm_slug == 'forgot') str_member += '<div class="m-text t_center">Masukkan alamat email yang terdaftar, link untuk reset katasandi akan dikirim melalui email.</div>';
-    if (bmv_prm_slug == 'signup') str_member += '<div class="m-group flex_wrap"><label for="name">Nama</label><input type="text" name="log" class="m-name full" id="name" placeholder="Name" value="" required></div>';
-    str_member += '<div class="m-group flex_wrap"><label for="email">Email</label><input type="email" class="m-email full" id="email" placeholder="Email" value="" required></div>';
-    if (bmv_prm_slug != 'forgot') str_member += '<div class="m-group flex_wrap"><label for="password">Katasandi</label><input type="password" class="m-pass full" id="password" placeholder="Password" value="" minlength="8" required></div>';
+    if (bmv_prm_slug == 'forgot') str_member += '<div class="m-text t_center">'+ bmv_settings.l10n.member.forgot_info +'</div>';
+    if (bmv_prm_slug == 'signup') str_member += '<div class="m-group flex_wrap"><label for="name">'+ bmv_settings.l10n.form.name +'</label><input type="text" name="log" class="m-name full" id="name" placeholder="Name" value="" required></div>';
+    str_member += '<div class="m-group flex_wrap"><label for="email">'+ bmv_settings.l10n.form.email +'</label><input type="email" class="m-email full" id="email" placeholder="Email" value="" required></div>';
+    if (bmv_prm_slug != 'forgot') str_member += '<div class="m-group flex_wrap"><label for="password">'+ bmv_settings.l10n.form.password +'</label><input type="password" class="m-pass full" id="password" placeholder="Password" value="" minlength="8" required></div>';
     if (bmv_prm_slug == 'login') {
-      str_member += '<button type="submit" class="m-submit btn full">MASUK</button>';
-      str_member += '<div class="m-text t_center">Lupa katasandi? <a href="#/member/forgot">klik disini</a></div>';
-      str_member += '<div class="m-text t_center">Belum punya akun? <a href="#/member/signup">daftar disini</a></div>';
+      str_member += '<button type="submit" class="m-submit btn full">'+ bmv_settings.l10n.member.login +'</button>';
+      str_member += '<div class="m-text t_center">'+ bmv_settings.l10n.member.forgot_link +'</div>';
+      str_member += '<div class="m-text t_center">'+ bmv_settings.l10n.member.signup_link +'</div>';
     } else if (bmv_prm_slug == 'forgot') {
-      str_member += '<button type="submit" class="m-submit btn full">KIRIM</button>';
-      str_member += '<div class="m-text t_center">Belum punya akun? <a href="#/member/signup">daftar disini</a></div>';
+      str_member += '<button type="submit" class="m-submit btn full">'+ bmv_settings.l10n.form.submit +'</button>';
+      str_member += '<div class="m-text t_center">'+ bmv_settings.l10n.member.signup_link +'</div>';
     } else { //signup
-      str_member += '<div class="m-group flex_wrap"><label for="c-password">Konfirmasi Katasandi</label><input type="password" class="m-pass-c full" id="c-password" placeholder="Confirm Password" value="" minlength="8" required></div>';
-      str_member += '<button type="submit" class="m-submit btn full">DAFTAR</button>';
-      str_member += '<div class="m-text t_center">Sudah punya akun? <a href="#/member/login">masuk disini</a></div>';
+      str_member += '<div class="m-group flex_wrap"><label for="c-password">'+ bmv_settings.l10n.form.pass_confirm +'</label><input type="password" class="m-pass-c full" id="c-password" placeholder="Confirm Password" value="" minlength="8" required></div>';
+      str_member += '<button type="submit" class="m-submit btn full">'+ bmv_settings.l10n.member.signup +'</button>';
+      str_member += '<div class="m-text t_center">'+ bmv_settings.l10n.member.login_link +'</div>';
     }
     str_member += '</div>'; //.form-email
     str_member += '</form>';
-    // str_member += '<div class="m-separator t_center"><span>ATAU</span></div>';
-    // str_member += '<div class="form-social">';
-    // str_member += '<button class="m-google btn full flex f_center f_middle"><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M19.6 10.227c0-.709-.064-1.39-.182-2.045H10v3.868h5.382a4.6 4.6 0 0 1-1.996 3.018v2.51h3.232c1.891-1.742 2.982-4.305 2.982-7.35z" fill="#4285F4"></path><path d="M10 20c2.7 0 4.964-.895 6.618-2.423l-3.232-2.509c-.895.6-2.04.955-3.386.955-2.605 0-4.81-1.76-5.595-4.123H1.064v2.59A9.996 9.996 0 0 0 10 20z" fill="#34A853"></path><path d="M4.405 11.9c-.2-.6-.314-1.24-.314-1.9 0-.66.114-1.3.314-1.9V5.51H1.064A9.996 9.996 0 0 0 0 10c0 1.614.386 3.14 1.064 4.49l3.34-2.59z" fill="#FBBC05"></path><path d="M10 3.977c1.468 0 2.786.505 3.823 1.496l2.868-2.868C14.959.99 12.695 0 10 0 6.09 0 2.71 2.24 1.064 5.51l3.34 2.59C5.192 5.736 7.396 3.977 10 3.977z" fill="#EA4335"></path></g></svg><span>'+ (bmv_prm_slug == 'signup' ? 'Daftar' : 'Masuk') +' dengan Google</span></button>';
-    // str_member += '<button class="m-facebook btn full flex f_center f_middle"><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.5 2 2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12c0-5.5-4.5-10-10-10z"></path></svg><span>'+ (bmv_prm_slug == 'signup' ? 'Daftar' : 'Masuk') +' dengan Facebook</span></button>';
+    // str_member += '<div class="m-separator t_center"><span>||</span></div>';
+    // str_member += '<div class="form-social flex">';
+    // str_member += '<button class="m-google btn full flex f_center f_middle"><svg data-name="logos/google-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 256 262"><path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"/><path fill="#34A853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"/><path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82c0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782"/><path fill="#EB4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"/></svg><span>Google</span></button>';
+    // str_member += '<button class="m-facebook btn full flex f_center f_middle"><svg data-name="simple-icons/facebook" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669c1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></button>';
     // str_member += '</div>'; //.form-social
   }
   str_member += '</div>'; //.content
   bmv_el_post.innerHTML = str_member;
-  if (!fbase_login) el('.main').style.maxWidth = '500px';
+  if (!fbase_login) el('.main').classList.add('wBox');
 
   bmf_member_fnc();
 }
@@ -1715,20 +1936,14 @@ function bmf_build_member() {
 // #===========================================================================================#
 
 function bmf_window_stop() {
-  // window.stop();
+  // window.stop(); //bug: firebase error
   el('.cm_stop').classList.add('no_items');
   el('.cm_reload').classList.remove('no_items');
 }
 
 function bmf_chapter_key(e) {
-  // key: left arrow
-  if (e.keyCode == 37 && el('.chapter .btn.prev')) {
-    el('.chapter .btn.prev').click();
-  }
-  // key: right arrow
-  else if (e.keyCode == 39 && el('.chapter .btn.next')) {
-    el('.chapter .btn.next').click();
-  }
+  if (keyEvent(e, 37) && el('.chapter .btn.prev')) el('.chapter .btn.prev').click(); //key: left arrow
+  if (keyEvent(e, 39) && el('.chapter .btn.next')) el('.chapter .btn.next').click(); //key: right arrow
 }
 
 function bmf_chapter_direction() {
@@ -1759,36 +1974,33 @@ function bmf_chapter_zoom(slug, type) {
 
 // Find element on middle visible screen (viewport) https://stackoverflow.com/a/26466655/7598333
 function bmf_menu_key(e) {
-  if ((e.altKey) && (e.keyCode == 82)) {
-    el('.cm_reload').click(); //"alt & r" for reload page
-  } else if ((e.altKey) && (e.keyCode == 88)) {
-    el('.cm_stop').click(); //"alt & x" for stop page loading
-  } else if ((e.altKey) && (e.keyCode == 65)) {
-    el('.cm_ld_img').click(); //"alt & a" for load all
-  } else if ((e.shiftKey) && (e.keyCode == 38)) {
-    el('.cm_zoom .cm_plus').click(); //"shift & up" zoom +
-  } else if ((e.shiftKey) && (e.keyCode == 40)) {
-    el('.cm_zoom .cm_less').click(); //"shift & down" zoom -
-  }
-
-  // enter to load
-  if (el('.cm_load .cm_all') === document.activeElement && e.keyCode == 13) {
-    el('.cm_load .cm_ld_img').click();
-  }
-
-  // enter to zoom
-  if (el('.cm_zoom input') === document.activeElement && e.keyCode == 13) {
-    var load_zm = Number(el('.cm_zoom input').value);
-    bmv_el_images.style.setProperty('max-width', load_zm +'px', 'important');
-    el('.cm_zoom input').value = load_zm;
-    bmv_zoom[bmv_zoom_id] = load_zm;
-    local('set', 'bmv_zoom', JSON.stringify(bmv_zoom));
+  if (e.altKey) {
+    if (keyEvent(e, 82)) el('.cm_reload').click(); //"alt & r" for reload page
+    if (keyEvent(e, 88)) el('.cm_stop').click(); //"alt & x" for stop page loading
+    if (keyEvent(e, 65)) el('.cm_ld_img').click(); //"alt & a" for load all
   }
   
-  if (e.keyCode == 13) document.activeElement.blur();
+  if (e.shiftKey) {
+    if (keyEvent(e, 38)) el('.cm_zoom .cm_plus').click(); //"shift & up" zoom +
+    if (keyEvent(e, 40)) el('.cm_zoom .cm_less').click(); //"shift & down" zoom -
+  }
+
+  if (keyEvent(e, 13)) {
+    // enter to load
+    if (el('.cm_load .cm_all') === document.activeElement) el('.cm_load .cm_ld_img').click();
+  
+    // enter to zoom
+    if (el('.cm_zoom input') == e.target) {
+      var load_zm = Number(el('.cm_zoom input').value);
+      bmv_el_images.style.setProperty('max-width', load_zm +'px', 'important');
+      el('.cm_zoom input').value = load_zm;
+      bmv_zoom[bmv_zoom_id] = load_zm;
+      local('set', 'bmv_zoom', JSON.stringify(bmv_zoom));
+    }
+  }
 }
 
-function bmf_menu_chapter_cdn(elem) {
+function bmf_menu_cdn(elem) {
   if (el('.cm_cdn.cm_active')) el('.cm_cdn.cm_active').classList.remove('cm_active');
   elem.classList.add('cm_active');
   if (bmv_chk_gi) {
@@ -1797,75 +2009,68 @@ function bmf_menu_chapter_cdn(elem) {
   }
 }
 
-function bmf_menu_fnc(img_list) {
-  var np_newtab = bmv_dt_settings.link.indexOf(`${bmv_current}-np`) != -1;
+function bmf_menu_cdn_url(source, elem, url) {
+  bmv_str_cdn_url = elem.dataset.cdn ? elem.dataset.cdn : url;
+  bmv_load_cdn = true;
+  bmv_str_cdn = source;
+  bmf_menu_cdn(elem);
+}
 
-  if (el('.cm_prev button')) {
+function bmf_menu_fnc(img_list) {
+  if (el('.cm_prev')) {
     el('.cm_prev').classList.remove('no_items');
     if (is_mobile) el('.cm_prev2').classList.remove('no_items');
-    el('.cm_prev button').onclick = function() {
-      openInNewTab(this.dataset.href, !np_newtab);
-    };
   }
 
-  if (el('.cm_next button')) {
+  if (el('.cm_next')) {
     el('.cm_next').classList.remove('no_items');
-    el('.cm_next button').onclick = function() {
-      openInNewTab(this.dataset.href, !np_newtab);
-    };
-    if (is_mobile) {
-      el('.cm_next2').classList.remove('no_items');
-      el('.cm_next2').onclick = function() {
-        openInNewTab(el('.cm_next button').dataset.href, !np_newtab);
-      };
-    }
+    if (is_mobile) el('.cm_next2').classList.remove('no_items');
   }
 
-  el('.cm_toggle').onclick = function() {
+  el('.cm_toggle').addEventListener('click', function() {
     this.classList.toggle('db_danger');
     el('.ch_menu').classList.toggle('cm_shide');
     if (is_mobile) {
       el('.cm_bg').classList.toggle('no_items');
       el('.cm_pause2').classList.toggle('no_items');
-      if (el('.cm_prev button')) el('.cm_prev2').classList.toggle('no_items');
-      if (el('.cm_next button')) {
-        el('.cm_next button').classList.toggle('no_hover');
-        el('.cm_next2').classList.toggle('no_items');
-      }
+      if (el('.cm_next')) toggleClass(el('.cm_next'), ['no_hover', 'mobile_left_hand']);
     }
     el('.cm_tr2 .cm_td1').classList.toggle('no_items');
-  };
+  });
   
   if (is_mobile) {
-    el('.cm_bg').onclick = function() {
+    el('.cm_bg').addEventListener('click', function() {
       el('.cm_toggle').click();
-    };
+    });
   }
   
   el('.cm_load input', 'all').forEach(function(item) {
-    item.oninput = function() {
+    item.addEventListener('click', function() {
+      this.select();
+    });
+    item.addEventListener('input', function() {
       if (this.value > img_list.length) this.value = img_list.length;
-    };
+      if (this.classList.contains('cm_all') && !isNumeric(this.value) && this.value != 'all') this.value = 'all';
+    });
   });
   
   // Load all images
-  el('.cm_load .cm_ld_img').onclick = function() {
+  el('.cm_load .cm_ld_img').addEventListener('click', function() {
     if (isNumeric(el('.cm_load .cm_all').value)) {
-      lazyLoad(img_list[Number(el('.cm_load .cm_all').value) - 1], 'single');
+      bmf_lazyLoad(img_list[Number(el('.cm_load .cm_all').value) - 1], 'single');
     } else {
       // "img_list" from bmf_menu_fnc() parameter
-      if (!bmv_chk_from) bmv_load_img = true;
-      el('.cm_load .cm_all').value = 'all';
+      if (!bmv_chk_from) bmv_loaded_img = true;
       var ld_index = bmv_chk_from && el('.cm_load .cm_fr_min').value != '' ? (Number(el('.cm_load .cm_fr_min').value) - 1) : 0;
       var ld_length = bmv_chk_from && el('.cm_load .cm_fr_max').value != '' ? Number(el('.cm_load .cm_fr_max').value) : img_list.length;
       for (var i = ld_index; i < ld_length; i++) {
-        lazyLoad(img_list[i], 'all');
+        bmf_lazyLoad(img_list[i], 'single');
       }
       if (bmv_chk_from) el(`#reader [data-index="${ld_index+1}"]`).scrollIntoView();
     }
-  };
+  });
   
-  el('.cm_load .cm_fr_btn').onclick = function() {
+  el('.cm_load .cm_fr_btn').addEventListener('click', function() {
     var ld_from = this.classList.contains('cm_active');
     el('.cm_load .cm_all').value = 'all';
     el('.cm_load .cm_all').disabled = ld_from && !bmv_chk_pause ? false : true;
@@ -1877,52 +2082,62 @@ function bmf_menu_fnc(img_list) {
     }
     bmv_chk_from = ld_from ? false : true;
     this.classList.toggle('cm_active');
-  };
+  });
   
-  el('.cm_load .cm_pause').onclick = function() {
+  el('.cm_load .cm_pause').addEventListener('click', function() {
     this.classList.toggle('cm_danger');
     if (is_mobile) el('.cm_pause2').classList.toggle('cm_danger');
     bmv_chk_pause = bmv_chk_pause ? false : true;
     el('.cm_ld_img').disabled = bmv_chk_pause ? true : false;
+    el('.cm_load2').disabled = bmv_chk_pause ? true : false;
     el('.cm_load .cm_all').disabled = bmv_chk_pause ? true : false;
     if (el('.cm_load .cm_fr_btn').classList.contains('cm_active')) el('.cm_load .cm_fr_btn').click();
     el('.cm_load .cm_fr_btn').disabled = bmv_chk_pause ? true : false;
-  };
+  });
   
   if (bmv_chk_gi) {
-    el('.cm_size').onclick = function() {
+    el('.cm_size').addEventListener('click', function() {
       this.innerHTML = this.innerHTML == bmv_str_gi ? 's15000' : bmv_str_gi;
       bmv_load_gi = this.innerHTML == bmv_str_gi ? false : true;
-    };
+    });
   }
 
-  el('.cdn_statically').onclick = function() {
+  el('.cdn_statically').addEventListener('click', function() {
+    // https://statically.io/docs/using-images/
     if (this.classList.contains('cm_active')) return;
-    var bmv_cdn = this.dataset.cdn;
-    bmv_str_cdn_link = bmv_cdn ? bmv_cdn : 'cdn.statically.io/img/';
-    bmv_load_cdn = true;
-    bmf_menu_chapter_cdn(this);
-  };
+    bmf_menu_cdn_url('statically', this, 'cdn.statically.io/img/');
+  });
 
-  el('.cdn_wp').onclick = function() {
-    // wp.com cdn https://developer.wordpress.com/docs/photon/
+  el('.cdn_wp').addEventListener('click', function() {
+    // https://developer.wordpress.com/docs/photon/
     if (this.classList.contains('cm_active')) return;
-    var bmv_cdn = this.dataset.cdn;
     var wp_num = getRndInteger(0, 2);
-    bmv_str_cdn_link = bmv_cdn ? bmv_cdn : `i${wp_num}.wp.com/`;
-    bmv_load_cdn = true;
-    bmf_menu_chapter_cdn(this);
-  };
+    bmf_menu_cdn_url('wp', this, `i${wp_num}.wp.com/`);
+  });
 
-  el('.cdn_not').onclick = function() {
+  el('.cdn_imagecdn').addEventListener('click', function() {
+    // https://imagecdn.app/docs
+    if (this.classList.contains('cm_active')) return;
+    bmf_menu_cdn_url('imagecdn', this, 'imagecdn.app/v2/image/');
+  });
+
+  el('.cdn_imageoptim').addEventListener('click', function() {
+    // https://imageoptim.com/api/get?username=plctjbqbcz
+    if (this.classList.contains('cm_active')) return;
+    var cdn_username = 'plctjbqbcz';
+    bmf_menu_cdn_url('imageoptim', this, `img.gs/${cdn_username}/full/`);
+  });
+
+  el('.cdn_not').addEventListener('click', function() {
     if (this.classList.contains('cm_active')) return;
     bmv_load_cdn = false;
-    bmf_menu_chapter_cdn(this);
-  };
+    bmv_str_cdn = '';
+    bmf_menu_cdn(this);
+  });
   
   if (bmv_chk_cdn) {
     if (bmv_dt_settings.cdn == 'default') el(`.cm_cdn.cdn_${bmv_str_cdn}`).classList.add('cm_active');
-    el(`.cm_cdn.cdn_${bmv_str_cdn}`).setAttribute('data-cdn', bmv_str_cdn_link);
+    el(`.cm_cdn.cdn_${bmv_str_cdn}`).setAttribute('data-cdn', bmv_str_cdn_url);
   }
 
   if (bmv_dt_settings.cdn != 'default') el(`.cm_cdn.cdn_${bmv_dt_settings.cdn}`).click();
@@ -1941,22 +2156,36 @@ function bmf_menu_fnc(img_list) {
       local('set', 'bmv_zoom', JSON.stringify(bmv_zoom));
     });
   });
+
+  el('.cm_load2').addEventListener('click', function() {
+    el('.cm_ld_img').click();
+  });
+
+  if (el('.cm_pause2')) {
+    el('.cm_pause2').addEventListener('click', function() {
+      el('.cm_pause').click();
+    });
+  }
+
+  el('.cm_reload').addEventListener('click', function() {
+    window.location.reload();
+  });
   
-  el('.cm_stop').onclick = bmf_window_stop;
+  el('.cm_stop').addEventListener('click', bmf_window_stop);
   
   // back to top
-  el('.cm_top').onclick = function() {
+  el('.cm_top').addEventListener('click', function() {
     document.body.scrollIntoView();
-  };
+  });
   
   // scroll to bottom
-  el('.cm_bottom').onclick = function() {
+  el('.cm_bottom').addEventListener('click', function() {
     //document.body.scrollIntoView(false);
     window.scrollTo(0, bmv_el_images.scrollHeight);
-  };
+  });
   
   document.addEventListener('keyup', bmf_menu_key);
-  loadListener('load', bmf_window_stop);//stop page after html and js "_reader" loaded
+  loadListener('load', bmf_window_stop); //stop page after html and js "_reader" loaded
   // if (el('.cm_reload').classList.contains('no_items')) el('.cm_stop').click(); //auto stop page after html and js "_reader" loaded
   if (bmv_settings.remove_statically && bmv_chk_cdn) el('.cm_cdn').click(); //auto remove cdn from statically
 }
@@ -1971,47 +2200,66 @@ function bmf_chapter_menu() {
   if (is_mobile) str_menu += '<div class="cm_bg no_items"></div>';
   str_menu += '<div class="ch_menu'+ (is_mobile ? ' cm_shide' : '') +' flex_wrap f_bottom bg2">';
   str_menu += '<div class="cm_tr1 flex_wrap">';
-  str_menu += '<div class="cm_others cm_line w_100 flex_wrap">';
+  str_menu += '<div class="cm_others cm_line w100 flex_wrap">';
   str_menu += '<button class="cdn_statically cm_cdn cm_btn btn">Statically</button>';
   str_menu += '<button class="cdn_wp cm_cdn cm_btn btn">WP</button>';
+  str_menu += '<button class="cdn_imagecdn cm_cdn cm_btn btn">ImageCDN</button>';
+  str_menu += '<button class="cdn_imageoptim cm_cdn cm_btn btn">ImageOptim</button>';
   str_menu += '<button class="cdn_not cm_cdn cm_btn btn">not</button>';
   if (bmv_chk_gi) str_menu += '<div class="cm_size cm_btn btn">'+ bmv_str_gi +'</div>';
   str_menu += '</div>'; //.cm_others
   if (el('.ch-nav .prev') || el('.ch-nav .next')) {
-    str_menu += '<div class="cm_nav cm_line w_100 flex">';
-    if (el('.ch-nav .prev')) str_menu += '<div class="cm_prev no_items"><button class="cm_btn btn" title="arrow left &#x25C0;" data-href="'+ el('.ch-nav .prev').href +'">&#9666; Prev</button></div>';
-    if (el('.ch-nav .next')) str_menu += '<div class="cm_next no_items"><button class="cm_btn btn'+ (is_mobile ? ' no_hover' : '') +'" title="arrow right &#x25B6;" data-href="'+ el('.ch-nav .next').href +'">Next &#9656;</button></div>';
+    var np_newtab = bmv_dt_settings.link.indexOf(`${bmv_current}-np`) != -1;
+    str_menu += '<div class="cm_nav cm_line w100 flex">';
+    if (el('.ch-nav .prev')) {
+      str_menu += '<a class="cm_prev cm_btn btn no_items" title="arrow left &#x25C0;" href="'+ el('.ch-nav .prev').href;
+      if (np_newtab) str_menu += '" target="_blank';
+      str_menu += '">&#9666; Prev</a>';
+    }
+    if (el('.ch-nav .next')) {
+      str_menu += '<a class="cm_next cm_btn btn no_items'+ (is_mobile ? ' no_hover mobile_left_hand' : '') +'" title="arrow right &#x25B6;" href="'+ el('.ch-nav .next').href;
+      if (np_newtab) str_menu += '" target="_blank';
+      str_menu += '">Next &#9656;</a>';
+    }
     str_menu += '</div>'; //.cm_nav
   }
-  str_menu += '<div class="cm_home cm_line w_100"><a class="cm_btn btn" href="./">Homepage</a></div>';
+  str_menu += '<div class="cm_home cm_line w100"><a class="cm_btn btn" href="./">Homepage</a></div>';
   str_menu += '<div class="cm_load cm_line flex_wrap">';
   str_menu += '<div class="flex">';
   str_menu += '<button class="cm_ld_img cm_btn btn" title="alt + a">Load</button>';
-  str_menu += '<input class="cm_all cm_input" value="all" type="text" onclick="this.select()">';
-  str_menu += '<button class="cm_pause cm_btn btn no_hover" title="Pause images from loading"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em" viewBox="0 0 24 24" version="1.1" x="0px" y="0px"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><path fill="currentColor" d="M15,18 L15,6 L17,6 L17,18 L15,18 Z M20,18 L20,6 L22,6 L22,18 L20,18 Z M2,5 L13,12 L2,19 L2,5 Z"></path></g></svg></button>';
+  str_menu += '<input class="cm_all cm_input" value="all" type="text">';
+  str_menu += '<button class="cm_pause cm_btn btn no_hover" title="Pause images from loading"><svg data-name="mdi/play-pause" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5v14l8-7m2 7h3V5h-3m5 0v14h3V5"/></svg></g></svg></button>';
   str_menu += '</div>';
-  str_menu += '<div class="cm_from flex f_middle w_100">';
+  str_menu += '<div class="cm_from flex f_middle w100">';
   str_menu += '<button class="cm_fr_btn cm_btn btn no_hover" title="Load images from [index]">From</button>';
   str_menu += '<div class="cm_fr_num">';
-  str_menu += '<input class="cm_fr_min cm_input no_arrows" type="number" value="1" onclick="this.select()" disabled>';
+  str_menu += '<input class="cm_fr_min cm_input no_arrows" type="number" value="1"  disabled>';
   str_menu += '<span>-</span>';
-  str_menu += '<input class="cm_fr_max cm_input no_arrows" type="number" value="'+ bmv_dt_chapter.images.length +'" data-value="'+ bmv_dt_chapter.images.length +'" onclick="this.select()" disabled>';
+  str_menu += '<input class="cm_fr_max cm_input no_arrows" type="number" value="'+ bmv_dt_chapter.images.length +'" data-value="'+ bmv_dt_chapter.images.length +'" disabled>';
   str_menu += '</div>';// .cm_fr_num
   str_menu += '</div>';// .cm_from
   str_menu += '</div>';// .cm_load
-  str_menu += '<div class="cm_zoom w_100"><button class="cm_plus cm_btn btn" title="shift + up">+</button><button class="cm_less cm_btn btn" title="shift + down">-</button><input style="width:50px;" class="cm_input" value="'+ cm_size +'" type="text"></div>';
+  str_menu += '<div class="cm_zoom w100"><button class="cm_plus cm_btn btn" title="shift + up">+</button><button class="cm_less cm_btn btn" title="shift + down">-</button><input style="width:50px;" class="cm_input" value="'+ cm_size +'" type="text"></div>';
   str_menu += '</div>';// .cm_tr1
   str_menu += '<div class="cm_tr2 '+ (is_mobile ? ' flex f_bottom' : '') +'">';
   str_menu += '<div class="cm_td1'+ (is_mobile ? '' : ' no_items') +'">';
   if (is_mobile) {
-    str_menu += '<div class="cm_next2 cm_btn btn flex f_center f_middle no_items">&#9656;</div>';
-    str_menu += '<div class="cm_prev2 cm_btn btn flex f_center f_middle no_items">&#9666;</div>';
+    if (el('.ch-nav .next')) {
+      str_menu += '<a class="cm_next2 cm_btn btn flex f_center f_middle no_items" href="'+ el('.ch-nav .next').href;
+      if (np_newtab) str_menu += '" target="_blank';
+      str_menu += '">&#9656;</a>';
+    }
+    if (el('.ch-nav .prev')) {
+      str_menu += '<a class="cm_prev2 cm_btn btn flex f_center f_middle no_items" href="'+ el('.ch-nav .prev').href;
+      if (np_newtab) str_menu += '" target="_blank';
+      str_menu += '">&#9666;</a>';
+    }
   }
-  str_menu += '<div class="cm_load2 cm_btn btn flex f_center f_middle" onclick="document.querySelector(\'.cm_ld_img\').click()">&#671;</div>';
+  str_menu += '<button class="cm_load2 cm_btn btn flex f_center f_middle" title="alt + a">&#671;</button>';
   str_menu += '</div>';// .cm_td1
   str_menu += '<div class="cm_td2">';
-  if (is_mobile) str_menu += '<div class="cm_pause2 cm_btn btn flex f_center f_middle no_hover" onclick="document.querySelector(\'.cm_pause\').click()"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1em" height="1em" viewBox="0 0 24 24" version="1.1" x="0px" y="0px"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><path fill="currentColor" d="M15,18 L15,6 L17,6 L17,18 L15,18 Z M20,18 L20,6 L22,6 L22,18 L20,18 Z M2,5 L13,12 L2,19 L2,5 Z"></path></g></svg></div>';
-  str_menu += '<div class="cm_rest"><div class="cm_reload cm_btn btn flex f_center f_middle no_items" onclick="window.location.reload()" title="alt + r">&#8635;</div><div class="cm_stop cm_btn btn flex f_center f_middle" title="alt + x">&#10007;</div></div>';
+  if (is_mobile) str_menu += '<div class="cm_pause2 cm_btn btn flex f_center f_middle no_hover"><svg data-name="mdi/play-pause" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5v14l8-7m2 7h3V5h-3m5 0v14h3V5"/></svg></g></svg></div>';
+  str_menu += '<div class="cm_rest"><div class="cm_reload cm_btn btn flex f_center f_middle no_items" title="alt + r">&#8635;</div><div class="cm_stop cm_btn btn flex f_center f_middle" title="alt + x">&#10007;</div></div>';
   str_menu += '<div class="cm_top cm_btn btn flex f_center f_middle">&#9652;</div>';
   str_menu += '<div class="cm_bottom cm_btn btn flex f_center f_middle">&#9662;</div>';
   str_menu += '<div class="cm_toggle cm_btn btn flex f_center f_middle'+ (is_mobile ? ' no_hover' : '') +'">&#174;</div>';
@@ -2047,6 +2295,7 @@ function bmf_chapter_middle() {
 }
 
 function bmf_chapter_nav(note, data) {
+  if (!bmv_dt_chapter) return;
   var json = JSON.parse(data);
   bmv_dt_series = json;
   if (json.status_code == 200) {
@@ -2060,7 +2309,7 @@ function bmf_chapter_nav(note, data) {
     for (var i = 0; i < lists.length; i++) {
       str_ch_nav += '<option value="'+ lists[i].number +'"';
       if (lists[i].number == bmv_dt_chapter.current) { str_ch_nav += ' selected="selected"'; }
-      str_ch_nav += '>Chapter '+ lists[i].number.replace(/[-\s]((bahasa[-\s])?indo(nesia)?|full)/, '') +'</option>';
+      str_ch_nav += '>Chapter '+ lists[i].number.replace(/[-\s]((bahasa[-\s])?indo(nesiaa?)?|full)/, '') +'</option>';
     }
     str_ch_nav += '</select>';
   
@@ -2082,7 +2331,7 @@ function bmf_chapter_fnc() {
   // generate & send chapter data to firebase realtime database
   if (fbase_login && !bmv_dt_settings.hs_stop) {
     var c_path = bmf_fbase_path(`series/${bmv_dt_chapter.slug}`);
-    var c_data = bmv_dt_settings.source.type == 'eastheme' ? '/hs_visited' : ''; //different path for cover
+    var c_data = bmv_dt_settings.source.type.search(/eastheme|koidezign/) != -1 ? '/hs_visited' : ''; //different path for cover
 
     bmf_fbase_db_get('chapter/history', `${c_path + c_data}`, function(res) {
       var ch_data = bmf_fbase_gen('history|info|set', bmv_dt_chapter);
@@ -2091,19 +2340,29 @@ function bmf_chapter_fnc() {
       if (res.exists()) {
         // update history, get first {bmv_max_hv} data
         ch_visited = res.val();
-        if (bmv_dt_settings.source.type.search(/themesia|enduser/) != -1) ch_visited = 'hs_visited' in ch_visited ? ch_visited.hs_visited : {};
-        ch_visited[bmv_dt_chapter.current] = {number: bmv_dt_chapter.current, added: new Date().getTime()}; //add current chapter
+        if (bmv_dt_settings.source.type.search(/eastheme|koidezign/) == -1) ch_visited = 'hs_visited' in ch_visited ? ch_visited.hs_visited : {};
+        ch_visited[bmv_dt_chapter.current] = { //add current chapter
+          number: bmv_dt_chapter.current,
+          url: new URL(bmv_dt_chapter.source).pathname,
+          added: new Date().getTime(),
+          site: bmv_dt_settings.source.site //only for info (visited chapter)
+        };
         ch_visited = genArray(ch_visited); //convert to Array
         ch_visited = sortBy(ch_visited, 'added'); //sort by "added" (desc)
         ch_visited = firstArray(ch_visited, bmv_max_hv); //get first {bmv_max_hv} data
         ch_visited = genJSON(ch_visited, 'number'); //convert to JSON
       } else {
-        ch_visited[bmv_dt_chapter.current] = {number: bmv_dt_chapter.current, added: new Date().getTime()}; //add current chapter
+        ch_visited[bmv_dt_chapter.current] = { //add current chapter
+          number: bmv_dt_chapter.current,
+          url: new URL(bmv_dt_chapter.source).pathname,
+          added: new Date().getTime(),
+          site: bmv_dt_settings.source.site //only for info (visited chapter)
+        };
         bmf_bmhs_change('history|set');
       }
 
       ch_data.hs_visited = ch_visited;
-      var cover_chk = bmv_dt_settings.source.type.search(/themesia|enduser/) != -1 && res.exists() && 'cover' in bmv_dt_chapter && bmv_dt_chapter.cover == '';
+      var cover_chk = bmv_dt_settings.source.type.search(/eastheme|koidezign/) == -1 && res.exists() && 'cover' in bmv_dt_chapter && bmv_dt_chapter.cover == '';
       if (cover_chk) ch_data.cover = res.val().cover;
       bmf_fbase_db_change('chapter/history/set', c_path, 'update', ch_data); //use "update" to keep "other data" from being deleted
     });
@@ -2140,7 +2399,7 @@ function bmf_build_chapter(data) {
   bmv_dt_chapter = data;
   bmv_zoom_id = data.slug;
   var images = data.images;
-  var ch_current = data.current.replace(/[-\s]((bahasa[-\s])?indo(nesia)?|full)/, '');
+  var ch_current = data.current.replace(/[-\s]((bahasa[-\s])?indo(nesiaa?)?|full)/, '');
   var ch_title = data.title +' Chapter '+ ch_current;
   var bc_newtab = bmv_dt_settings.link.indexOf(`${bmv_current}-bc`) != -1;
   var img_newtab = bmv_dt_settings.link.indexOf(`${bmv_current}-img`) != -1;
@@ -2169,16 +2428,16 @@ function bmf_build_chapter(data) {
   
       if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.ch_menu) {
         // Check CDN
-        if (!bmv_chk_cdn && images[i].search(bmv_rgx_cdn) != -1) {
+        if (!bmv_chk_cdn && images[i].match(bmv_rgx_cdn)) {
           var cdn_match = images[i].match(bmv_rgx_cdn);
           bmv_chk_cdn = true;
           bmv_load_cdn = true;
           bmv_str_cdn = cdn_match[2];
-          bmv_str_cdn_link = cdn_match[1];
+          bmv_str_cdn_url = cdn_match[1];
         }
         
         // Check Google images
-        if (!bmv_chk_gi && images[i].search(bmv_rgx_gi) != -1) {
+        if (!bmv_chk_gi && images[i].match(bmv_rgx_gi)) {
           bmv_chk_gi = true;
           bmv_str_gi = images[i].match(bmv_rgx_gi);
           bmv_str_gi = bmv_str_gi[1] || bmv_str_gi[2];
@@ -2202,7 +2461,7 @@ function bmf_build_chapter(data) {
     if (bmv_dt_settings.ch_menu) bmf_chapter_menu();
     if (bmv_dt_settings.ch_index) document.addEventListener('scroll', bmf_chapter_middle); //ch-index
   }
-  bmf_loadXMLDoc(`xhr/${bmv_current}/nav`, `${api_url}/api/?source=${bmv_dt_settings.source.site}&index=series&slug=${data.slug}`, bmf_chapter_nav); //get data from series for type & chapter list
+  bmf_loadXMLDoc(`xhr/${bmv_current}/nav`, `${api_url}/api/?source=${bmv_dt_settings.source.site}&index=series&slug=${data.slug}&cache=${bmv_dt_settings.cache}`, bmf_chapter_nav); //get data from series for type & chapter list
 }
 
 // #===========================================================================================#
@@ -2216,9 +2475,10 @@ function bmf_series_chapter_number(check) {
 }
 
 function bmf_series_chapter_link(note, data, slug) {
-  data = note.search(/visited|\/select/i) != -1 ? bmf_series_chapter_number(data) : data;
-  var ch_link = (slug || bmv_dt_series.slug) + '/' + data.number;
+  if (note.search(/\/select/i) != -1) data = bmf_series_chapter_number(data);
+  var ch_link = (slug || bmv_dt_series.slug) +'/'+ data.number;
   if (bmv_dt_settings.ch_url) ch_link += '/'+ encodeURIComponent('url='+ data.url);
+  if (note == 'visited') ch_link += (bmv_dt_settings.ch_url ? '&' : '/')+ encodeURIComponent('site='+ data.site);
   return ch_link;
 }
 
@@ -2228,13 +2488,12 @@ function bmf_series_chapter_list(note, data) {
   var str_lists = '';
   
   if (data.length > 0) {
-    if (note == 'visited') str_lists += '<div class="ch-title">'+ bmv_settings.l10n.series_visited +'</div>';
+    if (note == 'visited') str_lists += '<div class="ch-title">'+ bmv_settings.l10n.series.visited +'</div>';
     str_lists += '<ul class="flex_wrap">';
     for (var i in data) {
       str_lists += '<li><a class="full radius" href="#/chapter/'+ bmf_series_chapter_link(note, data[i]);
       if (s_newtab) str_lists += '" target="_blank';
-      var ch_number = note == 'chapter' ? data[i].number : data[i];
-      str_lists += '">Chapter '+ ch_number.replace(/[-\s]((bahasa[-\s])?indo(nesia)?|full)/, '') +'</a></li>';
+      str_lists += '">Chapter '+ data[i].number.replace(/[-\s]((bahasa[-\s])?indo(nesiaa?)?|full)/, '') +'</a></li>';
     }
     str_lists += '</ul>';
   } else {
@@ -2246,10 +2505,10 @@ function bmf_series_chapter_list(note, data) {
 function bmf_series_fnc() {
   var s_bm = el('.info-left .bookmark');
   
-  el('.info-left img').onerror = function() {
+  el('.info-left img').addEventListener('error', function() {
     this.classList.remove('loading', 'loge');
     this.classList.add('no-image');
-  };
+  });
 
   // init check bookmark
   if (fbase_login) {
@@ -2277,7 +2536,7 @@ function bmf_series_fnc() {
   
           var hs_list = [];
           for (var i in hs_data) {
-            hs_list.push(hs_data[i].number);
+            hs_list.push(hs_data[i]);
             var ch_number = bmv_dt_settings.ch_url ? `*="/${hs_data[i].number}/` : `$="/${hs_data[i].number}`;
             var ch_visited = el(`.chapter-list a[href${ch_number}"]`);
             if (ch_visited) ch_visited.classList.add('visited');
@@ -2388,14 +2647,14 @@ function bmf_build_series(data) {
 
   var str_series = '';
   str_series += '<div class="post-header flex f_middle">';
-  if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.sr_copy) str_series += '<span class="s-copy" title="Copy Title"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 512 512"><path fill="currentColor" d="M502.6 70.63L441.35 9.38C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.02 256c.88 35.4 29.58 64 64.88 64h192c35.2 0 64-28.8 64-64V93.25c0-8.48-3.4-16.62-9.4-22.62zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16V64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1v192zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16l.88-255.9c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64L0 448c.002 35.3 28.66 64 64 64h192c35.2 0 64-28.8 64-64v-32h-47.1l-.9 32z"/></svg></span>';
+  if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.sr_copy) str_series += '<span class="s-copy" title="Copy Title"><svg data-name="zondicons/copy" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M6 6V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h4zm2 0h4a2 2 0 0 1 2 2v4h4V2H8v4zM2 8v10h10V8H2z"/></svg></span>';
   str_series += '<h1 class="title">' + data.title + '</h1>';
   str_series += '</div>'; //.post-header
   str_series += '<div class="flex_wrap f_between '+ (fbase_login ? 'login' : 'not-login') +'">';
   str_series += '<div class="info info-left">';
   str_series += '<div class="cover"><img style="min-height:330px;" class="radius full_img loading loge" src="'+ data.cover + '" alt="'+ data.title +'" title="'+ data.title +'"></div>';
-  str_series += '<div class="bookmark wait btn space-v flex f_middle f_center" data-slug="'+ data.slug +'" disabled><span class="svg"></span>Bookmark</div>';
-  str_series += '<ul class="detail bg2 space-v layer radius">';
+  str_series += '<div class="bookmark wait btn flex f_middle f_center" data-slug="'+ data.slug +'" disabled><span class="svg"></span>Bookmark</div>';
+  str_series += '<ul class="detail bg2 layer radius">';
   if (data.detail.type != '') str_series += '<li><b>Type</b> <div class="text">'+ firstUCase(data.detail.type) +'</div></li>';
   str_series += '<li><b>Status</b> <div class="text">'+ data.detail.status.replace(/berjalan/i, 'Ongoing') +'</div></li>';
   if (data.detail.genre != '') str_series += '<li><b>Genre</b> <div class="text">'+ data.detail.genre +'</div></li>';
@@ -2403,9 +2662,11 @@ function bmf_build_series(data) {
   str_series += '</div>'; //.info-left
   str_series += '<span class="f_grow"></span>';
   str_series += '<div class="info info-right">';
+  if (data.alternative != '') str_series += '<b>'+ bmv_settings.l10n.series.alternative +'</b><div class="alternative">'+ data.alternative +'</div>';
   var s_desc = bmv_dt_settings.source.type == 'eastheme' ? data.desc.replace(/.*bercerita\stentang\s/i, '') : data.desc;
   str_series += '<div class="desc">';
-  str_series += '<div class="summary'+ (is_mobile ? ' clamp' : '') +'">'+ s_desc.replace(/\.\s/g, '.<div class="new_line"></div>') +'</div>';
+  str_series += '<b>'+ bmv_settings.l10n.series.synopsis +'</b>';
+  str_series += '<div class="summary'+ (is_mobile && s_desc.length >= 400 ? ' clamp' : '') +'">'+ (s_desc != '' ? s_desc.replace(/\.\s/g, '.<div class="new_line"></div>') : '-') +'</div>';
   if (is_mobile && s_desc.length >= 400) str_series += '<div class="accordion more t_center"><span class="show-more btn bgrey">Show more&#160;&#160;&#x025BC;</span><span class="show-less btn bgrey">Show less&#160;&#160;&#x025B2;</span></div>';
   str_series += '</div>'; //.description
   if (data.detail.genre.search(/adult/i) != -1) str_series += '<div class="warning t_center radius">Series ini dikategorikan sebagai Dewasa/Adult<br>MEMBACA SERIES INI DAPAT <b>MERUSAK OTAKMU</b></div>';
@@ -2415,10 +2676,10 @@ function bmf_build_series(data) {
     str_series += '<div class="last-end flex f_between">';
     str_series += '<a class="btn t_center radius" href="#/chapter/'+ bmf_series_chapter_link('ch_first', data.chapter[data.chapter.length-1]);
     if (s_newtab) str_series += '" target="_blank';
-    str_series += '"><div>'+ bmv_settings.l10n.series_first +'</div><div class="char">Chapter '+ data.chapter[data.chapter.length-1].number.replace(/-[a-zA-Z\-]+/, '') +'</div></a>';
+    str_series += '"><div>'+ bmv_settings.l10n.series.first +'</div><div class="char">Chapter '+ data.chapter[data.chapter.length-1].number.replace(/-[a-zA-Z\-]+/, '') +'</div></a>';
     str_series += '<a class="btn t_center radius" href="#/chapter/'+ bmf_series_chapter_link('ch_last', data.chapter[0]);
     if (s_newtab) str_series += '" target="_blank';
-    str_series += '"><div>'+ bmv_settings.l10n.series_last +'</div><div class="char">Chapter '+ data.chapter[0].number.replace(/-[a-zA-Z\-]+/, '') +'</div></a>';
+    str_series += '"><div>'+ bmv_settings.l10n.series.last +'</div><div class="char">Chapter '+ data.chapter[0].number.replace(/-[a-zA-Z\-]+/, '') +'</div></a>';
     str_series += '</div>'; //.last-end
   }
   str_series += '<div class="chapter-list ch-list bg2 radius"><div class="loading loge" style="height:25vh;"></div></div>';
@@ -2450,8 +2711,9 @@ function bmf_search_result(data) {
       str_result += '<a href="#/series/' + series[i].slug;
       if (s_newtab) str_result += '" target="_blank';
       str_result += '"><img style="min-height:225px;" class="radius full_img loading loge lazy1oad" data-src="' + series[i].cover + '" alt="' + series[i].title + '" title="' + series[i].title + '"></a>';
-      if (series[i].type != '') str_result += '<span class="type m-icon btn radius '+ series[i].type +'"></span>';
-      if (series[i].color) str_result += '<span class="color m-icon btn radius" title="Berwarna"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 512 512"><path fill="currentColor" d="M204.3 5C104.9 24.4 24.8 104.3 5.2 203.4c-37 187 131.7 326.4 258.8 306.7c41.2-6.4 61.4-54.6 42.5-91.7c-23.1-45.4 9.9-98.4 60.9-98.4h79.7c35.8 0 64.8-29.6 64.9-65.3C511.5 97.1 368.1-26.9 204.3 5zM96 320c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm32-128c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128-64c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128 64c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/></svg></span>';
+      if (series[i].type != '') str_result += '<span class="type m-icon btn radius '+ series[i].type +'" title="'+ firstUCase(series[i].type) +'"></span>';
+      if (series[i].completed != '') str_result += '<span class="completed m-icon btn red radius">completed</span>';
+      if (series[i].color) str_result += '<span class="color m-icon btn radius" title="Berwarna"><svg data-name="fa-solid/palette" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M204.3 5C104.9 24.4 24.8 104.3 5.2 203.4c-37 187 131.7 326.4 258.8 306.7c41.2-6.4 61.4-54.6 42.5-91.7c-23.1-45.4 9.9-98.4 60.9-98.4h79.7c35.8 0 64.8-29.6 64.9-65.3C511.5 97.1 368.1-26.9 204.3 5zM96 320c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm32-128c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128-64c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128 64c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/></svg></span>';
       str_result += '</div>';
       str_result += '<div class="title"><a href="#/series/' + series[i].slug;
       if (s_newtab) str_result += '" target="_blank';
@@ -2461,56 +2723,115 @@ function bmf_search_result(data) {
     str_result += '</ul></div>';
     bmv_el_result.innerHTML = str_result;
   } else {
-    bmv_el_result.innerHTML = '<div class="error t_center t_perfect" style="min-height:50vh;"><div class="tp_content"><div class="info-result">Tidak ditemukan</div><div class="info-try">Silahkan coba lagi dengan kata kunci yang lain.</div></div></div>';
+    bmv_el_result.innerHTML = '<div class="error t_center t_perfect layer2" style="min-height:50vh;"><div class="tp_content"><div class="info-result">Tidak ditemukan</div><div class="info-try">Silahkan coba lagi dengan kata kunci yang lain.</div></div></div>';
   }
   bmv_el_result.classList.remove('no_items');
 }
 
-function bmf_search_fill() {
-  // auto fill "filter input"
-  var s_wh = wl.href.replace(/\/(\?.+=.+)?#/, '');
-  if (bmv_chk_query) {
-    el('.quick-search .qs-field').value = bmf_getParam('query', s_wh)[0];
-    el('.search .post-header span').innerHTML = bmf_getParam('query', s_wh)[0];
+function bmf_search_adv_fill_set(url, param, type) {
+  var adv_genre = bmf_getParam('genre[]', url);
+  if (param == 'genre' && adv_genre) {
+    for (var genre of adv_genre) {
+      el('.filter .s-genre[value="'+ genre +'"]').checked = true;
+    }
   } else {
-    var adv_wh = bmf_getParam('params', s_wh)[0];
-    adv_wh = wl.protocol +'//'+ wl.hostname +'/?'+ decodeURIComponent(adv_wh.replace(/orderby/, 'order'));
-    if (bmf_getParam('title', adv_wh)) el('.filter .s-title').value = bmf_getParam('title', adv_wh)[0];
-    if (bmf_getParam('status', adv_wh)) el('.filter .s-status[value="'+ bmf_getParam('status', adv_wh)[0] +'"]').checked = true;
-    if (bmf_getParam('format', adv_wh)) el('.filter .s-format[value="'+ bmf_getParam('format', adv_wh)[0] +'"]').checked = true;
-    if (bmf_getParam('type', adv_wh)) el('.filter .s-type[value="'+ bmf_getParam('type', adv_wh)[0] +'"]').checked = true;
-    if (bmf_getParam('order', adv_wh)) el('.filter .s-order[value="'+ bmf_getParam('order', adv_wh)[0] +'"]').checked = true;
-    if (bmf_getParam('genre[]', adv_wh)) {
-      var adv_genre = bmf_getParam('genre[]', adv_wh);
-      for (var i = 0; i < adv_genre.length; i++) {
-        el('.filter .s-genre[value="'+ bmf_getParam('genre[]', adv_wh)[i] +'"]').checked = true;
+    var elem = el(`.filter .s-${param}`);
+    if (!elem) return;
+    
+    var s_name = elem.getAttribute('name');
+    var s_value = bmf_getParam(s_name, url);
+    if (s_value) {
+      if (type == 'text') {
+        elem.value = s_value[0];
+      } else {
+        el(`.filter .s-${param}[value="${s_value[0]}"]`).checked = true;
       }
     }
   }
 }
 
-function bmf_search_adv_value(elem, param) {
-  var s_value = elem.value == '' ? '' : ('&'+ param +'='+ elem.value);
-  return s_value;
+function bmf_search_fill() {
+  // auto fill "filter input"
+  if (bmv_chk_query) {
+    el('.quick-search .qs-field').value = bmf_getParam('query', wd)[0];
+    el('.search .post-header span').innerHTML = bmf_getParam('query', wd)[0];
+  } else {
+    var adv_wh = bmf_getParam('params', wd)[0];
+    adv_wh = wl.protocol +'//'+ wl.hostname +'/?'+ decodeURIComponent(adv_wh);
+
+    var adv_list = ['title','status','format','type','order','genre'];
+    for (var param of adv_list) {
+      var s_type = param == 'title' ? 'text' : 'radio';
+      bmf_search_adv_fill_set(adv_wh, param, s_type);
+    }
+  }
+}
+
+function bmf_search_adv_value(elem) {
+  var s_param = elem.getAttribute('name');
+  return elem.value == '' ? '' : ('&'+ s_param +'='+ elem.value);
 }
 
 function bmf_search_adv_param(info) {
-  var s_title = el('.s-title') ? bmf_search_adv_value(el('.s-title'), 'title') : '';
-  var s_status = bmf_search_adv_value(el('.s-status:checked'), 'status');
-  var s_format = el('.s-format') ? bmf_search_adv_value(el('.s-format:checked'), 'format') : '';
-  var s_type = bmf_search_adv_value(el('.s-type:checked'), 'type');
-  var s_order = bmf_search_adv_value(el('.s-order:checked'), bmv_dt_settings.source.site.indexOf('komikcast') != -1 ? 'orderby' : 'order');
+  var s_title = el('.s-title') ? bmf_search_adv_value(el('.s-title')) : '';
+  var s_status = bmf_search_adv_value(el('.s-status:checked'));
+  var s_format = el('.s-format') ? bmf_search_adv_value(el('.s-format:checked')) : '';
+  var s_type = bmf_search_adv_value(el('.s-type:checked'));
+  var s_order = bmf_search_adv_value(el('.s-order:checked'));
 
   var s_genre = el('.s-genre:checked', 'all');
   var s_genre_val = '';
   if (s_genre.length > 0) {
-    for (var i = 0; i < s_genre.length; i++) {
-      s_genre_val += bmf_search_adv_value(s_genre[i], 'genre%5B%5D');
+    for (var genre of s_genre) {
+      s_genre_val += bmf_search_adv_value(genre);
     }
   }
 
   var s_param = s_title + s_status + s_format + s_type + s_order + s_genre_val;
-  if (s_param != '') wl.hash = '#/search/?params='+ encodeURIComponent(s_param.replace(/^[&\?]/, ''));
+  s_param = s_param == '' ? 'default' : encodeURIComponent(s_param.replace(/^[&\?]/, ''));
+  wl.hash = '#/search/?params='+ s_param;
+}
+
+function bmf_search_list(param, type) {
+  // default value is from "eastheme"
+  var s_adv = {"title":{"desc":"Minimal 3 Karakter"},"status":[{"value":"ongoing"},{"value":"completed"}],"format":[{"value":"0","label":"Hitam Putih"},{"value":"1","label":"Berwarna"}],"type":[{"value":"manga","label":"Manga (Jepang)"},{"value":"manhwa","label":"Manhwa (Korea)"},{"value":"manhua","label":"Manhua (Cina)"}],"order":[{"value":"title","label":"A-Z"},{"value":"titlereverse","label":"Z-A"},{"value":"update"},{"value":"latest","label":"Added"},{"value":"popular"}]};
+
+  var str_adv = '';
+  var s_param = param;
+  var s_list = s_adv[param];
+
+  if (param == 'status' && (bmv_dt_settings.source.site == 'manhwaindo' || bmv_dt_settings.source.type == 'themesia')) s_list.push({"value":"hiatus"});
+  if (bmv_dt_settings.source.type == 'enduser' && param == 'order') { //komikcast
+    s_param = 'orderby';
+    s_list[0].value = 'titleasc';
+    s_list[1].value = 'titledesc';
+  }
+  if (bmv_dt_settings.source.type == 'madara') {
+    if (param == 'title') s_param = 's';
+    if (param == 'status') {
+      s_param += '[]';
+      s_list = [{"value":"on-going","label":"Ongoing"},{"value":"end","label":"Completed"},{"value":"on-hold","label":"Hiatus"}];
+    }
+    if (param == 'order') {
+      s_param = 'm_orderby';
+      s_list = [{"value":"alphabet","label":"A-Z"},{"value":"latest","label":"Update"},{"value":"new-manga","label":"Added"},{"value":"views","label":"Popular"}];
+    }
+  }
+
+  if (type == 'text') {
+    str_adv += `<input type="text" class="s-${param} val" placeholder="${s_list.desc}" minlength="3" name="${s_param}" value="" autocomplete="off">`;
+  } else {
+    str_adv = `<li><label class="radio"><input type="radio" class="s-${param}" name="${s_param}" value="" checked><span></span>All</label></li>`;
+    for (var i = 0; i < s_list.length; i++) {
+      str_adv += '<li><label class="radio">';
+      str_adv += `<input type="radio" class="s-${param}" name="${s_param}" value="${s_list[i].value}"><span></span>`;
+      str_adv += 'label' in s_list[i] ? s_list[i].label : firstUCase(s_list[i].value);
+      str_adv += '</label></li>';
+      str_adv += '';
+    }
+  }
+
+  return str_adv;
 }
 
 function bmf_build_search(data) {
@@ -2522,24 +2843,24 @@ function bmf_build_search(data) {
   str_search += '<div class="adv-search layer2">';
   str_search += '<div class="post-header flex"><h1 class="title">'+ (bmv_chk_query ? 'Hasil Pencarian: <span></span>' : 'Advanced Search') + s_page +'</h1><span class="toggle btn t_center'+ (wh.indexOf('params=') != -1 ? '' : ' no_items') +'">+</span></div>';
   str_search += '<div class="filter in-check'+ (wh.search(/(query|params)=/) != -1 ? ' no_items' : '') +'"><table class="full"><tbody>';
-  if (bmv_dt_settings.source.type == 'eastheme') str_search += '<tr><td>Judul</td><td><input type="text" class="s-title val" placeholder="Minimal 3 Karakter" minlength="3" value=""></td></tr>';
+  if (bmv_dt_settings.source.type.search(/eastheme|koidezign|madara/) != -1) str_search += '<tr><td>'+ bmv_settings.l10n.title +'</td><td>'+ bmf_search_list('title', 'text') +'</td></tr>'; //"Title"
   str_search += '<tr><td>Status</td><td><ul class="status radio flex_wrap">';
-  str_search += '<li><label class="radio"><input type="radio" class="s-status" name="s-status" value="" checked><span></span>All</label></li><li><label class="radio"><input type="radio" class="s-status" name="s-status" value="ongoing"><span></span>Ongoing</label></li><li><label class="radio"><input type="radio" class="s-status" name="s-status" value="completed"><span></span>Completed</label></li>';
-  str_search += '</ul></td></tr>';
+  str_search += bmf_search_list('status');
+  str_search += '</ul></td></tr>'; //"Status"
   if (bmv_dt_settings.source.type == 'eastheme') {
     str_search += '<tr><td>Format</td><td><ul class="format radio flex_wrap">';
-    str_search += '<li><label class="radio"><input type="radio" class="s-format" name="s-format" value="" checked><span></span>All</label></li><li><label class="radio"><input type="radio" class="s-format" name="s-format" value="0"><span></span>Hitam Putih</label></li><li><label class="radio"><input type="radio" class="s-format" name="s-format" value="1"><span></span>Berwarna</label></li>';
-    str_search += '</ul></td></tr>';
+    str_search += bmf_search_list('format');
+    str_search += '</ul></td></tr>'; //"Format"
   }
   str_search += '<tr><td>Type</td><td><ul class="type radio flex_wrap">';
-  str_search += '<li><label class="radio"><input type="radio" class="s-type" name="s-type" value="" checked><span></span>All</label></li><li><label class="radio"><input type="radio" class="s-type" name="s-type" value="manga"><span></span>Manga (Jepang)</label></li><li><label class="radio"><input type="radio" class="s-type" name="s-type" value="manhwa"><span></span>Manhwa (Korea)</label></li><li><label class="radio"><input type="radio" class="s-type" name="s-type" value="manhua"><span></span>Manhua (Cina)</label></li>';
-  str_search += '</ul></td></tr>';
+  str_search += bmf_search_list('type');
+  str_search += '</ul></td></tr>'; //"Type"
   str_search += '<tr><td>Order by</td><td><ul class="order radio flex_wrap">';
-  str_search += '<li><label class="radio"><input type="radio" class="s-order" name="s-order" value="" checked><span></span>All</label></li><li><label class="radio"><input type="radio" class="s-order" name="s-order" value="title"><span></span>A-Z</label></li><li><label class="radio"><input type="radio" class="s-order" name="s-order" value="titlereverse"><span></span>Z-A</label></li><li><label class="radio"><input type="radio" class="s-order" name="s-order" value="update"><span></span>Update</label></li><li><label class="radio"><input type="radio" class="s-order" name="s-order" value="latest"><span></span>Added</label></li><li><label class="radio"><input type="radio" class="s-order" name="s-order" value="popular"><span></span>Popular</label></li>';
-  str_search += '</ul></td></tr>';
+  str_search += bmf_search_list('order');
+  str_search += '</ul></td></tr>'; //"Order/Sort"
   str_search += '<tr><td>Genre</td><td><ul class="genres checkbox flex_wrap">';
   for (var i in bmv_genres) {
-    str_search += '<li><label class="checkbox"><input type="checkbox" class="s-genre" value="' + bmv_genres[i] + '"><span></span>' + firstUCase(bmv_genres[i]) + '</label></li>';
+    str_search += '<li><label class="checkbox"><input type="checkbox" class="s-genre" name="genre[]" value="' + bmv_genres[i] + '"><span></span>' + firstUCase(bmv_genres[i]) + '</label></li>';
   }
   str_search += '</ul></td></tr>';
   str_search += '<tr><td class="submit t_center" colspan="2"><button type="button" class="btn" id="search_btn">Search</button>&nbsp;&nbsp;<button type="button" class="btn" id="reset_btn"'+ (bmv_prm_slug ? '' : ' disabled') +'>Reset</button></td></tr>';
@@ -2582,60 +2903,134 @@ function bmf_email_validate(str) {
   return /^[+a-zA-Z0-9_.!#$%&'*\/=?^`{|}~-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z0-9]{2,63}$/.test(str);
 }
 
-function bmf_build_contact() {
-  // Display "contact" page
-  var str_contact = '';
+function bmf_contact_fnc(captcha) {
+  const _cnu = {
+    _rc: function(min, max) {
+      return Array.from({length: 4}, () => Math.floor(Math.random() * (max - min + 1) + min));
+    },
+    
+    _r: function(c) {
+      let i = c.length, r;
+      while (i != 0) {
+        r = Math.floor(Math.random() * i);
+        i--;
+        [c[i], c[r]] = [c[r], c[i]];
+      }
+      return c;
+    },
+    
+    _g: function(c) {
+      var a = 'abcdefghij'.split('');
+      var r = [];
+      for (var n of c.split('')) {
+        r.push(a[n]);
+      }
+      return r;
+    },
+    
+    _calc: function(p, c1, c2) {
+      if (!c2) c2 = c1;
+      return p ? (c1 + c2) : (c1 - c2);
+    },
+    
+    _get: function(el) {
+      return self[_cnu._g(el.textContent).split('')];
+    },
+    
+    _set: function(code) {
+      var cnu_c = [3, 4, 5, 6];
+      var cnu_p = [8, 25, 44, 65];
+      var cnu_n = _cnu._r([1, 2, 3, 4]);
+      
+      var cnu_str = '';
+      for (var i = 0; i < cnu_n.length; i++) {
+        var n = cnu_n[i] - 1;
+        var cnu_m = _cnu._r([1, 0]);
+        var cnu_cn = _cnu._calc(1, _cnu._r(cnu_c)[n], n);
+        var cnu_pn = _cnu._calc(cnu_m[0], cnu_p[n], _cnu._r(cnu_c)[n]);
+        cnu_str += `<span style="position:absolute;padding-left:${cnu_pn}px;padding-top:${cnu_cn}px;">${code[n]}</span>`;
+      }
+    
+      var cnu_el = document.createElement('div');
+      cnu_el.className = 'cnu t_left';
+      cnu_el.innerHTML = cnu_str;
+      self[_cnu._g(cnu_el.textContent).join('')] = code;
+      return cnu_el;
+    },
+  }
 
-  str_contact += '<div class="post-header"><h1 class="title">'+ bmv_settings.l10n.contact_h1 +'</h1></div>';
-  str_contact += '<div class="post">';
-  str_contact += '<div class="contact-form bg2 layer radius">';
-  str_contact += '<iframe class="no_items" id="contact-frame" name="contact-frame"data-loaded="false"></iframe>';
-  str_contact += '<form action="https://docs.google.com/forms/d/1ezK2EoF11JzEYb1Mk5vO0ZJqGOO8sQ3KQq1uHCM-XSY/formResponse" method="POST" target="contact-frame" autocomplete="off">';
-  str_contact += '<div class="contact-name"><input name="entry.2005620554" type="text" placeholder="Nama Asli (wajib)" value="" required></div>';
-  str_contact += '<div class="contact-email"><input name="entry.1045781291" type="email" placeholder="Email Aktif (wajib)" value="" required></div>';
-  str_contact += '<div class="contact-title"><input name="entry.703833447" type="text" placeholder="Judul Pesan (wajib)" value="" required></div>';
-  str_contact += '<div class="contact-message"><textarea name="entry.839337160" rows="5" cols="25" placeholder="Isi pesan tulis disini.. (wajib)" required></textarea></div>';
-  str_contact += '<input name="partialResponse" type="hidden" value="[,,&quot;328016698945689561&quot;]">';
-  str_contact += '<input name="pageHistory" type="hidden" value="0">';
-  str_contact += '<input name="fbzx" type="hidden" value="328016698945689561">';
-  str_contact += '<button class="contact-submit btn full" type="submit" name="submit">Kirim</button>';
-  str_contact += '</div>'; //.contact-form
-  str_contact += '<div class="contact-status bg2 layer radius t_center no_items"></div>';
-  str_contact += '</div>';
-  bmv_el_post.innerHTML = str_contact;
-  el('.main').style.maxWidth = '500px';
+  var captcha = _cnu._rc(0, 9);
+  el('.contact-captcha').insertBefore(_cnu._set(captcha), el('.contact-captcha').children[0]);
   
   el('#contact-frame').addEventListener('load', function() {
     if (this.dataset.loaded == 'true') {
+      captcha = _cnu._rc(0, 9);
+      removeElem('.contact-captcha .cnu');
+      el('.contact-captcha input').value = '';
+      el('.contact-captcha').insertBefore(_cnu._set(captcha), el('.contact-captcha').children[0]);
+
       el('.contact-form').classList.remove('loading', 'loge');
       el('.contact-status').classList.remove('no_items');
       el('.contact-status').classList.add('green');
-      el('.contact-status').innerHTML = 'Pesan sudah dikirim.';
+      el('.contact-status').innerHTML = bmv_settings.l10n.contact.success;
+      setTimeout(function() { el('.contact-status').classList.add('no_items'); }, 3000);
     }
   });
 
   el('.contact-form form').addEventListener('submit', function(e) {
     el('.contact-status').classList.add('no_items');
-    var f_lists = ['name', 'email', 'title', 'message'];
+    var f_lists = ['name', 'email', 'subject', 'message', 'captcha'];
     
     for (var i in f_lists) {
       var f_elem = f_lists[i] == 'message' ? el(`.contact-${f_lists[i]} textarea`) : el(`.contact-${f_lists[i]} input`);
       var f_chk = f_lists[i] == 'email' ? bmf_email_validate(f_elem.value) : f_elem.checkValidity();
 
+      if (f_lists[i] == 'captcha' && (f_elem.value == '' || f_elem.value.length < 4 || f_elem.value.length > 4 || f_elem.value != self[_cnu._g(el('.contact-captcha .cnu').textContent).join('')].join(''))) f_chk = false;
+
       if (!f_chk) {
-        var f_msg = f_lists[i] == 'email' ? 'Alamat email harus valid.' : f_elem.validationMessage;
+        var f_msg = f_lists[i] == 'email' ? 'Alamat email harus valid.' : f_lists[i] == 'captcha' ? 'Wrong captcha.' : f_elem.validationMessage;
         e.preventDefault();
         el('#contact-frame').dataset.loaded = 'false';
         el('.contact-status').classList.remove('no_items');
         el('.contact-status').classList.add('red');
         el('.contact-status').innerHTML = '!! Error: '+ f_msg;
-        return;
+
+        e.preventDefault();
+        e.returnValue = false;
+        return false;
       }
     }
 
     this.parentElement.classList.add('loading', 'loge');
     el('#contact-frame').dataset.loaded = 'true';
   });
+}
+
+function bmf_build_contact() {
+  // Display "contact" page
+  var str_contact = '';
+
+  str_contact += '<div class="post-header"><h1 class="title">'+ bmv_settings.l10n.contact.h1 +'</h1></div>';
+  str_contact += '<div class="post">';
+  str_contact += '<div class="contact-form bg2 layer radius">';
+  str_contact += '<iframe class="no_items" id="contact-frame" name="contact-frame"data-loaded="false"></iframe>';
+  str_contact += '<form action="https://docs.google.com/forms/d/1ezK2EoF11JzEYb1Mk5vO0ZJqGOO8sQ3KQq1uHCM-XSY/formResponse" method="POST" target="contact-frame" autocomplete="off">';
+  str_contact += '<div class="contact-name"><input name="entry.2005620554" type="text" placeholder="'+ bmv_settings.l10n.contact.name +'" value="" required></div>';
+  str_contact += '<div class="contact-email"><input name="entry.1045781291" type="email" placeholder="'+ bmv_settings.l10n.contact.email +'" value="" required></div>';
+  str_contact += '<div class="contact-subject"><input name="entry.703833447" type="text" placeholder="'+ bmv_settings.l10n.contact.subject +'" value="" required></div>';
+  str_contact += '<div class="contact-message"><textarea name="entry.839337160" rows="5" cols="25" placeholder="'+ bmv_settings.l10n.contact.message +'" required></textarea></div>';
+  str_contact += '<div class="contact-captcha flex"><input class="no_arrow" type="text" minlength="4" maxlength="4" required></div>';
+  str_contact += '<input name="partialResponse" type="hidden" value="[,,&quot;328016698945689561&quot;]">';
+  str_contact += '<input name="pageHistory" type="hidden" value="0">';
+  str_contact += '<input name="fbzx" type="hidden" value="328016698945689561">';
+  str_contact += '<button class="contact-submit btn full" type="submit" name="submit">'+ bmv_settings.l10n.form.submit +'</button>';
+  str_contact += '</div>'; //.contact-form
+  str_contact += '<div class="contact-status bg2 layer radius t_center no_items"></div>';
+  str_contact += '</div>';
+  bmv_el_post.innerHTML = str_contact;
+
+  el('.main').classList.add('wBox');
+  bmf_contact_fnc();
 }
 
 // #===========================================================================================#
@@ -2656,14 +3051,18 @@ function bmf_build_latest(data) {
     str_latest += '<a href="#/series/'+ series[i].slug;
     if (l_newtab) str_latest += '" target="_blank';
     str_latest += '"><img style="min-height:225px;" class="radius full_img loading loge lazy1oad" data-src="'+ series[i].cover +'" alt="'+ series[i].title +'" title="'+ series[i].title +'"></a>';
-    if (series[i].type != '') str_latest += '<span class="type m-icon btn radius '+ series[i].type +'"></span>';
-    if (series[i].color) str_latest += '<span class="color m-icon btn radius" title="Berwarna"><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 512 512"><path fill="currentColor" d="M204.3 5C104.9 24.4 24.8 104.3 5.2 203.4c-37 187 131.7 326.4 258.8 306.7c41.2-6.4 61.4-54.6 42.5-91.7c-23.1-45.4 9.9-98.4 60.9-98.4h79.7c35.8 0 64.8-29.6 64.9-65.3C511.5 97.1 368.1-26.9 204.3 5zM96 320c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm32-128c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128-64c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128 64c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/></svg></span>';
+    if (series[i].type != '') str_latest += '<span class="type m-icon btn radius '+ series[i].type +'" title="'+ firstUCase(series[i].type) +'"></span>';
+    if (series[i].completed) str_latest += '<span class="completed m-icon btn red radius">completed</span>';
+    if (series[i].color) str_latest += '<span class="color m-icon btn radius" title="Berwarna"><svg data-name="fa-solid/palette" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M204.3 5C104.9 24.4 24.8 104.3 5.2 203.4c-37 187 131.7 326.4 258.8 306.7c41.2-6.4 61.4-54.6 42.5-91.7c-23.1-45.4 9.9-98.4 60.9-98.4h79.7c35.8 0 64.8-29.6 64.9-65.3C511.5 97.1 368.1-26.9 204.3 5zM96 320c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm32-128c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128-64c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128 64c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/></svg></span>';
     str_latest += '</div>'; //.cover
     str_latest += '<div class="title"><a href="#/series/'+ series[i].slug;
     if (l_newtab) str_latest += '" target="_blank';
     str_latest += '"><h3 class="hd-title clamp">'+ series[i].title +'</h3></a></div>';
-    if (series[i].chapter != '') str_latest += '<div class="l-chapter">'+ series[i].chapter.replace(/ch\.(\s+)?/i, 'Chapter ').replace(/[-\s]((bahasa[-\s])?indo(nesia)?|full)/, '') +'</div>';
-    if (series[i].date != '') str_latest += '<div class="date">'+ series[i].date +'</div>';
+    if (series[i].chapter != '') str_latest += '<div class="l-chapter">'+ series[i].chapter.replace(/ch\.(\s+)?/i, 'Chapter ').replace(/[-\s]((bahasa[-\s])?indo(nesiaa?)?|full)/, '') +'</div>';
+    if (series[i].date != '') {
+      var l_date = isNaN(Date.parse(series[i].date)) ? series[i].date : timeDifference(series[i].date);
+      str_latest += '<div class="date">'+ l_date +'</div>';
+    }
     str_latest += '</li>';
   }
   str_latest += '</ul></div>';
@@ -2693,21 +3092,33 @@ function bmf_build_info() {
 // #===========================================================================================#
 
 function bmf_default_key(e) {
-  if (e.keyCode == 13) el('.quick-search .qs-search').click();
+  if (keyEvent(e, 13) && el('.quick-search .qs-field') == e.target) el('.quick-search .qs-search').click();
 }
 
-function bmf_toggle_dark(note, theme) {
-  var method;
-  if (note == 'toggle') {
-    method = 'toggle';
-    local('set', 'bmv_theme', theme);
+function bmf_toggle_dark(event) {
+  var DOC = document.documentElement;
+  var local_theme = local('get', 'bmv_theme');
+  var browser_theme = window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+
+  DOC.classList.remove('system', 'dark', 'light');
+  if (!event) bmv_dt_settings.theme = local_theme;
+  var user_theme = bmv_dt_settings.theme == 'system' ? browser_theme : bmv_dt_settings.theme;
+  
+  if (bmv_dt_settings.theme == 'system') {
+    DOC.classList.add('system');
   } else {
-    method = theme == 'dark' ? 'add' : 'remove';
+    DOC.classList.remove('system');
   }
-  document.documentElement.classList[method]('dark');
+
+  DOC.classList.remove('dark', 'light');
+  DOC.classList.add(user_theme);
+  local('set', 'bmv_theme', bmv_dt_settings.theme);
 }
 
 function bmf_build_default_fnc() {
+  // Auto select menu from url
+  if (el(`#header .navigation>ul>li>a[href="${wh}"]`)) el(`#header .navigation>ul>li>a[href="${wh}"]`).parentElement.classList.add('selected');
+
   if (el('#header .navigation [href*="/login"]')) {
     el('#header .navigation [href*="/login"]').addEventListener('click', function(e) {
       e.preventDefault();
@@ -2720,20 +3131,15 @@ function bmf_build_default_fnc() {
   }
   
   el('.quick-search .qs-search').addEventListener('click', function() {
-    if (el('.quick-search .qs-field').value != '') wl.hash = '#/search/?query='+ el('.quick-search .qs-field').value;
+    if (el('.quick-search .qs-field').value != '') wl.hash = '#/search/?query='+ el('.quick-search .qs-field').value.trim();
   });
   document.addEventListener('keyup', bmf_default_key);
 
-  el('.toggle-mode [data-mode]', 'all').forEach(function(item) {
-    item.addEventListener('click', function() {
-      bmf_toggle_dark('toggle', this.dataset.mode);
-    });
+  el('.theme-switch').addEventListener('click', function(event) {
+    bmv_dt_settings.theme = bmv_dt_settings.theme == 'system' ? 'dark' : bmv_dt_settings.theme == 'dark' ? 'light' : 'system';
+    bmf_toggle_dark(event);
   });
-
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-    var th_mode = e.matches ? 'dark' : 'light';
-    if (!local('get', 'bmv_theme')) bmf_toggle_dark('matchMedia', th_mode);
-  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', bmf_toggle_dark);
 
   if (is_mobile) {
     el('#header .nav-toggle').addEventListener('click', function() {
@@ -2747,10 +3153,10 @@ function bmf_build_default_fnc() {
       toggleClass(el('.quick-search .qs-form'), ['qs-show', 'no_items']);
       el('.quick-search .qs-field').select();
     });
+    if (el('#back-to')) el('#back-to').classList.add('flex');
   }
 
   if (bmv_current != 'chapter') {
-    if (is_mobile) el('#back-to').classList.add('flex');
     el('#back-to .to-top').addEventListener('click', function() { document.body.scrollIntoView() });
     el('#back-to .to-bottom').addEventListener('click', function() { window.scrollTo(0, document.body.scrollHeight) });
   }
@@ -2760,25 +3166,34 @@ function bmf_build_footer() {
   var str_footer = '<div class="footer max layer">';
   if (bmv_current != 'chapter') str_footer += '<div class="message bg2 t_center layer radius">'+ bmv_settings.l10n.footer_msg +'</div>';
   str_footer += '<div class="flex_wrap '+ (is_mobile ? 'f_center t_center' : 'f_between') +'">';
-  str_footer += '<div class="footer-left">© '+ new Date().getFullYear() +', Made with \ud83d\udc96 & \ud83d\ude4c by <a href="https://github.com/bakomon/mydb" target="_blank" title="Bakomon">Bakomon</a></div>';
+  str_footer += '<div class="footer-left">© '+ new Date().getFullYear() +', Made with \ud83d\udc96 & \ud83d\ude4c by <a href="https://github.com/bakomon/markdb/tree/master/web" target="_blank" title="Bakomon">Bakomon</a></div>';
   str_footer += '<div class="footer-right"><a href="#/latest">'+ bmv_settings.l10n.homepage +'</a><span>|</span><a href="'+ bmv_series_list +'">'+ bmv_settings.l10n.all_series +'</a><span>|</span><a href="#/contact">Contact</a><span>|</span><a href="#/search" title="Advanced search">Advanced search</a></div>';
   str_footer += '</div>';
-  str_footer += '</div>';
-  if (bmv_current != 'chapter') str_footer += '<div id="back-to"><div class="to-top btn">&#x25B2;</div><div class="to-bottom btn">&#x25BC;</div></div>';
-  str_footer += '<style>.footer span {padding:0 6px;}</style>';
+  str_footer += '</div>'; //.footer
+  if (bmv_current != 'chapter' || (fbase_user && fbase_user.tier == 'basic')) str_footer += '<div id="back-to"><div class="to-top btn">&#x25B2;</div><div class="to-bottom btn">&#x25BC;</div></div>';
   return str_footer;
 }
 
 function bmf_build_main() {
-  var main_layer = bmv_current.search(/series|member|contact/i) != -1? ' layer' : '';
+  var main_layer = bmv_current.search(/series|member|contact/i) != -1 ? ' layer' : '';
   var str_main = '<div class="main max flex_wrap'+ main_layer +'">';
   str_main += '<div class="post-content full">';
   str_main += '<div class="post-info"></div>';
   if (bmv_chk_nav) str_main += '<div class="page-nav t_center"></div>';
   str_main += '</div>'; //.post-content
-  str_main += '<div class="source no_items" title="Source Link"><a href="" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48"><mask id="svgIDa"><g fill="none"><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M23 40H7a3 3 0 0 1-3-3V11a3 3 0 0 1 3-3h34a3 3 0 0 1 3 3v14.882"/><path fill="#fff" stroke="#fff" stroke-width="4" d="M4 11a3 3 0 0 1 3-3h34a3 3 0 0 1 3 3v9H4v-9Z"/><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m34 33l-4 4l4 4m6-8l4 4l-4 4"/><circle r="2" fill="#000" transform="matrix(0 -1 -1 0 10 14)"/><circle r="2" fill="#000" transform="matrix(0 -1 -1 0 16 14)"/></g></mask><path fill="currentColor" d="M0 0h48v48H0z" mask="url(#svgIDa)"/></svg></a></div>';
+  str_main += '<div class="others">';
+  str_main += '<div class="clear-cache ot-icon pointer no_items" title="Clear Cache"><svg data-name="pajamas/clear-all" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M15.963 7.23A8 8 0 0 1 .044 8.841a.75.75 0 0 1 1.492-.158a6.5 6.5 0 1 0 9.964-6.16V4.25a.75.75 0 0 1-1.5 0V0h4.25a.75.75 0 0 1 0 1.5h-1.586a8.001 8.001 0 0 1 3.299 5.73ZM7 2a1 1 0 1 0 0-2a1 1 0 0 0 0 2Zm-2.25.25a1 1 0 1 1-2 0a1 1 0 0 1 2 0ZM1.5 6a1 1 0 1 0 0-2a1 1 0 0 0 0 2Z" clip-rule="evenodd"/></svg></div>';
+  str_main += '<div class="source ot-icon no_items" title="Source Link"><a href="" target="_blank"><svg data-name="icon-park-solid/source-code" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48"><mask id="ipSSourceCode0"><g fill="none"><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M23 40H7a3 3 0 0 1-3-3V11a3 3 0 0 1 3-3h34a3 3 0 0 1 3 3v14.882"/><path fill="#fff" stroke="#fff" stroke-width="4" d="M4 11a3 3 0 0 1 3-3h34a3 3 0 0 1 3 3v9H4v-9Z"/><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m34 33l-4 4l4 4m6-8l4 4l-4 4"/><circle r="2" fill="#000" transform="matrix(0 -1 -1 0 10 14)"/><circle r="2" fill="#000" transform="matrix(0 -1 -1 0 16 14)"/></g></mask><path fill="currentColor" d="M0 0h48v48H0z" mask="url(#ipSSourceCode0)"/></svg></a></div>';
+  str_main += '</div>'; //.others
   str_main += '</div>'; //.main
   return str_main;
+}
+
+function bmf_build_notif() {
+  var str_notif = '<div class="notif">';
+  str_notif += '<div class="message max t_center layer">'+ bmv_settings.l10n.notif_msg +'</div>';
+  str_notif += '</div>'; //.notif
+  return str_notif;
 }
 
 function bmf_build_header() {
@@ -2786,40 +3201,38 @@ function bmf_build_header() {
   var str_head = '<div class="header-wrapper"><div class="header max layer flex f_middle" id="header">';
   if (is_mobile) {
     str_head += '<div class="nav-toggle">';
-    str_head += '<span class="nav-icon">';
-    str_head += '<svg class="nav-open" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M0 96c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24zm0 160c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24zm0 160c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24z"></path></svg>';
-    str_head += '</span>'; //.nav-icon
+    str_head += '<div class="nav-icon">';
+    str_head += '<svg class="nav-open" data-name="zondicons/menu" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="currentColor" d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path></svg>';
+    str_head += '</div>'; //.nav-icon
     str_head += '<span class="nav-text">Menu</span>';
     str_head += '</div>'; //.nav-toggle
     str_head += '<span class="f_grow"></span>';
   }
-  var logo_img = blogger_mode ? 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEidppqaJ1cThfdVj6XvIV9B0Hj3XfCGX40y-D0fGNMonhaNnFqQYCAaslgSyRIk1AJmmXdcRNYg5W_lMsAh-vNbCxcjZbJ7S0_ly-QXuesV2NIQiQBRhxbRvGyXUbtQLJbaYGh4PkqzLLsJiTvaBPZm9W2Melk44ELIiBL-pipg1yd2ekFfEgBZZlmMfg/s200/logo-text.png' : './images/logo-text.png';
+  var logo_img = './images/logo-text.png';
   str_head += '<div class="title"><a href="./" title="Bakomon - Baca Komik Online"><'+ tag_head +' class="text">Bakomon</'+ tag_head +'><img alt="Bakomon" src="'+ logo_img +'" title="Bakomon - Baca Komik Indonesia Online"></a></div>'; //blogger
   str_head += '<span class="f_grow"></span>';
   str_head += '<div class="navigation"><ul class="'+ (is_mobile ? 'bg2' : 'flex') +'">';
   str_head += '<li><a href="#/latest">'+ bmv_settings.l10n.homepage +'</a></li><li><a href="'+ bmv_series_list +'">'+ bmv_settings.l10n.all_series +'</a></li><li><a href="#/search" title="Advanced Search">Adv Search</a></li><li><a href="#/contact">Contact</a></li>';
   if (fbase_login) {
-    str_head += '<li class="dropdown"><a href="javascript:void(0)">Member</a><ul class="full"><li class="selected"><a class="clamp lc1" href="javascript:void(0)">'+ fbase_user.email +'</a></li><li><a href="#/member/profile">'+ bmv_settings.l10n.member.profile +'</a></li><li><a href="#/member/bookmark">Bookmark</a></li><li><a href="#/member/history">History</a></li><li><a href="#/member/settings">'+ bmv_settings.l10n.member.settings +'</a></li><li><a href="javascript:bmf_fbase_logout()">'+ bmv_settings.l10n.member.logout +'</a></li></ul></li>';
+    str_head += '<li class="dropdown"><a href="javascript:void(0)">Member</a><ul class="full"><li class="selected"><a class="clamp lc1" href="javascript:void(0)" title="'+ fbase_user.uid +'">'+ fbase_user.email +'</a></li><li><a href="#/member/profile">'+ bmv_settings.l10n.member.profile +'</a></li><li><a href="#/member/bookmark">Bookmark</a></li><li><a href="#/member/history">History</a></li><li><a href="#/member/settings">'+ bmv_settings.l10n.member.settings +'</a></li><li><a href="javascript:bmf_fbase_logout()">'+ bmv_settings.l10n.member.logout +'</a></li></ul></li>';
   } else {
-    str_head += '<li class="selected"><a href="#/member/login">'+ bmv_settings.l10n.member.login +'</a></li>';
+    str_head += '<li><a href="#/member/login">'+ bmv_settings.l10n.member.login +'</a></li>';
+    str_head += '<li><a href="#/member/signup">'+ bmv_settings.l10n.member.signup +'</a></li>';
   }
   str_head += '</ul></div>'; //.navigation
   str_head += '<div class="quick-search">';
   if (is_mobile) {
     str_head += '<div class="qs-icon">';
-    str_head += '<span class="qs-open"><svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path fill-rule="evenodd" clip-rule="evenodd" d="M208 48c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S296.366 48 208 48zM0 208C0 93.125 93.125 0 208 0s208 93.125 208 208c0 48.741-16.765 93.566-44.843 129.024l133.826 134.018c9.366 9.379 9.355 24.575-.025 33.941-9.379 9.366-24.575 9.355-33.941-.025L337.238 370.987C301.747 399.167 256.839 416 208 416 93.125 416 0 322.875 0 208z"></path></svg></span>';
-    str_head += '<span class="qs-close no_items"><svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M71.029 71.029c9.373-9.372 24.569-9.372 33.942 0L256 222.059l151.029-151.03c9.373-9.372 24.569-9.372 33.942 0 9.372 9.373 9.372 24.569 0 33.942L289.941 256l151.03 151.029c9.372 9.373 9.372 24.569 0 33.942-9.373 9.372-24.569 9.372-33.942 0L256 289.941l-151.029 151.03c-9.373 9.372-24.569 9.372-33.942 0-9.372-9.373-9.372-24.569 0-33.942L222.059 256 71.029 104.971c-9.372-9.373-9.372-24.569 0-33.942z"></path></svg></span>';
+    str_head += '<span class="qs-open"><svg data-name="zondicons/search" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="currentColor" d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33l-1.42 1.42l-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg></span>';
+    str_head += '<span class="qs-close no_items"><svg data-name="zondicons/close" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="currentColor" d="M10 8.586L2.929 1.515L1.515 2.929L8.586 10l-7.071 7.071l1.414 1.414L10 11.414l7.071 7.071l1.414-1.414L11.414 10l7.071-7.071l-1.414-1.414L10 8.586z"/></svg></span>';
     str_head += '</div>';
   }
   str_head += '<div class="qs-form flex f_middle'+ (is_mobile ? ' no_items' : '') +'">';
   str_head += '<input class="qs-field radius" type="search" placeholder="Judul..." value=""/>';
-  str_head += '<button class="qs-search btn radius"><svg viewBox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path fill-rule="evenodd" clip-rule="evenodd" d="M208 48c-88.366 0-160 71.634-160 160s71.634 160 160 160 160-71.634 160-160S296.366 48 208 48zM0 208C0 93.125 93.125 0 208 0s208 93.125 208 208c0 48.741-16.765 93.566-44.843 129.024l133.826 134.018c9.366 9.379 9.355 24.575-.025 33.941-9.379 9.366-24.575 9.355-33.941-.025L337.238 370.987C301.747 399.167 256.839 416 208 416 93.125 416 0 322.875 0 208z"></path></svg></button>';
+  str_head += '<button class="qs-search btn radius"><svg data-name="zondicons/search" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20"><path fill="currentColor" d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33l-1.42 1.42l-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg></button>';
   str_head += '</div>'; //.qs-form
   str_head += '</div>'; //.quick-search
-  str_head += '<div class="toggle-mode">';
-  str_head += '<span class="tm-moon'+ (is_mobile ? '' : ' btn bgrey radius') +'" data-mode="dark"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><g fill="currentColor"><path d="M6 .278a.768.768 0 0 1 .08.858a7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277c.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316a.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71C0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/><path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/></g></svg></span>';
-  str_head += '<span class="tm-sun'+ (is_mobile ? '' : ' btn bgrey radius') +'" data-mode="light"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="currentColor" d="M8 12a4 4 0 1 0 0-8a4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/></svg></span>';
-  str_head += '</div>'; //.toggle-mode
+  str_head += '<div class="theme-switch"></div>';
   str_head += '</div></div>';
   str_head += '<div class="line"></div>';
   return str_head;
@@ -2829,10 +3242,11 @@ function bmf_build_default() {
   // Build "main" element
   var bmv_parent = el('.atoz');
   bmv_parent.innerHTML = bmf_build_header();
+  if (bmv_current == 'latest' && bmv_page_num == '1' && bmv_settings.l10n.notif_msg != '') bmv_parent.innerHTML += bmf_build_notif();
   bmv_parent.innerHTML += bmf_build_main();
   bmv_parent.innerHTML += bmf_build_footer();
   bmv_el_post = el('.post-info');
-  bmv_hp_url = el('#header .title a').href;
+  bmv_homepage = el('#header .title a').href;
 
   bmf_build_default_fnc();
 }
@@ -2922,38 +3336,23 @@ function bmf_page_scroll() {
   
   if (bmv_current == 'chapter') {
     if (!bmv_chk_pause && !bmv_chk_from) {
-      if (!bmv_load_img) lazyLoad(el('img.lazy1oad', 'all'), 'scroll');
-      if (el('img.lazy1oad', 'all').length == 0) bmv_load_img = true;
-
-      // load next image
-      var r_imgs = el('#reader img', 'all');
-      r_imgs.forEach(function(item, index) {
-        var lz_chk1 = getOffset(item).top < (getOffset(check_point).top + check_point.offsetHeight);
-        var lz_chk2 = getOffset(item).bottom > getOffset(check_point).bottom;
-        var lz_chk3 = lz_chk1 && lz_chk2 && item.classList.contains('lazyload3d');
-        var lz_chk4 = r_imgs[index+1] && r_imgs[index+1].classList.contains('lazy1oad');
-        if (lz_chk3 && lz_chk4) {
-          item.classList.add('next-loaded');
-          lazyLoad(r_imgs[index+1], 'single');
-        }
-      });
+      if (el('img.lazy1oad', 'all').length == 0) bmv_loaded_img = true;
+      if (!bmv_loaded_img) bmf_lazyLoad(el('#reader img', 'all'), 'scroll');
     }
     
     if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.ch_menu && el('.cm_nav .cm_next')) {
       // next background (mobile)
       if (is_mobile && (getOffset(check_point).bottom + bmv_half_screen) >= getOffset(el('#reader')).bottom) {
-        el('.cm_nav .cm_next').classList.add('cm_next_floating');
+        el('.cm_nav .cm_next').classList.add('mlh_show');
       } else {
-        el('.cm_nav .cm_next').classList.remove('cm_next_floating');
+        el('.cm_nav .cm_next').classList.remove('mlh_show');
       }
     }
     
     // auto show disqus
-    if (bmv_dt_settings.cm_load && el('.disqus-trigger') && (getOffset(check_point).bottom + window.screen.height) >= getOffset(el('.disqus-trigger')).bottom) {
-      el('.disqus-trigger').click();
-    }
+    if (bmv_dt_settings.cm_load && el('.disqus-trigger') && (getOffset(check_point).bottom + window.screen.height) >= getOffset(el('.disqus-trigger')).bottom) el('.disqus-trigger').click();
   } else {
-    if (el('img.lazy1oad')) lazyLoad(el('img.lazy1oad', 'all'));
+    if (el('img.lazy1oad')) bmf_lazyLoad(el('img.lazy1oad', 'all'));
   }
   
   if (bmv_current == 'member' && bmv_prm_slug == 'settings') {
@@ -3001,7 +3400,7 @@ function bmf_build_page_api(json) {
     if (bmv_current == 'series') bmf_build_series(json);
     if (bmv_current == 'chapter') bmf_build_chapter(json);
 
-    if (bmv_current != 'chapter') lazyLoad(el('img.lazy1oad', 'all')); //first load
+    if (bmv_current != 'chapter') bmf_lazyLoad(el('img.lazy1oad', 'all')); //first load
     document.addEventListener('scroll', bmf_page_scroll);
   
     if (bmv_chk_nav) bmf_page_nav(json);
@@ -3011,6 +3410,7 @@ function bmf_build_page_api(json) {
 
     if (bmv_current == 'series' || bmv_current == 'chapter') {
       el('.disqus-trigger').addEventListener('click', function() {
+        this.disabled = true; //"this" tagName should be "button"
         this.innerHTML = 'Loading...';
         bmf_disqus_load(json);
       });
@@ -3023,9 +3423,15 @@ function bmf_build_page_api(json) {
     document.title = str_error +' \u2013 Bakomon';
   }
 
+  el('.others .clear-cache').classList.remove('no_items');
+  el('.others .clear-cache').addEventListener('click', function() {
+    sessionStorage.setItem('clear_cache', '0');
+    wl.reload();
+  });
+
   if (bmv_dt_settings.src_link && 'source' in json && json.source != '') {
-    el('.main .source a').href = json.source;
-    el('.main .source').classList.remove('no_items');
+    el('.others .source a').href = json.source;
+    el('.others .source').classList.remove('no_items');
   }
   
   bmv_page_loaded = true;
@@ -3073,8 +3479,6 @@ function bmf_build_page(note, data) {
     }
   } else {
     bmf_build_page_api(JSON.parse(data));
-    bmv_dt_hs_bkp = `{"url":"${wl.href}","data":${JSON.stringify(data)}}`;
-    if (!sessionStorage.getItem('history_data')) sessionStorage.setItem('history_data', bmv_dt_hs_bkp);
   }
 
   // addons
@@ -3096,12 +3500,14 @@ function bmf_gen_url() {
     bmv_prm_slug = bmv_prm_slug.match(/\?(query|params)=(.*)/);
     url_param += `&${bmv_prm_slug[1]}=${bmv_prm_slug[2]}`;
   }
-
-  if (bmv_dt_settings.cache && bmv_dt_hs) {
-    bmf_build_page(`xhr/${bmv_current}`, bmv_dt_hs);
-  } else {
-    bmf_loadXMLDoc(`xhr/${bmv_current}`, `${api_url}/api/${url_param}`, bmf_build_page);
+  
+  var url_cache = sessionStorage.getItem('clear_cache');
+  if (url_cache) {
+    sessionStorage.removeItem('clear_cache');
+    bmv_dt_settings['cache'] = url_cache;
   }
+
+  bmf_loadXMLDoc(`xhr/${bmv_current}`, `${api_url}/api/${url_param}&cache=${bmv_dt_settings.cache}`, bmf_build_page);
 }
 
 function bmf_build_load(note) {
@@ -3136,7 +3542,14 @@ function bmf_build_wait(note) {
 
   var fbase_close = setTimeout(function() {
     clearInterval(tier_from);
-    alert(`bmf_build_wait:\nfbase_login = ${fbase_login}\nfbase_user.tier = ${'tier' in fbase_user}\nbmv_dt_settings.from = ${bmv_dt_settings.from}`);
+    var bw_msg = `!! Error: bmf_build_wait\n\nfbase_login = ${fbase_login};\n`;
+    if (fbase_user) {
+      bw_msg += `fbase_user.tier = ${'tier' in fbase_user};\nbmv_dt_settings.from = ${bmv_dt_settings.from};`;
+    } else {
+      bw_msg += `fbase_loaded = ${fbase_loaded};\nfbase_init = ${fbase_init};\nfbase_observer = ${fbase_observer};`;
+    }
+    console.error(bw_msg);
+    alert(bw_msg);
   }, 60000);
 }
 
@@ -3147,12 +3560,13 @@ function bmf_reset_var() {
   bmv_page_loaded = false;
   bmv_str_cdn = '';
   bmv_str_gi = ''; //google images size
-  bmv_str_cdn_link = '';
+  bmv_str_cdn_url = '';
   bmv_chk_cdn = false; //if image use CDN, wp.com | statically.io | imagesimple.co
   bmv_chk_gi = false;  //if google images
   bmv_chk_pause = false; //pause "chapter" images from loading
   bmv_chk_from = false; //load "chapter" image from [index]
-  bmv_load_img = false; //all "chapter" images loaded
+  bmv_chk_lazy = false;
+  bmv_loaded_img = false; //all "chapter" images loaded
   bmv_load_cdn = false;
   bmv_load_gi = false;
   bmv_zoom_id = null;
@@ -3163,6 +3577,8 @@ function bmf_reset_var() {
   bmv_dt_series = null;
   bmv_dt_chapter = null;
   bmv_dt_bmhs = null;
+  bmv_dt_delete = [];
+  bmv_dt_lazy = [];
   bmv_el_result = null;
   bmv_el_images = null;
   document.removeEventListener('scroll', bmf_page_scroll);
@@ -3181,6 +3597,7 @@ function bmf_update_settings(note, newdata) {
     data[key] = newdata[key];
   }
   data['from'] = note;
+  if (fbase_user && fbase_user.tier == 'basic') data.source = bmv_settings.default.source;
   return data;
 }
 
@@ -3188,6 +3605,7 @@ function bmf_get_fragment() {
   bmf_reset_var();
   bmv_start = true;
   wh = wl.hash;
+  wd = wl.href.replace(/\/(\?.+=.+)?#/, '');
   document.title = 'Loading... \u2013 Bakomon';
   bmv_dt_settings = local('get', 'bmv_user_settings') ? bmf_update_settings('local', JSON.parse(local('get', 'bmv_user_settings'))) : bmv_settings.default;
 
@@ -3240,6 +3658,20 @@ function bmf_get_fragment() {
 
 // #===========================================================================================#
 
+function bmf_fbase_backup() {
+  if (!cookies.get('fbase_backup')) {
+    bmf_loadXMLDoc(`xhr/${bmv_current}/backup`, `${api_url}/firebase/backup.php?uid=${fbase_user.uid}`, function(n, res) {
+      if (res.indexOf('Error:') != -1) {
+        console.error(res);
+        alert(res);
+      } else {
+        console.log(res);
+        cookies.set('fbase_backup', new Date(), 'day');
+      }
+    });
+  }
+}
+
 function bmf_fbase_lognotif(note) {
   if (note == 'login' && !el('#lognotif') || !document.hidden) return;
 
@@ -3275,7 +3707,7 @@ function bmf_fbase_gen(info, data) {
       name: data.name,
       email: data.email,
       cover: '',
-      tier: 'basic'
+      tier: bmv_settings['\x74\x69\x65\x72']['\x62\x61\x73\x69\x63']
     };
   }
 
@@ -3292,7 +3724,7 @@ function bmf_fbase_gen(info, data) {
         slug: data.slug,
         title: data.title,
         type: data.detail.type,
-        status: data.detail.status.replace(/berjalan/i, 'ongoing').replace(/tamat/i, 'completed'),
+        status: data.detail.status.replace(/berjalan|on-going/i, 'ongoing').replace(/on-hold/i, 'hiatus').replace(/tamat|end/i, 'completed').toLowerCase(),
         genre: data.detail.genre.toLowerCase(),
         cover: data.cover
       };
@@ -3364,7 +3796,7 @@ function bmf_fbase_db_remove(note, path, callback) {
   fbase.database().ref(path).remove().then(function() {
     if (callback) callback();
   }).catch(function(error) {
-    console.error('!! Error: Firebasebmf_fbase_db_remove, code: '+ error.code +', message: '+ error.message);
+    console.error('!! Error: Firebase bmf_fbase_db_remove, code: '+ error.code +', message: '+ error.message);
     alert('!! Error: Firebase bmf_fbase_db_remove\n'+ error.message);
   });
 }
@@ -3378,8 +3810,8 @@ function bmf_fbase_logout() {
         wl.reload();
       }
     }, function(error) {
-      console.error('!! Error: Firebase signOut, code: '+ error.code +', message: '+ error.message);
-      alert('!! Error: Firebase signOut(\n'+ error.message);
+      console.error('!! Error: Firebase bmf_fbase_logout, code: '+ error.code +', message: '+ error.message);
+      alert('!! Error: Firebase bmf_fbase_logout(\n'+ error.message);
     });
   }
 }
@@ -3388,6 +3820,7 @@ function bmf_fbase_observer() {
   // Initialize new app with different name https://stackoverflow.com/a/37603526/7598333
   firebase.initializeApp(fbase_config, fbase_app);
   fbase = firebase.app(fbase_app);
+  fbase.appCheck().activate('6LdY31skAAAAAA5CaB1j42Udt73nQiQ7sSpwy917', true);
   fbase_init = true;
 
   // Check login https://firebase.google.com/docs/auth/web/manage-users#get_the_currently_signed-in_user
@@ -3397,9 +3830,9 @@ function bmf_fbase_observer() {
       fbase_login = true;
       fbase_user = user;
       bmf_fbase_db_get('observer/tier', bmf_fbase_path('profile/tier'), function(res) {
-        fbase_user['\x74\x69\x65\x72'] = res.val();
-        bmv_max_bmhs = bmv_settings['\x74\x69\x65\x72'][res.val()].bmhs;
-        bmv_max_hv = bmv_settings['\x74\x69\x65\x72'][res.val()].visited;
+        fbase_user['\x74\x69\x65\x72'] = res.val().level;
+        bmv_max_bmhs = res.val().bmhs;
+        bmv_max_hv = res.val().visited;
       });
       bmf_fbase_db_get('observer/settings', bmf_fbase_path('settings'), function(res) {
         bmv_dt_settings = res.exists() ? bmf_update_settings('observer/database', res.val()) : bmf_update_settings('observer/new_member', bmv_settings.default);
@@ -3407,6 +3840,7 @@ function bmf_fbase_observer() {
         local_settings.from = 'local';
         local('set', 'bmv_user_settings', JSON.stringify(local_settings));
       });
+      bmf_fbase_backup();
     } else {
       if (bmv_current.search(/member|series/) != -1 && fbase_login) bmf_fbase_lognotif('logout');
       fbase_login = false;
@@ -3441,26 +3875,59 @@ function bmf_fbase_check() {
   }, 10);
 }
 
+// #===========================================================================================#
+
 // note: prm = param, dt = data, el = element
-var wh, bmv_current, bmv_zoom_id, bmv_max_bmhs, bmv_max_hv, bmv_hp_url;
+var wh, wd, bmv_current, bmv_zoom_id, bmv_max_bmhs, bmv_max_hv, bmv_homepage, bmv_lazy_error, bmv_lazy_skip;
 var bmv_prm_slug, bmv_prm_chapter;
-var bmv_page_loaded, bmv_chk_query, bmv_chk_nav, bmv_chk_cdn, bmv_chk_gi, bmv_chk_pause, bmv_chk_from;
-var bmv_load_img, bmv_load_cdn, bmv_load_gi;
-var bmv_dt_hs, bmv_dt_hs_bkp, bmv_dt_latest, bmv_dt_search, bmv_dt_series, bmv_dt_chapter, bmv_dt_bmhs, bmv_dt_settings;
+var bmv_page_loaded, bmv_chk_query, bmv_chk_nav, bmv_chk_cdn, bmv_chk_gi, bmv_chk_pause, bmv_chk_from, bmv_chk_lazy;
+var bmv_loaded_img, bmv_load_cdn, bmv_load_gi;
+var bmv_dt_latest, bmv_dt_search, bmv_dt_series, bmv_dt_chapter, bmv_dt_bmhs, bmv_dt_settings, bmv_dt_delete, bmv_dt_lazy;
 var bmhs_arr, bmhs_current, bmhs_length;
 var bmv_el_post, bmv_el_result, bmv_el_images;
-var bmv_str_cdn, bmv_str_gi, bmv_str_cdn_link;
+var bmv_str_cdn, bmv_str_gi, bmv_str_cdn_url;
 var bmv_start = false;
-var bmv_deleted_all = false;
-var bmv_deleted_list = [];
 var bmhs_max = 12;
 var bmhs_nav_max = 3; //min = 3
-var bmv_series_list = '#/search/?params=order%3Dlatest';
+var bmv_series_list = '#/search/?params=default';
 var bmv_half_screen = Math.floor((window.screen.height / 2) + 30);
 var bmv_zoom = local('get', 'bmv_zoom') ? JSON.parse(local('get', 'bmv_zoom')) : {};
-var bmv_rgx_cdn = /((?:i\d+|cdn|img)\.(wp|statically|imagesimple)\.(?:com?|io)\/(?:img\/(?:[^\.]+\/)?)?)/i;
+var bmv_rgx_cdn = /((?:(?:i\d+|cdn|img)\.)?(wp|statically|image(?:simple|cdn))\.(?:com?|io|app)\/(?:(?:img|v\d+)\/(?:[^\.]+\/)?)?)/i;
 var bmv_rgx_gi = /\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+).*/i;
 var bmv_genres = ['4-koma','action','adult','adventure','comedy','cooking','crime','demons','doujinshi','drama','ecchi','fantasy','game','ghosts','gore','harem','historical','horror','isekai','josei','kingdom','loli','magic','magical-girls','martial-arts','mature','mecha','medical','military','monster-girls','monsters','music','mystery','one-shot','parody','philosophical','police','post-apocalyptic','psychological','reincarnation','revenge','romance','samurai','school','school-life','sci-fi','seinen','shotacon','shoujo','shounen','slice-of-life','sports','super-power','superhero','supernatural','survival','system','thriller','tragedy','vampires','video-games','villainess','webtoons','wuxia'];
+
+// #===========================================================================================#
+
+var wl = window.location;
+var is_mobile = isMobile();
+var is_chrome = isChromium();
+var is_dark = document.documentElement.classList.contains('dark');
+var last_scroll = 0;
+var check_point = el('#check-point');
+var api_url = '.';
+
+// #===========================================================================================#
+
+var fbase = null;
+var fbase_app = 'bakomon';
+var fbase_loaded = false;
+var fbase_init = false;
+var fbase_login = false;
+var fbase_observer = false;
+var fbase_user = null;
+/* Firebase configuration for Firebase JS SDK v7.20.0 and later, measurementId is optional */
+var fbase_config = {
+  apiKey: "API_KEY",
+  authDomain: "PROJECT_ID.firebaseapp.com",
+  databaseURL: "https://PROJECT_ID.firebaseio.com",
+  projectId: "PROJECT_ID",
+  storageBucket: "PROJECT_ID.appspot.com",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID",
+  measurementId: "G-MEASUREMENT_ID",
+};
+
+// #===========================================================================================#
 
 var bmv_settings = {
   "direction": true,
@@ -3469,7 +3936,7 @@ var bmv_settings = {
     "from": "default",
     "source": {
       "type": "themesia",
-      "site": "bacamanga"
+      "site": "mangatale"
     },
     "sr_copy": true,
     "sr_list": true,
@@ -3478,10 +3945,10 @@ var bmv_settings = {
     "src_link": true,
     "cm_load": true,
     "cdn": 'default',
-    "theme": "dark",
+    "theme": "system",
     "hs_stop": false,
     "ch_url": false,
-    "cache": true,
+    "cache": 30,
     "link": "search, chapter-img, bookmark, history"
   },
   "source": {
@@ -3497,9 +3964,9 @@ var bmv_settings = {
       "type": "themesia",
       "site": "tukangkomik"
     },
-    "bacamanga": {
+    "mangatale": {
       "type": "themesia",
-      "site": "bacamanga"
+      "site": "mangatale"
     },
     "komiklab": {
       "type": "themesia",
@@ -3508,80 +3975,116 @@ var bmv_settings = {
     "komikcast": {
       "type": "enduser",
       "site": "komikcast"
+    },
+    "maid": {
+      "type": "koidezign",
+      "site": "maid"
+    },
+    "neumanga": {
+      "type": "koidezign",
+      "site": "neumanga"
+    },
+    "mgkomik": {
+      "type": "madara",
+      "site": "mgkomik"
+    },
+    "shinigami": {
+      "type": "madara",
+      "site": "shinigami"
     }
   },
   "tier": {
     "pro": {
-      "bmhs": 1000,
-      "visited": 10
+      "level": "pro",
+      "bmhs": 1500,
+      "visited": 4
     },
     "basic": {
-      "bmhs": 100,
-      "visited": 5
+      "level": "basic",
+      "bmhs": 400,
+      "visited": 2
     }
   },
   "l10n": {
     "next": "Next",
     "prev": "Prev",
+    "title": "Judul",
     "homepage": "Beranda",
     "all_series": "Daftar Komik",
     "latest_h2": "Update Komik Terbaru",
-    "contact_h1": "Hubungi Kami",
-    "series_visited": "terakhir dibaca",
-    "series_first": "Chapter Awal",
-    "series_last": "Chapter Baru",
     "comment_btn": "Komentar",
+    "contact": {
+      "h1": "Hubungi Kami",
+      "name": "Nama Asli (wajib)",
+      "email": "Email Aktif (wajib)",
+      "subject": "Judul Pesan (wajib)",
+      "message": "Isi pesan tulis disini.. (wajib)",
+      "success": "Pesan sudah dikirim."
+    },
+    "form": {
+      "name": "Nama",
+      "email": "Email",
+      "password": "Katasandi",
+      "pass_confirm": "Konfirmasi Katasandi",
+      "submit": "Kirim"
+    },
+    "series": {
+      "alternative": "Judul Alternatif",
+      "synopsis": "Sinopsis",
+      "visited": "Terakhir Dibaca",
+      "first": "Chapter Awal",
+      "last": "Chapter Baru"
+    },
     "member": {
       "profile": "Profil",
       "settings": "Pengaturan",
       "login": "Masuk",
+      "signup": "Daftar",
       "logout": "Keluar",
-      "title": "Judul"
+      "edit": "Edit",
+      "save": "Simpan",
+      "cancel": "Batal",
+      "delete": "Hapus",
+      "reset": "Reset",
+      "delete_all": "Hapus Semua",
+      "select_all": "Pilih Semua",
+      "login_link": "Sudah punya akun? <a href=\"#/member/login\">masuk disini</a>",
+      "signup_link": "Belum punya akun? <a href=\"#/member/signup\">daftar disini</a>",
+      "forgot_link": "Lupa katasandi? <a href=\"#/member/forgot\">klik disini</a>",
+      "forgot_info": "Masukkan alamat email yang terdaftar, link untuk reset katasandi akan dikirim melalui email."
     },
-    "footer_msg": "Semua komik di website ini hanya preview dari komik aslinya, mungkin terdapat banyak kesalahan bahasa, nama tokoh, dan alur cerita. Dukung mangakanya dengan membeli komik aslinya jika tersedia di kotamu!"
+    "profile": {
+      "id": "Profil",
+      "backup_account": "Backup Akun",
+      "backup_all": "Backup semua data",
+      "export_account": "Kamu mungkin perlu mengekspor semua data akun terlebih dahulu",
+      "export_all": "Unduh data akun",
+      "delete_account": "Hapus Akun",
+      "delete_permanent": "Hapus Permanen",
+      "verified_not": "Email belum diverifikasi. <b>Verifikasi sekarang</b>",
+      "delete_notif": "<p class=\"m-text\"><b>Apakah Kamu yakin?</b></p><p>Akun ini dan termasuk semua data Profil, Pengaturan, Bookmark, History akan dihapus secara <b>permanen</b> dan tidak dapat dikembalikan.</p>"
+    },
+    "bmhs": {
+      "info": "yang dapat di simpan pada akun yang digunakan saat ini maksimal"
+    },
+    "notif_msg": "Jika ada masalah/kendala saat mengakses situs ini, lapor di <a href=\"#/contact\">Contact</a> atau <a href=\"https://github.com/bakomon/markdb/issues\" target=\"_blank\">Github</a>",
+    "footer_msg": "Semua komik di website ini hanya preview dari komik aslinya, mungkin terdapat banyak kesalahan bahasa, nama tokoh, dan alur cerita. Beli komik aslinya jika tersedia di kotamu!"
   }
 };
 
-var wl = window.location;
-var is_mobile = isMobile();
-var is_chrome = isChromium();
-var is_dark = document.documentElement.classList.contains('dark');
-var last_scroll = 0;
-var check_point = el('#check-point');
-var bakomon_web = true; //for mydb_tools
-var blogger_mode = false;
-// var api_url = blogger_mode ? 'https://sekedus.online/wp-content/plugins/bakomon-api' : '.';
-var api_url = blogger_mode ? 'https://sekedus.online/bakomon' : '.';
+// #===========================================================================================#
 
-var fbase = null;
-var fbase_app = 'bakomon';
-var fbase_loaded = false;
-var fbase_init = false;
-var fbase_login = false;
-var fbase_observer = false;
-var fbase_user = null;
-/* Firebase configuration for Firebase JS SDK v7.20.0 and later, measurementId is optional */
-var fbase_config = {
-  apiKey: "AIzaSyBma6cWOGzwSE4sv8SsSewIbCjTPhm7qi0",
-  authDomain: "bakomon99.firebaseapp.com",
-  databaseURL: "https://bakomon99.firebaseio.com",
-  projectId: "bakomon99",
-  storageBucket: "bakomon99.appspot.com",
-  messagingSenderId: "894358128479",
-  appId: "1:894358128479:web:6fbf2d52cf76da755918ea",
-  measurementId: "G-Z4YQS31CXM"
-};
+loadListener('initial', infinityfree_check);
 
 // START, first load
 window.addEventListener('load', function() {
-  if (!bmv_start) {
+  if (!bmv_start && window.isES6) {
     infinityfree_check();
     if (bmf_getParam('demo')) {
       cookies.set('\x64\x65\x6d\x6f\x5f\x70\x61\x67\x65', true, 'hour|12');
       window.stop();
       wl.href = './';
     }
-    sessionStorage.removeItem('history_data');
     removeElem('noscript'); //Remove noscript notification
     bmf_fbase_check();
     bmf_get_fragment();
@@ -3589,24 +4092,19 @@ window.addEventListener('load', function() {
 });
 
 window.addEventListener('hashchange', function(e) {
-  infinityfree_check();
-  
-  var hs_data = sessionStorage.getItem('history_data');
-  if (hs_data) {
-    bmv_dt_hs = JSON.parse(hs_data).url == e.newURL ? JSON.parse(hs_data).data : null; //newURL = current url
-    if (JSON.parse(bmv_dt_hs_bkp).url == e.oldURL) sessionStorage.setItem('history_data', bmv_dt_hs_bkp);
+  if (window.isES6) {
+    infinityfree_check();
+    document.body.scrollIntoView(); //Scroll to top
+    bmf_get_fragment();
   }
-
-  document.body.scrollIntoView(); //Scroll to top
-  bmf_get_fragment();
 });
 
-window.addEventListener('online', connectionNotif);
-window.addEventListener('offline', connectionNotif);
+window.addEventListener('online', bmf_connectionNotif);
+window.addEventListener('offline', bmf_connectionNotif);
 
-console.log('%cBakomon is a free and open-source project, source: %chttps://github.com/bakomon/mydb', 'color:#ea8502;font:26px/1.5 monospace;', 'color:#333;font:26px/1.5 monospace;text-decoration:none;');
+console.log('%cBakomon is a free and open-source project, source: %chttps://github.com/bakomon/markdb/tree/master/web', 'color:#ea8502;font:24px/1.5 monospace;', 'color:#333;font:26px/1.5 monospace;text-decoration:none;');
 
-// infinityfree
+// custom: infinityfree
 function infinityfree_check() {
   if (wl.hostname.search(/epizy\.com|rf\.gd|great-site\.net|infinityfreeapp\.com|lovestoblog\.com|42web\.io/i) != -1) {
     if (wl.href.search(/[\?&]i=\d/) != -1) {

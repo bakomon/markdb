@@ -9,4 +9,5 @@ Currently supported sites are:
 ## [Demo](https://bakomon.blogspot.com/?demo)
 
 ## Source
-- API: [`Manganya`](https://github.com/vnxx/manganya)
+- API: [Manganya](https://github.com/vnxx/manganya)
+- Icon: [Icon Sets`](https://github.com/iconify/icon-sets)

@@ -11,22 +11,25 @@ require __DIR__ . '/Services/xSelector.php';
 
 class CController
 {
+    private function param_check($name)
+    {
+        return isset($_GET[$name]) && (!empty($_GET[$name]) || $_GET[$name] != '');
+    }
+
     public function latestPage()
     {
         $selector = new xSelector;
-        $source_site = isset($_GET['source']) && !empty($_GET['source']) ? $_GET['source'] : $selector::$source_default;
+        $source_site = $this->param_check('source') ? $_GET['source'] : $selector::$source_default;
         if (in_array($source_site, $selector::$source_lists)) :
             $source = $selector->$source_site();
     
-            $page = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : '1';
+            $page = $this->param_check('page') ? $_GET['page'] : '1';
             $data = [];
     
             $source_link = str_replace('{$page}', $page, $source['url']['latest']);
             $source_xml = Http::get($source_link);
     
-            if (!$source_xml->isSuccess()) {
-                return (object) $source_xml->showError();
-            }
+            if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
     
             $xpath = new DOMXpath($source_xml->responseParse());
             $lists = $xpath->query($source['LS']['parent']); //parent
@@ -35,23 +38,45 @@ class CController
                 $ls_lists = [];
     
                 foreach ($lists as $index) {
-                    if ($source['theme'] == 'themesia' || $source['theme'] == 'enduser') :
-                        $color = '';
-                        $date = '';
+                    if (array_key_exists('type', $source['LS'])) :
+                        $type_el = $xpath->query($source['LS']['type']['xpath'], $index);
+                        $type_el = $type_el->length > 0 ? $type_el[0]->getAttribute($source['LS']['type']['attr']) : '';
+                        $type_chk = preg_match($source['LS']['type']['regex'], $type_el, $type);
                     else :
+                        $type_chk = false;
+                    endif;
+
+                    if (array_key_exists('color', $source['LS'])) :
                         $color = $xpath->query($source['LS']['color']['xpath'], $index);
                         $color = $color->length > 0 ? true : false;
-
-                        $date = $xpath->query($source['latest']['date']['xpath'], $index);
-                        $date = $date->length > 0 ? trim($date[0]->textContent) : '';
+                    else :
+                        $color = '';
                     endif;
                     
+                    if (array_key_exists('completed', $source['LS'])) :
+                        $completed_el = $xpath->query($source['LS']['completed']['xpath'], $index);
+                        if ($completed_el->length > 0) :
+                            $completed_str = $source['theme'] == 'madara' ? trim($completed_el[0]->textContent) : $completed_el[0]->getAttribute($source['LS']['completed']['attr']);
+                        else :
+                            $completed_str = '';
+                        endif;
+                        $completed = preg_match($source['LS']['completed']['regex'], $completed_str);
+                    else :
+                        $completed = false;
+                    endif;
+                    
+                    if (array_key_exists('date', $source['latest'])) :
+                        $date = $xpath->query($source['latest']['date']['xpath'], $index);
+                        $date = $date->length > 0 ? trim($date[0]->textContent) : '';
+                    else :
+                        $date = '';
+                    endif;
+
                     $cover = $xpath->query($source['LS']['cover']['xpath'], $index);
                     $cover = $cover->length > 0 ? $cover[0]->getAttribute($source['LS']['cover']['attr']) : '';
-
-                    $type_el = $xpath->query($source['LS']['type']['xpath'], $index);
-                    $type_el = $type_el->length > 0 ? $type_el[0]->getAttribute($source['LS']['type']['attr']) : '';
-                    $type_chk = preg_match($source['LS']['type']['regex'], $type_el, $type);
+                    
+                    // skip 18+
+                    if ($source_site == 'maid' && preg_match('/\sdoujin/i', $type_el)) continue;
 
                     $chapter = $xpath->query($source['latest']['chapter']['xpath'], $index);
                     $chapter = $chapter->length > 0 ? trim($chapter[0]->textContent) : '';
@@ -60,10 +85,10 @@ class CController
                     
                     array_push($ls_lists, [
                         'title' => trim($xpath->query($source['LS']['title']['xpath'], $index)[0]->textContent),
-                        // 'cover' => preg_replace('/\?.*/', '', $xpath->query($source['LS']['cover']['xpath'], $index)[0]->getAttribute($source['LS']['cover']['attr'])), //remove search parameter and push
                         'cover' => $cover,
                         'type' => $type_chk ? strtolower($type[1]) : '',
                         'color' => $color,
+                        'completed' => $completed,
                         'chapter' => $chapter,
                         'date' => $date,
                         'url' => $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source['LS']['link']['attr']),
@@ -85,7 +110,8 @@ class CController
 
                 // prev button
                 if ($prev_btn->length > 0) :
-                    preg_match($nav_pattern, $prev_btn[0]->getAttribute($source['LS']['nav']['prev']['attr']), $prev);
+                    $prev_index = $source['theme'] == 'madara' && $prev_btn->length > 1 ? ($prev_btn->length - 1) : 0;
+                    preg_match($nav_pattern, $prev_btn[$prev_index]->getAttribute($source['LS']['nav']['prev']['attr']), $prev);
                     $prev = empty($prev) ? '1' : $prev[1];
                 else :
                     $prev = '';
@@ -113,57 +139,95 @@ class CController
     public function searchPage()
     {
         $selector = new xSelector;
-        $source_site = isset($_GET['source']) && !empty($_GET['source']) ? $_GET['source'] : $selector::$source_default;
+        $source_site = $this->param_check('source') ? $_GET['source'] : $selector::$source_default;
         if (in_array($source_site, $selector::$source_lists)) :
             $source = $selector->$source_site();
     
-            $page = isset($_GET['page']) && !empty($_GET['page']) ? $_GET['page'] : '1';
+            $page = $this->param_check('page') ? $_GET['page'] : '1';
             $data = [];
             
-            $querams = isset($_GET['params']) ? 'params' : 'query';
+            $querams = $this->param_check('params') ? 'params' : 'query';
             $value = isset($_GET[$querams]) && (!empty($_GET[$querams]) || $_GET[$querams] === '0') ?  $_GET[$querams] : null;
     
             if ($value || $value === '0') :
-                $is_advanced = isset($_GET['params']) ? true : false;
+                $is_advanced = $this->param_check('params') ? true : false;
                 $qs = $is_advanced && $source['theme'] == 'eastheme' ? '?' : '';
                 $search = ['{$page}', '{$value}'];
-                $replace = [$page, urldecode($qs . $value)];
+                $replace = $value == 'default' ? [$page, ''] : [$page, $qs . $value];
                 $full_url = $is_advanced ? 'advanced' : 'search';
                 $source_link = str_replace($search, $replace, $source['url'][$full_url]);
+
+                if ($is_advanced && $value == 'default') $source_link = preg_replace('/[\?&]=?$/', '', $source_link);
+                if ($source['theme'] == 'madara') :
+                    if (strpos($source_link, '&s=') === FALSE) $source_link .= '&s';
+                    if (strpos($source_link, '&type=') !== FALSE) $source_link = str_replace('&type', '&genre[]', $source_link);
+                endif;
+                if (strpos($value, 'order=') === FALSE && ($source['theme'] == 'koidezign' || $is_advanced && $value == 'default')) :
+                    $s_qs = strpos($source_link, '?') !== FALSE ? '&' :'?';
+                    $s_value = $source['theme'] == 'enduser' ? 'update' : 'latest'; //order/sort by "added (latest)"
+                    $s_url = $source['theme'] == 'madara' ? 'my_orderby=new-manga' : ('order=' . $s_value);
+                    $source_link .= $s_qs . $s_url;
+                endif;
+                
                 $source_xml = Http::get($source_link);
     
-                if (!$source_xml->isSuccess()) {
-                    return (object) $source_xml->showError();
-                }
+                if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
     
                 $xpath = new DOMXpath($source_xml->responseParse());
-                $lists = $xpath->query($source['LS']['parent']); //parent
+
+                $par_path = array_key_exists('search', $source) ? 'search' : 'LS';
+                $lists = $xpath->query($source[$par_path]['parent']); //parent
                 $ls_lists = [];
     
                 if ($lists->length > 0) :
                     foreach ($lists as $index) {
-                        if ($source['theme'] == 'themesia' || $source['theme'] == 'enduser') :
-                            $color = '';
+                        if (array_key_exists('type', $source['LS'])) :
+                            $type_el = $xpath->query($source['LS']['type']['xpath'], $index);
+                            $type_el = $type_el->length > 0 ? $type_el[0]->getAttribute($source['LS']['type']['attr']) : '';
+                            $type_chk = preg_match($source['LS']['type']['regex'], $type_el, $type);
                         else :
+                            $type_chk = false;
+                        endif;
+
+                        if (array_key_exists('color', $source['LS'])) :
                             $color = $xpath->query($source['LS']['color']['xpath'], $index);
                             $color = $color->length > 0 ? true : false;
+                        else :
+                            $color = '';
+                        endif;
+                        
+                        if (array_key_exists('completed', $source['LS'])) :
+                            $completed_el = $xpath->query($source['LS']['completed']['xpath'], $index);
+                            if ($completed_el->length > 0) :
+                                $completed_str = $source['theme'] == 'madara' ? trim($completed_el[0]->textContent) : $completed_el[0]->getAttribute($source['LS']['completed']['attr']);
+                            else :
+                                $completed_str = '';
+                            endif;
+                            $completed = preg_match($source['LS']['completed']['regex'], $completed_str);
+                        else :
+                            $completed = false;
+                        endif;
+                        
+                        if ($source['theme'] == 'koidezign') :
+                            $title = $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source[$par_path]['title']['attr']);
+                        else :
+                            $title = $xpath->query($source[$par_path]['title']['xpath'], $index)[0]->textContent;
                         endif;
 
                         $cover = $xpath->query($source['LS']['cover']['xpath'], $index);
                         $cover = $cover->length > 0 ? $cover[0]->getAttribute($source['LS']['cover']['attr']) : '';
-
-                        $type_el = $xpath->query($source['LS']['type']['xpath'], $index);
-                        $type_el = $type_el->length > 0 ? $type_el[0]->getAttribute($source['LS']['type']['attr']) : '';
-                        $type_chk = preg_match($source['LS']['type']['regex'], $type_el, $type);
+                        
+                        // skip 18+
+                        if ($source_site == 'maid' && preg_match('/\sdoujin/i', $type_el)) continue;
                         
                         preg_match($source['LS']['slug']['regex'], $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source['LS']['slug']['attr']), $slug);
 
                         array_push($ls_lists, [
-                            'title' => trim($xpath->query($source['LS']['title']['xpath'], $index)[0]->textContent),
-                            // 'cover' => preg_replace('/\?.*/', '', $xpath->query($source['LS']['cover']['xpath'], $index)[0]->getAttribute($source['LS']['cover']['attr'])), //remove search parameter and push
+                            'title' => trim($title),
                             'cover' => $cover,
                             'type' => $type_chk ? strtolower($type[1]) : '',
                             'color' => $color,
+                            'completed' => $completed,
                             'url' => $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source['LS']['link']['attr']),
                             'slug' => $slug[1],
                         ]);
@@ -184,7 +248,8 @@ class CController
     
                     // prev button
                     if ($prev_btn->length > 0) :
-                        preg_match($nav_pattern, $prev_btn[0]->getAttribute($source[$nav_path]['nav']['prev']['attr']), $prev);
+                        $prev_index = $source['theme'] == 'madara' && $prev_btn->length > 1 ? ($prev_btn->length - 1) : 0;
+                        preg_match($nav_pattern, $prev_btn[$prev_index]->getAttribute($source[$nav_path]['nav']['prev']['attr']), $prev);
                         $prev = empty($prev) ? '1' : $prev[1];
                     else :
                         $prev = '';
@@ -220,27 +285,33 @@ class CController
     public function seriesPage()
     {
         $selector = new xSelector;
-        $source_site = isset($_GET['source']) && !empty($_GET['source']) ? $_GET['source'] : $selector::$source_default;
+        $source_site = $this->param_check('source') ? $_GET['source'] : $selector::$source_default;
         if (in_array($source_site, $selector::$source_lists)) :
             $source = $selector->$source_site();
     
-            $slug = isset($_GET['slug']) && !empty($_GET['slug']) ? $_GET['slug'] : null;
+            $slug = $this->param_check('slug') ? $_GET['slug'] : null;
             $data = [];
     
             if ($slug) :
                 $source_link = str_replace('{$slug}', $slug, $source['url']['series']);
                 $source_xml = Http::get($source_link);
     
-                if (!$source_xml->isSuccess()) {
-                    return (object) $source_xml->showError();
-                }
+                if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
     
-                $xpath = new DOMXpath($source_xml->responseParse());
+                $dom = $source_xml->responseParse();
+                $xpath = new DOMXpath($dom);
 
                 $slink = $xpath->query($source['series']['shortlink']['xpath']);
                 if ($slink->length > 0) :
                     preg_match($source['series']['shortlink']['regex'], $slink[0]->getAttribute($source['series']['shortlink']['attr']), $shortlink);
                     $slink = $shortlink[1];
+                else :
+                    $slink = $xpath->query("//article[contains(@id, 'post-')]");
+                    if ($slink->length > 0) :
+                        $slink = preg_replace('/post-(.*)/i', '', $slink[0]->getAttribute('id'));
+                    else :
+                        $slink = '';
+                    endif;
                 endif;
 
                 $article = $xpath->query($source['series']['parent']); //parent
@@ -260,37 +331,57 @@ class CController
                     $title = $xpath->query($source['series']['title']['xpath'], $article)[0]->textContent;
                     $title = preg_replace($source['series']['title']['regex'], '', $title);
                     $title = preg_replace($source['series']['title']['regex2'], '', $title);
+
+                    if (array_key_exists('alternative', $source['series'])) :
+                        $alternative = $xpath->query($source['series']['alternative']['xpath'], $article);
+                        $alternative = $alternative->length > 0 ? trim($alternative[0]->textContent) : '';
+                        if (array_key_exists('regex', $source['series']['alternative'])) :
+                            $alternative = preg_replace($source['series']['alternative']['regex'], '', $alternative);
+                        endif;
+                    else :
+                        $alternative = '';
+                    endif;
                     
                     $cover = $xpath->query($source['series']['cover']['xpath'], $article);
                     $cover = $cover->length > 0 ? $cover[0]->getAttribute($source['series']['cover']['attr']) : '';
                     
                     $type = $xpath->query($detail['type']['xpath'], $article);
                     $type = $type->length > 0 ? $type[0]->textContent : '';
-                    if ($source_site == 'komiklab') :
-                        $type = preg_replace($detail['type']['regex'], '', $type);
-                        $type = preg_replace('/[\s\n\t]+$/', '', $type);
-                    endif;
-
-                    $status = preg_replace($detail['status']['regex'], '', $xpath->query($detail['status']['xpath'], $article)[0]->textContent);
-                    if ($source_site == 'komiklab') :
-                        $status = preg_replace('/[\s\n\t]+$/', '', $status);
-                    endif;
+                    if (array_key_exists('regex', $detail['type'])) $type = preg_replace($detail['type']['regex'], '', $type);
+                    
+                    $status = $xpath->query($detail['status']['xpath'], $article)[0]->textContent;
+                    if (array_key_exists('regex', $detail['status'])) $status = preg_replace($detail['status']['regex'], '', $status);
 
                     $detail_list = [
-                        'status' => $status,
-                        'type' => strtolower($type),
+                        'status' => trim($status),
+                        'type' => strtolower(trim($type)),
                         'genre' => implode(', ', $gr_lists),
                     ];
 
                     $desc = $xpath->query($source['series']['desc']['xpath'], $article);
                     $desc = $desc->length > 0 ? $desc[0]->textContent : '';
+
+                    if ($source['theme'] == 'madara' && array_key_exists('ajax', $source['series']['chapter'])) :
+                        $chapters_link = $source_link . $source['series']['chapter']['ajax'];
+                        $chapters_xml = Http::post($chapters_link);
+    
+                        if (!$chapters_xml->isSuccess()) return (object) $chapters_xml->showError();
+            
+                        $chapter_list = $dom->createDocumentFragment();
+                        $chapter_list->appendXML($chapters_xml->response());
+                        $xpath->query($source['series']['chapter']['parent'], $article)[0]->appendChild($chapter_list);
+                    endif;
     
                     $chapters = $xpath->query($source['series']['chapter']['xpath'], $article);
                     $ch_lists = [];
     
                     if ($chapters->length > 0) :
                         foreach ($chapters as $index) {
-                            $ch_el = $source['theme'] == 'enduser' ? $index : $xpath->query($source['series']['chapter']['num'], $index)[0];
+                            if ($source['theme'] == 'koidezign') :
+                                $date = $xpath->query("//*[contains(@class, 'date')]", $index)[0];
+                                $date->parentNode->removeChild($date);
+                            endif;
+                            $ch_el = array_key_exists('num', $source['series']['chapter']) ? $xpath->query($source['series']['chapter']['num'], $index)[0] : $index;
                             $ch_num = preg_replace('/chapter\s+/i', '', $ch_el->textContent);
                             $ch_url = $index->getAttribute($source['series']['chapter']['attr']);
                             $sr_slug = $slink ? preg_replace('/^' . $slink . '(\d+)?\-/i', '', $slug) : $slug; //remove shortlink
@@ -308,9 +399,9 @@ class CController
                     $data = [
                         'status' => 'SUCCESS',
                         'status_code' => $source_xml::$status,
-                        'title' => $title,
+                        'title' => trim($title),
+                        'alternative' => $alternative,
                         'slug' => $slug,
-                        // 'cover' => preg_replace('/\?.*/', '', $xpath->query($source['series']['cover']['xpath'], $article)[0]->getAttribute($source['series']['cover']['attr'])), //remove search parameter and push
                         'cover' => $cover,
                         'detail' => $detail_list,
                         'desc' => trim(preg_replace($source['series']['desc']['regex'], ' ', strip_tags($desc))),
@@ -337,13 +428,13 @@ class CController
     public function chapterPage()
     {
         $selector = new xSelector;
-        $source_site = isset($_GET['source']) && !empty($_GET['source']) ? $_GET['source'] : $selector::$source_default;
+        $source_site = $this->param_check('source') ? $_GET['source'] : $selector::$source_default;
         if (in_array($source_site, $selector::$source_lists)) :
             $source = $selector->$source_site();
     
-            $slug = isset($_GET['slug']) && !empty($_GET['slug']) ? $_GET['slug'] : null;
+            $slug = $this->param_check('slug') ? $_GET['slug'] : null;
             $chapter = isset($_GET['chapter']) && (!empty($_GET['chapter']) || $_GET['chapter'] === '0') ? $_GET['chapter'] : null;
-            $url = isset($_GET['url']) && !empty($_GET['url']) ? $_GET['url'] : null;
+            $url = $this->param_check('url') ? $_GET['url'] : null;
             $data = [];
     
             if ($url || ($chapter || $chapter === '0')) :
@@ -352,9 +443,7 @@ class CController
                 $source_link = $url ? $source['url']['host'] . $url : str_replace($search, $replace, $source['url']['chapter']);
                 $source_xml = Http::get($source_link);
     
-                if (!$source_xml->isSuccess()) {
-                    return (object) $source_xml->showError();
-                }
+                if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
     
                 $xpath = new DOMXpath($source_xml->responseParse());
                 $content = $xpath->query($source['chapter']['parent']); //parent
@@ -363,7 +452,12 @@ class CController
                     $content = $content[0];
                     $img_lists = [];
     
-                    preg_match($source['chapter']['title']['regex'], $xpath->query($source['chapter']['title']['xpath'])[0]->textContent, $title);
+                    $title_path = $source['chapter']['title']['xpath'];
+                    if ($source_site == 'mgkomik') $title_path = $title_path . "//a[contains(@href, '$slug')]";
+                    $title = $xpath->query($title_path)[0]->textContent;
+                    if (preg_match($source['chapter']['title']['regex'], $title, $m_title)) :
+                        $title = $m_title[1];
+                    endif;
                     $title = preg_replace($source['chapter']['title']['regex2'], '', $title);
     
                     if ($source['theme'] == 'themesia') :
@@ -411,13 +505,12 @@ class CController
                             echo '"ts_reader" not found.';
                         endif;
                     else :
-                        if ($source['theme'] == 'enduser') :
-                            $cover = '';
-                        else :
+                        if (array_key_exists('cover', $source['chapter'])) :
                             // cover selector without parent
-                            // $cover = preg_replace('/\?.*/', '', $xpath->query($source['chapter']['cover']['xpath'])[0]->getAttribute($source['chapter']['cover']['attr'])); //remove search parameter and push
                             $cover = $xpath->query($source['chapter']['cover']['xpath']);
                             $cover = $cover->length > 0 ? $cover[0]->getAttribute($source['chapter']['cover']['attr']) : '';
+                        else :
+                            $cover = '';
                         endif;
 
                         $next_btn = $xpath->query($source['chapter']['next']['xpath'], $content);
@@ -452,7 +545,7 @@ class CController
     
                         if ($images->length > 0) :
                             foreach ($images as $img) {
-                                array_push($img_lists, $img->getAttribute($source['chapter']['images']['attr']));
+                                array_push($img_lists, trim($img->getAttribute($source['chapter']['images']['attr'])));
                             }
                         endif;
                     endif;
@@ -460,7 +553,7 @@ class CController
                     $data = [
                         'status' => 'SUCCESS',
                         'status_code' => $source_xml::$status,
-                        'title' => $title[1],
+                        'title' => trim($title),
                         'slug' => $slug,
                         'cover' => $cover,
                         'current' => $chapter,
