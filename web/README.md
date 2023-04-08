@@ -10,4 +10,4 @@ Currently supported sites are:
 
 ## Source
 - API: [Manganya](https://github.com/vnxx/manganya)
-- Icon: [Icon Sets`](https://github.com/iconify/icon-sets)
+- Icon: [Icon Sets](https://github.com/iconify/icon-sets)

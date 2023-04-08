@@ -372,6 +372,7 @@ html:not(.mobile) .member .m-delete .m-delete-btn{order:1;}
 #back-to .btn{border-radius:0;}
 #back-to .to-bottom{border-top:1px solid var(--border);}
 #connection,#lognotif{position:fixed;bottom:0;right:0;left:0;z-index:2147483647;padding:20px;text-align:center;}
+#connection.hide{right:auto;}
 #check-point{position:fixed;top:0;bottom:0;left:-2px;}
 
 @keyframes pulse {

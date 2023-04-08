@@ -384,6 +384,18 @@ function bmf_connectionNotif(e) {
     c_el = document.createElement('div');
     c_el.id = 'connection';
     document.body.appendChild(c_el);
+
+    c_el.addEventListener('click', function() {
+      if (bmv_current == 'chapter' && e.type != 'online') {
+        toggleClass(this, ['red', 'bgrey', 'hide', 'pulse']);
+        if (this.classList.contains('hide')) {
+          this.setAttribute('title', this.innerHTML);
+          this.innerHTML = '<svg data-name="mdi/globe-remove" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m14.46 15.88l1.42-1.42L18 16.59l2.12-2.12l1.42 1.41L19.41 18l2.13 2.12l-1.42 1.42L18 19.41l-2.12 2.13l-1.42-1.42L16.59 18l-2.12-2.12M20 12c0-3.36-2.07-6.23-5-7.41V5c0 1.1-.9 2-2 2h-2v2c0 .55-.45 1-1 1H8v2h6c.5 0 .9.35 1 .81c-1.8 1.04-3 2.98-3 5.19c0 1.5.54 2.85 1.44 3.9L12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10l-.1 1.44c-.56-.48-1.2-.85-1.9-1.1V12m-9 7.93V18c-1.1 0-2-.9-2-2v-1l-4.79-4.79C4.08 10.78 4 11.38 4 12c0 4.08 3.06 7.44 7 7.93Z"/></svg>';
+        } else {
+          this.innerHTML = this.getAttribute('title');;
+        }
+      }
+    });
   }
 
   var c_msg = e.type == 'online' ? 'Kembali Online.' : 'Tidak ada koneksi internet. Pastikan Wi-Fi atau data seluler aktif, lalu muat ulang halaman.';
@@ -443,6 +455,17 @@ function bmf_lazyLoad(elem, note) {
       lz_img = lz_elem;
       lz_2nd = 'lazyload3d lazyshow';
       lz_elem.style.removeProperty('min-height');
+
+      // Get image dimensions before image has fully loaded https://stackoverflow.com/a/6575319/7598333
+      var lz_wait, lz_loaded = false;
+      lz_img.addEventListener('load', function () { lz_loaded = true; }, true);
+      lz_wait = setInterval(function () {
+        if (lz_loaded && lz_img.height > 0) {
+          clearInterval(lz_wait);
+          lz_elem.style.minHeight = lz_img.height +'px';
+          console.log(lz_elem, lz_img.width, 'x', lz_img.height);
+        }
+      }, 0);
     }
 
     lz_elem.className = lz_elem.className.replace('lazy1oad', lz_2nd);
@@ -452,7 +475,7 @@ function bmf_lazyLoad(elem, note) {
     var skip_img = setTimeout(function() { bmv_lazy_skip = true; }, 5000);
 
     var wait_img = setInterval(function() {
-      if (isImageLoaded(lz_img) || bmv_lazy_error || bmv_lazy_skip) {
+      if (isImageLoaded(lz_img) || bmv_lazy_error || (bmv_lazy_skip && bmv_current != 'chapter')) {
         clearInterval(wait_img);
         clearTimeout(skip_img);
 
