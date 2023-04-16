@@ -74,3 +74,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - lazyload: disable skip image if current page is chapter
 - lazyload: get image dimensions before image has fully loaded
 - connection-notif: show/hide click on chapter page
+
+## [1.2] - 2023-04-16
+
+### Fixed
+- minor bug fixes and improvements.
+
+### Added
+
+- lazyload: load `single` image directly

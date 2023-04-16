@@ -445,9 +445,9 @@ function bmf_lazyLoad(elem, note) {
     lz_check_point = el('#lz_check_point');
   }
 
-  function lazyQueue() {
+  function lazyQueue(data) {
     if (bmv_chk_lazy) return;
-    var lz_elem = bmv_dt_lazy[0].elem;
+    var lz_elem = data ? data.elem : bmv_dt_lazy[0].elem;
     var lz_img = new Image();
     var lz_2nd = 'la2yloading';
 
@@ -457,20 +457,19 @@ function bmf_lazyLoad(elem, note) {
       lz_elem.style.removeProperty('min-height');
 
       // Get image dimensions before image has fully loaded https://stackoverflow.com/a/6575319/7598333
-      var lz_wait, lz_loaded = false;
-      lz_img.addEventListener('load', function () { lz_loaded = true; }, true);
-      lz_wait = setInterval(function () {
+      var lz_loaded = false;
+      lz_img.addEventListener('load', function() { lz_loaded = true; }, true);
+      var lz_wait = setInterval(function() {
         if (lz_loaded && lz_img.height > 0) {
           clearInterval(lz_wait);
           lz_elem.style.minHeight = lz_img.height +'px';
-          console.log(lz_elem, lz_img.width, 'x', lz_img.height);
         }
       }, 0);
     }
 
     lz_elem.className = lz_elem.className.replace('lazy1oad', lz_2nd);
     lz_img.onerror = function() { bmv_lazy_error = true; };
-    lz_img.src = bmv_dt_lazy[0].img;
+    lz_img.src = data ? data.img : bmv_dt_lazy[0].img;
     bmv_chk_lazy = true;
     var skip_img = setTimeout(function() { bmv_lazy_skip = true; }, 5000);
 
@@ -480,10 +479,15 @@ function bmf_lazyLoad(elem, note) {
         clearTimeout(skip_img);
 
         if (bmv_lazy_error && lz_img.src.match(bmv_rgx_cdn)) {
-          bmv_dt_lazy[0].img = lz_img.src.replace(bmv_rgx_cdn, '');
           bmv_lazy_error = false;
           bmv_chk_lazy = false;
-          lazyQueue();
+          if (data) {
+            data.img = lz_img.src.replace(bmv_rgx_cdn, '');
+            lazyQueue(data);
+          } else {
+            bmv_dt_lazy[0].img = lz_img.src.replace(bmv_rgx_cdn, '');
+            lazyQueue();
+          }
         } else {
           lz_elem.className = lz_elem.className.replace('la2yloading', 'lazyload3d');
           lz_elem.classList.remove('loading', 'loge');
@@ -500,8 +504,10 @@ function bmf_lazyLoad(elem, note) {
           bmv_chk_lazy = false;
           bmv_lazy_error = false;
           bmv_lazy_skip = false;
-          bmv_dt_lazy.splice(0, 1); //remove image after loaded
-          if (bmv_dt_lazy.length > 0) lazyQueue();
+          if (!data) {
+            bmv_dt_lazy.splice(0, 1); //remove image after loaded
+            if (bmv_dt_lazy.length > 0 || note == 'single') lazyQueue();
+          }
         }
       }
     }, 100);
@@ -528,7 +534,7 @@ function bmf_lazyLoad(elem, note) {
       }
     }
     
-    if (lz_chk1 || note == 'single' || lz_next) {
+    if (lz_chk1 || note == 'single' || note == 'multi' || lz_next) {
       img.classList.remove('lazyload3d', 'lazyshow', 'no-image');
       img.classList.add('loading', 'loge', 'lazy1oad');
       var imgs = img.dataset.src;
@@ -551,9 +557,13 @@ function bmf_lazyLoad(elem, note) {
         }
       }
 
-      if (!bmv_dt_lazy.some(function(item) {return item.elem == img})) {
-        bmv_dt_lazy.push({"elem": img, "img": imgs});
-        lazyQueue();
+      if (note == 'single') {
+        lazyQueue({"elem": img, "img": imgs});
+      } else {
+        if (!bmv_dt_lazy.some(function(item) {return item.elem == img})) {
+          bmv_dt_lazy.push({"elem": img, "img": imgs});
+          lazyQueue();
+        }
       }
     }
   }
@@ -2086,9 +2096,7 @@ function bmf_menu_fnc(img_list) {
       if (!bmv_chk_from) bmv_loaded_img = true;
       var ld_index = bmv_chk_from && el('.cm_load .cm_fr_min').value != '' ? (Number(el('.cm_load .cm_fr_min').value) - 1) : 0;
       var ld_length = bmv_chk_from && el('.cm_load .cm_fr_max').value != '' ? Number(el('.cm_load .cm_fr_max').value) : img_list.length;
-      for (var i = ld_index; i < ld_length; i++) {
-        bmf_lazyLoad(img_list[i], 'single');
-      }
+      for (var i = ld_index; i < ld_length; i++) { bmf_lazyLoad(img_list[i], 'multi'); }
       if (bmv_chk_from) el(`#reader [data-index="${ld_index+1}"]`).scrollIntoView();
     }
   });
@@ -4097,12 +4105,9 @@ var bmv_settings = {
 
 // #===========================================================================================#
 
-loadListener('initial', infinityfree_check);
-
 // START, first load
 window.addEventListener('load', function() {
   if (!bmv_start && window.isES6) {
-    infinityfree_check();
     if (bmf_getParam('demo')) {
       cookies.set('\x64\x65\x6d\x6f\x5f\x70\x61\x67\x65', true, 'hour|12');
       window.stop();
@@ -4116,7 +4121,6 @@ window.addEventListener('load', function() {
 
 window.addEventListener('hashchange', function(e) {
   if (window.isES6) {
-    infinityfree_check();
     document.body.scrollIntoView(); //Scroll to top
     bmf_get_fragment();
   }
@@ -4126,19 +4130,3 @@ window.addEventListener('online', bmf_connectionNotif);
 window.addEventListener('offline', bmf_connectionNotif);
 
 console.log('%cBakomon is a free and open-source project, source: %chttps://github.com/bakomon/markdb/tree/master/web', 'color:#ea8502;font:24px/1.5 monospace;', 'color:#333;font:26px/1.5 monospace;text-decoration:none;');
-
-// custom: infinityfree
-function infinityfree_check() {
-  if (wl.hostname.search(/epizy\.com|rf\.gd|great-site\.net|infinityfreeapp\.com|lovestoblog\.com|42web\.io/i) != -1) {
-    if (wl.href.search(/[\?&]i=\d/) != -1) {
-      window.stop();
-      if (sessionStorage.getItem('current_url')) {
-        wl.href = sessionStorage.getItem('current_url');
-      } else {
-        wl.href = './';
-      }
-    } else {
-      sessionStorage.setItem('current_url', wl.href);
-    }
-  }
-}
