@@ -29,7 +29,14 @@ class CController
             $source_link = str_replace('{$page}', $page, $source['url']['latest']);
             $source_xml = Http::get($source_link);
     
-            if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
+            if (!$source_xml->isSuccess()) {
+                if ($source_xml->isBlocked()) {
+                    $source_xml = Http::bypass($source_link);
+                    if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
+                } else {
+                    return (object) $source_xml->showError();
+                }
+            }
     
             $xpath = new DOMXpath($source_xml->responseParse());
             $lists = $xpath->query($source['LS']['parent']); //parent
@@ -92,17 +99,17 @@ class CController
                         'chapter' => $chapter,
                         'date' => $date,
                         'url' => $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source['LS']['link']['attr']),
-                        'slug' => $slug[1],
+                        'slug' => preg_replace($source['LS']['slug']['regex2'], '', $slug[1]),
                     ]);
                 }
 
-                $nav_pattern = $source['LS']['nav']['regex'];
+                $n_pattern = $source['LS']['nav']['regex'];
                 $next_btn = $xpath->query($source['LS']['nav']['next']['xpath']);
                 $prev_btn = $xpath->query($source['LS']['nav']['prev']['xpath']);
 
                 // next button
                 if ($next_btn->length > 0) :
-                    preg_match($nav_pattern, $next_btn[0]->getAttribute($source['LS']['nav']['next']['attr']), $next);
+                    preg_match($n_pattern, $next_btn[0]->getAttribute($source['LS']['nav']['next']['attr']), $next);
                     $next = $next[1];
                 else :
                     $next = '';
@@ -111,7 +118,7 @@ class CController
                 // prev button
                 if ($prev_btn->length > 0) :
                     $prev_index = $source['theme'] == 'madara' && $prev_btn->length > 1 ? ($prev_btn->length - 1) : 0;
-                    preg_match($nav_pattern, $prev_btn[$prev_index]->getAttribute($source['LS']['nav']['prev']['attr']), $prev);
+                    preg_match($n_pattern, $prev_btn[$prev_index]->getAttribute($source['LS']['nav']['prev']['attr']), $prev);
                     $prev = empty($prev) ? '1' : $prev[1];
                 else :
                     $prev = '';
@@ -120,18 +127,25 @@ class CController
                 $data = [
                     'status' => 'SUCCESS',
                     'status_code' => $source_xml::$status,
+                    'bypass' => $source_xml::$bypass,
                     'next' => $next,
                     'prev' => $prev,
                     'source' => $source_link,
                     'lists' => $ls_lists,
                 ];
             else :
-                echo '{$lists} Not Found. $data = ';
+                $data = [
+                    'status' => 'NOT_FOUND',
+                    'status_code' => 404,
+                    'bypass' => $source_xml::$bypass,
+                    'message' => '{$lists} Not Found',
+                    'source' => $source_link,
+                ];
             endif;
     
             return (object) $data;
         else :
-            echo $_GET['source'] . ' not listed in $source_lists';
+            echo 'Source "' . $_GET['source'] . '" not listed in "$source_lists" (xSelector)';
             exit();
         endif;
     }
@@ -171,12 +185,21 @@ class CController
                 
                 $source_xml = Http::get($source_link);
     
-                if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
+                if (!$source_xml->isSuccess()) {
+                    if ($source_xml->isBlocked()) {
+                        $source_xml = Http::bypass($source_link);
+                        if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
+                    } else {
+                        return (object) $source_xml->showError();
+                    }
+                }
     
                 $xpath = new DOMXpath($source_xml->responseParse());
 
-                $par_path = array_key_exists('search', $source) ? 'search' : 'LS';
-                $lists = $xpath->query($source[$par_path]['parent']); //parent
+                $sc_path = array_key_exists('search', $source) ? 'search' : 'LS';
+                
+                $ls_path = array_key_exists('parent', $source[$sc_path]) ? $sc_path : 'LS';
+                $lists = $xpath->query($source[$ls_path]['parent']); //parent
                 $ls_lists = [];
     
                 if ($lists->length > 0) :
@@ -208,10 +231,11 @@ class CController
                             $completed = false;
                         endif;
                         
+                        $t_path = array_key_exists('title', $source[$sc_path]) ? $sc_path : 'LS';
                         if ($source['theme'] == 'koidezign') :
-                            $title = $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source[$par_path]['title']['attr']);
+                            $title = $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source[$t_path]['title']['attr']);
                         else :
-                            $title = $xpath->query($source[$par_path]['title']['xpath'], $index)[0]->textContent;
+                            $title = $xpath->query($source[$t_path]['title']['xpath'], $index)[0]->textContent;
                         endif;
 
                         $cover = $xpath->query($source['LS']['cover']['xpath'], $index);
@@ -229,18 +253,18 @@ class CController
                             'color' => $color,
                             'completed' => $completed,
                             'url' => $xpath->query($source['LS']['link']['xpath'], $index)[0]->getAttribute($source['LS']['link']['attr']),
-                            'slug' => $slug[1],
+                            'slug' => preg_replace($source['LS']['slug']['regex2'], '', $slug[1]),
                         ]);
                     }
 
-                    $nav_path = $source['theme'] == 'themesia' && !$is_advanced ? 'search' : 'LS';
-                    $nav_pattern = $source[$nav_path]['nav']['regex'];
-                    $next_btn = $xpath->query($source[$nav_path]['nav']['next']['xpath']);
-                    $prev_btn = $xpath->query($source[$nav_path]['nav']['prev']['xpath']);
+                    $n_path = array_key_exists('nav', $source[$sc_path]) && !$is_advanced ? $sc_path : 'LS';
+                    $n_pattern = $source[$n_path]['nav']['regex'];
+                    $next_btn = $xpath->query($source[$n_path]['nav']['next']['xpath']);
+                    $prev_btn = $xpath->query($source[$n_path]['nav']['prev']['xpath']);
     
                     // next button
                     if ($next_btn->length > 0) :
-                        preg_match($nav_pattern, $next_btn[0]->getAttribute($source[$nav_path]['nav']['next']['attr']), $next);
+                        preg_match($n_pattern, $next_btn[0]->getAttribute($source[$n_path]['nav']['next']['attr']), $next);
                         $next = $next[1];
                     else :
                         $next = '';
@@ -249,7 +273,7 @@ class CController
                     // prev button
                     if ($prev_btn->length > 0) :
                         $prev_index = $source['theme'] == 'madara' && $prev_btn->length > 1 ? ($prev_btn->length - 1) : 0;
-                        preg_match($nav_pattern, $prev_btn[$prev_index]->getAttribute($source[$nav_path]['nav']['prev']['attr']), $prev);
+                        preg_match($n_pattern, $prev_btn[$prev_index]->getAttribute($source[$n_path]['nav']['prev']['attr']), $prev);
                         $prev = empty($prev) ? '1' : $prev[1];
                     else :
                         $prev = '';
@@ -263,6 +287,7 @@ class CController
                 $data = [
                     'status' => 'SUCCESS',
                     'status_code' => $source_xml::$status,
+                    'bypass' => $source_xml::$bypass,
                     'next' => $next,
                     'prev' => $prev,
                     'source' => $source_link,
@@ -272,12 +297,13 @@ class CController
                 $data = [
                     'status' => 'BAD_REQUEST',
                     'status_code' => 400,
+                    'message' => 'Bad Request',
                 ];
             endif;
     
             return (object) $data;
         else :
-            echo $_GET['source'] . ' not listed in $source_lists';
+            echo 'Source "' . $_GET['source'] . '" not listed in "$source_lists" (xSelector)';
             exit();
         endif;
     }
@@ -296,7 +322,17 @@ class CController
                 $source_link = str_replace('{$slug}', $slug, $source['url']['series']);
                 $source_xml = Http::get($source_link);
     
-                if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
+                if (!$source_xml->isSuccess()) {
+                    if ($source_xml->isBlocked()) {
+                        $source_xml = Http::bypass($source_link);
+                        if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
+                    } else {
+                        return (object) $source_xml->showError();
+                    }
+                }
+
+                $status_code = $source_xml::$status;
+                $bypass = $source_xml::$bypass;
     
                 $dom = $source_xml->responseParse();
                 $xpath = new DOMXpath($dom);
@@ -352,24 +388,44 @@ class CController
                     $status = $xpath->query($detail['status']['xpath'], $article)[0]->textContent;
                     if (array_key_exists('regex', $detail['status'])) $status = preg_replace($detail['status']['regex'], '', $status);
 
+                    if (array_key_exists('author', $detail)) {
+                        $author = $xpath->query($detail['author']['xpath'], $article);
+                        $author = $author->length > 0 ? $author[0]->textContent : '';
+                        if (array_key_exists('regex', $detail['author'])) $author = preg_replace($detail['author']['regex'], '', $author);
+                    } else {
+                        $author = '';
+                    }
+
+                    if (array_key_exists('artist', $detail)) :
+                        $artist = $xpath->query($detail['artist']['xpath'], $article);
+                        $artist = $artist->length > 0 ? $artist[0]->textContent : '';
+                    else :
+                        $artist = '';
+                    endif;
+
                     $detail_list = [
-                        'status' => trim($status),
                         'type' => strtolower(trim($type)),
+                        'status' => trim($status),
+                        'author' => trim($author),
+                        'artist' => trim($artist),
                         'genre' => implode(', ', $gr_lists),
                     ];
 
                     $desc = $xpath->query($source['series']['desc']['xpath'], $article);
                     $desc = $desc->length > 0 ? $desc[0]->textContent : '';
 
-                    if ($source['theme'] == 'madara' && array_key_exists('ajax', $source['series']['chapter'])) :
+                    $ajax_check = array_key_exists('ajax', $source['series']['chapter']) && $xpath->query($source['series']['chapter']['parent'], $article)->length > 0;
+                    if ($source['theme'] == 'madara' && $ajax_check) :
                         $chapters_link = $source_link . $source['series']['chapter']['ajax'];
                         $chapters_xml = Http::post($chapters_link);
-    
-                        if (!$chapters_xml->isSuccess()) return (object) $chapters_xml->showError();
+                        
+                        if (!$chapters_xml->isSuccess() && $chapters_xml->isBlocked()) $chapters_xml = Http::bypass($chapters_link, true);
             
-                        $chapter_list = $dom->createDocumentFragment();
-                        $chapter_list->appendXML($chapters_xml->response());
-                        $xpath->query($source['series']['chapter']['parent'], $article)[0]->appendChild($chapter_list);
+                        if ($chapters_xml->isSuccess()) {
+                            $chapter_list = $dom->createDocumentFragment();
+                            $chapter_list->appendXML($chapters_xml->response());
+                            $xpath->query($source['series']['chapter']['parent'], $article)[0]->appendChild($chapter_list);
+                        }
                     endif;
     
                     $chapters = $xpath->query($source['series']['chapter']['xpath'], $article);
@@ -381,15 +437,19 @@ class CController
                                 $date = $xpath->query("//*[contains(@class, 'date')]", $index)[0];
                                 $date->parentNode->removeChild($date);
                             endif;
-                            $ch_el = array_key_exists('num', $source['series']['chapter']) ? $xpath->query($source['series']['chapter']['num'], $index)[0] : $index;
-                            $ch_num = preg_replace('/chapter\s+/i', '', $ch_el->textContent);
                             $ch_url = $index->getAttribute($source['series']['chapter']['attr']);
+                            
+                            $ch_el = array_key_exists('num', $source['series']['chapter']) ? $xpath->query($source['series']['chapter']['num'], $index)[0] : $index;
+                            $ch_num = preg_replace('/ch([ap][ap](t?er)?)?\.?[\s\t]+/i', '', $ch_el->textContent);
+
                             $sr_slug = $slink ? preg_replace('/^' . $slink . '(\d+)?\-/i', '', $slug) : $slug; //remove shortlink
+                            $sr_slug = preg_replace('/s\-/i', 's?-', $sr_slug); //eg. https://regexr.com/7es39
                             $ch_str = preg_replace('/' . $sr_slug . '/i', '', $ch_url);
                             $ch_str = preg_replace($source['series']['chapter']['regex2'], '', $ch_str);
                             preg_match($source['series']['chapter']['regex'], $ch_str, $chapter);
+                            
                             $ch_data = [
-                                'number' => count($chapter) > 0 ? $chapter[1] : $ch_num,
+                                'number' => $ch_num != '' ? trim($ch_num) : (count($chapter) > 0 ? $chapter[1] : ''),
                                 'url' => parse_url($ch_url, PHP_URL_PATH),
                             ];
                             array_push($ch_lists, $ch_data);
@@ -398,7 +458,8 @@ class CController
     
                     $data = [
                         'status' => 'SUCCESS',
-                        'status_code' => $source_xml::$status,
+                        'status_code' => $status_code,
+                        'bypass' => $bypass,
                         'title' => trim($title),
                         'alternative' => $alternative,
                         'slug' => $slug,
@@ -409,18 +470,25 @@ class CController
                         'chapter' => $ch_lists,
                     ];
                 else :
-                    echo '{$article} Not Found. $data = ';
+                    $data = [
+                        'status' => 'NOT_FOUND',
+                        'status_code' => 404,
+                        'bypass' => $bypass,
+                        'message' => '{$article} Not Found',
+                        'source' => $source_link,
+                    ];
                 endif;
             else :
                 $data = [
                     'status' => 'BAD_REQUEST',
                     'status_code' => 400,
+                    'message' => 'Bad Request',
                 ];
             endif;
     
             return (object) $data;
         else :
-            echo $_GET['source'] . ' not listed in $source_lists';
+            echo 'Source "' . $_GET['source'] . '" not listed in "$source_lists" (xSelector)';
             exit();
         endif;
     }
@@ -443,7 +511,14 @@ class CController
                 $source_link = $url ? $source['url']['host'] . $url : str_replace($search, $replace, $source['url']['chapter']);
                 $source_xml = Http::get($source_link);
     
-                if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
+                if (!$source_xml->isSuccess()) {
+                    if ($source_xml->isBlocked()) {
+                        $source_xml = Http::bypass($source_link);
+                        if (!$source_xml->isSuccess()) return (object) $source_xml->showError();
+                    } else {
+                        return (object) $source_xml->showError();
+                    }
+                }
     
                 $xpath = new DOMXpath($source_xml->responseParse());
                 $content = $xpath->query($source['chapter']['parent']); //parent
@@ -553,6 +628,7 @@ class CController
                     $data = [
                         'status' => 'SUCCESS',
                         'status_code' => $source_xml::$status,
+                        'bypass' => $source_xml::$bypass,
                         'title' => trim($title),
                         'slug' => $slug,
                         'cover' => $cover,
@@ -563,18 +639,25 @@ class CController
                         'images' => $img_lists,
                     ];
                 else :
-                    echo '{$content} Not Found. $data = ';
+                    $data = [
+                        'status' => 'NOT_FOUND',
+                        'status_code' => 404,
+                        'bypass' => $source_xml::$bypass,
+                        'message' => '{$content} Not Found',
+                        'source' => $source_link,
+                    ];
                 endif;
             else :
                 $data = [
                     'status' => 'BAD_REQUEST',
                     'status_code' => 400,
+                    'message' => 'Bad Request',
                 ];
             endif;
     
             return (object) $data;
         else :
-            echo $_GET['source'] . ' not listed in $source_lists';
+            echo 'Source "' . $_GET['source'] . '" not listed in "$source_lists" (xSelector)';
             exit();
         endif;
     }

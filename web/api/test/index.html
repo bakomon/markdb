@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>PHP Scraper Check</title>
+<title>Web Scraping Test</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <!-- Mobile Properties -->
 <meta name="theme-color" content="#4774a7"/>
@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="#4774a7" />
 <!-- Mobile Favicons -->
-<meta name="application-name" content="PHP Scraper Check" />
+<meta name="application-name" content="Web Scraping Test" />
 <meta name="msapplication-TileColor" content="#4774a7"/>
 <link rel="icon" type="image/png" href="./favicon.png"/>
 <style type='text/css'>
@@ -109,7 +109,7 @@ a.btn{color:var(--color3);}
 .hidden_items{visibility:hidden;opacity:0;margin:0;padding:0;max-height:0;max-width:0;overflow:hidden;text-indent:-9999px;}
 
 /* Main */
-.main{margin:15px auto;margin-top:30px;position:relative;}
+.main{margin:15px auto;position:relative;}
 .main .source{position:absolute;top:0;right:0;line-height:0;padding-right:15px;}
 .footer{margin-bottom:20px;}
 .footer .message{margin:0 0 20px;}
@@ -119,9 +119,11 @@ a.btn{color:var(--color3);}
 .post-header{margin:0 0 30px;}
 .post-content .scrap-submit{margin:20px 0 5px;}
 .post-content .scrap-result{margin-top:15px;}
-.post-content .scrap-result .result-code{margin:10px 0;}
-.post-content .scrap-result .result-code .result-bottom{padding-top:5px;font-size:200%;}
+.post-content .scrap-result .result-code{margin:15px 0 25px;}
+.post-content .scrap-result .result-code .result-bottom{padding-top:10px;font-size:200%;}
 .post-content .scrap-result .result-code .result-ok{color:#238636;}
+.post-content .scrap-result .result-code .result-ok .code{vertical-align:middle;}
+.post-content .scrap-result .result-code .result-ok .bypass{font-size:80%;}
 
 @keyframes pulse {
   0%{box-shadow:0 0 0 0px #dc3545;}
@@ -141,13 +143,14 @@ a.btn{color:var(--color3);}
   }
 
   .loading.loge:before{background-color:rgba(0,0,0,.7);}
-  input[type=text],.dark input[type=number],.dark textarea,.dark select{background-color:var(--color2);color:var(--color4);}
+  input[type=text],input[type=number],textarea,select{background-color:#282828;color:var(--color4);}
 }
 
 /* #===========================================================================================#  */
 
 /* Desktop */
 @media screen and (min-width:481px) {
+.main{margin-top:30px;}
 }
 
 /* Mobile */
@@ -170,7 +173,7 @@ a.btn{color:var(--color3);}
 
 <div class="main max layer ">
   <div class="post-wrapper">
-    <div class="post-header t_center"><h1 class="title"><a href="./">PHP Scraper Check</a></h1></div>
+    <div class="post-header t_center"><h1 class="title"><a href="./">Web Scraping Test</a></h1></div>
     <div class="post-content bg2 layer radius">
       <input class="scrap-url full" type="text" placeholder="URL">
       <button type="submit" class="scrap-submit btn full">Check</button>
@@ -181,7 +184,10 @@ a.btn{color:var(--color3);}
         </div>
         <div class="result-code">
           <div class="result-top">Status Code:</div>
-          <div class="result-bottom"><strong></strong></div>
+          <div class="result-bottom"><span class="code"><strong></strong></span><span class="bypass"></span></div>
+        </div>
+        <div class="result-xml">
+          <textarea class="full" style="min-height:150px;" readonly></textarea>
         </div>
       </div>
     </div>
@@ -190,13 +196,18 @@ a.btn{color:var(--color3);}
 
 <script type="text/javascript">
 // Simple querySelector https://codepen.io/sekedus/pen/oKYOEK
-function el(e, l, m) {
-  var elem, parent = l != 'all' && (l || l === null) ? l : document;
+function el(e,l,m) {
+  var elem, parent = l != 'all' && l != 'xpath' && (l || l === null) ? l : document;
   if (parent === null) {
     elem = parent;
-    console.error('selector: ' + e + ' => parent: ' + parent);
+    console.error('selector: '+ e +' => parent: '+ parent);
   } else {
-    elem = (m || l == 'all') ? parent.querySelectorAll(e) : parent.querySelector(e);
+    if ((m || l) == 'xpath') {
+      // https://stackoverflow.com/a/14284815/7598333
+      elem = document.evaluate(e, parent, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    } else {
+      elem = ((m || l) == 'all') ? parent.querySelectorAll(e) : parent.querySelector(e);
+    }
   }
   return elem;
 }
@@ -232,12 +243,15 @@ function loadXMLDoc(url, callback, info) {
 }
 
 function scrap_show(res) {
-  var data = JSON.parse(res);
+  window['bmv_data'] = JSON.parse(res);
+  console.log('bmv_data:', bmv_data);
   el('.post-content').classList.remove('loading', 'loge');
-  el('.result-url a').href = data.url.search(/(https?:)?\/\//) == -1 ? ('//'+ data.url) : data.url;
-  el('.result-url a').innerHTML = data.url;
-  el('.result-code strong').innerHTML = data.status_code;
-  if (data.status_code == 200) el('.result-code .result-bottom').classList.add('result-ok');
+  el('.result-url a').href = bmv_data.url.search(/(https?:)?\/\//) == -1 ? ('//'+ bmv_data.url) : bmv_data.url;
+  el('.result-url a').innerHTML = bmv_data.url;
+  el('.result-code .code strong').innerHTML = bmv_data.status_code;
+  el('.result-code .bypass').innerHTML = bmv_data.bypass ? ' (bypass)' : '';
+  if (bmv_data.status_code == 200) el('.result-code .result-bottom').classList.add('result-ok');
+  el('.result-xml textarea').value = bmv_data.body;
   el('.scrap-result').classList.remove('no_items');
 }
 
@@ -255,6 +269,10 @@ el('.scrap-submit').addEventListener('click', function() {
   el('.scrap-result').classList.add('no_items');
   el('.result-code .result-bottom').classList.remove('result-ok');
   loadXMLDoc('./test.php?url='+ encodeURIComponent(el('.scrap-url').value), scrap_show);
+});
+
+el('.result-xml textarea').addEventListener('dblclick', function () {
+  this.select();
 });
 
 document.addEventListener('keyup', function(e) {

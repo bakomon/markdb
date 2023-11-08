@@ -10,9 +10,9 @@ function beforeUnloadListener(event) {
 }
 
 // Check if string is number https://stackoverflow.com/a/175787/7598333
-function isNumeric(str) {
-  if (typeof str != 'string') return false;
-  return !isNaN(str) && !isNaN(parseFloat(str));
+function isNumeric(data) {
+  if (typeof data == 'number') return true;
+  return !isNaN(data) && !isNaN(parseFloat(data));
 }
 
 // Check if browser is Chromium-based https://stackoverflow.com/a/62797156/7598333
@@ -465,6 +465,8 @@ function bmf_lazyLoad(elem, note) {
           lz_elem.style.minHeight = lz_img.height +'px';
         }
       }, 0);
+      
+      el('.cm_ld_current').innerHTML = 'LZ ('+ lz_elem.dataset.index +')';
     }
 
     lz_elem.className = lz_elem.className.replace('lazy1oad', lz_2nd);
@@ -558,6 +560,7 @@ function bmf_lazyLoad(elem, note) {
       }
 
       if (note == 'single') {
+        if (bmv_current == 'chapter') img.style.minHeight = '750px';
         lazyQueue({"elem": img, "img": imgs});
       } else {
         if (!bmv_dt_lazy.some(function(item) {return item.elem == img})) {
@@ -598,7 +601,7 @@ function bmf_meta_tags(note, data) {
   }
 
   if (bmv_current == 'chapter') {
-    if (fbase_user && fbase_user.tier == 'pro') mt_title = `[${data.current.replace(/[-\s]((bahasa[-\s])?indo(nesiaa?)?|full)/, '')}] `+ mt_title;
+    if (fbase_user && fbase_user.tier == '\x70\x72\x6f') mt_title = `[${data.current.replace(/[-\s]((bahasa?[-\s])?indo(nesiaa?)?|full)/, '')}] `+ mt_title;
     d_desc = mt_desc = 'Baca download komik '+ data.title +' volume batch bahasa indonesia pdf rar zip terlengkap.';
     d_key = d_key + ', '+ data.title +' Chapter '+ data.current;
   }
@@ -875,20 +878,20 @@ function bmf_bmhs_fnc(note) {
   
     // bmhs: delete all
     el('.m-delete-all').addEventListener('click', function() {
-      el('.m-delete-confirm').classList.remove('no_items');
-      el('.m-delete-confirm input').focus();
+      el('.m-confirm').classList.remove('no_items');
+      el('.m-confirm input').focus();
     });
   
-    el('.m-delete-confirm .dc-remove').addEventListener('click', function() {
-      if (el('.m-delete-confirm input').value == `delete-all-${bmv_prm_slug}`) {
-        el('.m-delete-confirm').classList.add('no_items');
+    el('.m-confirm .dc-remove').addEventListener('click', function() {
+      if (el('.m-confirm input').value == `delete-all-${bmv_prm_slug}`) {
+        el('.m-confirm').classList.add('no_items');
         el('.member .m-list').classList.add('loading', 'loge');
         bmf_bmhs_remove('series');
       }
     });
   
-    el('.m-delete-confirm .dc-cancel').addEventListener('click', function() {
-      el('.m-delete-confirm').classList.add('no_items');
+    el('.m-confirm .dc-cancel').addEventListener('click', function() {
+      el('.m-confirm').classList.add('no_items');
     });
   }
 
@@ -1025,12 +1028,14 @@ function bmf_bmhs_html(note) {
     str_bmhs += '"><ul class="flex_wrap">';
 
     for (var i = (bmhs_current-1) * bmhs_max; i < (bmhs_current * bmhs_max) && i < bmhs_arr.length; i++) {
+      var slug = 'slug_alt' in bmhs_arr[i] && bmv_dt_settings.source.site in bmhs_arr[i].slug_alt ? bmhs_arr[i].slug_alt[bmv_dt_settings.source.site] : bmhs_arr[i].slug;
+      var title = bmhs_arr[i].title == '' ? 'untitled' : bmhs_arr[i].title;
       if (bmv_prm_slug == 'bookmark') {
         str_bmhs += '<li class="flex f_column" data-slug="'+ bmhs_arr[i].slug +'">';
         str_bmhs += '<div class="cover f_grow">';
-        str_bmhs += '<a href="#/series/'+ bmhs_arr[i].slug;
+        str_bmhs += '<a href="#/series/'+ slug;
         if (m_newtab) str_bmhs += '" target="_blank';
-        str_bmhs += '"><img style="min-height:225px;" class="radius full_img loading loge lazy1oad" data-src="'+ bmhs_arr[i].cover +'" alt="'+ bmhs_arr[i].title +'" title="'+ bmhs_arr[i].title +'"></a>';
+        str_bmhs += '"><img style="min-height:225px;" class="radius full_img loading loge lazy1oad" data-src="'+ bmhs_arr[i].cover +'" alt="'+ title +'" title="'+ title +'"></a>';
         str_bmhs += '<span class="type m-icon btn radius '+ bmhs_arr[i].type +'"></span>';
         if (bmhs_arr[i].status == 'completed') str_bmhs += '<span class="completed m-icon btn red radius">completed</span>';
         if (bmhs_arr[i].history == 'true') {
@@ -1039,27 +1044,27 @@ function bmf_bmhs_html(note) {
           str_bmhs += '<span class="last-read m-icon btn green clamp lc1" title="Last Read">ch. '+ m_visited[0].number +'</span>';
         }
         str_bmhs += '</div>'; //.cover
-        str_bmhs += '<div class="title"><a href="#/series/'+ bmhs_arr[i].slug;
+        str_bmhs += '<div class="title"><a href="#/series/'+ slug;
         if (m_newtab) str_bmhs += '" target="_blank';
-        str_bmhs += '"><h3 class="hd-title clamp">'+ bmhs_arr[i].title +'</h3></a></div>';
+        str_bmhs += '"><h3 class="hd-title clamp">'+ title +'</h3></a></div>';
       } else { //history
         str_bmhs += '<li class="flex f_between" data-slug="'+ bmhs_arr[i].slug +'">';
         str_bmhs += '<div class="cover">';
-        str_bmhs += '<a href="#/series/'+ bmhs_arr[i].slug;
+        str_bmhs += '<a href="#/series/'+ slug;
         if (m_newtab) str_bmhs += '" target="_blank';
-        str_bmhs += '"><img style="min-height:130px;" class="radius full_img loading loge lazy1oad" data-src="'+ bmhs_arr[i].cover +'" alt="'+ bmhs_arr[i].title +'" title="'+ bmhs_arr[i].title +'"></a>';
+        str_bmhs += '"><img style="min-height:130px;" class="radius full_img loading loge lazy1oad" data-src="'+ bmhs_arr[i].cover +'" alt="'+ title +'" title="'+ title +'"></a>';
         if (bmhs_arr[i].bookmarked == 'true') str_bmhs += '<span class="bookmarked m-icon btn green" title="Bookmarked"><svg data-name="fa/bookmark" xmlns="http://www.w3.org/2000/svg" width="0.84em" height="1em" viewBox="0 0 1280 1536"><path fill="currentColor" d="M1164 0q23 0 44 9q33 13 52.5 41t19.5 62v1289q0 34-19.5 62t-52.5 41q-19 8-44 8q-48 0-83-32l-441-424l-441 424q-36 33-83 33q-23 0-44-9q-33-13-52.5-41T0 1401V112q0-34 19.5-62T72 9q21-9 44-9h1048z"/></svg></span>';
         if (bmhs_arr[i].status && bmhs_arr[i].status.search(/completed?|tamat/i) != -1) str_bmhs += '<span class="completed m-icon btn red radius">completed</span>';
         str_bmhs += '</div>'; //.cover
         str_bmhs += '<div class="detail">';
-        str_bmhs += '<div class="title"><a href="#/series/'+ bmhs_arr[i].slug;
+        str_bmhs += '<div class="title"><a href="#/series/'+ slug;
         if (m_newtab) str_bmhs += '" target="_blank';
-        str_bmhs += '"><h3 class="hd-title clamp lc1">'+ bmhs_arr[i].title +'</h3></a></div>';
+        str_bmhs += '"><h3 class="hd-title clamp lc1">'+ title +'</h3></a></div>';
         str_bmhs += '<ul class="">';
         var m_visited = genArray(bmhs_arr[i].hs_visited);
         m_visited = sortBy(m_visited, 'added'); //descanding
         for (var j = 0; j < m_visited.length; j++) {
-          var m_url = bmhs_arr[i].slug +'/'+ m_visited[j].number +'/';
+          var m_url = slug +'/'+ m_visited[j].number +'/';
           if (bmv_dt_settings.ch_url) m_url = m_url + encodeURIComponent('url='+ m_visited[j].url +'&');
           m_url = m_url + encodeURIComponent('site='+ m_visited[j].site);
           str_bmhs += '<li class="flex"><a class="f_grow f_clamp" href="#/chapter/'+ m_url;
@@ -1197,7 +1202,7 @@ function bmf_member_profile_fnc() {
         el('.m-pass-n', parent).focus();
       }
 
-      if (pr_data == 'backup' && fbase_user && fbase_user.tier == 'pro') {
+      if (pr_data == 'backup' && fbase_user && fbase_user.tier == '\x70\x72\x6f') {
         this.disabled = true;
         el('.m-profile .m-detail').classList.add('loading', 'loge');
         bmf_loadXMLDoc(`xhr/${bmv_current}/backup`, `${api_url}/firebase/backup.php?uid=${fbase_user.uid}&manual`, function(n, res) {
@@ -1436,7 +1441,7 @@ function bmf_settings_changed(elem) {
 }
 
 function bmf_settings_fill(settings) {
-  if (fbase_user && fbase_user.tier == 'pro') {
+  if (fbase_user && fbase_user.tier == '\x70\x72\x6f') {
     el(`.st-source input[value="${settings.source.site}"]`).checked = true;
     el('.st-sr-copy input').checked = settings.sr_copy;
     el('.st-sr-list input').checked = settings.sr_list;
@@ -1473,7 +1478,7 @@ function bmf_member_settings_fnc() {
   if (!(bmv_dt_settings.source.site in bmv_settings.source)) bmv_dt_settings.source = bmv_settings.default.source;
   bmf_settings_fill(bmv_dt_settings);
   
-  if (fbase_user && fbase_user.tier == 'pro') {
+  if (fbase_user && fbase_user.tier == '\x70\x72\x6f') {
     el('.st-ch-menu input').addEventListener('input', function() {
       var menu_chk = this.checked;
       el('.st-cdn input', 'all').forEach(function(item) {
@@ -1512,15 +1517,25 @@ function bmf_member_settings_fnc() {
   });
 
   el('.st-reset button').addEventListener('click', function() {
-    if (confirm('Are you sure you want to RESET all settings to default?')) {
-      this.disabled = true;
+    el('.m-confirm').classList.remove('no_items');
+    el('.m-confirm input').focus();
+  });
+  
+  el('.m-confirm .dc-remove').addEventListener('click', function() {
+    if (el('.m-confirm input').value == `reset-all-${bmv_prm_slug}`) {
+      el('.m-confirm').classList.add('no_items');
       var st_new = bmf_update_settings('reset', bmv_settings.default);
       bmf_settings_fill(st_new);
       
+      el('.st-reset button').disabled = true;
       el('.st-save button').classList.add('pulse');
       el('.st-control').classList.add('loading', 'loge');
       window.addEventListener('beforeunload', beforeUnloadListener);
     }
+  });
+
+  el('.m-confirm .dc-cancel').addEventListener('click', function() {
+    el('.m-confirm').classList.add('no_items');
   });
 
   el('.st-save button').addEventListener('click', function() {
@@ -1530,7 +1545,7 @@ function bmf_member_settings_fnc() {
     el('.st-reset button').disabled = true;
     el('.st-control').classList.add('loading', 'loge');
   
-    if (fbase_user && fbase_user.tier == 'pro') {
+    if (fbase_user && fbase_user.tier == '\x70\x72\x6f') {
       var st_source = bmv_settings.source[el('.st-source input:checked').value];
       bmv_dt_settings['source']['type'] = st_source.type;
       bmv_dt_settings['source']['site'] = st_source.site;
@@ -1584,7 +1599,7 @@ function bmf_member_settings_fnc() {
 function bmf_member_settings_html() {
   // Display "settings" html
   var str_settings = '';
-  if (fbase_user && fbase_user.tier == 'pro') {
+  if (fbase_user && fbase_user.tier == '\x70\x72\x6f') {
     str_settings += '<div class="st-adv bg2 layer">';
     str_settings += '<div class="st-source st-list" id="st-source">';
     str_settings += '<h2>API Sources</h2>';
@@ -1605,7 +1620,7 @@ function bmf_member_settings_html() {
     str_settings += '<div class="st-cdn st-list" id="st-cdn">';
     str_settings += '<h2>CDN for chapter</h2>';
     str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="default"><span></span>Default</label>';
-    str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="not"><span></span>Remove CDN</label>';
+    str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="not"><span></span>Remove CDN (not)</label>';
     str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="statically"><span></span>statically.io</label>';
     str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="wp"><span></span>wp.com</label>';
     str_settings += '<label class="radio"><input type="radio" name="st-cdn" value="imagecdn"><span></span>imagecdn.app</label>';
@@ -1653,7 +1668,7 @@ function bmf_member_settings_html() {
   str_settings += '</div>'; //.st-link
   str_settings += '</div>'; //.st-general
   el('.st-control').innerHTML = str_settings;
-  if (fbase_user && fbase_user.tier == 'pro') el('.m-settings').classList.add('m-pro');
+  if (fbase_user && fbase_user.tier == '\x70\x72\x6f') el('.m-settings').classList.add('m-pro');
 
   bmf_fbase_db_get('member/settings', bmf_fbase_path('settings'), function(res) {
     if (res.exists()) bmv_dt_settings = bmf_update_settings('member/database', res.val());
@@ -1866,7 +1881,7 @@ function bmf_build_member() {
       str_member += '<div class="m-name-i f_grow">';
       var m_name = fbase_user.displayName ? fbase_user.displayName : '';
       str_member += '<input class="full" type="text" name="log" placeholder="Name" value="'+ m_name +'" data-value="'+ m_name +'" required readonly>';
-      if (fbase_user && fbase_user.tier == 'pro') str_member += '<span class="m-pro">pro</span>';
+      if (fbase_user && fbase_user.tier == '\x70\x72\x6f') str_member += '<span class="m-pro">pro</span>';
       str_member += '</div>'; //.m-name-i
       str_member += '<button class="m-edit btn">'+ bmv_settings.l10n.member.edit +'</button>';
       str_member += '<div class="flex no_items"><button class="m-save btn m-space-h">'+ bmv_settings.l10n.member.save +'</button><button class="m-cancel btn selected">'+ bmv_settings.l10n.member.cancel +'</button></div>';
@@ -1896,7 +1911,7 @@ function bmf_build_member() {
       str_member += '<div class="flex no_items"><button class="m-save btn m-space-h">'+ bmv_settings.l10n.member.save +'</button><button class="m-cancel btn selected">'+ bmv_settings.l10n.member.cancel +'</button></div>';
       str_member += '</div>'; //.m-input
       str_member += '</div>'; //.m-password
-      if (fbase_user && fbase_user.tier == 'pro') {
+      if (fbase_user && fbase_user.tier == '\x70\x72\x6f') {
         str_member += '<div class="m-backup mp-list m-trigger flex_wrap">';
         str_member += '<div class="m-label f_grow">'+ bmv_settings.l10n.profile.backup_account +'</div>';
         str_member += '<div class="m-input flex_wrap" data-edit="backup">';
@@ -1931,7 +1946,8 @@ function bmf_build_member() {
     }
     str_member += '</div>';
     if (bmv_prm_slug == 'profile') str_member += '<div class="m-reauth flex f_perfect no_items"><div class="fp_content"><div class="fp_content"><input type="password" name="password" placeholder="Password" autocomplete="off"><div class="flex full f_between m-space-v"><button class="r-save btn red f_grow" data-active="">'+ bmv_settings.l10n.member.delete +'</button><button class="r-cancel btn selected f_grow" style="margin-left:15px;">'+ bmv_settings.l10n.member.cancel +'</button></div></div></div>';
-    if (bmv_prm_slug == 'bookmark' || bmv_prm_slug == 'history') str_member += '<div class="m-delete-confirm flex f_perfect no_items"><div class="fp_content wBox bg2 layer"><div class="fp_content"><p><b>Are you absolutely sure?</b></p><p class="m-space-v">This action will <b>permanently</b> delete all '+ bmv_prm_slug +' data and <b>cannot</b> be undone.</p><p>Please type <b>delete-all-'+ bmv_prm_slug +'</b> to confirm.</p><input class="full m-space-v" type="text" name="verify" placeholder="delete-all-'+ bmv_prm_slug +'" autocomplete="off"><div class="flex full f_between"><button class="dc-remove btn red f_grow">'+ bmv_settings.l10n.member.delete +'</button><button class="dc-cancel btn selected f_grow" style="margin-left:15px;">'+ bmv_settings.l10n.member.cancel +'</button></div></div></div>';
+    var dc_text = bmv_prm_slug == 'settings' ? 'reset' : 'delete';
+    if (bmv_prm_slug.search(/bookmark|history|settings/) != -1) str_member += '<div class="m-confirm flex f_perfect no_items"><div class="fp_content wBox bg2 layer"><div class="fp_content"><p><b>Are you absolutely sure?</b></p><p class="m-space-v">This action will <b>permanently</b> '+ dc_text +' all '+ bmv_prm_slug +' data and <b>cannot</b> be undone.</p><p>Please type <b class="no_select">'+ dc_text +'-all-'+ bmv_prm_slug +'</b> to confirm.</p><input class="full m-space-v" type="text" name="verify" placeholder="'+ dc_text +'-all-'+ bmv_prm_slug +'" autocomplete="off"><div class="flex full f_between"><button class="dc-remove btn red f_grow">'+ bmv_settings.l10n.member[bmv_prm_slug == 'settings' ? 'reset' : 'delete'] +'</button><button class="dc-cancel btn selected f_grow" style="margin-left:15px;">'+ bmv_settings.l10n.member.cancel +'</button></div></div></div>';
   } else {
     str_member += '<form class="m-form form-'+ bmv_prm_slug +'" onsubmit="return false">';
     str_member += '<div class="form-email">';
@@ -1975,8 +1991,11 @@ function bmf_window_stop() {
 }
 
 function bmf_chapter_key(e) {
-  if (keyEvent(e, 37) && el('.chapter .btn.prev')) el('.chapter .btn.prev').click(); //key: left arrow
-  if (keyEvent(e, 39) && el('.chapter .btn.next')) el('.chapter .btn.next').click(); //key: right arrow
+  var is_edit = ['input', 'textarea'].indexOf(document.activeElement.tagName.toLowerCase()) !== -1;
+  if (!is_edit) {
+    if (keyEvent(e, 37) && el('.chapter .btn.prev')) el('.chapter .btn.prev').click(); //key: left arrow
+    if (keyEvent(e, 39) && el('.chapter .btn.next')) el('.chapter .btn.next').click(); //key: right arrow
+  }
 }
 
 function bmf_chapter_direction() {
@@ -1998,14 +2017,11 @@ function bmf_chapter_direction() {
 
 function bmf_chapter_zoom(slug, type) {
   // set "zoom" for chapter
-  if (!is_mobile) {
-    bmv_zoom = local('get', 'bmv_zoom') ? JSON.parse(local('get', 'bmv_zoom')) : {}; //check localStorage
-    if (slug in bmv_zoom === false) bmv_zoom[slug] = type;
-    local('set', 'bmv_zoom', JSON.stringify(bmv_zoom));
-  }
+  bmv_zoom = local('get', 'bmv_zoom') ? JSON.parse(local('get', 'bmv_zoom')) : {}; //check localStorage
+  if (slug in bmv_zoom === false && type != '') bmv_zoom[slug] = type;
+  local('set', 'bmv_zoom', JSON.stringify(bmv_zoom));
 }
 
-// Find element on middle visible screen (viewport) https://stackoverflow.com/a/26466655/7598333
 function bmf_menu_key(e) {
   if (e.altKey) {
     if (keyEvent(e, 82)) el('.cm_reload').click(); //"alt & r" for reload page
@@ -2014,22 +2030,13 @@ function bmf_menu_key(e) {
   }
   
   if (e.shiftKey) {
-    if (keyEvent(e, 38)) el('.cm_zoom .cm_plus').click(); //"shift & up" zoom +
-    if (keyEvent(e, 40)) el('.cm_zoom .cm_less').click(); //"shift & down" zoom -
+    if (keyEvent(e, 38)) el('.cm_zoom .cm_zm_plus').click(); //"shift & up" zoom +
+    if (keyEvent(e, 40)) el('.cm_zoom .cm_zm_less').click(); //"shift & down" zoom -
   }
 
   if (keyEvent(e, 13)) {
     // enter to load
-    if (el('.cm_load .cm_all') === document.activeElement) el('.cm_load .cm_ld_img').click();
-  
-    // enter to zoom
-    if (el('.cm_zoom input') == e.target) {
-      var load_zm = Number(el('.cm_zoom input').value);
-      bmv_el_images.style.setProperty('max-width', load_zm +'px', 'important');
-      el('.cm_zoom input').value = load_zm;
-      bmv_zoom[bmv_zoom_id] = load_zm;
-      local('set', 'bmv_zoom', JSON.stringify(bmv_zoom));
-    }
+    if (el('.cm_ld_all') === document.activeElement) el('.cm_ld_img').click();
   }
 }
 
@@ -2052,20 +2059,20 @@ function bmf_menu_cdn_url(source, elem, url) {
 function bmf_menu_fnc(img_list) {
   if (el('.cm_prev')) {
     el('.cm_prev').classList.remove('no_items');
-    if (is_mobile) el('.cm_prev2').classList.remove('no_items');
+    el('.cm_prev2').classList.remove('no_items');
   }
 
   if (el('.cm_next')) {
     el('.cm_next').classList.remove('no_items');
-    if (is_mobile) el('.cm_next2').classList.remove('no_items');
+    el('.cm_next2').classList.remove('no_items');
   }
 
   el('.cm_toggle').addEventListener('click', function() {
     this.classList.toggle('db_danger');
     el('.ch_menu').classList.toggle('cm_shide');
+    el('.cm_pause2').classList.toggle('no_items');
     if (is_mobile) {
       el('.cm_bg').classList.toggle('no_items');
-      el('.cm_pause2').classList.toggle('no_items');
       if (el('.cm_next')) toggleClass(el('.cm_next'), ['no_hover', 'mobile_left_hand']);
     }
     el('.cm_tr2 .cm_td1').classList.toggle('no_items');
@@ -2083,47 +2090,56 @@ function bmf_menu_fnc(img_list) {
     });
     item.addEventListener('input', function() {
       if (this.value > img_list.length) this.value = img_list.length;
-      if (this.classList.contains('cm_all') && !isNumeric(this.value) && this.value != 'all') this.value = 'all';
+      if (this.classList.contains('cm_ld_all') && !isNumeric(this.value) && this.value != 'all') this.value = 'all';
     });
+  });
+  
+  el('.cm_load .cm_ld_pause').addEventListener('click', function() {
+    this.classList.toggle('cm_danger');
+    el('.cm_pause2').classList.toggle('cm_danger');
+    bmv_chk_pause = bmv_chk_pause ? false : true;
+    el('.cm_ld_img').disabled = bmv_chk_pause ? true : false;
+    el('.cm_load2').disabled = bmv_chk_pause ? true : false;
+    el('.cm_ld_all').disabled = bmv_chk_pause ? true : false;
+    el('.cm_ld_reset').disabled = bmv_chk_pause ? true : false;
+    if (el('.cm_fr_btn').classList.contains('cm_active')) el('.cm_fr_btn').click();
+    el('.cm_fr_btn').disabled = bmv_chk_pause ? true : false;
   });
   
   // Load all images
   el('.cm_load .cm_ld_img').addEventListener('click', function() {
-    if (isNumeric(el('.cm_load .cm_all').value)) {
-      bmf_lazyLoad(img_list[Number(el('.cm_load .cm_all').value) - 1], 'single');
+    if (isNumeric(el('.cm_ld_all').value)) {
+      bmf_lazyLoad(img_list[Number(el('.cm_ld_all').value) - 1], 'single');
     } else {
       // "img_list" from bmf_menu_fnc() parameter
       if (!bmv_chk_from) bmv_loaded_img = true;
-      var ld_index = bmv_chk_from && el('.cm_load .cm_fr_min').value != '' ? (Number(el('.cm_load .cm_fr_min').value) - 1) : 0;
-      var ld_length = bmv_chk_from && el('.cm_load .cm_fr_max').value != '' ? Number(el('.cm_load .cm_fr_max').value) : img_list.length;
+      var ld_index = bmv_chk_from && el('.cm_fr_min').value != '' ? (Number(el('.cm_fr_min').value) - 1) : 0;
+      var ld_length = bmv_chk_from && el('.cm_fr_max').value != '' ? Number(el('.cm_fr_max').value) : img_list.length;
       for (var i = ld_index; i < ld_length; i++) { bmf_lazyLoad(img_list[i], 'multi'); }
       if (bmv_chk_from) el(`#reader [data-index="${ld_index+1}"]`).scrollIntoView();
     }
+    var fr_last = bmv_chk_from && el('.cm_fr_max').value == img_list.length;
+    if (is_mobile && !el('.ch_menu').classList.contains('cm_shide') && (!bmv_chk_from || (fr_last))) el('.cm_toggle').click();
+  });
+  
+  el('.cm_load .cm_ld_reset').addEventListener('click', function() {
+    el('.cm_ld_all').value = 'all';
   });
   
   el('.cm_load .cm_fr_btn').addEventListener('click', function() {
     var ld_from = this.classList.contains('cm_active');
-    el('.cm_load .cm_all').value = 'all';
-    el('.cm_load .cm_all').disabled = ld_from && !bmv_chk_pause ? false : true;
-    el('.cm_load .cm_fr_min').disabled = ld_from ? true : false;
-    el('.cm_load .cm_fr_max').disabled = ld_from ? true : false;
+    el('.cm_ld_all').value = 'all';
+    el('.cm_ld_all').disabled = ld_from && !bmv_chk_pause ? false : true;
+    el('.cm_ld_reset').disabled = ld_from && !bmv_chk_pause ? false : true;
+    el('.cm_fr_min').disabled = ld_from ? true : false;
+    el('.cm_fr_max').disabled = ld_from ? true : false;
     if (ld_from) {
-      el('.cm_load .cm_fr_min').value = '1';
-      el('.cm_load .cm_fr_max').value = el('.cm_load .cm_fr_max').dataset.value;
+      el('.cm_fr_min').value = '1';
+      el('.cm_fr_max').value = el('.cm_fr_max').dataset.value;
     }
     bmv_chk_from = ld_from ? false : true;
     this.classList.toggle('cm_active');
-  });
-  
-  el('.cm_load .cm_pause').addEventListener('click', function() {
-    this.classList.toggle('cm_danger');
-    if (is_mobile) el('.cm_pause2').classList.toggle('cm_danger');
-    bmv_chk_pause = bmv_chk_pause ? false : true;
-    el('.cm_ld_img').disabled = bmv_chk_pause ? true : false;
-    el('.cm_load2').disabled = bmv_chk_pause ? true : false;
-    el('.cm_load .cm_all').disabled = bmv_chk_pause ? true : false;
-    if (el('.cm_load .cm_fr_btn').classList.contains('cm_active')) el('.cm_load .cm_fr_btn').click();
-    el('.cm_load .cm_fr_btn').disabled = bmv_chk_pause ? true : false;
+    el('.cm_load2').classList.toggle('cm_fr_active');
   });
   
   if (bmv_chk_gi) {
@@ -2153,10 +2169,8 @@ function bmf_menu_fnc(img_list) {
   });
 
   el('.cdn_imageoptim').addEventListener('click', function() {
-    // https://imageoptim.com/api/get?username=plctjbqbcz
     if (this.classList.contains('cm_active')) return;
-    var cdn_username = 'plctjbqbcz';
-    bmf_menu_cdn_url('imageoptim', this, `img.gs/${cdn_username}/full/`);
+    bmf_menu_cdn_url('imageoptim', this, `img.gs/${imageoptim_username}/full/`);
   });
 
   el('.cdn_not').addEventListener('click', function() {
@@ -2174,16 +2188,32 @@ function bmf_menu_fnc(img_list) {
   if (bmv_dt_settings.cdn != 'default') el(`.cm_cdn.cdn_${bmv_dt_settings.cdn}`).click();
   
   el('.cm_zoom button', 'all').forEach(function(item) {
-    item.addEventListener('click', function(e) {
-      var load_zm = Number(el('.cm_zoom input').value);
-      if (item.classList.contains('cm_plus')) {
-        load_zm += 50;
+    item.addEventListener('click', function() {
+      var load_zm;
+      if (item.classList.contains('cm_zm_reset')) {
+        var zm_type = bmv_el_post.dataset.type || 'manga';
+        if (bmv_el_post.dataset.type) {
+          bmv_zoom[bmv_zoom_id] = zm_type;
+        } else {
+          delete bmv_zoom[bmv_zoom_id];
+        }
+        load_zm = bmv_zm_size[zm_type];
+        if (load_zm > window.screen.width) load_zm = window.screen.width;
       } else {
-        load_zm += -50
+        var zm_min = 240;
+        var zm_max = is_mobile ? window.screen.width : ((window.screen.width * 50) / 100);
+        load_zm = Number(el('.cm_zoom input').value);
+        if (item.classList.contains('cm_zm_plus')) {
+          load_zm += 50;
+          if (load_zm > zm_max) load_zm = zm_max;
+        } else {
+          load_zm += -50
+          if (load_zm < zm_min) load_zm = zm_min;
+        }
+        bmv_zoom[bmv_zoom_id] = load_zm;
       }
       bmv_el_images.style.setProperty('max-width', load_zm +'px', 'important');
       el('.cm_zoom input').value = load_zm;
-      bmv_zoom[bmv_zoom_id] = load_zm;
       local('set', 'bmv_zoom', JSON.stringify(bmv_zoom));
     });
   });
@@ -2191,12 +2221,10 @@ function bmf_menu_fnc(img_list) {
   el('.cm_load2').addEventListener('click', function() {
     el('.cm_ld_img').click();
   });
-
-  if (el('.cm_pause2')) {
-    el('.cm_pause2').addEventListener('click', function() {
-      el('.cm_pause').click();
-    });
-  }
+  
+  el('.cm_pause2').addEventListener('click', function() {
+    el('.cm_ld_pause').click();
+  });
 
   el('.cm_reload').addEventListener('click', function() {
     window.location.reload();
@@ -2222,14 +2250,21 @@ function bmf_menu_fnc(img_list) {
 }
 
 function bmf_chapter_menu() {
-  var cm_size = is_mobile ? window.screen.width : bmv_zoom_id in bmv_zoom ? bmv_zoom[bmv_zoom_id] : bmv_el_images.offsetWidth;
-  if (bmv_zoom_id in bmv_zoom && !is_mobile) cm_size = cm_size == 'manga' ? '800' : cm_size == 'manhua' ? '700' : cm_size == 'manhwa' ? '500' : cm_size;
+  var cm_size;
+  if (bmv_zoom_id in bmv_zoom) {
+    cm_size = isNumeric(bmv_zoom[bmv_zoom_id]) ? bmv_zoom[bmv_zoom_id] : bmv_zm_size[bmv_zoom[bmv_zoom_id]];
+  } else {
+    cm_size = bmv_zm_size['manga'];
+  }
+  if (cm_size > window.screen.width) cm_size = window.screen.width;
   bmv_el_images.style.setProperty('max-width', cm_size +'px', 'important');
   
   // Add "chapter" menu
   var str_menu = '';
   if (is_mobile) str_menu += '<div class="cm_bg no_items"></div>';
-  str_menu += '<div class="ch_menu'+ (is_mobile ? ' cm_shide' : '') +' flex_wrap f_bottom bg2">';
+  str_menu += '<div class="ch_menu ';
+  if (is_mobile) str_menu += 'cm_shide ';
+  str_menu += 'flex_wrap f_bottom bg2">';
   str_menu += '<div class="cm_tr1 flex_wrap">';
   str_menu += '<div class="cm_others cm_line w100 flex_wrap">';
   str_menu += '<button class="cdn_statically cm_cdn cm_btn btn">Statically</button>';
@@ -2256,10 +2291,14 @@ function bmf_chapter_menu() {
   }
   str_menu += '<div class="cm_home cm_line w100"><a class="cm_btn btn" href="./">Homepage</a></div>';
   str_menu += '<div class="cm_load cm_line flex_wrap">';
+  str_menu += '<div class="flex f_middle">';
+  str_menu += '<span class="cm_ld_current cm_text" title="Current image loading">LZ (0)</span>';
+  str_menu += '<button class="cm_ld_pause cm_btn btn btn_circle btn_icon no_hover" title="Pause images from loading"><svg data-name="mdi/play-pause" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5v14l8-7m2 7h3V5h-3m5 0v14h3V5"/></svg></g></svg></button>';
+  str_menu += '</div>';
   str_menu += '<div class="flex">';
   str_menu += '<button class="cm_ld_img cm_btn btn" title="alt + a">Load</button>';
-  str_menu += '<input class="cm_all cm_input" value="all" type="text">';
-  str_menu += '<button class="cm_pause cm_btn btn no_hover" title="Pause images from loading"><svg data-name="mdi/play-pause" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5v14l8-7m2 7h3V5h-3m5 0v14h3V5"/></svg></g></svg></button>';
+  str_menu += '<input class="cm_ld_all cm_input" value="all" type="text">';
+  str_menu += '<button class="cm_ld_reset cm_btn btn btn_circle btn_icon" title="Reset">&#8634;</button>';
   str_menu += '</div>';
   str_menu += '<div class="cm_from flex f_middle w100">';
   str_menu += '<button class="cm_fr_btn cm_btn btn no_hover" title="Load images from [index]">From</button>';
@@ -2270,30 +2309,30 @@ function bmf_chapter_menu() {
   str_menu += '</div>';// .cm_fr_num
   str_menu += '</div>';// .cm_from
   str_menu += '</div>';// .cm_load
-  str_menu += '<div class="cm_zoom w100"><button class="cm_plus cm_btn btn" title="shift + up">+</button><button class="cm_less cm_btn btn" title="shift + down">-</button><input style="width:50px;" class="cm_input" value="'+ cm_size +'" type="text"></div>';
+  str_menu += '<div class="cm_zoom flex w100"><button class="cm_zm_plus cm_btn btn" title="shift + up">+</button><button class="cm_zm_less cm_btn btn" title="shift + down">-</button><input style="width:50px;" class="cm_input no_arrow" value="'+ cm_size +'" type="number" readonly><button class="cm_zm_reset cm_btn btn btn_circle btn_icon" title="Reset zoom">&#8634;</button></div>';
   str_menu += '</div>';// .cm_tr1
-  str_menu += '<div class="cm_tr2 '+ (is_mobile ? ' flex f_bottom' : '') +'">';
+  str_menu += '<div class="cm_tr2 flex f_bottom">';
   str_menu += '<div class="cm_td1'+ (is_mobile ? '' : ' no_items') +'">';
-  if (is_mobile) {
-    if (el('.ch-nav .next')) {
-      str_menu += '<a class="cm_next2 cm_btn btn flex f_center f_middle no_items" href="'+ el('.ch-nav .next').href;
-      if (np_newtab) str_menu += '" target="_blank';
-      str_menu += '">&#9656;</a>';
-    }
-    if (el('.ch-nav .prev')) {
-      str_menu += '<a class="cm_prev2 cm_btn btn flex f_center f_middle no_items" href="'+ el('.ch-nav .prev').href;
-      if (np_newtab) str_menu += '" target="_blank';
-      str_menu += '">&#9666;</a>';
-    }
+  if (el('.ch-nav .next')) {
+    str_menu += '<a class="cm_next2 cm_btn btn flex f_center f_middle no_items" href="'+ el('.ch-nav .next').href;
+    if (np_newtab) str_menu += '" target="_blank';
+    str_menu += '">&#9656;</a>';
+  }
+  if (el('.ch-nav .prev')) {
+    str_menu += '<a class="cm_prev2 cm_btn btn flex f_center f_middle no_items" href="'+ el('.ch-nav .prev').href;
+    if (np_newtab) str_menu += '" target="_blank';
+    str_menu += '">&#9666;</a>';
   }
   str_menu += '<button class="cm_load2 cm_btn btn flex f_center f_middle" title="alt + a">&#671;</button>';
   str_menu += '</div>';// .cm_td1
   str_menu += '<div class="cm_td2">';
-  if (is_mobile) str_menu += '<div class="cm_pause2 cm_btn btn flex f_center f_middle no_hover"><svg data-name="mdi/play-pause" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5v14l8-7m2 7h3V5h-3m5 0v14h3V5"/></svg></g></svg></div>';
+  str_menu += '<div class="cm_pause2 cm_btn btn flex f_center f_middle no_hover';
+  if (!is_mobile) str_menu += ' no_items';
+  str_menu += '"><svg data-name="mdi/play-pause" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5v14l8-7m2 7h3V5h-3m5 0v14h3V5"/></svg></g></svg></div>';
   str_menu += '<div class="cm_rest"><div class="cm_reload cm_btn btn flex f_center f_middle no_items" title="alt + r">&#8635;</div><div class="cm_stop cm_btn btn flex f_center f_middle" title="alt + x">&#10007;</div></div>';
   str_menu += '<div class="cm_top cm_btn btn flex f_center f_middle">&#9652;</div>';
   str_menu += '<div class="cm_bottom cm_btn btn flex f_center f_middle">&#9662;</div>';
-  str_menu += '<div class="cm_toggle cm_btn btn flex f_center f_middle'+ (is_mobile ? ' no_hover' : '') +'">&#174;</div>';
+  str_menu += '<div class="cm_toggle cm_btn btn flex f_center f_middle no_select'+ (is_mobile ? ' no_hover' : '') +'">&#174;</div>';
   str_menu += '</div>';// .cm_td2
   str_menu += '</div>';// .cm_tr2
   str_menu += '</div>';// .ch_menu
@@ -2302,6 +2341,7 @@ function bmf_chapter_menu() {
   bmf_menu_fnc(el('#reader img', 'all'));
 }
 
+// Find element on middle visible screen (viewport) https://stackoverflow.com/a/26466655/7598333
 function bmf_chapter_middle() {
   var viewportHeight = document.documentElement.clientHeight;
   var found = [];
@@ -2312,56 +2352,23 @@ function bmf_chapter_middle() {
   };
 
   for (var i = opts.elements.length; i--;) {
-      var elm = opts.elements[i];
-      var pos = elm.getBoundingClientRect();
-      var topPerc = pos.top    / viewportHeight * 100;
-      var bottomPerc = pos.bottom / viewportHeight * 100;
-      var middle = (topPerc + bottomPerc)/2;
-      var inViewport = middle > opts.zone[1] && middle < (100-opts.zone[1]);
+    var elm = opts.elements[i];
+    var pos = elm.getBoundingClientRect();
+    var topPerc = pos.top / viewportHeight * 100;
+    var bottomPerc = pos.bottom / viewportHeight * 100;
+    var middle = (topPerc + bottomPerc)/2;
+    var inViewport = middle > opts.zone[1] && middle < (100-opts.zone[1]);
 
-      elm.classList.toggle(opts.class, inViewport);
+    elm.classList.toggle(opts.class, inViewport);
 
-      if (inViewport) found.push(elm);
+    if (inViewport) found.push(elm);
   }
 }
 
-function bmf_chapter_nav(note, data) {
-  if (!bmv_dt_chapter) return;
-  var json = JSON.parse(data);
-  bmv_dt_series = json;
-  if (json.status_code == 200) {
-    // Chapter navigation
-    bmf_chapter_zoom(json.slug, json.detail.type);
-    bmv_el_post.setAttribute('data-type', json.detail.type);
-
-    var lists = json.chapter; //JSON data
-    var str_ch_nav = '';
-    str_ch_nav += '<select name="index">';
-    for (var i = 0; i < lists.length; i++) {
-      str_ch_nav += '<option value="'+ lists[i].number +'"';
-      if (lists[i].number == bmv_dt_chapter.current) { str_ch_nav += ' selected="selected"'; }
-      str_ch_nav += '>Chapter '+ lists[i].number.replace(/[-\s]((bahasa[-\s])?indo(nesiaa?)?|full)/, '') +'</option>';
-    }
-    str_ch_nav += '</select>';
-  
-    // Display chapter navigation
-    el('.ch-nav .ch-number', 'all')[0].innerHTML = str_ch_nav;
-    el('.ch-nav .ch-number', 'all')[1].innerHTML = str_ch_nav;
-
-    // Select option navigation
-    el('.chapter select', 'all').forEach(item => {
-      item.addEventListener('change', function() {
-        var num = this.selectedIndex;
-        wl.hash = '#/chapter/'+ bmf_series_chapter_link('nav/select', this.options[num].value);
-      });
-    });
-  }
-}
-
-function bmf_chapter_fnc() {
+function bmf_chapter_history(slug) {
   // generate & send chapter data to firebase realtime database
   if (fbase_login && !bmv_dt_settings.hs_stop) {
-    var c_path = bmf_fbase_path(`series/${bmv_dt_chapter.slug}`);
+    var c_path = bmf_fbase_path(`series/${slug}`);
     var c_data = bmv_dt_settings.source.type.search(/eastheme|koidezign/) != -1 ? '/hs_visited' : ''; //different path for cover
 
     bmf_fbase_db_get('chapter/history', `${c_path + c_data}`, function(res) {
@@ -2392,17 +2399,58 @@ function bmf_chapter_fnc() {
         bmf_bmhs_change('history|set');
       }
 
+      if (bmv_dt_chapter.slug != slug) {
+        var slug_alt = 'slug_alt' in ch_data ? ch_data.slug_alt : {};
+        slug_alt[bmv_dt_settings.source.site] = bmv_dt_chapter.slug;
+        ch_data.slug_alt = slug_alt;
+      }
+      ch_data.slug = slug;
       ch_data.hs_visited = ch_visited;
       var cover_chk = bmv_dt_settings.source.type.search(/eastheme|koidezign/) == -1 && res.exists() && 'cover' in bmv_dt_chapter && bmv_dt_chapter.cover == '';
       if (cover_chk) ch_data.cover = res.val().cover;
       bmf_fbase_db_change('chapter/history/set', c_path, 'update', ch_data); //use "update" to keep "other data" from being deleted
     });
   }
-    
-  // if (bmv_settings.direction && !cookies.get(bmv_zoom_id)) bmf_chapter_direction(); //rtl or ltr
+}
+
+function bmf_chapter_nav(note, data) {
+  if (!bmv_dt_chapter) return;
+  var json = JSON.parse(data);
+  bmv_dt_series = json;
+  bmf_fbase_slug('chapter', {"id": bmv_dt_chapter.slug, "title": bmv_dt_series.title}, bmf_chapter_history);
+
+  if (json.status_code == 200) {
+    // Chapter navigation
+    bmf_chapter_zoom(json.slug, json.detail.type);
+    bmv_el_post.setAttribute('data-type', json.detail.type);
+
+    var lists = json.chapter; //JSON data
+    var str_ch_nav = '';
+    str_ch_nav += '<select name="index">';
+    for (var i = 0; i < lists.length; i++) {
+      str_ch_nav += '<option value="'+ lists[i].number +'"';
+      if (lists[i].number.replace(/[\.\s\t\-]+/g, '-') == bmv_dt_chapter.current) { str_ch_nav += ' selected="selected"'; }
+      str_ch_nav += '>Chapter '+ lists[i].number.replace(/[-\s]((bahasa?[-\s])?indo(nesiaa?)?|full)/, '') +'</option>';
+    }
+    str_ch_nav += '</select>';
   
-  // Left and right keyboard navigation
-  document.addEventListener('keyup', bmf_chapter_key);
+    // Display chapter navigation
+    el('.ch-nav .ch-number', 'all')[0].innerHTML = str_ch_nav;
+    el('.ch-nav .ch-number', 'all')[1].innerHTML = str_ch_nav;
+
+    // Select option navigation
+    el('.chapter select', 'all').forEach(item => {
+      item.addEventListener('change', function() {
+        var num = this.selectedIndex;
+        wl.hash = '#/chapter/'+ bmf_series_chapter_link('nav/select', this.options[num].value);
+      });
+    });
+  }
+}
+
+function bmf_chapter_fnc() {
+  // if (bmv_settings.direction && !cookies.get(bmv_zoom_id)) bmf_chapter_direction(); //rtl or ltr
+  document.addEventListener('keyup', bmf_chapter_key); //Left and right keyboard navigation
 }
 
 function bmf_build_chapter_nav(data) {
@@ -2430,7 +2478,7 @@ function bmf_build_chapter(data) {
   bmv_dt_chapter = data;
   bmv_zoom_id = data.slug;
   var images = data.images;
-  var ch_current = data.current.replace(/[-\s]((bahasa[-\s])?indo(nesiaa?)?|full)/, '');
+  var ch_current = data.current.replace(/[-\s]((bahasa?[-\s])?indo(nesiaa?)?|full)/, '');
   var ch_title = data.title +' Chapter '+ ch_current;
   var bc_newtab = bmv_dt_settings.link.indexOf(`${bmv_current}-bc`) != -1;
   var img_newtab = bmv_dt_settings.link.indexOf(`${bmv_current}-img`) != -1;
@@ -2453,11 +2501,11 @@ function bmf_build_chapter(data) {
       images[i] = images[i].replace(/^\s+/, '').replace(/^(%20)+/, '');
       str_chapter += '<a class="ch-images full" data-index="'+ (i + 1) +'" href="'+ images[i];
       if (img_newtab) str_chapter += '" target="_blank';
-      str_chapter += '"><img style="min-height:750px;" class="full_img loading loge lazy1oad" data-src="'+ images[i] +'" title="'+ img_attr +'" alt="'+ img_attr +'">';
-      if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.ch_index) str_chapter += '<div class="ch-index"><div class="sticky"><div class="btn">'+ (i + 1) +'</div></div></div>';
+      str_chapter += '"><img style="min-height:750px;" class="full_img loading loge lazy1oad" data-index="'+ (i + 1) +'" data-src="'+ images[i] +'" title="'+ img_attr +'" alt="'+ img_attr +'">';
+      if (fbase_user && fbase_user.tier == '\x70\x72\x6f' && bmv_dt_settings.ch_index) str_chapter += '<div class="ch-index"><div class="sticky"><div class="btn">'+ (i + 1) +'</div></div></div>';
       str_chapter += '</a>';
   
-      if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.ch_menu) {
+      if (fbase_user && fbase_user.tier == '\x70\x72\x6f' && bmv_dt_settings.ch_menu) {
         // Check CDN
         if (!bmv_chk_cdn && images[i].match(bmv_rgx_cdn)) {
           var cdn_match = images[i].match(bmv_rgx_cdn);
@@ -2488,7 +2536,7 @@ function bmf_build_chapter(data) {
 
   bmf_chapter_fnc();
   bmv_el_images = el('#reader');
-  if (fbase_user && fbase_user.tier == 'pro') {
+  if (fbase_user && fbase_user.tier == '\x70\x72\x6f') {
     if (bmv_dt_settings.ch_menu) bmf_chapter_menu();
     if (bmv_dt_settings.ch_index) document.addEventListener('scroll', bmf_chapter_middle); //ch-index
   }
@@ -2496,6 +2544,22 @@ function bmf_build_chapter(data) {
 }
 
 // #===========================================================================================#
+
+function bmf_series_get_id(title) {
+  var id = '';
+  
+  // id from <title>, bug: if title is contains text "episode" or "chapter"
+  var titleId = title || el('title').innerHTML || '';
+  titleId = titleId.replace(/&#{0,1}[a-z0-9]+;/ig, '').replace(/\([^\)]+\)/g, '').replace(/\s+/g, ' ');
+  if (!title) {
+    titleId = titleId.replace(/\s((bahasa|sub(title)?)\s)?indo(nesia)?/i, '').replace(/(baca|read|download)\s/i, '').replace(/\s?(man(ga|hwa|hua)|[kc]omi[kc]s?|novel|anime)\s?/i, '\x20');
+    titleId = titleId.replace(/[\||\-|\–|»](?:.(?![\||\-|\–|»]))+$/, '').replace(/^\s+/g, ''); //old = ^([^\||\-|\–]+)(?:\s[\||\-|\–])?
+  }
+  titleId = titleId.replace(/\./g, '-').replace(/[^\s\w\-]/g, '').replace(/\s+$/g, '').replace(/\s+/g, '-').toLowerCase();
+  id = titleId;
+  
+  return id;
+}
 
 function bmf_series_chapter_number(check) {
   var ch_arr = bmv_dt_series.chapter;
@@ -2507,7 +2571,7 @@ function bmf_series_chapter_number(check) {
 
 function bmf_series_chapter_link(note, data, slug) {
   if (note.search(/\/select/i) != -1) data = bmf_series_chapter_number(data);
-  var ch_link = (slug || bmv_dt_series.slug) +'/'+ data.number;
+  var ch_link = (slug || bmv_dt_series.slug) +'/'+ data.number.replace(/[\.\s\t\-]+/g, '-').toLowerCase();
   if (bmv_dt_settings.ch_url) ch_link += '/'+ encodeURIComponent('url='+ data.url);
   if (note == 'visited') ch_link += (bmv_dt_settings.ch_url ? '&' : '/')+ encodeURIComponent('site='+ data.site);
   return ch_link;
@@ -2524,7 +2588,7 @@ function bmf_series_chapter_list(note, data) {
     for (var i in data) {
       str_lists += '<li><a class="full radius" href="#/chapter/'+ bmf_series_chapter_link(note, data[i]);
       if (s_newtab) str_lists += '" target="_blank';
-      str_lists += '">Chapter '+ data[i].number.replace(/[-\s]((bahasa[-\s])?indo(nesiaa?)?|full)/, '') +'</a></li>';
+      str_lists += '">Chapter '+ data[i].number.replace(/[-\s]((bahasa?[-\s])?indo(nesiaa?)?|full)/, '') +'</a></li>';
     }
     str_lists += '</ul>';
   } else {
@@ -2533,7 +2597,7 @@ function bmf_series_chapter_list(note, data) {
   el(`.series .${note}-list`).innerHTML = str_lists;
 }
 
-function bmf_series_fnc() {
+function bmf_series_fnc(slug) {
   var s_bm = el('.info-left .bookmark');
   
   el('.info-left img').addEventListener('error', function() {
@@ -2543,7 +2607,7 @@ function bmf_series_fnc() {
 
   // init check bookmark
   if (fbase_login) {
-    var s_path = bmf_fbase_path(`series/${bmv_dt_series.slug}`);
+    var s_path = bmf_fbase_path(`series/${slug}`);
     bmf_fbase_db_get('series/bookmark', `${s_path}/bookmarked`, function(res) {
       if (res.val() == 'true') {
         s_bm.classList.remove('wait');
@@ -2552,6 +2616,12 @@ function bmf_series_fnc() {
 
         // update bookmark
         var data = bmf_fbase_gen('bookmark|info|update', bmv_dt_series);
+        if (bmv_dt_series.slug != slug) {
+          var slug_alt = 'slug_alt' in data ? data.slug_alt : {};
+          slug_alt[bmv_dt_settings.source.site] = bmv_dt_series.slug;
+          data.slug_alt = slug_alt;
+        }
+        data.slug = slug;
         bmf_fbase_db_change('series/bookmark', s_path, 'update', data);
       } else {
         s_bm.classList.remove('wait', 'marked', 'red');
@@ -2560,7 +2630,7 @@ function bmf_series_fnc() {
     });
     
     if (bmv_dt_series.chapter.length > 0) {
-      bmf_fbase_db_get('series/bookmark/style', `${s_path}/hs_visited`, function(res) {
+      bmf_fbase_db_get('series/bookmark/visited', `${s_path}/hs_visited`, function(res) {
         if (res.exists()) {
           var hs_data = genArray(res.val());
           hs_data = sortBy(hs_data, 'added');
@@ -2588,16 +2658,14 @@ function bmf_series_fnc() {
   }
 
   s_bm.addEventListener('click', function() {
-    var slug = this.dataset.slug;
-
     if (fbase_login) {
-      var s_path = bmf_fbase_path(`series/${bmv_dt_series.slug}`);
+      var s_path = bmf_fbase_path(`series/${slug}`);
       this.classList.add('wait');
 
       if (this.classList.contains('marked')) {
         if (confirm(`Hapus series ini dari bookmark?\n👉 ${slug}`)) {
           var r_note = 'series/bookmark/remove';
-          var hs_path = bmf_fbase_path(`series/${bmv_dt_series.slug}/hs_visited`);
+          var hs_path = bmf_fbase_path(`series/${slug}/hs_visited`);
           bmf_fbase_db_check(r_note, hs_path, function(res) {
             if (res) {
               bmf_fbase_db_change(r_note, s_path, 'update', {bookmarked: 'false'}, function() {
@@ -2634,7 +2702,7 @@ function bmf_series_fnc() {
     }
   });
 
-  if (fbase_user && fbase_user.tier == 'pro') {
+  if (fbase_user && fbase_user.tier == '\x70\x72\x6f') {
     if (el('.series .s-copy')) {
       el('.series .s-copy').addEventListener('click', function() {
         if (copyToClipboard(el('.series h1').textContent, this)) {
@@ -2673,12 +2741,12 @@ function bmf_series_fnc() {
 function bmf_build_series(data) {
   // Display "series" page
   bmv_dt_series = data;
-  if (data.detail.type != '') bmf_chapter_zoom(data.slug, data.detail.type);
+  bmf_chapter_zoom(data.slug, data.detail.type);
   var s_newtab = bmv_dt_settings.link.indexOf(bmv_current) != -1;
 
   var str_series = '';
   str_series += '<div class="post-header flex f_middle">';
-  if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.sr_copy) str_series += '<span class="s-copy" title="Copy Title"><svg data-name="zondicons/copy" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M6 6V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h4zm2 0h4a2 2 0 0 1 2 2v4h4V2H8v4zM2 8v10h10V8H2z"/></svg></span>';
+  if (fbase_user && fbase_user.tier == '\x70\x72\x6f' && bmv_dt_settings.sr_copy) str_series += '<span class="s-copy" title="Copy Title"><svg data-name="zondicons/copy" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M6 6V2c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h4zm2 0h4a2 2 0 0 1 2 2v4h4V2H8v4zM2 8v10h10V8H2z"/></svg></span>';
   str_series += '<h1 class="title">' + data.title + '</h1>';
   str_series += '</div>'; //.post-header
   str_series += '<div class="flex_wrap f_between '+ (fbase_login ? 'login' : 'not-login') +'">';
@@ -2688,6 +2756,8 @@ function bmf_build_series(data) {
   str_series += '<ul class="detail bg2 layer radius">';
   if (data.detail.type != '') str_series += '<li><b>Type</b> <div class="text">'+ firstUCase(data.detail.type) +'</div></li>';
   str_series += '<li><b>Status</b> <div class="text">'+ data.detail.status.replace(/berjalan/i, 'Ongoing') +'</div></li>';
+  if (data.detail.author != '') str_series += '<li><b>Author</b> <div class="text">'+ data.detail.author +'</div></li>';
+  if (data.detail.artist != '') str_series += '<li><b>Artist</b> <div class="text">'+ data.detail.artist +'</div></li>';
   if (data.detail.genre != '') str_series += '<li><b>Genre</b> <div class="text">'+ data.detail.genre +'</div></li>';
   str_series += '</ul>';
   str_series += '</div>'; //.info-left
@@ -2717,12 +2787,12 @@ function bmf_build_series(data) {
   str_series += '</div>'; //.chapters
   str_series += '<div id="disqus_thread"><div class="full t_center"><button class="disqus-trigger btn bgrey">'+ bmv_settings.l10n.comment_btn +'</button></div></div>';
   str_series += '</div>'; //.info-right
-  if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.sr_list && is_mobile) str_series += '<div class="scroll-to-list btn bgrey">list</div>';
-  if (bmv_dt_settings.source.site.search(/manhwaindo|tukangkomik/) != -1 && data.slug.search(/^\d{5,}-|-[a-z]{1,3}\d{1,3}$|-\d{1,3}[a-z]{1,3}$/i) != -1) str_series += '<div class="mod-slug btn bgrey pulse" title="remove random number from slug">slug</div>';
+  if (fbase_user && fbase_user.tier == '\x70\x72\x6f' && bmv_dt_settings.sr_list && is_mobile) str_series += '<div class="scroll-to-list btn bgrey">list</div>';
+  if (bmv_dt_settings.source.site.search(/manhwaindo|tukangkomik/) != -1 && data.slug.search(/^\d{5,}(\w{2,})?-|-[a-z]{1,3}\d{1,3}$|-\d{1,3}[a-z]{1,3}$/i) != -1) str_series += '<div class="mod-slug btn bgrey pulse" title="remove random number from slug">slug</div>';
   str_series += '</div>';
   bmv_el_post.innerHTML = str_series;
 
-  bmf_series_fnc();
+  bmf_fbase_slug('series', {"id": bmv_dt_series.slug, "title": bmv_dt_series.title}, bmf_series_fnc);
   bmf_series_chapter_list('chapter', data.chapter); //Build chapter list
 }
 
@@ -2818,7 +2888,7 @@ function bmf_search_adv_param(info) {
     }
   }
 
-  var s_param = s_title + s_status + s_format + s_type + s_order + s_genre_val;
+  var s_param = s_title.toLowerCase() + s_status + s_format + s_type + s_order + s_genre_val;
   s_param = s_param == '' ? 'default' : encodeURIComponent(s_param.replace(/^[&\?]/, ''));
   wl.hash = '#/search/?params='+ s_param;
 }
@@ -3089,7 +3159,7 @@ function bmf_build_latest(data) {
     str_latest += '<div class="title"><a href="#/series/'+ series[i].slug;
     if (l_newtab) str_latest += '" target="_blank';
     str_latest += '"><h3 class="hd-title clamp">'+ series[i].title +'</h3></a></div>';
-    if (series[i].chapter != '') str_latest += '<div class="l-chapter">'+ series[i].chapter.replace(/ch\.(\s+)?/i, 'Chapter ').replace(/[-\s]((bahasa[-\s])?indo(nesiaa?)?|full)/, '') +'</div>';
+    if (series[i].chapter != '') str_latest += '<div class="l-chapter">'+ series[i].chapter.replace(/ch\.(\s+)?/i, 'Chapter ').replace(/[-\s]((bahasa?[-\s])?indo(nesiaa?)?|full)/, '') +'</div>';
     if (series[i].date != '') {
       var l_date = isNaN(Date.parse(series[i].date)) ? series[i].date : timeDifference(series[i].date);
       str_latest += '<div class="date">'+ l_date +'</div>';
@@ -3102,21 +3172,100 @@ function bmf_build_latest(data) {
 
 // #===========================================================================================#
 
-function bmf_build_info() {
-  if (!el('#addons .page-info')) {
+function bmf_build_addons(note) {
+  if (!el('#addons .a-toggle')) {
+    var t_elem = document.createElement('div');
+    t_elem.className = 'a-toggle btn green';
+    t_elem.innerHTML = '&#43;';
+    el('#addons').appendChild(t_elem);
+
+    el('#addons .a-toggle').addEventListener('click', function() {
+      this.parentElement.classList.toggle('active');
+    });
+  }
+
+  if (!el('#addons .a-info')) {
     var i_data = '\u2714\ufe0f\x20\x64\x65\x76';
     if (cookies.get('\x64\x65\x6d\x6f\x5f\x70\x61\x67\x65')) i_data += '<br>'+ '\u2714\ufe0f\x20\x64\x65\x6d\x6f';
 
     var i_elem = document.createElement('div');
-    i_elem.className = 'page-info bg2';
-    i_elem.innerHTML = '<div class="i-content">'+ i_data +'</div><div class="i-btn btn green" title="Info">i</div>';
+    i_elem.className = 'a-info a-content bg2';
+    i_elem.innerHTML = i_data;
     el('#addons').appendChild(i_elem);
-
-    el('#addons .page-info').addEventListener('click', function() {
-      this.classList.toggle('active');
-    });
+  }
+  
+  if (el('#addons .a-link')) {
+    el('#addons .a-l-content').classList.add('no_items');
+    if (note.indexOf('xhr') != -1) {
+      el('#addons .a-l-api').href = bmv_url_api.replace('?', '?\x64\x65\x76&');
+      el('#addons .a-api').classList.remove('no_items');
+    } else {
+      el('#addons .a-api').classList.add('no_items');
+    }
   } else {
-    el('#addons .page-info').classList.remove('active');
+    var l_str = '<ul>';
+    l_str += '<li><a class="newtab" href="./api/test/" target="_blank" title="Web Scraping Test">WST</a></li>';
+    l_str += '<li><a class="a-api no_items" href="javascript:void(0)">API</a></li>';
+    l_str += '</ul>';
+    l_str += '<div class="a-l-content flex f_perfect no_items"><div class="fp_content full">';
+    l_str += '<div class="a-l-btn flex f_middle">';
+    l_str += '<button class="a-res btn selected">Response</button>';
+    l_str += '<button class="a-error btn no_items"><span style="color:red">!!</span> Error</button>';
+    l_str += '<span class="f_grow"></span>';
+    l_str += '<a class="a-l-api newtab" href="" target="_blank">API URL</a>';
+    l_str += '</div>';
+    l_str += '<textarea class="a-show full" readonly></textarea>';
+    l_str += '<div class="a-close t_center"><span class="btn red">close</span></div>';
+    l_str += '</div></div>';
+
+    var l_elem = document.createElement('div');
+    l_elem.className = 'a-link a-content bg2';
+    l_elem.innerHTML = l_str;
+    el('#addons').appendChild(l_elem);
+    
+    if (note.indexOf('xhr') != -1) {
+      el('#addons .a-l-api').href = bmv_url_api.replace('?', '?\x64\x65\x76&');
+      el('#addons .a-api').classList.remove('no_items');
+    }
+
+    el('#addons .a-api').addEventListener('click', function() {
+      if (bmv_dt_error && 'response' in bmv_dt_error) {
+        el('#addons .a-l-btn .a-error').classList.remove('no_items');
+      } else {
+        el('#addons .a-l-btn .a-error').classList.add('no_items');
+      }
+
+      el('#header').style.top = '-'+ el('#header').offsetHeight +'px';
+      document.body.classList.remove('header-show');
+      document.body.classList.add('no_scroll');
+
+      el('#addons .a-l-btn button.selected').classList.remove('selected');
+      el('#addons .a-l-btn .a-res').classList.add('selected');
+
+      var data = bmv_dt_error || window[`bmv_dt_${bmv_current}`];
+      el('#addons .a-l-content textarea').value = JSON.stringify(data, null, 2);
+      el('#addons .a-l-content').classList.remove('no_items');
+    });
+
+    el('#addons .a-l-btn button', 'all').forEach(function(item) {
+      item.addEventListener('click', function() {
+        el('#addons .a-l-btn button.selected').classList.remove('selected');
+        item.classList.add('selected');
+
+        var data;
+        if (item.classList.contains('a-error')) {
+          data = bmv_dt_error.response;
+        } else {
+          data = JSON.stringify(bmv_dt_error || window[`bmv_dt_${bmv_current}`], null, 2);
+        }
+        el('#addons .a-l-content textarea').value = data;
+      });
+    });
+
+    el('#addons .a-l-content .a-close').addEventListener('click', function() {
+      el('#addons .a-l-content').classList.add('no_items');
+      document.body.classList.remove('no_scroll');
+    });
   }
 }
 
@@ -3162,7 +3311,7 @@ function bmf_build_default_fnc() {
   }
   
   el('.quick-search .qs-search').addEventListener('click', function() {
-    if (el('.quick-search .qs-field').value != '') wl.hash = '#/search/?query='+ el('.quick-search .qs-field').value.trim();
+    if (el('.quick-search .qs-field').value != '') wl.hash = '#/search/?query='+ el('.quick-search .qs-field').value.toLowerCase().trim();
   });
   document.addEventListener('keyup', bmf_default_key);
 
@@ -3175,11 +3324,11 @@ function bmf_build_default_fnc() {
   if (is_mobile) {
     el('#header .nav-toggle').addEventListener('click', function() {
       this.parentElement.classList.toggle('nav-show');
-      document.body.classList.toggle('no-scroll');
+      document.body.classList.toggle('no_scroll');
     });
     el('.quick-search .qs-open').addEventListener('click', function() {
       this.classList.toggle('qs-bg');
-      document.body.classList.toggle('no-scroll');
+      document.body.classList.toggle('no_scroll');
       el('.quick-search .qs-close').classList.toggle('no_items');
       toggleClass(el('.quick-search .qs-form'), ['qs-show', 'no_items']);
       el('.quick-search .qs-field').select();
@@ -3357,8 +3506,7 @@ function bmf_page_scroll() {
       }
     } else {
       if (document.body.classList.contains('header-floating')) d_header.parentElement.style.removeProperty('height');
-      document.body.classList.remove('header-floating');
-      document.body.classList.remove('header-show');
+      document.body.classList.remove('header-floating', 'header-show');
       d_header.style.removeProperty('top');
     }
 
@@ -3371,7 +3519,7 @@ function bmf_page_scroll() {
       if (!bmv_loaded_img) bmf_lazyLoad(el('#reader img', 'all'), 'scroll');
     }
     
-    if (fbase_user && fbase_user.tier == 'pro' && bmv_dt_settings.ch_menu && el('.cm_nav .cm_next')) {
+    if (fbase_user && fbase_user.tier == '\x70\x72\x6f' && bmv_dt_settings.ch_menu && el('.cm_nav .cm_next')) {
       // next background (mobile)
       if (is_mobile && (getOffset(check_point).bottom + bmv_half_screen) >= getOffset(el('#reader')).bottom) {
         el('.cm_nav .cm_next').classList.add('mlh_show');
@@ -3414,7 +3562,7 @@ function bmf_build_page_direct(current) {
   if (current == 'contact') bmf_build_contact();
   
   bmf_meta_tags('direct'); //Meta tags
-  setTimeout(function() { document.body.classList.remove('loading', 'lody', 'no-scroll') }, 500); //show page
+  setTimeout(function() { document.body.classList.remove('loading', 'lody', 'no_scroll') }, 500); //show page
   document.addEventListener('scroll', bmf_page_scroll);
   
   bmv_page_loaded = true;
@@ -3436,7 +3584,7 @@ function bmf_build_page_api(json) {
   
     if (bmv_chk_nav) bmf_page_nav(json);
   
-    document.body.classList.remove('loading', 'lody', 'no-scroll');
+    document.body.classList.remove('loading', 'lody', 'no_scroll');
     bmf_meta_tags('api', json); //Meta tags
 
     if (bmv_current == 'series' || bmv_current == 'chapter') {
@@ -3448,6 +3596,7 @@ function bmf_build_page_api(json) {
     }
   } else {
     document.body.classList.remove('loading', 'lody');
+    bmv_dt_error = json;
     var str_error = json.status_code;
     if ('message' in json) str_error += ' '+ json.message;
     bmv_el_post.innerHTML = `<div class="flex f_middle f_center" style="min-height:50vh;">!! ERROR: ${str_error}</div>`;
@@ -3513,7 +3662,7 @@ function bmf_build_page(note, data) {
   }
 
   // addons
-  if (local('get', '\x64\x65\x76')) bmf_build_info();
+  if (local('get', '\x64\x65\x76')) bmf_build_addons(note);
 }
 
 function bmf_gen_url() {
@@ -3538,7 +3687,8 @@ function bmf_gen_url() {
     bmv_dt_settings['cache'] = url_cache;
   }
 
-  bmf_loadXMLDoc(`xhr/${bmv_current}`, `${api_url}/api/${url_param}&cache=${bmv_dt_settings.cache}`, bmf_build_page);
+  bmv_url_api = `${api_url}/api/${url_param}&cache=${bmv_current == 'search' ? '0' : bmv_dt_settings.cache}`;
+  bmf_loadXMLDoc(`xhr/${bmv_current}`, bmv_url_api, bmf_build_page);
 }
 
 function bmf_build_load(note) {
@@ -3608,10 +3758,12 @@ function bmf_reset_var() {
   bmv_dt_series = null;
   bmv_dt_chapter = null;
   bmv_dt_bmhs = null;
+  bmv_dt_error = null;
   bmv_dt_delete = [];
   bmv_dt_lazy = [];
   bmv_el_result = null;
   bmv_el_images = null;
+  bmv_url_api = null;
   document.removeEventListener('scroll', bmf_page_scroll);
   document.removeEventListener('scroll', bmf_chapter_middle);
   document.removeEventListener('keyup', bmf_default_key);
@@ -3619,6 +3771,7 @@ function bmf_reset_var() {
   document.removeEventListener('keyup', bmf_chapter_key);
   document.removeEventListener('keyup', bmf_bmhs_key);
   document.body.classList.remove('header-floating', 'header-show');
+  el('#addons').classList.remove('active');
 }
 
 function bmf_update_settings(note, newdata) {
@@ -3688,6 +3841,25 @@ function bmf_get_fragment() {
 }
 
 // #===========================================================================================#
+
+function bmf_fbase_slug(note, data, callback, backup) {
+  if (fbase_login) {
+    var f_path = bmf_fbase_path(`series/${data.id}`);
+    bmf_fbase_db_check(note +'/bookmark/slug', f_path, function(res) {
+      if (res) {
+        callback(data.id);
+      } else {
+        if (backup) {
+          callback(backup);
+        } else {
+          bmf_fbase_slug(note, {"id": bmf_series_get_id(data.title)}, callback, data.id);
+        }
+      }
+    });
+  } else {
+    callback(data.id);
+  }
+}
 
 function bmf_fbase_backup() {
   if (!cookies.get('fbase_backup')) {
@@ -3909,11 +4081,11 @@ function bmf_fbase_check() {
 // #===========================================================================================#
 
 // note: prm = param, dt = data, el = element
-var wh, wd, bmv_current, bmv_zoom_id, bmv_max_bmhs, bmv_max_hv, bmv_homepage, bmv_lazy_error, bmv_lazy_skip;
+var wh, wd, bmv_current, bmv_zoom_id, bmv_max_bmhs, bmv_max_hv, bmv_homepage, bmv_lazy_error, bmv_lazy_skip, bmv_url_api;
 var bmv_prm_slug, bmv_prm_chapter;
 var bmv_page_loaded, bmv_chk_query, bmv_chk_nav, bmv_chk_cdn, bmv_chk_gi, bmv_chk_pause, bmv_chk_from, bmv_chk_lazy;
 var bmv_loaded_img, bmv_load_cdn, bmv_load_gi;
-var bmv_dt_latest, bmv_dt_search, bmv_dt_series, bmv_dt_chapter, bmv_dt_bmhs, bmv_dt_settings, bmv_dt_delete, bmv_dt_lazy;
+var bmv_dt_latest, bmv_dt_search, bmv_dt_series, bmv_dt_chapter, bmv_dt_bmhs, bmv_dt_error, bmv_dt_settings, bmv_dt_delete, bmv_dt_lazy;
 var bmhs_arr, bmhs_current, bmhs_length;
 var bmv_el_post, bmv_el_result, bmv_el_images;
 var bmv_str_cdn, bmv_str_gi, bmv_str_cdn_url;
@@ -3923,6 +4095,7 @@ var bmhs_nav_max = 3; //min = 3
 var bmv_series_list = '#/search/?params=default';
 var bmv_half_screen = Math.floor((window.screen.height / 2) + 30);
 var bmv_zoom = local('get', 'bmv_zoom') ? JSON.parse(local('get', 'bmv_zoom')) : {};
+var bmv_zm_size = {"manga": 800, "manhua": 700, "manhwa": 500};
 var bmv_rgx_cdn = /((?:(?:i\d+|cdn|img)\.)?(wp|statically|image(?:simple|cdn))\.(?:com?|io|app)\/(?:(?:img|v\d+)\/(?:[^\.]+\/)?)?)/i;
 var bmv_rgx_gi = /\/([swh]\d+)(?:-[\w]+[^\/]*)?\/|=([swh]\d+).*/i;
 var bmv_genres = ['4-koma','action','adult','adventure','comedy','cooking','crime','demons','doujinshi','drama','ecchi','fantasy','game','ghosts','gore','harem','historical','horror','isekai','josei','kingdom','loli','magic','magical-girls','martial-arts','mature','mecha','medical','military','monster-girls','monsters','music','mystery','one-shot','parody','philosophical','police','post-apocalyptic','psychological','reincarnation','revenge','romance','samurai','school','school-life','sci-fi','seinen','shotacon','shoujo','shounen','slice-of-life','sports','super-power','superhero','supernatural','survival','system','thriller','tragedy','vampires','video-games','villainess','webtoons','wuxia'];
@@ -3934,6 +4107,7 @@ var is_mobile = isMobile();
 var is_chrome = isChromium();
 var is_dark = document.documentElement.classList.contains('dark');
 var last_scroll = 0;
+var imageoptim_username = 'YOUR_IMAGEOPTIM_USERNAME'; //https://imageoptim.com/api/get?username={USERNAME}
 var check_point = el('#check-point');
 var api_url = '.';
 
@@ -3999,14 +4173,6 @@ var bmv_settings = {
       "type": "themesia",
       "site": "mangatale"
     },
-    "komiklab": {
-      "type": "themesia",
-      "site": "komiklab"
-    },
-    "komikcast": {
-      "type": "enduser",
-      "site": "komikcast"
-    },
     "maid": {
       "type": "koidezign",
       "site": "maid"
@@ -4022,6 +4188,18 @@ var bmv_settings = {
     "shinigami": {
       "type": "madara",
       "site": "shinigami"
+    },
+    "kiryuu": {
+      "type": "themesia",
+      "site": "kiryuu"
+    },
+    "komikcast": {
+      "type": "enduser",
+      "site": "komikcast"
+    },
+    "pojokmanga": {
+      "type": "madara",
+      "site": "pojokmanga"
     }
   },
   "tier": {

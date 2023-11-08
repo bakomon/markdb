@@ -73,6 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - lazyload: disable skip image if current page is chapter
 - lazyload: get image dimensions before image has fully loaded
+- lazyload: current image loading info on chapter page (LZ)
 - connection-notif: show/hide click on chapter page
 
 ## [1.2] - 2023-04-16
@@ -83,3 +84,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - lazyload: load `single` image directly
+
+## [1.3] - 2023-07-05
+
+### Fixed
+- api: slug on latest & search page
+- api: path on search page
+- search: if value is not lowercase
+- series: chapter number
+- `DOMDocument loadHTML` not encoding `UTF-8` correctly
+- minor bug fixes and improvements.
+
+### Added
+
+- get `slug` from title on series page
+- `reset button` for zoom & load image on chapter page
+- `slug_alt` to bookmark data
+- `author` and `artist` in series page
+- settings: reset with `type` confirm
+- bypass `cloudflare` with [ScrapingAnt](https://scrapingant.com/)
+- new source `pojokmanga.net` (madara)
+- new source `kiryuu.id` (themesia)
+- `headers` and `body` to error data
+
+### Changed
+
+- api: `shinigami.id` (madara)
+- api: `komikcast.site` (enduser)
+- `komikcast.site` to `komikcast.io`
+
+### Removed
+
+- `komiklab.com` (themesia)
