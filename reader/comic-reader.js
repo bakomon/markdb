@@ -489,6 +489,7 @@ function mydb_cr_fnc() {
       '.read-container',
       '#readerareaimg',
       '.reader-area',
+      '#readarea',
       '.main-reading-area',
       '.viewer-cnt #all',
       '#Gambar_komik',
@@ -603,6 +604,8 @@ function mydb_cr_fnc() {
       }
     } else if (wh.indexOf('mangayu') != -1) {
       el('.m-scroll-chapter').classList.remove('sticky');
+    } else if (wh.indexOf('komikrealm') != -1) {
+      removeElem(el('[id^="chapterImage"]', main));
     } else if (document.body.classList.contains('reader_cms')) {
       var my_next = wh.indexOf('comicfx') != -1 ? el('.ch-nav a.ch-next') : el('.pager-cnt .pull-right a');
       if (window['next_chapter'] != '') {
@@ -620,7 +623,8 @@ function mydb_cr_fnc() {
       "webtoons": ["#_viewer"],
       "merakiscans": ["#container"],
       "mangapark": ["#readerarea","httpLis"],
-      "zeroscans": ["main .container"]
+      "zeroscans": ["main .container"],
+      "komikrealm": ["#readarea"]
     };
     
     var a_site = wh.replace(wh_rgx, '').replace(/\.(.*?)+$/, '');
@@ -691,6 +695,10 @@ function mydb_cr_fnc() {
   
   function checkAll() {
     //if (el('[rel="tag"]') && el('[rel="tag"]').innerHTML.search(/project/i) != -1) return;
+    
+    if (wh.indexOf('komikrealm') != -1) { //api
+      genImageApi(_chapterImage); //from web
+    }
     
     if (wh.indexOf('webtoons') != -1 && isMobile) { //api
       genImageApi(imageList); //from web
@@ -934,7 +942,7 @@ function mydb_cr_fnc() {
   var halfScreen = Math.floor((window.screen.height / 2) + 30);
   var rgxCdn = /(?:i\d+|cdn|img)\.(wp|statically|imagesimple)\.(?:com?|io)\/(?:img\/(?:[^\.]+\/)?)?/i;
   var rgxGi = /\/([swh]\d+)(?:-[\w]+[^\/]+)?\/|=([swh]\d+)[^\w]+(.*)/i;
-  var rgxApi = /new_cms|reader_cms|themesia|kyuroku|merakiscans|mangapark|softkomik|webtoons|zeroscans/i;
+  var rgxApi = /new_cms|reader_cms|themesia|kyuroku|merakiscans|mangapark|softkomik|webtoons|zeroscans|komikrealm/i;
   var checkPoint, imgArea, imgList, cdnName, zoomID;
   
   // START reader
