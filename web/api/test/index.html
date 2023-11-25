@@ -119,6 +119,7 @@ a.btn{color:var(--color3);}
 .post-header{margin:0 0 30px;}
 .post-content .scrap-submit{margin:20px 0 5px;}
 .post-content .scrap-result{margin-top:15px;}
+.post-content .scrap-result .result-url a{word-wrap:break-word;}
 .post-content .scrap-result .result-code{margin:15px 0 25px;}
 .post-content .scrap-result .result-code .result-bottom{padding-top:10px;font-size:200%;}
 .post-content .scrap-result .result-code .result-ok{color:#238636;}
@@ -224,35 +225,37 @@ function loadXMLDoc(url, callback, info) {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState == XMLHttpRequest.DONE) {
+      var response = this.responseText;
       if (this.status == 200) {
-        var response = this.responseText;
         if (info == 'parse') {
           var resHTML = new DOMParser();
           response = resHTML.parseFromString(response, 'text/html');
         }
-        callback(response);
       } else {
-        console.error('!! ERROR: loadXMLDoc status = '+ this.status +', url = '+ url);
-        // callback(this.status);
-        callback(this.responseText);
+        var err_msg = '!! ERROR: loadXMLDoc status = '+ this.status +', url = '+ url;
+        console.error(err_msg);
+        if (response == '') response = err_msg;
       }
+      callback({"status": this.status, "response": response});
     }
   };
   xhr.open('GET', url, true);
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   xhr.send();
 }
 
-function scrap_show(res) {
-  window['bmv_data'] = JSON.parse(res);
-  console.log('bmv_data:', bmv_data);
+function scrap_show(data) {
+  window['wst_data'] = JSON.parse(data.response);
+  // console.log('wst_data:', wst_data);
   el('.post-content').classList.remove('loading', 'loge');
-  el('.result-url a').href = bmv_data.url.search(/(https?:)?\/\//) == -1 ? ('//'+ bmv_data.url) : bmv_data.url;
-  el('.result-url a').innerHTML = bmv_data.url;
-  el('.result-code .code strong').innerHTML = bmv_data.status_code;
-  el('.result-code .bypass').innerHTML = bmv_data.bypass ? ' (bypass)' : '';
-  if (bmv_data.status_code == 200) el('.result-code .result-bottom').classList.add('result-ok');
-  el('.result-xml textarea').value = bmv_data.body;
+  el('.result-url a').href = wst_data.url.search(/(https?:)?\/\//) == -1 ? ('//'+ wst_data.url) : wst_data.url;
+  el('.result-url a').innerHTML = wst_data.url;
+  el('.result-code .code strong').innerHTML = wst_data.status_code;
+  el('.result-code .bypass').innerHTML = wst_data.bypass ? ' (bypass)' : '';
+  if (wst_data.status_code == 200) el('.result-code .result-bottom').classList.add('result-ok');
+  el('.result-xml textarea').value = wst_data.body;
   el('.scrap-result').classList.remove('no_items');
+  el('.result-xml textarea').scrollTop = 0;
 }
 
 el('.scrap-submit').addEventListener('click', function() {

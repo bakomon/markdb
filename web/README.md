@@ -11,3 +11,4 @@ Currently supported sites are:
 ## Source
 - API: [Manganya](https://github.com/vnxx/manganya)
 - Icon: [Icon Sets](https://github.com/iconify/icon-sets)
+- Image Resize: [Image Resize API](https://github.com/falconshark/image-resize-api)

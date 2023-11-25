@@ -2,12 +2,12 @@
 
 namespace Api;
 
+require_once __DIR__ . '/Services/Http.php';
+require_once __DIR__ . '/Services/xSelector.php';
+
 use \DOMXpath;
 use Api\Services\Http;
 use Api\Services\xSelector;
-
-require __DIR__ . '/Services/Http.php';
-require __DIR__ . '/Services/xSelector.php';
 
 class CController
 {
@@ -167,7 +167,7 @@ class CController
                 $is_advanced = $this->param_check('params') ? true : false;
                 $qs = $is_advanced && $source['theme'] == 'eastheme' ? '?' : '';
                 $search = ['{$page}', '{$value}'];
-                $replace = $value == 'default' ? [$page, ''] : [$page, $qs . $value];
+                $replace = $value == 'default' ? [$page, ''] : [$page, $qs . rawurlencode($value)];
                 $full_url = $is_advanced ? 'advanced' : 'search';
                 $source_link = str_replace($search, $replace, $source['url'][$full_url]);
 
@@ -441,6 +441,7 @@ class CController
                             
                             $ch_el = array_key_exists('num', $source['series']['chapter']) ? $xpath->query($source['series']['chapter']['num'], $index)[0] : $index;
                             $ch_num = preg_replace('/ch([ap][ap](t?er)?)?\.?[\s\t]+/i', '', $ch_el->textContent);
+                            $ch_num = preg_replace($source['series']['title']['regex2'], '', $ch_num);
 
                             $sr_slug = $slink ? preg_replace('/^' . $slink . '(\d+)?\-/i', '', $slug) : $slug; //remove shortlink
                             $sr_slug = preg_replace('/s\-/i', 's?-', $sr_slug); //eg. https://regexr.com/7es39

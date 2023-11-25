@@ -32,6 +32,14 @@ function firstUCase(str) {
   return text;
 }
 
+
+// Check if an image is loaded (no errors) https://stackoverflow.com/a/1977898/7598333
+function isImageLoaded(img) {
+  if (!img.complete) return false;
+  if (img.naturalWidth === 0) return false;
+  return true;
+}
+
 function modArray(note, array, str) {
   if (note == 'add') array.push(str);
   if (note == 'remove') return array.filter(function(item) { return item !== str });
@@ -72,17 +80,6 @@ function getOffset(element) {
   pos.bottom = rect.bottom + window.scrollY;
   pos.left = rect.left + window.scrollX;
   return pos;
-}
-
-// Check if an image is loaded (no errors) https://stackoverflow.com/a/1977898/7598333
-function isImageLoaded(img) {
-  if (!img.complete) {
-    return false;
-  }
-  if (img.naturalWidth === 0) {
-    return false;
-  }
-  return true;
 }
 
 // Get first {n} data from Array https://stackoverflow.com/a/50930772/7598333
@@ -156,7 +153,7 @@ function keyEvent(event, code) {
     key = event.keyCode;
   }
   
-  return key == code || prop.toLowerCase() == String(code).toLowerCase() || new RegExp(`^${prop}$`).test(code);
+  return key == code || prop.toLowerCase() == String(code).toLowerCase() || new RegExp(`^${escape('regex', prop)}$`).test(code);
 }
 
 // Simple querySelector https://codepen.io/sekedus/pen/oKYOEK
@@ -209,19 +206,19 @@ function fileValidate(elem, accept) {
 }
 
 // Add script to head https://codepen.io/sekedus/pen/QWKYpVR
-function addScript(options, note) {
+function addScript(options, callback) {
   // data, id, info, boolean, parent
   if (!('data' in options)) return;
   var js_new = document.createElement('script');
   if ('id' in options) js_new.id = options.id;
   if ('async' in options) js_new.async = options.async;
-  if (note == 'in') {
+  if ('html' in options && options.html == true) {
     js_new.type = 'text/javascript';
     js_new.innerHTML = options.data;
   } else {
-    if ('callback' in options) {
-      js_new.onerror = options.callback(true);
-      js_new.onload = options.callback(false);
+    if (callback) {
+      js_new.onerror = callback(true);
+      js_new.onload = callback(false);
     }
     js_new.src = options.data;
   }
@@ -300,8 +297,8 @@ function removeElem(elem, index) {
 
 // Detect mobile device https://stackoverflow.com/a/22327971/7598333
 function isMobile() {
-  var a = navigator.userAgent || navigator.vendor || window.opera;
-  return (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4)));
+  var ua = navigator.userAgent || navigator.vendor || window.opera;
+  return (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(ua) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(ua.substr(0,4)));
 }
   
 // Cookies with custom timer https://codepen.io/sekedus/pen/xxYeZZj
@@ -375,7 +372,8 @@ function bmf_getParam(param, url) {
 }
 
 function bmf_connectionNotif(e) {
-  if (e.type == 'online' && !el('#connection')) return;
+  bmv_connection = e.type;
+  if (bmv_connection == 'online' && !el('#connection')) return;
 
   var c_el;
   if (el('#connection')) {
@@ -386,25 +384,27 @@ function bmf_connectionNotif(e) {
     document.body.appendChild(c_el);
 
     c_el.addEventListener('click', function() {
-      if (bmv_current == 'chapter' && e.type != 'online') {
+      if (bmv_connection != 'online') {
         toggleClass(this, ['red', 'bgrey', 'hide', 'pulse']);
         if (this.classList.contains('hide')) {
           this.setAttribute('title', this.innerHTML);
           this.innerHTML = '<svg data-name="mdi/globe-remove" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m14.46 15.88l1.42-1.42L18 16.59l2.12-2.12l1.42 1.41L19.41 18l2.13 2.12l-1.42 1.42L18 19.41l-2.12 2.13l-1.42-1.42L16.59 18l-2.12-2.12M20 12c0-3.36-2.07-6.23-5-7.41V5c0 1.1-.9 2-2 2h-2v2c0 .55-.45 1-1 1H8v2h6c.5 0 .9.35 1 .81c-1.8 1.04-3 2.98-3 5.19c0 1.5.54 2.85 1.44 3.9L12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10l-.1 1.44c-.56-.48-1.2-.85-1.9-1.1V12m-9 7.93V18c-1.1 0-2-.9-2-2v-1l-4.79-4.79C4.08 10.78 4 11.38 4 12c0 4.08 3.06 7.44 7 7.93Z"/></svg>';
         } else {
-          this.innerHTML = this.getAttribute('title');;
+          this.innerHTML = this.getAttribute('title');
         }
       }
     });
   }
 
-  var c_msg = e.type == 'online' ? 'Kembali Online.' : 'Tidak ada koneksi internet. Pastikan Wi-Fi atau data seluler aktif, lalu muat ulang halaman.';
-  // var c_msg = e.type == 'online' ? 'Internet connected.' : 'No internet connection. Make sure Wi-Fi or mobile data is turned on, then reload the page.';
-  c_el.className = e.type == 'online' ? 'green' : 'red';
+  var c_msg = bmv_connection == 'online' ? 'Kembali Online.' : 'Tidak ada koneksi internet. Pastikan Wi-Fi atau data seluler aktif, lalu muat ulang halaman.';
+  // var c_msg = bmv_connection == 'online' ? 'Internet connected.' : 'No internet connection. Make sure Wi-Fi or mobile data is turned on, then reload the page.';
+  c_el.className = bmv_connection == 'online' ? 'green' : 'red';
   c_el.innerHTML = c_msg;
-  if (e.type == 'online') {
-    setTimeout(function() { removeElem(c_el); }, 1500);
-    if (!bmv_page_loaded) window.location.reload();
+  if (bmv_connection == 'online') {
+    setTimeout(function() {
+      if (bmv_connection == 'online') removeElem(c_el);
+    }, 1500);
+    if (!bmv_page_loaded) wl.reload();
   }
 }
 
@@ -413,21 +413,22 @@ function bmf_loadXMLDoc(note, url, callback, info) {
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState == XMLHttpRequest.DONE) {
+      var response = this.responseText;
       if (this.status == 200) {
-        var response = this.responseText;
         if (info == 'parse') {
           var resHTML = new DOMParser();
           response = resHTML.parseFromString(response, 'text/html');
         }
-        callback(note, response);
       } else {
-        console.error('!! ERROR: bmf_loadXMLDoc status = '+ this.status +', url = '+ url);
-        // callback(note, this.status);
-        callback(note, this.responseText);
+        var err_msg = '!! ERROR: bmf_loadXMLDoc status = '+ this.status +', url = '+ url;
+        console.error(err_msg);
+        if (response == '') response = err_msg;
       }
+      callback(note, {"code": this.status, "response": response});
     }
   };
   xhr.open('GET', url, true);
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   xhr.send();
 }
 
@@ -444,75 +445,115 @@ function bmf_lazyLoad(elem, note) {
   } else {
     lz_check_point = el('#lz_check_point');
   }
+  
+  function lazyNext() {
+    bmv_dt_lazy.splice(0, 1); //remove image after loaded
+    if (bmv_dt_lazy.length > 0 || note == 'single') lazyQueue();
+  }
+  
+  function lazyReset() {
+    bmv_chk_lazy = false;
+    bmv_lazy_error = false;
+    bmv_lazy_skip = false;
+  }
 
-  function lazyQueue(data) {
+  function lazyUrl(imgs, callback) {
+    if (is_mobile) {
+      var lz_width = bmv_current == 'chapter' ? window.screen.width : (window.screen.width / 2);
+      bmf_loadXMLDoc(`xhr/${bmv_current}/lazyload`, `${api_url}/tools/image-resize/?quality=${bmv_dt_settings.quality}&width=${(lz_width + 40)}&imageUrl=${encodeURIComponent(imgs)}`, function(n, res) {
+        if (res.code == 200 && res.response != '') {
+          var img_data = JSON.parse(res.response);
+          if (img_data.status == 'success') imgs = img_data.image_url;
+        }
+        callback(imgs);
+      });
+    } else {
+      callback(imgs);
+    }
+  }
+
+  function lazyQueue(single) {
     if (bmv_chk_lazy) return;
-    var lz_elem = data ? data.elem : bmv_dt_lazy[0].elem;
+    
+    var lz_elem = single ? single.elem : bmv_dt_lazy[0].elem;
     var lz_img = new Image();
     var lz_2nd = 'la2yloading';
 
+    var lz_wait;
     if (bmv_current == 'chapter') {
       lz_img = lz_elem;
       lz_2nd = 'lazyload3d lazyshow';
-      lz_elem.style.removeProperty('min-height');
 
       // Get image dimensions before image has fully loaded https://stackoverflow.com/a/6575319/7598333
       var lz_loaded = false;
       lz_img.addEventListener('load', function() { lz_loaded = true; }, true);
-      var lz_wait = setInterval(function() {
+      lz_wait = setInterval(function() {
         if (lz_loaded && lz_img.height > 0) {
           clearInterval(lz_wait);
+          lz_elem.style.removeProperty('min-height');
           lz_elem.style.minHeight = lz_img.height +'px';
         }
       }, 0);
       
-      el('.cm_ld_current').innerHTML = 'LZ ('+ lz_elem.dataset.index +')';
+      if (el('.ch_menu')) el('.cm_ld_current').innerHTML = 'LZ ('+ lz_elem.dataset.index +')';
     }
 
+    var imgs = single ? single.img : bmv_dt_lazy[0].img;
     lz_elem.className = lz_elem.className.replace('lazy1oad', lz_2nd);
     lz_img.onerror = function() { bmv_lazy_error = true; };
-    lz_img.src = data ? data.img : bmv_dt_lazy[0].img;
     bmv_chk_lazy = true;
-    var skip_img = setTimeout(function() { bmv_lazy_skip = true; }, 5000);
-
-    var wait_img = setInterval(function() {
-      if (isImageLoaded(lz_img) || bmv_lazy_error || (bmv_lazy_skip && bmv_current != 'chapter')) {
-        clearInterval(wait_img);
-        clearTimeout(skip_img);
-
-        if (bmv_lazy_error && lz_img.src.match(bmv_rgx_cdn)) {
-          bmv_lazy_error = false;
-          bmv_chk_lazy = false;
-          if (data) {
-            data.img = lz_img.src.replace(bmv_rgx_cdn, '');
-            lazyQueue(data);
-          } else {
-            bmv_dt_lazy[0].img = lz_img.src.replace(bmv_rgx_cdn, '');
-            lazyQueue();
-          }
-        } else {
-          lz_elem.className = lz_elem.className.replace('la2yloading', 'lazyload3d');
-          lz_elem.classList.remove('loading', 'loge');
-          lz_elem.classList[bmv_lazy_error ? 'add' : 'remove']('no-image');
-          if (!bmv_lazy_error) lz_elem.style.removeProperty('min-height');
-  
-          if (bmv_current != 'chapter') {
-            lz_elem.src = lz_img.src;
-            // lz_elem.removeAttribute('data-src');
-            setTimeout(function() { lz_elem.classList.add('lazyshow'); }, 100); //transition
-          }
-          lz_elem.parentElement.classList.add('lazy-loaded');
-  
-          bmv_chk_lazy = false;
-          bmv_lazy_error = false;
-          bmv_lazy_skip = false;
-          if (!data) {
-            bmv_dt_lazy.splice(0, 1); //remove image after loaded
-            if (bmv_dt_lazy.length > 0 || note == 'single') lazyQueue();
-          }
-        }
+    
+    if (isImageLoaded(lz_img) && lz_elem.classList.contains('lazyload3d')) {
+      if (bmv_current == 'chapter') {
+        clearInterval(lz_wait);
+        lz_elem.style.removeProperty('min-height');
       }
-    }, 100);
+      lazyReset();
+      if (!single) lazyNext();
+    } else {
+      lazyUrl(imgs, function(url) {
+        lz_img.src = url;
+
+        var skip_time = bmv_current == 'chapter' ? 60000 : 5000;
+        var skip_img = setTimeout(function() { bmv_lazy_skip = true; }, skip_time);
+
+        var wait_img = setInterval(function() {
+          if (isImageLoaded(lz_img) || bmv_lazy_error || bmv_lazy_skip) {
+            clearInterval(wait_img);
+            clearTimeout(skip_img);
+
+            // repeat, if error & cdn is true
+            if (bmv_lazy_error && lz_img.src.match(bmv_rgx_cdn)) {
+              lazyReset();
+              if (single) {
+                single.img = lz_img.src.replace(bmv_rgx_cdn, '');
+                lazyQueue(single);
+              } else {
+                bmv_dt_lazy[0].img = lz_img.src.replace(bmv_rgx_cdn, '');
+                lazyQueue();
+              }
+            } else {
+              lz_elem.className = lz_elem.className.replace('la2yloading', 'lazyload3d');
+              lz_elem.classList.remove('loading', 'loge');
+              lz_elem.classList[bmv_lazy_error ? 'add' : 'remove']('no-image');
+              lz_elem.style.removeProperty('min-height');
+
+              if (bmv_current == 'chapter') {
+                if (bmv_lazy_error) clearInterval(lz_wait);
+              } else {
+                lz_elem.src = lz_img.src;
+                // lz_elem.removeAttribute('data-src');
+                setTimeout(function() { lz_elem.classList.add('lazyshow'); }, 100); //transition
+              }
+              lz_elem.parentElement.classList.add('lazy-loaded');
+
+              lazyReset();
+              if (!single) lazyNext();
+            }
+          }
+        }, 100);
+      });
+    }
   }
 
   function lazyPos(img) {
@@ -545,7 +586,7 @@ function bmf_lazyLoad(elem, note) {
         imgs = bmv_load_cdn && bmv_str_cdn == 'imagecdn' ? encodeURIComponent(imgs) : imgs.replace(/^(https?:)?\/\//, '');
         if (bmv_chk_cdn) imgs = imgs.replace(bmv_rgx_cdn, '').replace(/\/[fhwq]=[^\/]+/, '');
         if (bmv_load_cdn) imgs = bmv_str_cdn_url + imgs;
-        imgs = '//'+ imgs;
+        imgs = wl.protocol +'//'+ imgs;
 
         // remove location.search ?=
         if (imgs.search(/(pending\-load|cdn\.statically\.io|cdn\.imagesimple\.co)/) != -1) imgs = imgs.replace(/\?(.*)/g, '');
@@ -760,6 +801,7 @@ function bmf_bmhs_remove(note) {
   if (note.indexOf('reset') != -1) {
     bmv_dt_delete = [];
     if (note.indexOf('toggle') == -1) {
+      el('.m-delete-btn').classList.remove('sh-close');
       el('.m-delete-all').classList.add('no_items');
       el('.nav-delete').classList.add('no_items');
     }
@@ -1014,7 +1056,7 @@ function bmf_bmhs_nav_html() {
 }
 
 function bmf_bmhs_html(note) {
-  var m_empty = `<div class="flex f_middle f_center full" style="min-height:130px;">${firstUCase(bmv_prm_slug)} Kosong</div>`;
+  var m_empty = '<div class="flex f_middle f_center full" style="min-height:130px;">'+ (note.indexOf('search') != -1 ? 'Tidak ditemukan' : firstUCase(bmv_prm_slug) +' Kosong') +'</div>';
 
   if ((bmhs_arr && bmhs_arr.length == 0) || note == 'empty') {
     el('.member .m-list').innerHTML = m_empty;
@@ -1095,7 +1137,12 @@ function bmf_bmhs_set(note) {
   if (bmhs_current > bmhs_length) bmhs_current = bmhs_length;
   
   bmf_bmhs_html(note);
-  bmf_bmhs_nav_html();
+  if (note.indexOf('search') != -1 && bmhs_arr.length <= 0) {
+    el('.member .m-pagination').classList.add('no_items');
+  } else {
+    bmf_bmhs_nav_html();
+    el('.member .m-pagination').classList.remove('no_items');
+  }
 }
 
 function bmf_member_bmhs_data(note) {
@@ -1205,15 +1252,15 @@ function bmf_member_profile_fnc() {
       if (pr_data == 'backup' && fbase_user && fbase_user.tier == '\x70\x72\x6f') {
         this.disabled = true;
         el('.m-profile .m-detail').classList.add('loading', 'loge');
-        bmf_loadXMLDoc(`xhr/${bmv_current}/backup`, `${api_url}/firebase/backup.php?uid=${fbase_user.uid}&manual`, function(n, res) {
+        bmf_loadXMLDoc(`xhr/${bmv_current}/backup`, `${api_url}/firebase/backup.php?uid=${fbase_user.uid}&manual`, function(n, data) {
           el('.m-edit', parent).disabled = false;
           el('.m-profile .m-detail').classList.remove('loading', 'loge');
 
-          if (res.indexOf('Error:') != -1) {
-            console.error(res);
-            alert(res);
+          if (data.code != 200 || data.response.indexOf('Error:') != -1) {
+            if (data.code == 200) console.error(data.response);
+            alert(data.response);
           } else {
-            console.log(res);
+            console.log(data.response);
             bmf_member_notif(`success/profile/backup`, {timer: 2000, message: 'Backup data berhasil.'});
           }
         });
@@ -1280,8 +1327,10 @@ function bmf_member_profile_fnc() {
 
       var parent = this.parentElement.parentElement;
       var pr_data = parent.dataset.edit;
+      el('.m-reauth input').placeholder = pr_data == 'password' ? 'Old Password' : 'Password';
 
       if (pr_data == 'delete') {
+        el('.m-reauth .r-save').innerHTML = bmv_settings.l10n.member.delete;
         el('.m-reauth .r-save').dataset.active = pr_data;
         el('.m-reauth').classList.remove('no_items');
         el('.m-reauth input').focus();
@@ -1290,7 +1339,6 @@ function bmf_member_profile_fnc() {
 
       var in_elem = el('input[name]', parent);
       if (!bmf_member_valid(pr_data, in_elem)) return;
-      el('.m-reauth input').placeholder = pr_data == 'password' ? 'Old Password' : 'Password';
       
       if (pr_data == 'cover' && el('.m-file', parent).files.length > 0) {
         parent.classList.add('loading', 'loge');
@@ -1325,6 +1373,7 @@ function bmf_member_profile_fnc() {
 
       if (pr_data == 'password') {
         if (bmf_member_valid('pass', in_elem) && bmf_member_valid('pass-c', in_elem, el('.m-pass-c', parent))) {
+          el('.m-reauth .r-save').innerHTML = bmv_settings.l10n.member.save;
           el('.m-reauth .r-save').dataset.active = pr_data;
           el('.m-reauth').classList.remove('no_items');
           el('.m-reauth input').focus();
@@ -1390,7 +1439,7 @@ function bmf_member_profile_fnc() {
             });
           });
         } else {
-          bmf_profile_save(el(`.m-profile .m-${a_data}.m-input`));
+          bmf_profile_save(el(`.m-profile .m-${a_data} .m-input`));
         }
       }).catch(function(error) {
         bmf_member_notif('error/reauth/'+ error.code);
@@ -1461,6 +1510,7 @@ function bmf_settings_fill(settings) {
   });
 
   el('.st-cache input').value = settings.cache;
+  el('.st-quality input').value = settings.quality;
   el('.st-history input').checked = settings.hs_stop;
   el('.st-ch-url input').checked = settings.ch_url;
 
@@ -1498,6 +1548,12 @@ function bmf_member_settings_fnc() {
     var cache = Number(this.value);
     if (cache < Number(e.target.min)) this.value = e.target.min;
     if (cache > Number(e.target.max)) this.value = e.target.max;
+  });
+
+  el('.st-quality input').addEventListener('input', function(e) {
+    var quality = Number(this.value);
+    if (quality < Number(e.target.min)) this.value = e.target.min;
+    if (quality > Number(e.target.max)) this.value = e.target.max;
   });
 
   el('.st-control input', 'all').forEach(function(item) {
@@ -1560,6 +1616,7 @@ function bmf_member_settings_fnc() {
 
     bmv_dt_settings['theme'] = el('.st-theme input:checked').value;
     bmv_dt_settings['cache'] = el('.st-cache input').value;
+    bmv_dt_settings['quality'] = el('.st-quality input').value;
     bmv_dt_settings['hs_stop'] = el('.st-history input').checked;
     bmv_dt_settings['ch_url'] = el('.st-ch-url input').checked;
 
@@ -1647,6 +1704,10 @@ function bmf_member_settings_html() {
   str_settings += '<h2>Cache Timer</h2>';
   str_settings += '<div><input type="number" id="st-cache" min="10" max="60" step="5" placeholder="30"> minutes (api data)</div>';
   str_settings += '</div>'; //.st-cache
+  str_settings += '<div class="st-quality st-list">';
+  str_settings += '<h2>Image Quality (lazyLoad)</h2>';
+  str_settings += '<div><input type="number" id="st-quality" min="0" max="100" placeholder="50"> percent</div>';
+  str_settings += '</div>'; //.st-quality
   str_settings += '<div class="st-history st-list">';
   str_settings += '<h2>Histori Bacaan (chapter)</h2>';
   str_settings += '<label class="checkbox"><input type="checkbox" id="st-hs-stop"><span></span>Berhenti merekam histori bacaan</label>';
@@ -1945,7 +2006,7 @@ function bmf_build_member() {
       str_member += '</div>'; //.st-control
     }
     str_member += '</div>';
-    if (bmv_prm_slug == 'profile') str_member += '<div class="m-reauth flex f_perfect no_items"><div class="fp_content"><div class="fp_content"><input type="password" name="password" placeholder="Password" autocomplete="off"><div class="flex full f_between m-space-v"><button class="r-save btn red f_grow" data-active="">'+ bmv_settings.l10n.member.delete +'</button><button class="r-cancel btn selected f_grow" style="margin-left:15px;">'+ bmv_settings.l10n.member.cancel +'</button></div></div></div>';
+    if (bmv_prm_slug == 'profile') str_member += '<div class="m-reauth flex f_perfect no_items"><div class="fp_content"><div class="fp_content"><input type="password" name="password" placeholder="Password" autocomplete="off"><div class="flex full f_between m-space-v"><button class="r-save btn red f_grow" data-active=""></button><button class="r-cancel btn selected f_grow" style="margin-left:15px;">'+ bmv_settings.l10n.member.cancel +'</button></div></div></div>';
     var dc_text = bmv_prm_slug == 'settings' ? 'reset' : 'delete';
     if (bmv_prm_slug.search(/bookmark|history|settings/) != -1) str_member += '<div class="m-confirm flex f_perfect no_items"><div class="fp_content wBox bg2 layer"><div class="fp_content"><p><b>Are you absolutely sure?</b></p><p class="m-space-v">This action will <b>permanently</b> '+ dc_text +' all '+ bmv_prm_slug +' data and <b>cannot</b> be undone.</p><p>Please type <b class="no_select">'+ dc_text +'-all-'+ bmv_prm_slug +'</b> to confirm.</p><input class="full m-space-v" type="text" name="verify" placeholder="'+ dc_text +'-all-'+ bmv_prm_slug +'" autocomplete="off"><div class="flex full f_between"><button class="dc-remove btn red f_grow">'+ bmv_settings.l10n.member[bmv_prm_slug == 'settings' ? 'reset' : 'delete'] +'</button><button class="dc-cancel btn selected f_grow" style="margin-left:15px;">'+ bmv_settings.l10n.member.cancel +'</button></div></div></div>';
   } else {
@@ -1992,7 +2053,7 @@ function bmf_window_stop() {
 
 function bmf_chapter_key(e) {
   var is_edit = ['input', 'textarea'].indexOf(document.activeElement.tagName.toLowerCase()) !== -1;
-  if (!is_edit) {
+  if (!is_edit && !is_mobile) {
     if (keyEvent(e, 37) && el('.chapter .btn.prev')) el('.chapter .btn.prev').click(); //key: left arrow
     if (keyEvent(e, 39) && el('.chapter .btn.next')) el('.chapter .btn.next').click(); //key: right arrow
   }
@@ -2227,7 +2288,7 @@ function bmf_menu_fnc(img_list) {
   });
 
   el('.cm_reload').addEventListener('click', function() {
-    window.location.reload();
+    wl.reload();
   });
   
   el('.cm_stop').addEventListener('click', bmf_window_stop);
@@ -2414,8 +2475,8 @@ function bmf_chapter_history(slug) {
 }
 
 function bmf_chapter_nav(note, data) {
-  if (!bmv_dt_chapter) return;
-  var json = JSON.parse(data);
+  if (!bmv_dt_chapter || data.code != 200) return;
+  var json = JSON.parse(data.response);
   bmv_dt_series = json;
   bmf_fbase_slug('chapter', {"id": bmv_dt_chapter.slug, "title": bmv_dt_series.title}, bmf_chapter_history);
 
@@ -2429,7 +2490,7 @@ function bmf_chapter_nav(note, data) {
     str_ch_nav += '<select name="index">';
     for (var i = 0; i < lists.length; i++) {
       str_ch_nav += '<option value="'+ lists[i].number +'"';
-      if (lists[i].number.replace(/[\.\s\t\-]+/g, '-') == bmv_dt_chapter.current) { str_ch_nav += ' selected="selected"'; }
+      if (lists[i].number.replace(/[\.\s\t\-]+/g, '-').toLowerCase() == bmv_dt_chapter.current) { str_ch_nav += ' selected="selected"'; }
       str_ch_nav += '>Chapter '+ lists[i].number.replace(/[-\s]((bahasa?[-\s])?indo(nesiaa?)?|full)/, '') +'</option>';
     }
     str_ch_nav += '</select>';
@@ -2451,6 +2512,13 @@ function bmf_chapter_nav(note, data) {
 function bmf_chapter_fnc() {
   // if (bmv_settings.direction && !cookies.get(bmv_zoom_id)) bmf_chapter_direction(); //rtl or ltr
   document.addEventListener('keyup', bmf_chapter_key); //Left and right keyboard navigation
+  
+  el('#reader .ch-index', 'all').forEach(function(item) {
+    el('.btn', item).addEventListener('click', function(e) {
+      e.preventDefault();
+      if (e.target == e.currentTarget) item.classList.toggle('right');
+    });
+  });
 }
 
 function bmf_build_chapter_nav(data) {
@@ -2499,7 +2567,7 @@ function bmf_build_chapter(data) {
     for (var i = 0; i < images.length; i++) {
       var img_attr = ch_title +' - '+ (i + 1);
       images[i] = images[i].replace(/^\s+/, '').replace(/^(%20)+/, '');
-      str_chapter += '<a class="ch-images full" data-index="'+ (i + 1) +'" href="'+ images[i];
+      str_chapter += '<a class="ch-images full" data-index="'+ (i + 1) +'" href="'+ images[i] +'#'+ (i + 1);
       if (img_newtab) str_chapter += '" target="_blank';
       str_chapter += '"><img style="min-height:750px;" class="full_img loading loge lazy1oad" data-index="'+ (i + 1) +'" data-src="'+ images[i] +'" title="'+ img_attr +'" alt="'+ img_attr +'">';
       if (fbase_user && fbase_user.tier == '\x70\x72\x6f' && bmv_dt_settings.ch_index) str_chapter += '<div class="ch-index"><div class="sticky"><div class="btn">'+ (i + 1) +'</div></div></div>';
@@ -2714,8 +2782,14 @@ function bmf_series_fnc(slug) {
 
     if (el('.series .scroll-to-list')) {
       el('.series .scroll-to-list').addEventListener('click', function() {
-        var s_half = bmv_half_screen - el('.chapters .visited-list').offsetHeight - 150;
-        window.scrollTo(0, getOffset(el('.series .chapters')).top - s_half);
+        var y, vl_height = el('.chapters .visited-list').offsetHeight;
+        if (vl_height == 0) {
+          y = getOffset(el('.series .desc')).top - el('#header').offsetHeight - 10;
+        } else {
+          var s_half = bmv_half_screen - vl_height - 150;
+          y = getOffset(el('.series .chapters')).top - s_half;
+        }
+        window.scrollTo(0, y);
       });
     }
   }
@@ -2729,8 +2803,8 @@ function bmf_series_fnc(slug) {
 
   if (el('.series .mod-slug')) {
     el('.series .mod-slug').addEventListener('click', function() {
-      if (wl.hash.search(/series\/\d{5,}-/) != -1) {
-        wl.href = wl.href.replace(/series\/\d{5,}-/, 'series/');
+      if (wl.hash.search(/series\/\d{5,}(\w{1,2})?-/) != -1) {
+        wl.href = wl.href.replace(/series\/\d{5,}(\w{1,2})?-/, 'series/');
       } else {
         wl.href = wl.href.replace(/(-[a-z]{1,3}\d{1,3}|-\d{1,3}[a-z]{1,3})$/, '');
       }
@@ -2751,7 +2825,7 @@ function bmf_build_series(data) {
   str_series += '</div>'; //.post-header
   str_series += '<div class="flex_wrap f_between '+ (fbase_login ? 'login' : 'not-login') +'">';
   str_series += '<div class="info info-left">';
-  str_series += '<div class="cover"><img style="min-height:330px;" class="radius full_img loading loge" src="'+ data.cover + '" alt="'+ data.title +'" title="'+ data.title +'"></div>';
+  str_series += '<div class="cover"><img style="min-height:330px;" class="radius full_img '+ (data.cover == '' ? 'no-image' : 'loading loge') +'" src="'+ data.cover + '" alt="'+ data.title +'" title="'+ data.title +'"></div>';
   str_series += '<div class="bookmark wait btn flex f_middle f_center" data-slug="'+ data.slug +'" disabled><span class="svg"></span>Bookmark</div>';
   str_series += '<ul class="detail bg2 layer radius">';
   if (data.detail.type != '') str_series += '<li><b>Type</b> <div class="text">'+ firstUCase(data.detail.type) +'</div></li>';
@@ -2764,7 +2838,7 @@ function bmf_build_series(data) {
   str_series += '<span class="f_grow"></span>';
   str_series += '<div class="info info-right">';
   if (data.alternative != '') str_series += '<b>'+ bmv_settings.l10n.series.alternative +'</b><div class="alternative">'+ data.alternative +'</div>';
-  var s_desc = bmv_dt_settings.source.type == 'eastheme' ? data.desc.replace(/.*bercerita\stentang\s/i, '') : data.desc;
+  var s_desc = data.desc.replace(/.*bercerita\stentang\s/i, '');
   str_series += '<div class="desc">';
   str_series += '<b>'+ bmv_settings.l10n.series.synopsis +'</b>';
   str_series += '<div class="summary'+ (is_mobile && s_desc.length >= 400 ? ' clamp' : '') +'">'+ (s_desc != '' ? s_desc.replace(/\.\s/g, '.<div class="new_line"></div>') : '-') +'</div>';
@@ -2777,7 +2851,7 @@ function bmf_build_series(data) {
     str_series += '<div class="last-end flex f_between">';
     str_series += '<a class="btn t_center radius" href="#/chapter/'+ bmf_series_chapter_link('ch_first', data.chapter[data.chapter.length-1]);
     if (s_newtab) str_series += '" target="_blank';
-    str_series += '"><div>'+ bmv_settings.l10n.series.first +'</div><div class="char">Chapter '+ data.chapter[data.chapter.length-1].number.replace(/-[a-zA-Z\-]+/, '') +'</div></a>';
+    str_series += '"><div>'+ bmv_settings.l10n.series.first +'</div><div class="char">Chapter '+ data.chapter[data.chapter.length-1].number /*.replace(/-[a-zA-Z\-]+/, '')*/ +'</div></a>';
     str_series += '<a class="btn t_center radius" href="#/chapter/'+ bmf_series_chapter_link('ch_last', data.chapter[0]);
     if (s_newtab) str_series += '" target="_blank';
     str_series += '"><div>'+ bmv_settings.l10n.series.last +'</div><div class="char">Chapter '+ data.chapter[0].number.replace(/-[a-zA-Z\-]+/, '') +'</div></a>';
@@ -2788,7 +2862,7 @@ function bmf_build_series(data) {
   str_series += '<div id="disqus_thread"><div class="full t_center"><button class="disqus-trigger btn bgrey">'+ bmv_settings.l10n.comment_btn +'</button></div></div>';
   str_series += '</div>'; //.info-right
   if (fbase_user && fbase_user.tier == '\x70\x72\x6f' && bmv_dt_settings.sr_list && is_mobile) str_series += '<div class="scroll-to-list btn bgrey">list</div>';
-  if (bmv_dt_settings.source.site.search(/manhwaindo|tukangkomik/) != -1 && data.slug.search(/^\d{5,}(\w{2,})?-|-[a-z]{1,3}\d{1,3}$|-\d{1,3}[a-z]{1,3}$/i) != -1) str_series += '<div class="mod-slug btn bgrey pulse" title="remove random number from slug">slug</div>';
+  if (bmv_dt_settings.source.site.indexOf('tukangkomik') != -1 && data.slug.search(/^\d{5,}(\w{1,2})?-|-[a-z]{1,3}\d{1,3}$|-\d{1,3}[a-z]{1,3}$/i) != -1) str_series += '<div class="mod-slug btn bgrey pulse" title="remove random number from slug">slug</div>';
   str_series += '</div>';
   bmv_el_post.innerHTML = str_series;
 
@@ -2901,7 +2975,7 @@ function bmf_search_list(param, type) {
   var s_param = param;
   var s_list = s_adv[param];
 
-  if (param == 'status' && (bmv_dt_settings.source.site == 'manhwaindo' || bmv_dt_settings.source.type == 'themesia')) s_list.push({"value":"hiatus"});
+  if (param == 'status' && bmv_dt_settings.source.type == 'themesia') s_list.push({"value": "hiatus"});
   if (bmv_dt_settings.source.type == 'enduser' && param == 'order') { //komikcast
     s_param = 'orderby';
     s_list[0].value = 'titleasc';
@@ -3172,105 +3246,6 @@ function bmf_build_latest(data) {
 
 // #===========================================================================================#
 
-function bmf_build_addons(note) {
-  if (!el('#addons .a-toggle')) {
-    var t_elem = document.createElement('div');
-    t_elem.className = 'a-toggle btn green';
-    t_elem.innerHTML = '&#43;';
-    el('#addons').appendChild(t_elem);
-
-    el('#addons .a-toggle').addEventListener('click', function() {
-      this.parentElement.classList.toggle('active');
-    });
-  }
-
-  if (!el('#addons .a-info')) {
-    var i_data = '\u2714\ufe0f\x20\x64\x65\x76';
-    if (cookies.get('\x64\x65\x6d\x6f\x5f\x70\x61\x67\x65')) i_data += '<br>'+ '\u2714\ufe0f\x20\x64\x65\x6d\x6f';
-
-    var i_elem = document.createElement('div');
-    i_elem.className = 'a-info a-content bg2';
-    i_elem.innerHTML = i_data;
-    el('#addons').appendChild(i_elem);
-  }
-  
-  if (el('#addons .a-link')) {
-    el('#addons .a-l-content').classList.add('no_items');
-    if (note.indexOf('xhr') != -1) {
-      el('#addons .a-l-api').href = bmv_url_api.replace('?', '?\x64\x65\x76&');
-      el('#addons .a-api').classList.remove('no_items');
-    } else {
-      el('#addons .a-api').classList.add('no_items');
-    }
-  } else {
-    var l_str = '<ul>';
-    l_str += '<li><a class="newtab" href="./api/test/" target="_blank" title="Web Scraping Test">WST</a></li>';
-    l_str += '<li><a class="a-api no_items" href="javascript:void(0)">API</a></li>';
-    l_str += '</ul>';
-    l_str += '<div class="a-l-content flex f_perfect no_items"><div class="fp_content full">';
-    l_str += '<div class="a-l-btn flex f_middle">';
-    l_str += '<button class="a-res btn selected">Response</button>';
-    l_str += '<button class="a-error btn no_items"><span style="color:red">!!</span> Error</button>';
-    l_str += '<span class="f_grow"></span>';
-    l_str += '<a class="a-l-api newtab" href="" target="_blank">API URL</a>';
-    l_str += '</div>';
-    l_str += '<textarea class="a-show full" readonly></textarea>';
-    l_str += '<div class="a-close t_center"><span class="btn red">close</span></div>';
-    l_str += '</div></div>';
-
-    var l_elem = document.createElement('div');
-    l_elem.className = 'a-link a-content bg2';
-    l_elem.innerHTML = l_str;
-    el('#addons').appendChild(l_elem);
-    
-    if (note.indexOf('xhr') != -1) {
-      el('#addons .a-l-api').href = bmv_url_api.replace('?', '?\x64\x65\x76&');
-      el('#addons .a-api').classList.remove('no_items');
-    }
-
-    el('#addons .a-api').addEventListener('click', function() {
-      if (bmv_dt_error && 'response' in bmv_dt_error) {
-        el('#addons .a-l-btn .a-error').classList.remove('no_items');
-      } else {
-        el('#addons .a-l-btn .a-error').classList.add('no_items');
-      }
-
-      el('#header').style.top = '-'+ el('#header').offsetHeight +'px';
-      document.body.classList.remove('header-show');
-      document.body.classList.add('no_scroll');
-
-      el('#addons .a-l-btn button.selected').classList.remove('selected');
-      el('#addons .a-l-btn .a-res').classList.add('selected');
-
-      var data = bmv_dt_error || window[`bmv_dt_${bmv_current}`];
-      el('#addons .a-l-content textarea').value = JSON.stringify(data, null, 2);
-      el('#addons .a-l-content').classList.remove('no_items');
-    });
-
-    el('#addons .a-l-btn button', 'all').forEach(function(item) {
-      item.addEventListener('click', function() {
-        el('#addons .a-l-btn button.selected').classList.remove('selected');
-        item.classList.add('selected');
-
-        var data;
-        if (item.classList.contains('a-error')) {
-          data = bmv_dt_error.response;
-        } else {
-          data = JSON.stringify(bmv_dt_error || window[`bmv_dt_${bmv_current}`], null, 2);
-        }
-        el('#addons .a-l-content textarea').value = data;
-      });
-    });
-
-    el('#addons .a-l-content .a-close').addEventListener('click', function() {
-      el('#addons .a-l-content').classList.add('no_items');
-      document.body.classList.remove('no_scroll');
-    });
-  }
-}
-
-// #===========================================================================================#
-
 function bmf_default_key(e) {
   if (keyEvent(e, 13) && el('.quick-search .qs-field') == e.target) el('.quick-search .qs-search').click();
 }
@@ -3311,7 +3286,7 @@ function bmf_build_default_fnc() {
   }
   
   el('.quick-search .qs-search').addEventListener('click', function() {
-    if (el('.quick-search .qs-field').value != '') wl.hash = '#/search/?query='+ el('.quick-search .qs-field').value.toLowerCase().trim();
+    if (el('.quick-search .qs-field').value != '') wl.hash = '#/search/?query='+ encodeURIComponent(el('.quick-search .qs-field').value.toLowerCase().trim());
   });
   document.addEventListener('keyup', bmf_default_key);
 
@@ -3337,8 +3312,8 @@ function bmf_build_default_fnc() {
   }
 
   if (bmv_current != 'chapter') {
-    el('#back-to .to-top').addEventListener('click', function() { document.body.scrollIntoView() });
-    el('#back-to .to-bottom').addEventListener('click', function() { window.scrollTo(0, document.body.scrollHeight) });
+    el('#back-to .to-top').addEventListener('click', function() { document.body.scrollIntoView(); });
+    el('#back-to .to-bottom').addEventListener('click', function() { window.scrollTo(0, document.body.scrollHeight); });
   }
 }
 
@@ -3347,7 +3322,7 @@ function bmf_build_footer() {
   if (bmv_current != 'chapter') str_footer += '<div class="message bg2 t_center layer radius">'+ bmv_settings.l10n.footer_msg +'</div>';
   str_footer += '<div class="flex_wrap '+ (is_mobile ? 'f_center t_center' : 'f_between') +'">';
   str_footer += '<div class="footer-left">© '+ new Date().getFullYear() +', Made with \ud83d\udc96 & \ud83d\ude4c by <a href="https://github.com/bakomon/markdb/tree/master/web" target="_blank" title="Bakomon">Bakomon</a></div>';
-  str_footer += '<div class="footer-right"><a href="#/latest">'+ bmv_settings.l10n.homepage +'</a><span>|</span><a href="'+ bmv_series_list +'">'+ bmv_settings.l10n.all_series +'</a><span>|</span><a href="#/contact">Contact</a><span>|</span><a href="#/search" title="Advanced search">Advanced search</a></div>';
+  str_footer += '<div class="footer-right"><a href="#/latest">'+ bmv_settings.l10n.homepage +'</a><span>|</span><a href="'+ bmv_series_list +'">'+ bmv_settings.l10n.all_series +'</a><span>|</span><a href="#/contact">Contact</a><span>|</span><a href="#/search" title="Advanced Search">Advanced search</a></div>';
   str_footer += '</div>';
   str_footer += '</div>'; //.footer
   if (bmv_current != 'chapter' || (fbase_user && fbase_user.tier == 'basic')) str_footer += '<div id="back-to"><div class="to-top btn">&#x25B2;</div><div class="to-bottom btn">&#x25BC;</div></div>';
@@ -3441,7 +3416,7 @@ function bmf_disqus_load(data) {
     title: el('h1').textContent
   };
 
-  if (el('#disqus-embed') && typeof DISQUS != 'undefined') {
+  if (el('#disqus-embed') && typeof DISQUS !== 'undefined') {
     // https://help.disqus.com/en/articles/1717163-using-disqus-on-ajax-sites
     DISQUS.reset({
       reload: true,
@@ -3599,14 +3574,18 @@ function bmf_build_page_api(json) {
     bmv_dt_error = json;
     var str_error = json.status_code;
     if ('message' in json) str_error += ' '+ json.message;
-    bmv_el_post.innerHTML = `<div class="flex f_middle f_center" style="min-height:50vh;">!! ERROR: ${str_error}</div>`;
+    bmv_el_post.innerHTML = `<div class="post-error flex_wrap f_middle f_center"><span class="t_center" style="max-width:90vw;">!! ERROR: ${str_error}</span></div>`;
     document.title = str_error +' \u2013 Bakomon';
   }
 
   el('.others .clear-cache').classList.remove('no_items');
   el('.others .clear-cache').addEventListener('click', function() {
     sessionStorage.setItem('clear_cache', '0');
-    wl.reload();
+    if (is_via) {
+      bmf_get_fragment();
+    } else {
+      wl.reload();
+    }
   });
 
   if (bmv_dt_settings.src_link && 'source' in json && json.source != '') {
@@ -3651,18 +3630,20 @@ function bmf_param_member() {
 }
 
 function bmf_build_page(note, data) {
-  if (note.indexOf('direct') != -1) {
+  if (bmv_page_type == 'direct') {
     if (bmv_current == 'member') {
       bmf_param_member();
     } else {
       bmf_build_page_direct(bmv_current);
     }
   } else {
-    bmf_build_page_api(JSON.parse(data));
+    try {
+      res = JSON.parse(data.response);
+    } catch (e) {
+      res = {"status_code": 0, "message": e};
+    }
+    bmf_build_page_api(res);
   }
-
-  // addons
-  if (local('get', '\x64\x65\x76')) bmf_build_addons(note);
 }
 
 function bmf_gen_url() {
@@ -3693,14 +3674,10 @@ function bmf_gen_url() {
 
 function bmf_build_load(note) {
   if (!fbase_login) {
-    if (!cookies.get('\x64\x65\x6d\x6f\x5f\x70\x61\x67\x65') && getHash('member') != 'login') {
-      wl.hash = '#/member/login';
-      return;
-    }
     local('remove', 'bmv_user_settings');
     bmv_dt_settings = bmv_settings.default;
   }
-  if (note.indexOf('direct') != -1) {
+  if (bmv_page_type == 'direct') {
     bmf_build_page(note);
   } else {
     bmf_gen_url();
@@ -3708,6 +3685,7 @@ function bmf_build_load(note) {
 }
 
 function bmf_build_wait(note) {
+  bmv_page_type = note.indexOf('direct') != -1 ? 'direct' : 'api';
   var tier_from, fbase_wait = setInterval(function() {
     if (fbase_loaded && fbase_init && fbase_observer) {
       clearInterval(fbase_wait);
@@ -3738,6 +3716,7 @@ function bmf_build_wait(note) {
 
 function bmf_reset_var() {
   bmv_page_num = '1';
+  bmv_page_type = null;
   bmv_page_loaded = false;
   bmv_str_cdn = '';
   bmv_str_gi = ''; //google images size
@@ -3863,12 +3842,12 @@ function bmf_fbase_slug(note, data, callback, backup) {
 
 function bmf_fbase_backup() {
   if (!cookies.get('fbase_backup')) {
-    bmf_loadXMLDoc(`xhr/${bmv_current}/backup`, `${api_url}/firebase/backup.php?uid=${fbase_user.uid}`, function(n, res) {
-      if (res.indexOf('Error:') != -1) {
-        console.error(res);
-        alert(res);
+    bmf_loadXMLDoc(`xhr/${bmv_current}/backup`, `${api_url}/firebase/backup.php?uid=${fbase_user.uid}`, function(n, data) {
+      if (data.code != 200 || data.response.indexOf('Error:') != -1) {
+        if (data.code == 200) console.error(data.response);
+        alert(data.response);
       } else {
-        console.log(res);
+        console.log(data.response);
         cookies.set('fbase_backup', new Date(), 'day');
       }
     });
@@ -4081,7 +4060,7 @@ function bmf_fbase_check() {
 // #===========================================================================================#
 
 // note: prm = param, dt = data, el = element
-var wh, wd, bmv_current, bmv_zoom_id, bmv_max_bmhs, bmv_max_hv, bmv_homepage, bmv_lazy_error, bmv_lazy_skip, bmv_url_api;
+var wh, wd, bmv_current, bmv_zoom_id, bmv_max_bmhs, bmv_max_hv, bmv_homepage, bmv_lazy_error, bmv_lazy_skip, bmv_url_api, bmv_connection, bmv_page_type;
 var bmv_prm_slug, bmv_prm_chapter;
 var bmv_page_loaded, bmv_chk_query, bmv_chk_nav, bmv_chk_cdn, bmv_chk_gi, bmv_chk_pause, bmv_chk_from, bmv_chk_lazy;
 var bmv_loaded_img, bmv_load_cdn, bmv_load_gi;
@@ -4105,6 +4084,7 @@ var bmv_genres = ['4-koma','action','adult','adventure','comedy','cooking','crim
 var wl = window.location;
 var is_mobile = isMobile();
 var is_chrome = isChromium();
+var is_via = !!window.via; //Via Browser "mark.via.gp"
 var is_dark = document.documentElement.classList.contains('dark');
 var last_scroll = 0;
 var imageoptim_username = 'YOUR_IMAGEOPTIM_USERNAME'; //https://imageoptim.com/api/get?username={USERNAME}
@@ -4154,16 +4134,13 @@ var bmv_settings = {
     "hs_stop": false,
     "ch_url": false,
     "cache": 30,
+    "quality": 50,
     "link": "search, chapter-img, bookmark, history"
   },
   "source": {
     "bacakomik": {
       "type": "eastheme",
       "site": "bacakomik"
-    },
-    "manhwaindo": {
-      "type": "eastheme",
-      "site": "manhwaindo"
     },
     "tukangkomik": {
       "type": "themesia",
@@ -4180,6 +4157,10 @@ var bmv_settings = {
     "neumanga": {
       "type": "koidezign",
       "site": "neumanga"
+    },
+    "komikindo": {
+      "type": "themesia",
+      "site": "komikindo"
     },
     "mgkomik": {
       "type": "madara",
@@ -4286,11 +4267,6 @@ var bmv_settings = {
 // START, first load
 window.addEventListener('load', function() {
   if (!bmv_start && window.isES6) {
-    if (bmf_getParam('demo')) {
-      cookies.set('\x64\x65\x6d\x6f\x5f\x70\x61\x67\x65', true, 'hour|12');
-      window.stop();
-      wl.href = './';
-    }
     removeElem('noscript'); //Remove noscript notification
     bmf_fbase_check();
     bmf_get_fragment();

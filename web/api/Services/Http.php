@@ -46,7 +46,7 @@ class Http
         self::$source = curl_exec($ch);
         self::$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if ($is_bypass && self::$status == 200) {
+        if ($is_bypass && self::$status == 200 && strpos($url, 'scrapingant') !== FALSE) {
             $response = json_decode(self::$source);
 
             if (count($response->headers) > 0) {
@@ -102,7 +102,7 @@ class Http
         self::$source = curl_exec($ch);
         self::$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if ($is_bypass && self::$status == 200) {
+        if ($is_bypass && self::$status == 200 && strpos($url, 'scrapingant') !== FALSE) {
             $response = json_decode(self::$source);
 
             if (count($response->headers) > 0) {
@@ -170,6 +170,16 @@ class Http
                 'url' => 'https://api.scrapingant.com/v2/extended?x-api-key={apikey}&url=',
                 'params' => '&browser=false&proxy_country=ID',
             ],
+            "webscraping" => [
+                'api' => 'YOUR_WEBSCRAPINGAI_APIKEY',
+                'url' => 'https://api.webscraping.ai/html?api_key={apikey}&url=',
+                'params' => '&js=false',
+            ],
+            "zenscrape" => [
+                'api' => 'YOUR_ZENSCRAPE_APIKEY',
+                'url' => 'https://app.zenscrape.com/api/v1/get?apikey={apikey}&url=',
+                'params' => '',
+            ]
         ];
 
         $full_url = str_replace('{apikey}', $lists[$source]['api'], $lists[$source]['url']) . urlencode($url) . $lists[$source]['params'];
@@ -185,7 +195,7 @@ class Http
         } else if (self::$status >= 500) {
             $error_message = 'Server Error';
         } else if (self::$status == 404) {
-            $error_message = 'Data tidak ditemukan';
+            $error_message = 'Page Not Found';
         } else if (self::$status >= 400) {
             $error_message = 'Client Error';
         }
@@ -193,7 +203,7 @@ class Http
         $error =  [
             'status' => strtoupper(str_replace(' ', '_', $error_message)),
             'status_code' => self::$status,
-            'message' => $error_message,
+            'message' => self::$bypass && strpos(self::$link, 'scrapingant') !== FALSE ? json_decode(self::$source)->detail : $error_message,
             'bypass' => self::$bypass,
             'source' => self::$link,
         ];

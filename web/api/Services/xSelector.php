@@ -8,7 +8,7 @@ class xSelector
 {
     public static $source_default = 'mangatale';
 
-    public static $source_lists = ['bacakomik', 'manhwaindo', 'tukangkomik', 'mangatale', 'maid', 'neumanga', 'mgkomik', 'shinigami', 'kiryuu', 'komikcast', 'pojokmanga'];
+    public static $source_lists = ['bacakomik', 'tukangkomik', 'mangatale', 'maid', 'neumanga', 'komikindo', 'mgkomik', 'shinigami', 'kiryuu', 'komikcast', 'pojokmanga'];
 
     public static function bacakomik()
     {
@@ -16,12 +16,12 @@ class xSelector
             'cms' => 'wordpress',
             'theme' => 'eastheme',
             'url' => [
-                'host' => 'https://bacakomik.co',
-                'latest' => 'https://bacakomik.co/komik-terbaru/page/{$page}/',
-                'search' => 'https://bacakomik.co/page/{$page}/?s={$value}',
-                'advanced' => 'https://bacakomik.co/daftar-manga/page/{$page}/{$value}',
-                'series' => 'https://bacakomik.co/komik/{$slug}/',
-                'chapter' => 'https://bacakomik.co/chapter/{$slug}-chapter-{$chapter}-bahasa-indonesia/',
+                'host' => 'https://bacakomik.me',
+                'latest' => 'https://bacakomik.me/komik-terbaru/page/{$page}/',
+                'search' => 'https://bacakomik.me/page/{$page}/?s={$value}',
+                'advanced' => 'https://bacakomik.me/daftar-manga/page/{$page}/{$value}',
+                'series' => 'https://bacakomik.me/komik/{$slug}/',
+                'chapter' => 'https://bacakomik.me/chapter/{$slug}-chapter-{$chapter}-bahasa-indonesia/',
             ],
             'latest' => [ //parent is same as "LS" parent
                 'chapter' => [
@@ -79,7 +79,7 @@ class xSelector
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
                 ],
                 'cover' => [
                     'xpath' => ".//*[contains(@class, 'thumb')]//img",
@@ -137,149 +137,7 @@ class xSelector
                     'attr' => 'href',
                 ],
                 'images' => [
-                    'xpath' => ".//*[@id='chimg-auh']//img",
-                    'attr' => 'src',
-                ],
-            ],
-        ];
-
-        return $data;
-    }
-
-    public static function manhwaindo()
-    {
-        $data = [
-            'cms' => 'wordpress',
-            'theme' => 'eastheme',
-            'url' => [
-                'host' => 'https://manhwaindo.org',
-                'latest' => 'https://manhwaindo.org/komik-terbaru/page/{$page}/',
-                'search' => 'https://manhwaindo.org/page/{$page}/?s={$value}',
-                'advanced' => 'https://manhwaindo.org/daftar-komik/page/{$page}/{$value}',
-                'series' => 'https://manhwaindo.org/komik/{$slug}/',
-                'chapter' => 'https://manhwaindo.org/{$slug}-chapter-{$chapter}/',
-            ],
-            'latest' => [ //parent is same as "LS" parent
-                'chapter' => [
-                    'xpath' => ".//*[contains(@class, 'adds')]//a",
-                ],
-                'date' => [
-                    'xpath' => ".//*[contains(@class, 'datech')]",
-                ],
-            ],
-            'LS' => [
-                'parent' => "//*[contains(@class, 'animposx')]",
-                'title' => [
-                    'xpath' => ".//h4",
-                ],
-                'cover' => [
-                    'xpath' => ".//img",
-                    'attr' => 'src',
-                ],
-                'type' => [
-                    'xpath' => ".//*[contains(@class, 'typeflag')]",
-                    'attr' => 'class',
-                    'regex' => '/[\s\/](man(?:h[wu]|g)a)/i',
-                ],
-                'color' => [
-                    'xpath' => ".//*[contains(@class, 'warnalabel')]",
-                ],
-                'link' => [
-                    'xpath' => ".//a[contains(@href, '/komik/')]",
-                    'attr' => 'href',
-                ],
-                'slug' => [
-                    'regex' => '/.*(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series?)\/([^\/]+)/i',
-                    'regex2' => '/(-(bahasa?-)?indo(nesiaa?)?\/?|\/$)/i',
-                    'attr' => 'href',
-                ],
-                'nav' => [ //no parent
-                    'regex' => '/.*page[\/=](\d+)[\/&]?/i',
-                    'next' => [
-                        'xpath' => "//*[contains(@class, 'pagination')]//a[contains(@class, 'next page-numbers')]",
-                        'attr' => 'href',
-                    ],
-                    'prev' => [
-                        'xpath' => "//*[contains(@class, 'pagination')]//a[contains(@class, 'prev page-numbers')]",
-                        'attr' => 'href',
-                    ],
-                ],
-            ],
-            'series' => [
-                'parent' => "//article",
-                'shortlink' => [
-                    'xpath' => "//link[@rel='shortlink']",
-                    'attr' => 'href',
-                    'regex' => '/(?:\?p=|wp\.me\/)(.*)/i',
-                ],
-                'title' => [
-                    'xpath' => ".//h1",
-                    'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
-                ],
-                'alternative' => [
-                    'xpath' => ".//*[contains(@class, 'infox')]//*[contains(text(), 'Judul Alternatif')]/parent::*",
-                    'regex' => '/([\s\n\t]+)?((judul\s)?alternati[fv]e?(\stitles?)?)\:?[\s\n\t]+/i',
-                ],
-                'cover' => [
-                    'xpath' => ".//*[contains(@class, 'thumb')]//img",
-                    'attr' => 'src',
-                ],
-                'detail' => [
-                    'type' => [
-                        'xpath' => ".//*[contains(@class, 'infox')]//*[contains(text(), 'Jenis')]/parent::*//a",
-                    ],
-                    'status' => [
-                        'xpath' => ".//*[contains(@class, 'infox')]//*[contains(text(), 'Status')]/parent::*",
-                        'regex' => '/([\s\n\t]+)?status\:?[\s\n\t]+/i',
-                    ],
-                    'author' => [
-                        'xpath' => ".//*[contains(@class, 'infox')]//*[contains(text(), 'Author')]/parent::*//a",
-                    ],
-                    'artist' => [
-                        'xpath' => ".//*[contains(@class, 'infox')]//*[contains(text(), 'Artis')]/parent::*//a",
-                    ],
-                    'genre' => [
-                        'xpath' => ".//*[contains(@class, 'genre-info')]//a",
-                    ],
-                ],
-                'desc' => [
-                    'xpath' => ".//*[contains(@class, 'entry-content') and @itemprop='description']",
-                    'regex' => '/\s+|&(#160|nbsp);/',
-                ],
-                'chapter' => [
-                    'xpath' => ".//*[@id='chapter_list']//*[contains(@class, 'lchx')]//a",
-                    'num' => ".//chapter",
-                    'regex' => '/(?:-ch(?:[ap][ap]t?er?)?)?-(\d(?:[\w\-]+)?)$/i',
-                    'regex2' => '/(-(bahasa?-)?indo(nesiaa?)?\/?|\/$)/i',
-                    'attr' => 'href',
-                ],
-            ],
-            'chapter' => [
-                'parent' => "//article//*[contains(@class, 'chapter-content')]",
-                'title' => [
-                    'xpath' => ".//h1",
-                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\s\d+/i',
-                    'regex2' => '/(\s-)?\sch(?:apt?er|\.)?/i',
-                ],
-                'cover' => [ //no parent
-                    'xpath' => "//*[@id='content']//*[contains(@class, 'infoanime')]//*[contains(@class, 'thumb')]//img",
-                    'attr' => 'src',
-                ],
-                'next' => [
-                    'xpath' => ".//*[contains(@class, 'nextprev')]//a[@rel='next']",
-                    'regex' => '/(?:-ch(?:[ap][ap]t?er?)?)?-(\d(?:[\w\-]+)?)$/i',
-                    'regex2' => '/(-(bahasa?-)?indo(nesiaa?)?\/?|\/$)/i',
-                    'attr' => 'href',
-                ],
-                'prev' => [
-                    'xpath' => ".//*[contains(@class, 'nextprev')]//a[@rel='prev']",
-                    'regex' => '/(?:-ch(?:[ap][ap]t?er?)?)?-(\d(?:[\w\-]+)?)$/i',
-                    'regex2' => '/(-(bahasa?-)?indo(nesiaa?)?\/?|\/$)/i',
-                    'attr' => 'href',
-                ],
-                'images' => [
-                    'xpath' => ".//*[@id='chimg']//img",
+                    'xpath' => ".//*[@id='imagenya-xiaomeng']//img",
                     'attr' => 'src',
                 ],
             ],
@@ -369,7 +227,7 @@ class xSelector
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
                 ],
                 'alternative' => [
                     'xpath' => ".//*[contains(@class, 'infox')]//*[contains(text(), 'Judul Alternatif')]/parent::*",
@@ -517,7 +375,7 @@ class xSelector
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
                 ],
                 'alternative' => [
                     'xpath' => ".//*[contains(@class, 'infox')]//*[contains(text(), 'Alternative Title')]/parent::*",
@@ -656,7 +514,7 @@ class xSelector
                 'title' => [
                     'xpath' => ".//*[contains(@class, 'series-title')]//h2",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
                 ],
                 'cover' => [
                     'xpath' => ".//*[contains(@class, 'series-thumb')]//img",
@@ -792,7 +650,7 @@ class xSelector
                 'title' => [
                     'xpath' => ".//*[contains(@class, 'series-title')]//h2",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
                 ],
                 'alternative' => [
                     'xpath' => ".//*[contains(@class, 'series-infolist')]//*[contains(text(), 'Alternative')]/parent::*//span",
@@ -862,18 +720,164 @@ class xSelector
         return $data;
     }
 
+    public static function komikindo()
+    {
+        $data = [
+            'cms' => 'wordpress',
+            'theme' => 'themesia',
+            'url' => [
+                'host' => 'https://komikindo.co',
+                'latest' => 'https://komikindo.co/manga/?page={$page}&order=update',
+                'search' => 'https://komikindo.co/page/{$page}/?s={$value}',
+                'advanced' => 'https://komikindo.co/manga/?page={$page}&{$value}',
+                'series' => 'https://komikindo.co/manga/{$slug}/',
+                'chapter' => 'https://komikindo.co/{$slug}-chapter-{$chapter}/',
+            ],
+            'latest' => [ //parent is same as "LS" parent
+                'chapter' => [
+                    'xpath' => ".//*[contains(@class, 'adds')]//*[contains(@class, 'epxs')]",
+                ],
+            ],
+            'search' => [
+                'nav' => [
+                    'regex' => '/.*page[\/=](\d+)[\/&]?/i',
+                    'next' => [
+                        'xpath' => "//*[contains(@class, 'pagination')]//a[contains(@class, 'next page-numbers')]",
+                        'attr' => 'href',
+                    ],
+                    'prev' => [
+                        'xpath' => "//*[contains(@class, 'pagination')]//a[contains(@class, 'prev page-numbers')]",
+                        'attr' => 'href',
+                    ],
+                ],
+            ],
+            'LS' => [
+                'parent' => "//*[contains(@class, 'listupd')]//a/parent::*",
+                'title' => [
+                    'xpath' => ".//*[@class='tt']",
+                ],
+                'cover' => [
+                    'xpath' => ".//img",
+                    'attr' => 'src',
+                ],
+                'type' => [
+                    'xpath' => ".//*[contains(@class, 'type')]",
+                    'attr' => 'class',
+                    'regex' => '/[\s\/](man(?:h[wu]|g)a)/i',
+                ],
+                'completed' => [
+                    'xpath' => ".//*[contains(@class, 'status')]",
+                    'attr' => 'class',
+                    'regex' => '/\s(completed?|tamat)/i',
+                ],
+                'link' => [
+                    'xpath' => ".//a[contains(@href, '/manga/')]",
+                    'attr' => 'href',
+                ],
+                'slug' => [
+                    'regex' => '/.*(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series?)\/([^\/]+)/i',
+                    'regex2' => '/(-(bahasa?-)?indo(nesiaa?)?\/?|\/$)/i',
+                    'attr' => 'href',
+                ],
+                'nav' => [ //no parent
+                    'regex' => '/.*page[\/=](\d+)[\/&]?/i',
+                    'next' => [
+                        'xpath' => "//*[contains(@class, 'hpage')]//a[@class='r']",
+                        'attr' => 'href',
+                    ],
+                    'prev' => [
+                        'xpath' => "//*[contains(@class, 'hpage')]//a[@class='l']",
+                        'attr' => 'href',
+                    ],
+                ],
+            ],
+            'series' => [
+                'parent' => "//article",
+                'shortlink' => [
+                    'xpath' => "//link[@rel='shortlink']",
+                    'attr' => 'href',
+                    'regex' => '/(?:\?p=|wp\.me\/)(.*)/i',
+                ],
+                'title' => [
+                    'xpath' => ".//h1",
+                    'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
+                ],
+                'alternative' => [
+                    'xpath' => ".//*[contains(@class, 'seriestualt')]",
+                ],
+                'cover' => [
+                    'xpath' => ".//*[contains(@class, 'thumb')]//img",
+                    'attr' => 'src',
+                ],
+                'detail' => [
+                    'type' => [
+                        'xpath' => ".//*[contains(@class, 'infotable')]//*[contains(text(), 'Type')]/parent::*//td[2]",
+                    ],
+                    'status' => [
+                        'xpath' => ".//*[contains(@class, 'infotable')]//*[contains(text(), 'Status')]/parent::*//td[2]",
+                    ],
+                    'author' => [
+                        'xpath' => ".//*[contains(@class, 'infotable')]//*[contains(text(), 'Author')]/parent::*//td[2]",
+                    ],
+                    'artist' => [
+                        'xpath' => ".//*[contains(@class, 'infotable')]//*[contains(text(), 'Artist')]/parent::*//td[2]",
+                    ],
+                    'genre' => [
+                        'xpath' => ".//*[contains(@class, 'seriestugenre')]//a",
+                    ],
+                ],
+                'desc' => [
+                    'xpath' => ".//*[contains(@class, 'entry-content') and @itemprop='description']",
+                    'regex' => '/\s+|&(#160|nbsp);/',
+                ],
+                'chapter' => [
+                    'xpath' => ".//*[@id='chapterlist']//*[contains(@class, 'eph-num')]//a",
+                    'num' => ".//*[contains(@class, 'chapternum')]",
+                    'regex' => '/(?:-ch(?:[ap][ap]t?er?)?)?-(\d(?:[\w\-]+)?)$/i',
+                    'regex2' => '/(-(bahasa?-)?indo(nesiaa?)?\/?|\/$)/i',
+                    'attr' => 'href',
+                ],
+            ],
+            'chapter' => [
+                'parent' => "//article",
+                'title' => [
+                    'xpath' => ".//h1",
+                    'regex' => '/(?:(?:[kc]omi[kc]s?|man(?:ga|hwa|hua)|series)\s)?(.*)\s\d+/i',
+                    'regex2' => '/(\s-)?\sch(?:apt?er|\.)?/i',
+                ],
+                'nav' => [ //no parent
+                    'xpath' => "//script[contains(text(), 'ts_reader.run')]",
+                    'next' => [
+                        'name' => 'nextUrl',
+                        'regex' => '/(?:-ch(?:[ap][ap]t?er?)?)?-(\d(?:[\w\-]+)?)$/i',
+                        'regex2' => '/(-(bahasa?-)?indo(nesiaa?)?\/?|\/$)/i',
+                    ],
+                    'prev' => [
+                        'name' => 'prevUrl',
+                        'regex' => '/(?:-ch(?:[ap][ap]t?er?)?)?-(\d(?:[\w\-]+)?)$/i',
+                        'regex2' => '/(-(bahasa?-)?indo(nesiaa?)?\/?|\/$)/i',
+                    ],
+                ],
+                'images' => [], //images from ts_reader
+            ],
+        ];
+
+        return $data;
+    }
+
     public static function mgkomik()
     {
         $data = [
             'cms' => 'wordpress',
             'theme' => 'madara',
             'url' => [
-                'host' => 'https://mgkomik.com/',
-                'latest' => 'https://mgkomik.com/page/{$page}/?s&post_type=wp-manga&m_orderby=latest',
-                'search' => 'https://mgkomik.com/page/{$page}/?post_type=wp-manga&s={$value}',
-                'advanced' => 'https://mgkomik.com/page/{$page}/?post_type=wp-manga&{$value}',
-                'series' => 'https://mgkomik.com/komik/{$slug}/',
-                'chapter' => 'https://mgkomik.com/komik/{$slug}/chapter-{$chapter}/',
+                'host' => 'https://mgkomik.id/',
+                'latest' => 'https://mgkomik.id/page/{$page}/?s&post_type=wp-manga&m_orderby=latest',
+                'search' => 'https://mgkomik.id/page/{$page}/?post_type=wp-manga&s={$value}',
+                'advanced' => 'https://mgkomik.id/page/{$page}/?post_type=wp-manga&{$value}',
+                'series' => 'https://mgkomik.id/komik/{$slug}/',
+                'chapter' => 'https://mgkomik.id/komik/{$slug}/chapter-{$chapter}/',
             ],
             'latest' => [ //parent is same as "LS" parent
                 'chapter' => [
@@ -932,7 +936,7 @@ class xSelector
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
                 ],
                 'alternative' => [
                     'xpath' => ".//*[contains(@class, 'post-content')]//*[contains(text(), 'Alternative')]/../..", //same as parent::
@@ -1000,12 +1004,12 @@ class xSelector
             'cms' => 'wordpress',
             'theme' => 'madara',
             'url' => [
-                'host' => 'https://shinigami.id/',
-                'latest' => 'https://shinigami.id/page/{$page}/?s&post_type=wp-manga&m_orderby=latest',
-                'search' => 'https://shinigami.id/page/{$page}/?post_type=wp-manga&s={$value}',
-                'advanced' => 'https://shinigami.id/page/{$page}/?post_type=wp-manga&{$value}',
-                'series' => 'https://shinigami.id/series/{$slug}/',
-                'chapter' => 'https://shinigami.id/series/{$slug}/chapter-{$chapter}/',
+                'host' => 'https://shinigami.sh/',
+                'latest' => 'https://shinigami.sh/page/{$page}/?s&post_type=wp-manga&m_orderby=latest',
+                'search' => 'https://shinigami.sh/page/{$page}/?post_type=wp-manga&s={$value}',
+                'advanced' => 'https://shinigami.sh/page/{$page}/?post_type=wp-manga&{$value}',
+                'series' => 'https://shinigami.sh/series/{$slug}/',
+                'chapter' => 'https://shinigami.sh/series/{$slug}/chapter-{$chapter}/',
             ],
             'latest' => [ //parent is same as "LS" parent
                 'chapter' => [
@@ -1064,7 +1068,7 @@ class xSelector
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
                 ],
                 'alternative' => [
                     'xpath' => ".//*[contains(@class, 'post-content')]//*[contains(text(), 'Alternative')]/../..", //same as parent::
@@ -1219,7 +1223,7 @@ class xSelector
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
                 ],
                 'alternative' => [
                     'xpath' => ".//*[contains(@class, 'seriestualt')]",
@@ -1352,7 +1356,7 @@ class xSelector
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
                 ],
                 'alternative' => [
                     'xpath' => ".//*[contains(@class, 'komik_info-content-native')]",
@@ -1487,7 +1491,7 @@ class xSelector
                 'title' => [
                     'xpath' => ".//h1",
                     'regex' => '/([kc]omi[kc]s?|man(ga|hwa|hua)|series?)\s/i',
-                    'regex2' => '/(\sbahasa?)?\sindo(nesia)?/i',
+                    'regex2' => '/(\sbahasa?)?\sindo(nesiaa?)?/i',
                 ],
                 'alternative' => [
                     'xpath' => ".//*[contains(@class, 'post-content')]//*[contains(text(), 'Alternative')]/../..", //same as parent::

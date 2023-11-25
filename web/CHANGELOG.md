@@ -67,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - cache data from `sessionStorage`
 
+
 ## [1.1] - 2023-04-08
 
 ### Added
@@ -76,18 +77,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - lazyload: current image loading info on chapter page (LZ)
 - connection-notif: show/hide click on chapter page
 
+
 ## [1.2] - 2023-04-16
 
 ### Fixed
+
 - minor bug fixes and improvements.
 
 ### Added
 
 - lazyload: load `single` image directly
 
+
 ## [1.3] - 2023-07-05
 
 ### Fixed
+
 - api: slug on latest & search page
 - api: path on search page
 - search: if value is not lowercase
@@ -116,3 +121,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - `komiklab.com` (themesia)
+
+
+## [1.4] - 2023-11-25
+
+### Fixed
+- api: remove unnecessary text from `ch_num`
+- series: image cover empty
+- `.clear-cache` timer doesn't work on [Via Browser](https://play.google.com/store/apps/details?id=mark.via.gp&hl=en&gl=US) if `Go back without reloading` is enabled
+- bmhs: hide pagination if search result is zero (empty)
+- profile: change password
+- adv search: css `box-shadow`
+- css loading icon `fixed` middle screen
+- keyevent: regexp escape
+- numerous bug fixes and improvements.
+
+### Added
+
+- request header `X-Requested-With` to `loadXMLDoc`
+- search: encode query string
+- resize image with [Image Resize API](https://github.com/falconshark/image-resize-api)
+- compress image with [reSmush.it](https://resmush.it/)
+- bypass with [WebScraping.AI](https://webscraping.ai/)
+- bypass with [Zenscrape](https://zenscrape.com/)
+- new source `komikindo.co` (themesia)
+
+### Changed
+
+- api: `bacakomik.me` (eastheme)
+- `bacakomik.co` to `bacakomik.me`
+- `shinigami.id` to `shinigami.sh`
+- `mgkomik.com` to `mgkomik.id`
+- chapter `keyEvent (prev/next)` only for desktop
+
+### Removed
+
+- `manhwaindo.org` (eastheme)

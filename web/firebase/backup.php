@@ -1,13 +1,17 @@
 <?php
 // Source: https://github.com/front/firebase-backup/blob/master/php/index.php
 
+require_once '../api/Allowed.php';
+
+use \Api\Allowed;
+
 // Prevent direct url access
-if (!isset($_SERVER['HTTP_REFERER'])) {
+if (!(new Allowed)->check()) {
   header('HTTP/1.0 403 Forbidden', TRUE, 403);
   exit;
 }
 
-function param_check($name, $arr = null)
+function param_check($name, $arr)
 {
   return isset($arr[$name]) && (!empty($arr[$name]) || $arr[$name] != '');
 }
@@ -54,7 +58,7 @@ if (param_check('uid', $_GET)) {
 
         echo json_encode($data);
       } else {
-        echo 'Firebase backup file successfully has been created, size: ' . number_format(filesize($file_location) / 1024, 2) . ' KB';
+        echo 'Firebase backup file has been created successfully, size: ' . number_format(filesize($file_location) / 1024, 2) . ' KB';
       }
     }
   } else {
