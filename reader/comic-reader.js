@@ -494,6 +494,7 @@ function mydb_cr_fnc() {
       '.viewer-cnt #all',
       '#Gambar_komik',
       '#viewer',
+      '#chimg-auh',
       '[for="Viewer-module"]',
       '[id^="Blog"] .post-body'
     ];
@@ -505,7 +506,7 @@ function mydb_cr_fnc() {
       "mangadropout": "#displayNoAds .col-md-12.text-center",
       "manhuaid": ".row.mb-4 .col-md-12",
       "komiku": "#Baca_Komik",
-      "bacakomik": "#chimg-auh",
+      "bacakomik": "#imagenya-xiaomeng",
       "nyanfm": ".elementor-widget-image-carousel",
       "readmangabat": ".container-chapter-reader",
       "rawdevart": "#img-container"
