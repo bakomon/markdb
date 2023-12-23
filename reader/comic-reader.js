@@ -425,7 +425,7 @@ function mydb_cr_fnc() {
       }
       
       reader_html += '<div class="reader_images" onclick="var img'+ (i+1) +'=this.querySelector(\'img\');mydb_open_new_tab(img'+ (i+1) +'.src?img'+ (i+1) +'.src:img'+ (i+1) +'.dataset.readImg)" title="'+ (i+1) +' - '+ imgList[i] +'">';
-      reader_html += '<img style="min-height:750px;" class="rc_lazy1oad" data-read-img="'+ imgList[i] +'" alt="'+ (i+1) +'">';
+      reader_html += '<img style="min-height:750px;" class="rc_lazy1oad" data-read-img="'+ imgList[i] +'" alt="'+ (i+1) +'" referrerpolicy="no-referrer">';
       if (mydb_settings.number_reader) reader_html += '<div class="reader_index"><div class="rc_sticky"><div class="_rc">'+ (i+1) +'</div></div></div>';
       reader_html += '</div>'; //.reader_images
     }
